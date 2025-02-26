@@ -1,0 +1,33 @@
+<Project>
+    <Import Project="$([MSBuild]::GetDirectoryNameOfFileAbove($(MSBuildProjectDirectory), 'alibabacloud-oss-csharp-sdk-v2.sln'))\props\Common.props"/>
+    <PropertyGroup>
+        <TargetFrameworks>netstandard2.0;net471;net48;net8.0;net9.0</TargetFrameworks>
+        <LangVersion>9.0</LangVersion>
+        <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
+        <PackageProjectUrl>https://github.com/aliyun/alibabacloud-oss-csharp-sdk-v2</PackageProjectUrl>
+        <RepositoryUrl>https://github.com/aliyun/alibabacloud-oss-csharp-sdk-v2.git</RepositoryUrl>
+        <RepositoryType>git</RepositoryType>
+        <Description>Alibaba Cloud OSS SDK for .NET v2</Description>
+        <Authors>Alibaba Cloud OSS SDK</Authors>
+        <UpdateVersionProperties>true</UpdateVersionProperties>
+        <PublishRepositoryUrl>true</PublishRepositoryUrl>
+        <IncludeSymbols>true</IncludeSymbols>
+        <SymbolPackageFormat>snupkg</SymbolPackageFormat>
+        <GenerateDocumentationFile>true</GenerateDocumentationFile>
+        <NoWarn>$(NoWarn);1591</NoWarn>
+        <PackageReadmeFile>README.md</PackageReadmeFile>
+    </PropertyGroup>
+
+    <PropertyGroup>
+        <FileVersion>0.1.0</FileVersion>
+        <AssemblyVersion>0.1.0</AssemblyVersion>
+        <InformationalVersion>0.1.0-dev</InformationalVersion>
+    </PropertyGroup>
+
+    <PropertyGroup Condition="'$(TargetFramework)' == 'net471' Or '$(TargetFramework)' == 'netstandard2.0' Or '$(TargetFramework)' == 'net48'">
+        <AddPolyfills>true</AddPolyfills>
+    </PropertyGroup>
+    <ItemGroup>
+        <PackageReference Include="Microsoft.SourceLink.GitHub" PrivateAssets="All"/>
+    </ItemGroup>
+</Project>

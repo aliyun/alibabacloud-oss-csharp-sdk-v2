@@ -1,0 +1,33 @@
+<Project>
+    <Import Project="$([MSBuild]::GetDirectoryNameOfFileAbove($(MSBuildProjectDirectory), 'alibabacloud-oss-csharp-sdk-v2.sln'))\props\Common.props"/>
+    <PropertyGroup>
+        <IsTestProject>true</IsTestProject>
+        <IsPackable>false</IsPackable>
+        <TargetFrameworks>net48;net8.0;net9.0</TargetFrameworks>
+        <Nullable>disable</Nullable>
+        <NoWarn>xUnit1033</NoWarn>
+        <LangVersion>preview</LangVersion>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <VSTestLogger>trx%3bLogFileName=$(MSBuildProjectName).trx</VSTestLogger>
+        <VSTestResultsDirectory>$(RepoRoot)/test-results/$(TargetFramework)</VSTestResultsDirectory>
+    </PropertyGroup>
+
+    <ItemGroup Condition="$(IsTestProject) == 'true'">
+        <PackageReference Include="Microsoft.NET.Test.Sdk" />
+        <PackageReference Include="xunit.runner.visualstudio" PrivateAssets="All"/>
+        <PackageReference Include="coverlet.collector" />
+        <PackageReference Include="coverlet.msbuild" />
+    </ItemGroup>
+    <ItemGroup>
+        <PackageReference Include="xunit" />
+    </ItemGroup>
+    <ItemGroup Condition="$(TargetFramework) == 'net48'">
+        <PackageReference Include="Microsoft.NETFramework.ReferenceAssemblies.net472" PrivateAssets="All"/>
+    </ItemGroup>
+
+    <ItemGroup>
+        <Using Include="System.Net.Http"/>
+        <Using Include="Xunit"/>
+        <Using Include="Xunit.Abstractions"/>
+    </ItemGroup>
+</Project>

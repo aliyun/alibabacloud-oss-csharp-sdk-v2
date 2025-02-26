@@ -1,0 +1,8 @@
+<Project>
+    <PropertyGroup>
+        <RepoRoot>$([System.IO.Directory]::GetParent($(MSBuildThisFileDirectory)).Parent.FullName)</RepoRoot>
+        <AssemblyOriginatorKeyFile>$(RepoRoot)\alibabacloud-oss-csharp-sdk-v2.snk</AssemblyOriginatorKeyFile>
+        <SignAssembly>true</SignAssembly>
+        <Nullable>enable</Nullable>
+    </PropertyGroup>
+</Project>
