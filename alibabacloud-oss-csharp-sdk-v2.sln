@@ -3,13 +3,13 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.12.35527.113
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AlibabaCloud.OSS.v2", "src\AlibabaCloud.OSS.v2\AlibabaCloud.OSS.v2.csproj", "{A121DEEF-B61F-4FAF-ABE0-F1F82B3D4F68}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AlibabaCloud.OSS.V2", "src\AlibabaCloud.OSS.V2\AlibabaCloud.OSS.V2.csproj", "{A121DEEF-B61F-4FAF-ABE0-F1F82B3D4F68}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{E0ED0D8D-C5C0-422F-B805-784D93028A2F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AlibabaCloud.OSS.v2.UnitTests", "test\AlibabaCloud.OSS.v2.UnitTests\AlibabaCloud.OSS.v2.UnitTests.csproj", "{F9327502-FB06-443B-9763-DF0A56C74246}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AlibabaCloud.OSS.V2.UnitTests", "test\AlibabaCloud.OSS.V2.UnitTests\AlibabaCloud.OSS.V2.UnitTests.csproj", "{F9327502-FB06-443B-9763-DF0A56C74246}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AlibabaCloud.OSS.v2.IntegrationTests", "test\AlibabaCloud.OSS.v2.IntegrationTests\AlibabaCloud.OSS.v2.IntegrationTests.csproj", "{A9F063E8-AE31-429A-8FD2-331A60889C54}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AlibabaCloud.OSS.V2.IntegrationTests", "test\AlibabaCloud.OSS.V2.IntegrationTests\AlibabaCloud.OSS.V2.IntegrationTests.csproj", "{A9F063E8-AE31-429A-8FD2-331A60889C54}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
