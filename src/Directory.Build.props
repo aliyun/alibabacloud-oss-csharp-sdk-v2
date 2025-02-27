@@ -7,7 +7,7 @@
         <PackageProjectUrl>https://github.com/aliyun/alibabacloud-oss-csharp-sdk-v2</PackageProjectUrl>
         <RepositoryUrl>https://github.com/aliyun/alibabacloud-oss-csharp-sdk-v2.git</RepositoryUrl>
         <RepositoryType>git</RepositoryType>
-        <Description>Alibaba Cloud OSS SDK for .NET v2</Description>
+        <Description>Alibaba Cloud OSS SDK for .NET V2</Description>
         <Authors>Alibaba Cloud OSS SDK</Authors>
         <UpdateVersionProperties>true</UpdateVersionProperties>
         <PublishRepositoryUrl>true</PublishRepositoryUrl>
