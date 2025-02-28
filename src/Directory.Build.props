@@ -18,16 +18,11 @@
         <PackageReadmeFile>README.md</PackageReadmeFile>
     </PropertyGroup>
 
-    <PropertyGroup>
-        <FileVersion>0.1.0</FileVersion>
-        <AssemblyVersion>0.1.0</AssemblyVersion>
-        <InformationalVersion>0.1.0-dev</InformationalVersion>
-    </PropertyGroup>
-
     <PropertyGroup Condition="'$(TargetFramework)' == 'net471' Or '$(TargetFramework)' == 'netstandard2.0' Or '$(TargetFramework)' == 'net48'">
         <AddPolyfills>true</AddPolyfills>
     </PropertyGroup>
     <ItemGroup>
         <PackageReference Include="Microsoft.SourceLink.GitHub" PrivateAssets="All"/>
+        <PackageReference Include="MinVer" PrivateAssets="All"/>
     </ItemGroup>
 </Project>
