@@ -1,0 +1,23 @@
+<Project>
+    <Import Project="$([MSBuild]::GetDirectoryNameOfFileAbove($(MSBuildProjectDirectory), 'alibabacloud-oss-csharp-sdk-v2.sln'))\props\Common.props"/>
+    <PropertyGroup>
+        <IsReferenceLocal>true</IsReferenceLocal>
+        <IsPackable>false</IsPackable>
+        <TargetFrameworks>net48;net8.0;net9.0</TargetFrameworks>
+        <LangVersion>latest</LangVersion>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+        <OutputType>Exe</OutputType>
+    </PropertyGroup>
+
+    <ItemGroup Condition="$(IsReferenceLocal) == 'true'">
+      <ProjectReference Include="$(RepoRoot)\src\AlibabaCloud.OSS.V2\AlibabaCloud.OSS.V2.csproj" />
+    </ItemGroup>
+  
+    <ItemGroup Condition="$(TargetFramework) == 'net48'">
+        <PackageReference Include="Microsoft.NETFramework.ReferenceAssemblies.net472" PrivateAssets="All"/>
+    </ItemGroup>
+    <ItemGroup>
+        <PackageReference Include="CommandLineParser" />
+    </ItemGroup>
+</Project>
