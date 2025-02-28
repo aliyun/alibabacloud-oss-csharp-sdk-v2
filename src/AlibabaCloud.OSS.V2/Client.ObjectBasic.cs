@@ -19,17 +19,17 @@ namespace AlibabaCloud.OSS.V2 {
         /// <returns><see cref="Models.PutObjectResult" />The result instance.</returns>
         public async Task<Models.PutObjectResult> PutObjectAsync(
             Models.PutObjectRequest request,
-            OperationOptions?       options           = null,
-            CancellationToken       cancellationToken = default
+            OperationOptions? options = null,
+            CancellationToken cancellationToken = default
         ) {
             Ensure.NotNull(request.Bucket, "request.Bucket");
             Ensure.NotNull(request.Key, "request.Key");
 
             var input = new OperationInput {
                 OperationName = "PutObject",
-                Method        = "PUT",
-                Bucket        = request.Bucket,
-                Key           = request.Key
+                Method = "PUT",
+                Bucket = request.Bucket,
+                Key = request.Key
             };
 
             Serde.SerializeInput(request, ref input, Serde.AddMetadata, AddContentType, AddCrcChecker, AddProgress);
@@ -52,8 +52,8 @@ namespace AlibabaCloud.OSS.V2 {
         /// <returns><see cref="Models.CopyObjectResult" />The result instance.</returns>
         public async Task<Models.CopyObjectResult> CopyObjectAsync(
             Models.CopyObjectRequest request,
-            OperationOptions?        options           = null,
-            CancellationToken        cancellationToken = default
+            OperationOptions? options = null,
+            CancellationToken cancellationToken = default
         ) {
             Ensure.NotNull(request.Bucket, "request.Bucket");
             Ensure.NotNull(request.Key, "request.Key");
@@ -61,9 +61,9 @@ namespace AlibabaCloud.OSS.V2 {
 
             var input = new OperationInput {
                 OperationName = "CopyObject",
-                Method        = "PUT",
-                Bucket        = request.Bucket,
-                Key           = request.Key
+                Method = "PUT",
+                Bucket = request.Bucket,
+                Key = request.Key
             };
 
             Serde.SerializeInput(request, ref input, Serde.AddCopySource, Serde.AddMetadata);
@@ -86,8 +86,8 @@ namespace AlibabaCloud.OSS.V2 {
         /// <returns><see cref="Models.GetObjectResult" />The result instance.</returns>
         public async Task<Models.GetObjectResult> GetObjectAsync(
             Models.GetObjectRequest request,
-            OperationOptions?       options           = null,
-            CancellationToken       cancellationToken = default
+            OperationOptions? options = null,
+            CancellationToken cancellationToken = default
         ) {
             return await GetObjectAsync(request, HttpCompletionOption.ResponseHeadersRead, options, cancellationToken).ConfigureAwait(false);
         }
@@ -139,8 +139,8 @@ namespace AlibabaCloud.OSS.V2 {
         /// <returns><see cref="Models.AppendObjectResult" />The result instance.</returns>
         public async Task<Models.AppendObjectResult> AppendObjectAsync(
             Models.AppendObjectRequest request,
-            OperationOptions?          options           = null,
-            CancellationToken          cancellationToken = default
+            OperationOptions? options = null,
+            CancellationToken cancellationToken = default
         ) {
             Ensure.NotNull(request.Bucket, "request.Bucket");
             Ensure.NotNull(request.Key, "request.Key");
@@ -148,12 +148,12 @@ namespace AlibabaCloud.OSS.V2 {
 
             var input = new OperationInput {
                 OperationName = "AppendObject",
-                Method        = "POST",
+                Method = "POST",
                 Parameters = new Dictionary<string, string> {
                     { "append", "" }
                 },
                 Bucket = request.Bucket,
-                Key    = request.Key
+                Key = request.Key
             };
 
             Serde.SerializeInput(request, ref input,
@@ -181,17 +181,17 @@ namespace AlibabaCloud.OSS.V2 {
         /// <returns><see cref="Models.DeleteObjectResult" />The result instance.</returns>
         public async Task<Models.DeleteObjectResult> DeleteObjectAsync(
             Models.DeleteObjectRequest request,
-            OperationOptions?          options           = null,
-            CancellationToken          cancellationToken = default
+            OperationOptions? options = null,
+            CancellationToken cancellationToken = default
         ) {
             Ensure.NotNull(request.Bucket, "request.Bucket");
             Ensure.NotNull(request.Key, "request.Key");
 
             var input = new OperationInput {
                 OperationName = "DeleteObject",
-                Method        = "DELETE",
-                Bucket        = request.Bucket,
-                Key           = request.Key
+                Method = "DELETE",
+                Bucket = request.Bucket,
+                Key = request.Key
             };
 
             Serde.SerializeInput(request, ref input, Serde.AddContentMd5);
@@ -214,17 +214,17 @@ namespace AlibabaCloud.OSS.V2 {
         /// <returns><see cref="Models.HeadObjectResult" />The result instance.</returns>
         public async Task<Models.HeadObjectResult> HeadObjectAsync(
             Models.HeadObjectRequest request,
-            OperationOptions?        options           = null,
-            CancellationToken        cancellationToken = default
+            OperationOptions? options = null,
+            CancellationToken cancellationToken = default
         ) {
             Ensure.NotNull(request.Bucket, "request.Bucket");
             Ensure.NotNull(request.Key, "request.Key");
 
             var input = new OperationInput {
                 OperationName = "HeadObject",
-                Method        = "HEAD",
-                Bucket        = request.Bucket,
-                Key           = request.Key
+                Method = "HEAD",
+                Bucket = request.Bucket,
+                Key = request.Key
             };
 
             Serde.SerializeInput(request, ref input);
@@ -247,20 +247,20 @@ namespace AlibabaCloud.OSS.V2 {
         /// <returns><see cref="Models.GetObjectMetaResult" />The result instance.</returns>
         public async Task<Models.GetObjectMetaResult> GetObjectMetaAsync(
             Models.GetObjectMetaRequest request,
-            OperationOptions?           options           = null,
-            CancellationToken           cancellationToken = default
+            OperationOptions? options = null,
+            CancellationToken cancellationToken = default
         ) {
             Ensure.NotNull(request.Bucket, "request.Bucket");
             Ensure.NotNull(request.Key, "request.Key");
 
             var input = new OperationInput {
                 OperationName = "GetObjectMeta",
-                Method        = "HEAD",
+                Method = "HEAD",
                 Parameters = new Dictionary<string, string> {
                     { "objectMeta", "" }
                 },
                 Bucket = request.Bucket,
-                Key    = request.Key
+                Key = request.Key
             };
 
             Serde.SerializeInput(request, ref input);
@@ -283,15 +283,15 @@ namespace AlibabaCloud.OSS.V2 {
         /// <returns><see cref="Models.RestoreObjectResult" />The result instance.</returns>
         public async Task<Models.RestoreObjectResult> RestoreObjectAsync(
             Models.RestoreObjectRequest request,
-            OperationOptions?           options           = null,
-            CancellationToken           cancellationToken = default
+            OperationOptions? options = null,
+            CancellationToken cancellationToken = default
         ) {
             Ensure.NotNull(request.Bucket, "request.Bucket");
             Ensure.NotNull(request.Key, "request.Key");
 
             var input = new OperationInput {
                 OperationName = "RestoreObject",
-                Method        = "POST",
+                Method = "POST",
                 Headers = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase) {
                     { "Content-Type", "application/xml" }
                 },
@@ -299,7 +299,7 @@ namespace AlibabaCloud.OSS.V2 {
                     { "restore", "" }
                 },
                 Bucket = request.Bucket,
-                Key    = request.Key
+                Key = request.Key
             };
 
             Serde.SerializeInput(request, ref input, Serde.AddContentMd5);
@@ -322,20 +322,20 @@ namespace AlibabaCloud.OSS.V2 {
         /// <returns><see cref="Models.CleanRestoredObjectResult" />The result instance.</returns>
         public async Task<Models.CleanRestoredObjectResult> CleanRestoredObjectAsync(
             Models.CleanRestoredObjectRequest request,
-            OperationOptions?                 options           = null,
-            CancellationToken                 cancellationToken = default
+            OperationOptions? options = null,
+            CancellationToken cancellationToken = default
         ) {
             Ensure.NotNull(request.Bucket, "request.Bucket");
             Ensure.NotNull(request.Key, "request.Key");
 
             var input = new OperationInput {
                 OperationName = "CleanRestoredObject",
-                Method        = "POST",
+                Method = "POST",
                 Parameters = new Dictionary<string, string> {
                     { "cleanRestoredObject", "" }
                 },
                 Bucket = request.Bucket,
-                Key    = request.Key,
+                Key = request.Key,
                 OperationMetadata = {
                     ["sub-resource"] = new List<string>() { "cleanRestoredObject" }
                 }
@@ -361,8 +361,8 @@ namespace AlibabaCloud.OSS.V2 {
         /// <returns><see cref="Models.ProcessObjectResult" />The result instance.</returns>
         public async Task<Models.ProcessObjectResult> ProcessObjectAsync(
             Models.ProcessObjectRequest request,
-            OperationOptions?           options           = null,
-            CancellationToken           cancellationToken = default
+            OperationOptions? options = null,
+            CancellationToken cancellationToken = default
         ) {
             Ensure.NotNull(request.Bucket, "request.Bucket");
             Ensure.NotNull(request.Key, "request.Key");
@@ -370,12 +370,12 @@ namespace AlibabaCloud.OSS.V2 {
 
             var input = new OperationInput {
                 OperationName = "ProcessObject",
-                Method        = "POST",
+                Method = "POST",
                 Parameters = new Dictionary<string, string> {
                     { "x-oss-process", "" }
                 },
                 Bucket = request.Bucket,
-                Key    = request.Key
+                Key = request.Key
             };
 
             Serde.SerializeInput(request, ref input, Serde.AddProcessAction, Serde.AddContentMd5);
@@ -398,8 +398,8 @@ namespace AlibabaCloud.OSS.V2 {
         /// <returns><see cref="Models.AsyncProcessObjectResult" />The result instance.</returns>
         public async Task<Models.AsyncProcessObjectResult> AsyncProcessObjectAsync(
             Models.AsyncProcessObjectRequest request,
-            OperationOptions?                options           = null,
-            CancellationToken                cancellationToken = default
+            OperationOptions? options = null,
+            CancellationToken cancellationToken = default
         ) {
             Ensure.NotNull(request.Bucket, "request.Bucket");
             Ensure.NotNull(request.Key, "request.Key");
@@ -407,12 +407,12 @@ namespace AlibabaCloud.OSS.V2 {
 
             var input = new OperationInput {
                 OperationName = "AsyncProcessObject",
-                Method        = "POST",
+                Method = "POST",
                 Parameters = new Dictionary<string, string> {
                     { "x-oss-async-process", "" }
                 },
                 Bucket = request.Bucket,
-                Key    = request.Key
+                Key = request.Key
             };
 
             Serde.SerializeInput(request, ref input, Serde.AddProcessAction, Serde.AddContentMd5);
@@ -435,15 +435,15 @@ namespace AlibabaCloud.OSS.V2 {
         /// <returns><see cref="Models.DeleteMultipleObjectsResult" />The result instance.</returns>
         public async Task<Models.DeleteMultipleObjectsResult> DeleteMultipleObjects(
             Models.DeleteMultipleObjectsRequest request,
-            OperationOptions?                   options           = null,
-            CancellationToken                   cancellationToken = default
+            OperationOptions? options = null,
+            CancellationToken cancellationToken = default
         ) {
             Ensure.NotNull(request.Bucket, "request.Bucket");
             Ensure.NotNull(request.Objects, "request.Objects");
 
             var input = new OperationInput {
                 OperationName = "DeleteMultipleObjects",
-                Method        = "POST",
+                Method = "POST",
                 Headers = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase) {
                     { "Content-Type", "application/xml" }
                 },
@@ -484,7 +484,7 @@ namespace AlibabaCloud.OSS.V2 {
                     var ccrc = Convert.ToString(BitConverter.ToUInt64(val, 0), CultureInfo.InvariantCulture);
                     if (!string.Equals(ccrc, scrc)) {
                         x.Headers.TryGetValue("x-oss-request-id", out var requestId);
-                        throw new InconsistentException(ccrc, scrc, requestId?? "");
+                        throw new InconsistentException(ccrc, scrc, requestId ?? "");
                     }
                 }
             };

@@ -80,7 +80,7 @@ public class ClientServiceTest : IDisposable {
         //list with prefix one by one async
         paginators = client.ListBucketsPaginator(
             new ListBucketsRequest() { Prefix = bucketNamePrefix },
-            new Paginator.PaginatorOptions() { Limit = 1});
+            new Paginator.PaginatorOptions() { Limit = 1 });
         count = 0;
         await foreach (var bucket in paginators.IterPageAsync()) {
             Assert.NotNull(bucket);

@@ -9,7 +9,7 @@ namespace AlibabaCloud.OSS.V2.IntegrationTests {
 
         public override int Read(byte[] buffer, int offset, int count) {
             Thread.Sleep(_timeout);
-            var n =  base.Read(buffer, offset, count);
+            var n = base.Read(buffer, offset, count);
             return n;
         }
 

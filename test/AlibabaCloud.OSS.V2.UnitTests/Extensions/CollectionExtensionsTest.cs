@@ -12,7 +12,7 @@ public class CollectionExtensionsTest {
 
         var newHeaders = new Dictionary<string, string> { };
         Assert.Empty(newHeaders);
-        headers.ForEach(x => { newHeaders.Add(x.Key.ToLowerInvariant(), x.Value);});
+        headers.ForEach(x => { newHeaders.Add(x.Key.ToLowerInvariant(), x.Value); });
 
         Assert.NotEmpty(newHeaders);
         Assert.Equal("value1", newHeaders["x-oss-meta-key-1"]);

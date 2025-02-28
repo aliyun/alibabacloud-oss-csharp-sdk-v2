@@ -117,20 +117,20 @@ namespace AlibabaCloud.OSS.V2.Transform {
     internal static partial class Serde {
         public static void DeserializeInitiateMultipartUpload(
             ref Models.ResultModel baseResult,
-            ref OperationOutput    output
+            ref OperationOutput output
         ) {
-            var       serializer = new XmlSerializer(typeof(XmlInitiateMultipartUploadResult));
-            using var body       = output.Body!;
-            var       obj        = serializer.Deserialize(body) as XmlInitiateMultipartUploadResult;
-            var       result     = baseResult as Models.InitiateMultipartUploadResult;
+            var serializer = new XmlSerializer(typeof(XmlInitiateMultipartUploadResult));
+            using var body = output.Body!;
+            var obj = serializer.Deserialize(body) as XmlInitiateMultipartUploadResult;
+            var result = baseResult as Models.InitiateMultipartUploadResult;
 
             if (obj == null || result == null) return;
 
             DeserializeInitiateMultipartUploadEncodingType(ref obj);
 
-            result.Bucket       = obj.Bucket;
-            result.Key          = obj.Key;
-            result.UploadId     = obj.UploadId;
+            result.Bucket = obj.Bucket;
+            result.Key = obj.Key;
+            result.UploadId = obj.UploadId;
             result.EncodingType = obj.EncodingType;
         }
 
@@ -142,34 +142,34 @@ namespace AlibabaCloud.OSS.V2.Transform {
 
         public static void DeserializeUploadPartCopy(
             ref Models.ResultModel baseResult,
-            ref OperationOutput    output
+            ref OperationOutput output
         ) {
-            var       serializer = new XmlSerializer(typeof(XmlCopyPartResult));
-            using var body       = output.Body!;
-            var       obj        = serializer.Deserialize(body) as XmlCopyPartResult;
-            var       result     = baseResult as Models.UploadPartCopyResult;
+            var serializer = new XmlSerializer(typeof(XmlCopyPartResult));
+            using var body = output.Body!;
+            var obj = serializer.Deserialize(body) as XmlCopyPartResult;
+            var result = baseResult as Models.UploadPartCopyResult;
 
             if (obj == null || result == null) return;
 
-            result.ETag         = obj.ETag;
+            result.ETag = obj.ETag;
             result.LastModified = obj.LastModified;
         }
 
         public static void DeserializeCompleteMultipartUpload(
             ref Models.ResultModel baseResult,
-            ref OperationOutput    output
+            ref OperationOutput output
         ) {
-            var       serializer = new XmlSerializer(typeof(XmlCompleteMultipartUploadResult));
-            using var body       = output.Body!;
-            var       obj        = serializer.Deserialize(body) as XmlCompleteMultipartUploadResult;
-            var       result     = baseResult as Models.CompleteMultipartUploadResult;
+            var serializer = new XmlSerializer(typeof(XmlCompleteMultipartUploadResult));
+            using var body = output.Body!;
+            var obj = serializer.Deserialize(body) as XmlCompleteMultipartUploadResult;
+            var result = baseResult as Models.CompleteMultipartUploadResult;
 
             if (obj == null || result == null) return;
 
-            result.Bucket       = obj.Bucket;
-            result.ETag         = obj.ETag;
+            result.Bucket = obj.Bucket;
+            result.ETag = obj.ETag;
             result.EncodingType = obj.EncodingType;
-            result.Key          = obj.Key;
+            result.Key = obj.Key;
 
             if (string.Equals("url", result.EncodingType) && obj.Key != null) {
                 result.Key = obj.Key.UrlDecode();
@@ -178,25 +178,25 @@ namespace AlibabaCloud.OSS.V2.Transform {
 
         public static void DeserializeCompleteMultipartUploadCallback(
             ref Models.ResultModel baseResult,
-            ref OperationOutput    output
+            ref OperationOutput output
         ) {
             if (output.Body == null) {
                 return;
             }
-            using var body   = output.Body;
+            using var body = output.Body;
             using var reader = new StreamReader(body);
-            var       result = baseResult as Models.CompleteMultipartUploadResult;
+            var result = baseResult as Models.CompleteMultipartUploadResult;
             result!.CallbackResult = reader.ReadToEnd();
         }
 
         public static void DeserializeListMultipartUploads(
             ref Models.ResultModel baseResult,
-            ref OperationOutput    output
+            ref OperationOutput output
         ) {
-            var       serializer = new XmlSerializer(typeof(XmlListMultipartUploadsResult));
-            using var body       = output.Body!;
-            var       obj        = serializer.Deserialize(body) as XmlListMultipartUploadsResult;
-            var       result     = baseResult as Models.ListMultipartUploadsResult;
+            var serializer = new XmlSerializer(typeof(XmlListMultipartUploadsResult));
+            using var body = output.Body!;
+            var obj = serializer.Deserialize(body) as XmlListMultipartUploadsResult;
+            var result = baseResult as Models.ListMultipartUploadsResult;
 
             if (obj == null || result == null) {
                 return;
@@ -204,17 +204,17 @@ namespace AlibabaCloud.OSS.V2.Transform {
 
             DeserializeListMultipartUploadsEncodingType(ref obj);
 
-            result.Bucket             = obj.Bucket;
-            result.KeyMarker          = obj.KeyMarker;
-            result.UploadIdMarker     = obj.UploadIdMarker;
-            result.NextKeyMarker      = obj.NextKeyMarker;
+            result.Bucket = obj.Bucket;
+            result.KeyMarker = obj.KeyMarker;
+            result.UploadIdMarker = obj.UploadIdMarker;
+            result.NextKeyMarker = obj.NextKeyMarker;
             result.NextUploadIdMarker = obj.NextUploadIdMarker;
-            result.Delimiter          = obj.Delimiter;
-            result.MaxUploads         = obj.MaxUploads;
-            result.EncodingType       = obj.EncodingType;
-            result.Prefix             = obj.Prefix;
-            result.IsTruncated        = obj.IsTruncated;
-            result.Uploads            = obj.Uploads;
+            result.Delimiter = obj.Delimiter;
+            result.MaxUploads = obj.MaxUploads;
+            result.EncodingType = obj.EncodingType;
+            result.Prefix = obj.Prefix;
+            result.IsTruncated = obj.IsTruncated;
+            result.Uploads = obj.Uploads;
         }
 
         private static void DeserializeListMultipartUploadsEncodingType(ref XmlListMultipartUploadsResult result) {
@@ -249,27 +249,27 @@ namespace AlibabaCloud.OSS.V2.Transform {
 
         public static void DeserializeListParts(
             ref Models.ResultModel baseResult,
-            ref OperationOutput    output
+            ref OperationOutput output
         ) {
-            var       serializer = new XmlSerializer(typeof(XmlListPartsResult));
-            using var body       = output.Body!;
-            var       obj        = serializer.Deserialize(body) as XmlListPartsResult;
-            var       result     = baseResult as Models.ListPartsResult;
+            var serializer = new XmlSerializer(typeof(XmlListPartsResult));
+            using var body = output.Body!;
+            var obj = serializer.Deserialize(body) as XmlListPartsResult;
+            var result = baseResult as Models.ListPartsResult;
 
             if (obj == null || result == null) {
                 return;
             }
 
-            result.Bucket               = obj.Bucket;
-            result.Key                  = obj.Key;
-            result.PartNumberMarker     = string.IsNullOrEmpty(obj.PartNumberMarker) ? null : Convert.ToInt64(obj.PartNumberMarker, CultureInfo.InvariantCulture);
+            result.Bucket = obj.Bucket;
+            result.Key = obj.Key;
+            result.PartNumberMarker = string.IsNullOrEmpty(obj.PartNumberMarker) ? null : Convert.ToInt64(obj.PartNumberMarker, CultureInfo.InvariantCulture);
             result.NextPartNumberMarker = string.IsNullOrEmpty(obj.NextPartNumberMarker) ? null : Convert.ToInt64(obj.NextPartNumberMarker, CultureInfo.InvariantCulture);
-            result.MaxParts             = obj.MaxParts;
-            result.UploadId             = obj.UploadId;
-            result.Parts                = obj.Parts;
-            result.IsTruncated          = obj.IsTruncated;
-            result.EncodingType         = obj.EncodingType;
-            result.StorageClass         = obj.StorageClass;
+            result.MaxParts = obj.MaxParts;
+            result.UploadId = obj.UploadId;
+            result.Parts = obj.Parts;
+            result.IsTruncated = obj.IsTruncated;
+            result.EncodingType = obj.EncodingType;
+            result.StorageClass = obj.StorageClass;
 
             if (string.Equals("url", result.EncodingType) && obj.Key != null) {
                 result.Key = obj.Key.UrlDecode();

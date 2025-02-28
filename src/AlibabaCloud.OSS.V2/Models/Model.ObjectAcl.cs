@@ -92,7 +92,7 @@ namespace AlibabaCloud.OSS.V2.Models {
 
         public GetObjectAclResult() {
             BodyFormat = "xml";
-            BodyType   = typeof(AccessControlPolicy);
+            BodyType = typeof(AccessControlPolicy);
         }
     }
 }

@@ -34,7 +34,7 @@ namespace AlibabaCloud.OSS.V2.Retry {
     internal class ClientExceptionRetryable : IErrorRetryable {
         public bool IsErrorRetryable(Exception error) {
             return error switch {
-                InconsistentException  => true,
+                InconsistentException => true,
                 RequestFailedException => true,
                 RequestTimeoutException => true,
                 _ => false

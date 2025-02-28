@@ -2,8 +2,7 @@ using AlibabaCloud.OSS.V2.Extensions;
 
 namespace AlibabaCloud.OSS.V2.UnitTests.Extensions;
 
-public class UriExtensionsTest
-{
+public class UriExtensionsTest {
 
     [Fact]
     public void TestIsHostIp() {

@@ -25,7 +25,7 @@ public class ModelObjectTaggingTest {
         Assert.Null(input.Body);
 
         request = new PutObjectTaggingRequest {
-            Bucket    = "bucket",
+            Bucket = "bucket",
             Key = "key",
             VersionId = "version-id",
             Tagging = new Tagging() {
@@ -94,7 +94,7 @@ public class ModelObjectTaggingTest {
 
         var output = new OperationOutput {
             StatusCode = 200,
-            Status     = "OK",
+            Status = "OK",
             Headers = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase) {
                 {"x-oss-request-id", "123-id"},
                 {"x-oss-version-id", "version-id-123"},
@@ -177,7 +177,7 @@ public class ModelObjectTaggingTest {
 
         var output = new OperationOutput {
             StatusCode = 200,
-            Status     = "OK",
+            Status = "OK",
             Headers = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase) {
                 {"x-oss-request-id", "123-id"},
                 {"Content-Type","txt"}

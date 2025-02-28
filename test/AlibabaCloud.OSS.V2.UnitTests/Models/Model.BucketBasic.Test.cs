@@ -26,13 +26,13 @@ public class ModelBucketBasicTest {
         Assert.Null(input.Body);
 
         request = new PutBucketRequest {
-            Bucket          = "bucket",
-            Acl             = "private",
+            Bucket = "bucket",
+            Acl = "private",
             ResourceGroupId = "rg-123",
             BucketTagging = "k1=v1&k2=v2",
             CreateBucketConfiguration = new CreateBucketConfiguration {
                 DataRedundancyType = "LZR",
-                StorageClass       = "IA"
+                StorageClass = "IA"
             }
         };
         Assert.Equal(3, request.Headers.Count);
@@ -75,7 +75,7 @@ public class ModelBucketBasicTest {
         Assert.Equal("", result.RequestId);
         Assert.Empty(result.Headers);
 
-        var output     = new OperationOutput {
+        var output = new OperationOutput {
             StatusCode = 200,
             Status = "OK",
             Headers = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase) {
@@ -197,7 +197,7 @@ public class ModelBucketBasicTest {
 
         var output = new OperationOutput {
             StatusCode = 200,
-            Status     = "OK",
+            Status = "OK",
             Headers = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase) {
                 {"x-oss-request-id", "123-id"},
                 {"Content-Type","application/xml"}
@@ -412,7 +412,7 @@ public class ModelBucketBasicTest {
 
         output = new OperationOutput {
             StatusCode = 200,
-            Status     = "OK",
+            Status = "OK",
             Headers = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase) {
                 {"x-oss-request-id", "123-id"},
                 {"Content-Type","application/xml"}
@@ -501,7 +501,7 @@ public class ModelBucketBasicTest {
 
         var output = new OperationOutput {
             StatusCode = 200,
-            Status     = "OK",
+            Status = "OK",
             Headers = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase) {
                 { "x-oss-request-id", "123-id" },
                 { "Content-Type", "application/xml" }
@@ -526,7 +526,7 @@ public class ModelBucketBasicTest {
 
         output = new OperationOutput {
             StatusCode = 200,
-            Status     = "OK",
+            Status = "OK",
             Headers = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase) {
                 { "x-oss-request-id", "123-id" },
                 { "Content-Type", "application/xml" }
@@ -566,12 +566,12 @@ public class ModelBucketBasicTest {
         Assert.Null(input.Body);
 
         request = new ListObjectsRequest {
-            Bucket       = "bucket",
-            Delimiter    = "/",
+            Bucket = "bucket",
+            Delimiter = "/",
             EncodingType = "url",
-            Marker       = "key-01",
-            MaxKeys      = 10001,
-            Prefix       = "prefix-01",
+            Marker = "key-01",
+            MaxKeys = 10001,
+            Prefix = "prefix-01",
         };
         Assert.Empty(request.Headers);
         Assert.Equal("bucket", request.Bucket);
@@ -697,7 +697,7 @@ public class ModelBucketBasicTest {
 """;
         output = new OperationOutput {
             StatusCode = 200,
-            Status     = "OK",
+            Status = "OK",
             Headers = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase) {
                 { "x-oss-request-id", "123-id" },
                 { "Content-Type", "application/xml" }
@@ -834,13 +834,13 @@ public class ModelBucketBasicTest {
         Assert.Null(input.Body);
 
         request = new ListObjectsV2Request {
-            Bucket       = "bucket",
-            Delimiter    = "/",
+            Bucket = "bucket",
+            Delimiter = "/",
             EncodingType = "url",
-            StartAfter   = "key-01",
-            ContinuationToken   = "token-01",
-            MaxKeys      = 10001,
-            Prefix       = "prefix-01",
+            StartAfter = "key-01",
+            ContinuationToken = "token-01",
+            MaxKeys = 10001,
+            Prefix = "prefix-01",
             FetchOwner = true
         };
         Assert.Empty(request.Headers);

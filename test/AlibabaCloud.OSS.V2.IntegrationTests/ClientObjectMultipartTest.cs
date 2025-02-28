@@ -16,7 +16,7 @@ public class ClientObjectMultipartTest : IDisposable {
     }
 
     [Fact]
-    public async Task TestUploadPart () {
+    public async Task TestUploadPart() {
         var client = Utils.GetDefaultClient();
 
         //default
@@ -33,9 +33,9 @@ public class ClientObjectMultipartTest : IDisposable {
         // init
         var objectName = Utils.RandomObjectName();
         var initResult = await client.InitiateMultipartUploadAsync(new() {
-                Bucket = bucketName,
-                Key = objectName
-            }
+            Bucket = bucketName,
+            Key = objectName
+        }
         );
         Assert.NotNull(initResult);
         Assert.Equal(200, initResult.StatusCode);

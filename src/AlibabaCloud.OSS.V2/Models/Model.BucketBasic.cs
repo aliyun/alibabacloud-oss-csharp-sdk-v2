@@ -429,7 +429,7 @@ namespace AlibabaCloud.OSS.V2.Models {
 
         public GetBucketStatResult() {
             BodyFormat = "xml";
-            BodyType   = typeof(BucketStat);
+            BodyType = typeof(BucketStat);
         }
     }
 
@@ -804,7 +804,7 @@ namespace AlibabaCloud.OSS.V2.Models {
 
         public GetBucketInfoResult() {
             BodyFormat = "xml";
-            BodyType   = typeof(XmlBucketInfo);
+            BodyType = typeof(XmlBucketInfo);
         }
     }
 
@@ -834,7 +834,7 @@ namespace AlibabaCloud.OSS.V2.Models {
 
         public GetBucketLocationResult() {
             BodyFormat = "xml";
-            BodyType   = typeof(XmlLocationConstraint);
+            BodyType = typeof(XmlLocationConstraint);
         }
     }
 }

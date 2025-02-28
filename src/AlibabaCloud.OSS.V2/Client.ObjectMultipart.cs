@@ -15,21 +15,21 @@ namespace AlibabaCloud.OSS.V2 {
         /// <returns><see cref="Models.InitiateMultipartUploadResult" />The result instance.</returns>
         public async Task<Models.InitiateMultipartUploadResult> InitiateMultipartUploadAsync(
             Models.InitiateMultipartUploadRequest request,
-            OperationOptions?                     options           = null,
-            CancellationToken                     cancellationToken = default
+            OperationOptions? options = null,
+            CancellationToken cancellationToken = default
         ) {
             Ensure.NotNull(request.Bucket, "request.Bucket");
             Ensure.NotNull(request.Key, "request.Key");
 
             var input = new OperationInput {
                 OperationName = "InitiateMultipartUpload",
-                Method        = "POST",
+                Method = "POST",
                 Parameters = new Dictionary<string, string> {
                     { "uploads", "" },
                     {"encoding-type", "url"}
                 },
                 Bucket = request.Bucket,
-                Key    = request.Key
+                Key = request.Key
             };
 
             Serde.SerializeInput(request, ref input, Serde.AddMetadata, Serde.AddContentMd5, AddContentTypeEx);
@@ -52,8 +52,8 @@ namespace AlibabaCloud.OSS.V2 {
         /// <returns><see cref="Models.UploadPartResult" />The result instance.</returns>
         public async Task<Models.UploadPartResult> UploadPartAsync(
             Models.UploadPartRequest request,
-            OperationOptions?        options           = null,
-            CancellationToken        cancellationToken = default
+            OperationOptions? options = null,
+            CancellationToken cancellationToken = default
         ) {
             Ensure.NotNull(request.Bucket, "request.Bucket");
             Ensure.NotNull(request.Key, "request.Key");
@@ -62,9 +62,9 @@ namespace AlibabaCloud.OSS.V2 {
 
             var input = new OperationInput {
                 OperationName = "UploadPart",
-                Method        = "PUT",
+                Method = "PUT",
                 Bucket = request.Bucket,
-                Key    = request.Key
+                Key = request.Key
             };
 
             Serde.SerializeInput(request, ref input, AddCrcChecker, AddProgress);
@@ -87,8 +87,8 @@ namespace AlibabaCloud.OSS.V2 {
         /// <returns><see cref="Models.CompleteMultipartUploadResult" />The result instance.</returns>
         public async Task<Models.CompleteMultipartUploadResult> CompleteMultipartUploadAsync(
             Models.CompleteMultipartUploadRequest request,
-            OperationOptions?                     options           = null,
-            CancellationToken                     cancellationToken = default
+            OperationOptions? options = null,
+            CancellationToken cancellationToken = default
         ) {
             Ensure.NotNull(request.Bucket, "request.Bucket");
             Ensure.NotNull(request.Key, "request.Key");
@@ -96,7 +96,7 @@ namespace AlibabaCloud.OSS.V2 {
 
             var input = new OperationInput {
                 OperationName = "CompleteMultipartUpload",
-                Method        = "POST",
+                Method = "POST",
                 Headers = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase) {
                     { "Content-Type", "application/xml" }
                 },
@@ -104,7 +104,7 @@ namespace AlibabaCloud.OSS.V2 {
                     {"encoding-type", "url"}
                 },
                 Bucket = request.Bucket,
-                Key    = request.Key
+                Key = request.Key
             };
 
             Serde.SerializeInput(request, ref input, Serde.AddContentMd5);
@@ -127,8 +127,8 @@ namespace AlibabaCloud.OSS.V2 {
         /// <returns><see cref="Models.UploadPartCopyResult" />The result instance.</returns>
         public async Task<Models.UploadPartCopyResult> UploadPartCopyAsync(
             Models.UploadPartCopyRequest request,
-            OperationOptions?            options           = null,
-            CancellationToken            cancellationToken = default
+            OperationOptions? options = null,
+            CancellationToken cancellationToken = default
         ) {
             Ensure.NotNull(request.Bucket, "request.Bucket");
             Ensure.NotNull(request.Key, "request.Key");
@@ -138,9 +138,9 @@ namespace AlibabaCloud.OSS.V2 {
 
             var input = new OperationInput {
                 OperationName = "UploadPartCopy",
-                Method        = "PUT",
+                Method = "PUT",
                 Bucket = request.Bucket,
-                Key    = request.Key
+                Key = request.Key
             };
 
             Serde.SerializeInput(request, ref input, Serde.AddCopySource);
@@ -163,8 +163,8 @@ namespace AlibabaCloud.OSS.V2 {
         /// <returns><see cref="Models.AbortMultipartUploadResult" />The result instance.</returns>
         public async Task<Models.AbortMultipartUploadResult> AbortMultipartUploadAsync(
             Models.AbortMultipartUploadRequest request,
-            OperationOptions?                  options           = null,
-            CancellationToken                  cancellationToken = default
+            OperationOptions? options = null,
+            CancellationToken cancellationToken = default
         ) {
             Ensure.NotNull(request.Bucket, "request.Bucket");
             Ensure.NotNull(request.Key, "request.Key");
@@ -172,12 +172,12 @@ namespace AlibabaCloud.OSS.V2 {
 
             var input = new OperationInput {
                 OperationName = "AbortMultipartUpload",
-                Method        = "DELETE",
+                Method = "DELETE",
                 Headers = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase) {
                     { "Content-Type", "application/xml" }
                 },
                 Bucket = request.Bucket,
-                Key    = request.Key
+                Key = request.Key
             };
 
             Serde.SerializeInput(request, ref input, Serde.AddContentMd5);
@@ -200,14 +200,14 @@ namespace AlibabaCloud.OSS.V2 {
         /// <returns><see cref="Models.ListMultipartUploadsResult" />The result instance.</returns>
         public async Task<Models.ListMultipartUploadsResult> ListMultipartUploadsAsync(
             Models.ListMultipartUploadsRequest request,
-            OperationOptions?                  options           = null,
-            CancellationToken                  cancellationToken = default
+            OperationOptions? options = null,
+            CancellationToken cancellationToken = default
         ) {
             Ensure.NotNull(request.Bucket, "request.Bucket");
 
             var input = new OperationInput {
                 OperationName = "ListMultipartUploads",
-                Method        = "GET",
+                Method = "GET",
                 Parameters = new Dictionary<string, string> {
                     { "uploads", "" },
                     { "encoding-type", "url" }
@@ -235,8 +235,8 @@ namespace AlibabaCloud.OSS.V2 {
         /// <returns><see cref="Models.ListPartsResult" />The result instance.</returns>
         public async Task<Models.ListPartsResult> ListPartsAsync(
             Models.ListPartsRequest request,
-            OperationOptions?       options           = null,
-            CancellationToken       cancellationToken = default
+            OperationOptions? options = null,
+            CancellationToken cancellationToken = default
         ) {
             Ensure.NotNull(request.Bucket, "request.Bucket");
             Ensure.NotNull(request.Key, "request.Key");
@@ -244,12 +244,12 @@ namespace AlibabaCloud.OSS.V2 {
 
             var input = new OperationInput {
                 OperationName = "ListParts",
-                Method        = "GET",
+                Method = "GET",
                 Parameters = new Dictionary<string, string> {
                     { "encoding-type", "url" }
                 },
-                Bucket        = request.Bucket,
-                Key           = request.Key
+                Bucket = request.Bucket,
+                Key = request.Key
             };
 
             Serde.SerializeInput(request, ref input);

@@ -26,7 +26,7 @@ public class SignerV4Test {
             Request = request,
             Credentials = cred,
             Product = "oss",
-            Region  = "cn-hangzhou",
+            Region = "cn-hangzhou",
             SignTime = signTime,
         };
 
@@ -136,7 +136,7 @@ public class SignerV4Test {
             Product = "oss",
             Region = "cn-hangzhou",
             SignTime = signTime,
-            AdditionalHeaders = new List<string>{"ZAbc", "abc"}
+            AdditionalHeaders = new List<string> { "ZAbc", "abc" }
         };
 
         var parameters = new Dictionary<string, string> {

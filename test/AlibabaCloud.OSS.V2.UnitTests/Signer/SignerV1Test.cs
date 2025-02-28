@@ -156,7 +156,7 @@ public class SignerV1Test {
             Expiration = expiration,
             AuthMethodQuery = true,
         };
- 
+
         var signer = new V2.Signer.SignerV1();
 
         signer.Sign(signCtx);

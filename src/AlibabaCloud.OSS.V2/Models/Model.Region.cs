@@ -70,7 +70,7 @@ namespace AlibabaCloud.OSS.V2.Models {
 
         public DescribeRegionsResult() {
             BodyFormat = "xml";
-            BodyType   = typeof(RegionInfoList);
+            BodyType = typeof(RegionInfoList);
         }
     }
 }

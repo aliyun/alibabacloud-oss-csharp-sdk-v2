@@ -6,15 +6,15 @@ namespace AlibabaCloud.OSS.V2 {
         private readonly IDictionary<string, string> _details;
 
         public ServiceException(
-            int                          statusCode,
+            int statusCode,
             IDictionary<string, string>? details,
             IDictionary<string, string>? errorFields = null,
-            IDictionary<string, string>? headers     = null
+            IDictionary<string, string>? headers = null
         ) : base(ToMessage(statusCode, details)) {
-            StatusCode  = statusCode;
-            _details    = details ?? new Dictionary<string, string>();
+            StatusCode = statusCode;
+            _details = details ?? new Dictionary<string, string>();
             ErrorFields = errorFields ?? new Dictionary<string, string>();
-            Headers     = headers ?? new Dictionary<string, string>();
+            Headers = headers ?? new Dictionary<string, string>();
         }
 
         public int StatusCode { get; }
@@ -38,7 +38,7 @@ namespace AlibabaCloud.OSS.V2 {
         public IDictionary<string, string> Headers { get; }
 
         private static string ToMessage(
-            int                          statusCode,
+            int statusCode,
             IDictionary<string, string>? details
         ) {
             return
@@ -90,7 +90,7 @@ namespace AlibabaCloud.OSS.V2 {
 
     public class OperationException : Exception {
         public OperationException(string name, Exception? innerException = null)
-          :base($"operation error {name}: {innerException}", innerException) {
+          : base($"operation error {name}: {innerException}", innerException) {
         }
     };
 

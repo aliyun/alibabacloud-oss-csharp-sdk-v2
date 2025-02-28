@@ -17,16 +17,16 @@ namespace AlibabaCloud.OSS.V2 {
         /// <param name="cancellationToken"><see cref="CancellationToken"/>Optional,The cancellation token to cancel.</param>
         /// <returns>True if the object exists, else False.</returns>
         public async Task<bool> IsObjectExistAsync(
-            string            bucket,
-            string            key,
-            string?           versionId         = null,
+            string bucket,
+            string key,
+            string? versionId = null,
             CancellationToken cancellationToken = default
         ) {
             try {
                 await GetObjectMetaAsync(
                     new() {
-                        Bucket    = bucket,
-                        Key       = key,
+                        Bucket = bucket,
+                        Key = key,
                         VersionId = versionId
                     },
                     null,
@@ -56,7 +56,7 @@ namespace AlibabaCloud.OSS.V2 {
         /// <param name="cancellationToken"><see cref="CancellationToken"/>Optional,The cancellation token to cancel.</param>
         /// <returns>True if the object exists, else False.</returns>
         public async Task<bool> IsBucketExistAsync(
-            string            bucket,
+            string bucket,
             CancellationToken cancellationToken = default
         ) {
             try {
@@ -89,9 +89,9 @@ namespace AlibabaCloud.OSS.V2 {
         /// <returns><see cref="Models.PutObjectResult" />The result instance.</returns>
         public async Task<Models.PutObjectResult> PutObjectFromFileAsync(
             Models.PutObjectRequest request,
-            string                  filepath,
-            OperationOptions?       options           = null,
-            CancellationToken       cancellationToken = default
+            string filepath,
+            OperationOptions? options = null,
+            CancellationToken cancellationToken = default
         ) {
 #if NET5_0_OR_GREATER
             await using var fs = File.Open(filepath, FileMode.Open);
@@ -112,9 +112,9 @@ namespace AlibabaCloud.OSS.V2 {
         /// <returns><see cref="Models.GetObjectResult" />The result instance.</returns>
         public async Task<Models.GetObjectResult> GetObjectToFileAsync(
             Models.GetObjectRequest request,
-            string                  filepath,
-            OperationOptions?       options           = null,
-            CancellationToken       cancellationToken = default
+            string filepath,
+            OperationOptions? options = null,
+            CancellationToken cancellationToken = default
         ) {
             var (retry, readTimeout) = _clientImpl.GetRuntimeContext(options);
             Models.GetObjectResult? result;
@@ -169,7 +169,8 @@ namespace AlibabaCloud.OSS.V2 {
                     if (cts.IsCancellationRequested) {
                         lastEx = new RequestTimeoutException(
                 $"The operation was cancelled because it exceeded the configured timeout of {readTimeout:g}. ", e);
-                    } else if (cancellationToken.IsCancellationRequested) {
+                    }
+                    else if (cancellationToken.IsCancellationRequested) {
                         break;
                     }
                 }

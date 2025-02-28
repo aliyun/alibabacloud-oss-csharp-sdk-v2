@@ -14,12 +14,12 @@ namespace AlibabaCloud.OSS.V2 {
         /// <returns><see cref="Models.DescribeRegionsResult" />The result instance.</returns>
         public async Task<Models.DescribeRegionsResult> DescribeRegionsAsync(
             Models.DescribeRegionsRequest request,
-            OperationOptions?             options           = null,
-            CancellationToken             cancellationToken = default
+            OperationOptions? options = null,
+            CancellationToken cancellationToken = default
         ) {
             var input = new OperationInput {
                 OperationName = "DescribeRegions",
-                Method        = "GET",
+                Method = "GET",
                 Parameters = new Dictionary<string, string> {
                     { "regions", "" }
                 },

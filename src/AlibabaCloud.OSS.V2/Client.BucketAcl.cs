@@ -15,15 +15,15 @@ namespace AlibabaCloud.OSS.V2 {
         /// <returns><see cref="Models.PutBucketAclResult" />The result instance.</returns>
         public async Task<Models.PutBucketAclResult> PutBucketAclAsync(
             Models.PutBucketAclRequest request,
-            OperationOptions?          options           = null,
-            CancellationToken          cancellationToken = default
+            OperationOptions? options = null,
+            CancellationToken cancellationToken = default
         ) {
             Ensure.NotNull(request.Bucket, "request.Bucket");
             Ensure.NotNull(request.Acl, "request.Acl");
 
             var input = new OperationInput {
                 OperationName = "PutBucketAcl",
-                Method        = "PUT",
+                Method = "PUT",
                 Headers = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase) {
                     { "Content-Type", "application/xml" }
                 },
@@ -53,14 +53,14 @@ namespace AlibabaCloud.OSS.V2 {
         /// <returns><see cref="Models.GetBucketAclResult" />The result instance.</returns>
         public async Task<Models.GetBucketAclResult> GetBucketAclAsync(
             Models.GetBucketAclRequest request,
-            OperationOptions?          options           = null,
-            CancellationToken          cancellationToken = default
+            OperationOptions? options = null,
+            CancellationToken cancellationToken = default
         ) {
             Ensure.NotNull(request.Bucket, "request.Bucket");
 
             var input = new OperationInput {
                 OperationName = "GetBucketAcl",
-                Method        = "GET",
+                Method = "GET",
                 Parameters = new Dictionary<string, string> {
                     { "acl", "" }
                 },

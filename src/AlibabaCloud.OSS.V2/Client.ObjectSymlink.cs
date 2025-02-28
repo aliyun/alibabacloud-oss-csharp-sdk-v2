@@ -16,8 +16,8 @@ namespace AlibabaCloud.OSS.V2 {
         /// <returns><see cref="Models.PutSymlinkResult" />The result instance.</returns>
         public async Task<Models.PutSymlinkResult> PutSymlinkAsync(
             Models.PutSymlinkRequest request,
-            OperationOptions?        options           = null,
-            CancellationToken        cancellationToken = default
+            OperationOptions? options = null,
+            CancellationToken cancellationToken = default
         ) {
             Ensure.NotNull(request.Bucket, "request.Bucket");
             Ensure.NotNull(request.Key, "request.Key");
@@ -25,7 +25,7 @@ namespace AlibabaCloud.OSS.V2 {
 
             var input = new OperationInput {
                 OperationName = "PutSymlink",
-                Method        = "PUT",
+                Method = "PUT",
                 Headers = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase) {
                     { "Content-Type", "application/xml" }
                 },
@@ -33,7 +33,7 @@ namespace AlibabaCloud.OSS.V2 {
                     { "symlink", "" }
                 },
                 Bucket = request.Bucket,
-                Key    = request.Key
+                Key = request.Key
             };
 
             Serde.SerializeInput(request, ref input, Serde.AddContentMd5);
@@ -56,20 +56,20 @@ namespace AlibabaCloud.OSS.V2 {
         /// <returns><see cref="Models.GetSymlinkResult" />The result instance.</returns>
         public async Task<Models.GetSymlinkResult> GetSymlinkAsync(
             Models.GetSymlinkRequest request,
-            OperationOptions?        options           = null,
-            CancellationToken        cancellationToken = default
+            OperationOptions? options = null,
+            CancellationToken cancellationToken = default
         ) {
             Ensure.NotNull(request.Bucket, "request.Bucket");
             Ensure.NotNull(request.Key, "request.Key");
 
             var input = new OperationInput {
                 OperationName = "GetSymlink",
-                Method        = "GET",
+                Method = "GET",
                 Parameters = new Dictionary<string, string> {
                     { "symlink", "" }
                 },
                 Bucket = request.Bucket,
-                Key    = request.Key
+                Key = request.Key
             };
 
             Serde.SerializeInput(request, ref input);

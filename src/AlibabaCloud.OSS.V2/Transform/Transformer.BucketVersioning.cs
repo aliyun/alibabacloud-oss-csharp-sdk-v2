@@ -105,12 +105,12 @@ namespace AlibabaCloud.OSS.V2.Transform {
     internal static partial class Serde {
         public static void DeserializeListObjectVersions(
             ref Models.ResultModel baseResult,
-            ref OperationOutput    output
+            ref OperationOutput output
         ) {
-            var       serializer = new XmlSerializer(typeof(XmlListVersionsResult));
-            using var body       = output.Body!;
-            var       obj        = serializer.Deserialize(body) as XmlListVersionsResult;
-            var       result     = baseResult as Models.ListObjectVersionsResult;
+            var serializer = new XmlSerializer(typeof(XmlListVersionsResult));
+            using var body = output.Body!;
+            var obj = serializer.Deserialize(body) as XmlListVersionsResult;
+            var result = baseResult as Models.ListObjectVersionsResult;
 
             if (obj == null || result == null) {
                 return;
@@ -118,19 +118,19 @@ namespace AlibabaCloud.OSS.V2.Transform {
 
             DeserializeVersionsEncodingType(ref obj);
 
-            result.Name                = obj.Name;
-            result.MaxKeys             = obj.MaxKeys;
-            result.Delimiter           = obj.Delimiter;
-            result.EncodingType        = obj.EncodingType;
-            result.KeyMarker           = obj.KeyMarker;
-            result.VersionIdMarker     = obj.VersionIdMarker;
-            result.NextKeyMarker       = obj.NextKeyMarker;
+            result.Name = obj.Name;
+            result.MaxKeys = obj.MaxKeys;
+            result.Delimiter = obj.Delimiter;
+            result.EncodingType = obj.EncodingType;
+            result.KeyMarker = obj.KeyMarker;
+            result.VersionIdMarker = obj.VersionIdMarker;
+            result.NextKeyMarker = obj.NextKeyMarker;
             result.NextVersionIdMarker = obj.NextVersionIdMarker;
-            result.Versions            = obj.Versions;
-            result.Prefix              = obj.Prefix;
-            result.IsTruncated         = obj.IsTruncated;
-            result.CommonPrefixes      = obj.CommonPrefixes;
-            result.DeleteMarkers       = obj.DeleteMarkers;
+            result.Versions = obj.Versions;
+            result.Prefix = obj.Prefix;
+            result.IsTruncated = obj.IsTruncated;
+            result.CommonPrefixes = obj.CommonPrefixes;
+            result.DeleteMarkers = obj.DeleteMarkers;
         }
 
         private static void DeserializeVersionsEncodingType(ref XmlListVersionsResult result) {
@@ -200,8 +200,7 @@ namespace AlibabaCloud.OSS.V2.Transform {
                     Status = obj.Status
                 };
             }
-            catch (InvalidOperationException)
-            {
+            catch (InvalidOperationException) {
                 if (!body.CanSeek) {
                     throw;
                 }

@@ -5,8 +5,7 @@ namespace AlibabaCloud.OSS.V2.Retry {
     /// <summary>
     /// The interface for Retryer.
     /// </summary>
-    public interface IRetryer
-    {
+    public interface IRetryer {
         /// <summary>
         /// Check whether the error is retryable.
         /// </summary>

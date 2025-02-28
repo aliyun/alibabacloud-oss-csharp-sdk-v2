@@ -2,15 +2,12 @@
 using System;
 
 namespace AlibabaCloud.OSS.V2.Retry {
-    public class NopRetryer : IRetryer
-    {
-        public bool IsErrorRetryable(Exception error)
-        {
+    public class NopRetryer : IRetryer {
+        public bool IsErrorRetryable(Exception error) {
             return false;
         }
 
-        public int MaxAttempts()
-        {
+        public int MaxAttempts() {
             return 1;
         }
 

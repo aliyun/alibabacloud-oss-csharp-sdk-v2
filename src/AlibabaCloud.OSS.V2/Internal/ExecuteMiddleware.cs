@@ -30,10 +30,10 @@ namespace AlibabaCloud.OSS.V2.Internal {
             using var cts = new CancellationTokenSource(context.RequestOnceTimeout);
             var linkedCts = CancellationTokenSource.CreateLinkedTokenSource(cts.Token, context.ApiCallCancellationToken);
 
-            using var            httpRequest  = new HttpRequestMessage(ConvertMethod(request.Method), request.RequestUri);
+            using var httpRequest = new HttpRequestMessage(ConvertMethod(request.Method), request.RequestUri);
             HttpResponseMessage? httpResponse = null;
             var completionOption = context.HttpCompletionOption ?? HttpCompletionOption.ResponseContentRead;
-            var                  content      = NopCloseRequestContent.StreamFor(request.Content, cts, context.RequestOnceTimeout);
+            var content = NopCloseRequestContent.StreamFor(request.Content, cts, context.RequestOnceTimeout);
 
             // Write data to the request stream.
             // Get & Head Method does not support HttpContent
@@ -137,13 +137,13 @@ namespace AlibabaCloud.OSS.V2.Internal {
 
         private static HttpMethod ConvertMethod(string method) {
             return method.ToLower() switch {
-                "delete"  => HttpMethod.Delete,
-                "get"     => HttpMethod.Get,
-                "head"    => HttpMethod.Head,
+                "delete" => HttpMethod.Delete,
+                "get" => HttpMethod.Get,
+                "head" => HttpMethod.Head,
                 "options" => HttpMethod.Options,
-                "post"    => HttpMethod.Post,
-                "put"     => HttpMethod.Put,
-                _         => throw new InvalidCastException()
+                "post" => HttpMethod.Post,
+                "put" => HttpMethod.Put,
+                _ => throw new InvalidCastException()
             };
         }
     }
@@ -175,8 +175,8 @@ namespace AlibabaCloud.OSS.V2.Internal {
         private readonly ICredentialsProvider? provider;
 
         public SignerExecuteMiddleware(
-            IExecuteMiddleware                nextHandler,
-            Signer.ISigner?                   signer,
+            IExecuteMiddleware nextHandler,
+            Signer.ISigner? signer,
             Credentials.ICredentialsProvider? provider
         ) {
             this.nextHandler = nextHandler;
@@ -191,7 +191,7 @@ namespace AlibabaCloud.OSS.V2.Internal {
                 var cred = provider.GetCredentials();
                 if (!cred.HasKeys) throw new("Credentials is null or empty");
                 context.SigningContext.Credentials = cred;
-                context.SigningContext.Request     = request;
+                context.SigningContext.Request = request;
                 _signer.Sign(context.SigningContext);
                 request = context.SigningContext.Request;
             }
@@ -202,22 +202,22 @@ namespace AlibabaCloud.OSS.V2.Internal {
 
     internal class RetryerExecuteMiddleware : IExecuteMiddleware {
         private readonly IExecuteMiddleware _nextHandler;
-        private readonly Retry.IRetryer     _retryer;
-        private readonly int?               _attempts;
+        private readonly Retry.IRetryer _retryer;
+        private readonly int? _attempts;
 
         public RetryerExecuteMiddleware(IExecuteMiddleware nextHandler, Retry.IRetryer? retryer) {
             _nextHandler = nextHandler;
-            _retryer     = retryer ?? new Retry.NopRetryer();
+            _retryer = retryer ?? new Retry.NopRetryer();
             if (_retryer is Retry.NopRetryer) _attempts = 1;
         }
 
         public async Task<ResponseMessage> ExecuteAsync(RequestMessage request, ExecuteContext context) {
             Exception? lastError;
-            var        body     = request.Content ?? new MemoryStream();
-            var        attempts = _attempts ?? context.RetryMaxAttempts;
-            var        bodyPos  = body.CanSeek ? body.Position : 0;
+            var body = request.Content ?? new MemoryStream();
+            var attempts = _attempts ?? context.RetryMaxAttempts;
+            var bodyPos = body.CanSeek ? body.Position : 0;
 
-            for (var i = 0;; i++) {
+            for (var i = 0; ; i++) {
                 try {
                     return await _nextHandler.ExecuteAsync(request, context).ConfigureAwait(false);
                 }

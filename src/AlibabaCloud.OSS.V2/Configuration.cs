@@ -3,12 +3,11 @@ using System;
 using System.Collections.Generic;
 
 namespace AlibabaCloud.OSS.V2 {
-    public class Configuration
-    {
+    public class Configuration {
         /// <summary>
         /// The region in which the bucket is located.
         /// </summary>
-        public string? Region { get; set;}
+        public string? Region { get; set; }
 
         /// <summary>
         /// The domain names that other services can use to access OSS.
@@ -135,8 +134,7 @@ namespace AlibabaCloud.OSS.V2 {
         public string? UserAgent { get; set; }
 
 
-        public static Configuration LoadDefault()
-        {
+        public static Configuration LoadDefault() {
             return new Configuration();
         }
     }

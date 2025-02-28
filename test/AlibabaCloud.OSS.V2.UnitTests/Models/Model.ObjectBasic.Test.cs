@@ -44,29 +44,29 @@ public class ModelObjectBasicTest {
         var body = new MemoryStream(Encoding.UTF8.GetBytes("hello world"));
 
         request = new PutObjectRequest {
-            Bucket             = "bucket",
-            Key                = "key",
-            Acl                = "private",
-            StorageClass       = "IA",
-            CacheControl       = "no-cache",
+            Bucket = "bucket",
+            Key = "key",
+            Acl = "private",
+            StorageClass = "IA",
+            CacheControl = "no-cache",
             ContentDisposition = "disposition",
-            ContentEncoding    = "gzip",
-            Expires            = "Thu, 01 Dec 1994 16:00:00 GMT",
-            ContentLength      = 12345,
-            ContentMd5         = "md5-123",
-            ContentType        = "txt",
+            ContentEncoding = "gzip",
+            Expires = "Thu, 01 Dec 1994 16:00:00 GMT",
+            ContentLength = 12345,
+            ContentMd5 = "md5-123",
+            ContentType = "txt",
             Metadata = new Dictionary<string, string>() {
                 { "key1", "value1" },
                 { "key2", "value2" }
             },
-            Tagging                   = "key1=value1&key2=value2",
-            ServerSideEncryption      = "AES256",
+            Tagging = "key1=value1&key2=value2",
+            ServerSideEncryption = "AES256",
             ServerSideEncryptionKeyId = "kms-key-id",
-            ServerSideDataEncryption  = "sse-data",
-            Callback                  = "callback",
-            CallbackVar               = "callback-var",
-            ForbidOverwrite           = true,
-            TrafficLimit              = 8888,
+            ServerSideDataEncryption = "sse-data",
+            Callback = "callback",
+            CallbackVar = "callback-var",
+            ForbidOverwrite = true,
+            TrafficLimit = 8888,
             Body = body
         };
 
@@ -156,7 +156,7 @@ public class ModelObjectBasicTest {
 
         var output = new OperationOutput {
             StatusCode = 200,
-            Status     = "OK",
+            Status = "OK",
             Headers = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase) {
                 { "x-oss-request-id", "123-id" },
                 { "Content-Type", "txt" },
@@ -181,14 +181,14 @@ public class ModelObjectBasicTest {
         Assert.Null(result.CallbackResult);
 
         //callback
-        result            = new PutObjectResult {
+        result = new PutObjectResult {
             BodyFormat = "string",
             BodyType = typeof(string)
-            
+
         };
         output = new OperationOutput {
             StatusCode = 200,
-            Status     = "OK",
+            Status = "OK",
             Headers = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase) {
                 { "x-oss-request-id", "123-id" },
                 { "Content-Type", "txt" },
@@ -257,24 +257,24 @@ public class ModelObjectBasicTest {
         Assert.Null(input.Body);
 
         request = new CopyObjectRequest {
-            Bucket             = "bucket",
-            Key                = "key",
-            SourceBucket       = "src-bucket",
-            SourceKey          = "src-key+?123.txt",
-            SourceVersionId    = "src-version-id",
-            IfMatch            = "if-match",
-            IfNoneMatch        = "if-none-match",
-            IfUnmodifiedSince  = "if_unmodified_since",
-            IfModifiedSince    = "if_modified_since",
-            Acl                = "private",
-            StorageClass       = "IA",
-            CacheControl       = "no-cache",
+            Bucket = "bucket",
+            Key = "key",
+            SourceBucket = "src-bucket",
+            SourceKey = "src-key+?123.txt",
+            SourceVersionId = "src-version-id",
+            IfMatch = "if-match",
+            IfNoneMatch = "if-none-match",
+            IfUnmodifiedSince = "if_unmodified_since",
+            IfModifiedSince = "if_modified_since",
+            Acl = "private",
+            StorageClass = "IA",
+            CacheControl = "no-cache",
             ContentDisposition = "disposition",
-            ContentEncoding    = "gzip",
-            Expires            = "Thu, 01 Dec 1994 16:00:00 GMT",
-            ContentLength      = 12345,
-            ContentMd5         = "md5-123",
-            ContentType        = "txt",
+            ContentEncoding = "gzip",
+            Expires = "Thu, 01 Dec 1994 16:00:00 GMT",
+            ContentLength = 12345,
+            ContentMd5 = "md5-123",
+            ContentType = "txt",
             Metadata = new Dictionary<string, string>() {
                 { "key1", "value1" },
                 { "key2", "value2" }
@@ -493,21 +493,21 @@ public class ModelObjectBasicTest {
         Assert.Null(input.Body);
 
         request = new GetObjectRequest {
-            Bucket            = "bucket",
-            Key               = "key",
-            Range             = "byte=0-1",
-            RangeBehavior     = "standard",
-            IfMatch           = "if-match",
-            IfNoneMatch       = "if-none-match",
+            Bucket = "bucket",
+            Key = "key",
+            Range = "byte=0-1",
+            RangeBehavior = "standard",
+            IfMatch = "if-match",
+            IfNoneMatch = "if-none-match",
             IfUnmodifiedSince = "if_unmodified_since",
-            IfModifiedSince   = "if_modified_since",
+            IfModifiedSince = "if_modified_since",
             ResponseContentType = "txt",
             ResponseCacheControl = "no-cache",
             ResponseContentDisposition = "a.jpg",
             ResponseContentEncoding = "utf-8",
             ResponseContentLanguage = "en",
             ResponseExpires = "Expires",
-            VersionId         = "version-id",
+            VersionId = "version-id",
             TrafficLimit = 8888,
             Process = "image process"
         };
@@ -650,7 +650,7 @@ public class ModelObjectBasicTest {
         var body = new MemoryStream(Encoding.UTF8.GetBytes("hello world"));
         output = new OperationOutput {
             StatusCode = 200,
-            Status     = "OK",
+            Status = "OK",
             Headers = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase) {
                 {"x-oss-request-id", "123-id"},
                 {"Content-Length", "123456789"},
@@ -866,7 +866,7 @@ public class ModelObjectBasicTest {
 
         var output = new OperationOutput {
             StatusCode = 200,
-            Status     = "OK",
+            Status = "OK",
             Headers = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase) {
                 { "x-oss-request-id", "123-id" },
                 { "Content-Type", "txt" },
@@ -915,8 +915,8 @@ public class ModelObjectBasicTest {
         Assert.Null(input.Body);
 
         request = new DeleteObjectRequest {
-            Bucket    = "bucket",
-            Key       = "key",
+            Bucket = "bucket",
+            Key = "key",
             VersionId = "version-id"
         };
 
@@ -948,7 +948,7 @@ public class ModelObjectBasicTest {
 
         var output = new OperationOutput {
             StatusCode = 200,
-            Status     = "OK",
+            Status = "OK",
             Headers = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase) {
                 { "x-oss-request-id", "123-id" },
                 { "Content-Type", "txt" },
@@ -1271,7 +1271,7 @@ public class ModelObjectBasicTest {
                 {"x-oss-last-access-time", "access-time"},
             }
         };
-        result     = new GetObjectMetaResult();
+        result = new GetObjectMetaResult();
         baseResult = result;
         Serde.DeserializeOutput(ref baseResult, ref output);
 
@@ -1348,8 +1348,8 @@ public class ModelObjectBasicTest {
 
         // only days
         request = new RestoreObjectRequest {
-            Bucket    = "bucket",
-            Key       = "key",
+            Bucket = "bucket",
+            Key = "key",
             VersionId = "version-id",
             RestoreRequest = new RestoreRequest() {
                 Days = 2,
@@ -1383,8 +1383,8 @@ public class ModelObjectBasicTest {
 
         // no RestoreRequest
         request = new RestoreObjectRequest {
-            Bucket    = "bucket",
-            Key       = "key",
+            Bucket = "bucket",
+            Key = "key",
         };
         input = new OperationInput();
 
@@ -1559,7 +1559,7 @@ public class ModelObjectBasicTest {
 
         output = new OperationOutput {
             StatusCode = 200,
-            Status     = "OK",
+            Status = "OK",
             Headers = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase) {
                 {"x-oss-request-id", "123-id"},
                 {"Content-Type","txt"}
@@ -1651,7 +1651,7 @@ public class ModelObjectBasicTest {
             },
             Body = new MemoryStream(Encoding.UTF8.GetBytes("hello world"))
         };
-        result     = new AsyncProcessObjectResult();
+        result = new AsyncProcessObjectResult();
         baseResult = result;
         Serde.DeserializeOutput(ref baseResult, ref output, Serde.DeserializerAnyBody);
 
@@ -1684,7 +1684,7 @@ public class ModelObjectBasicTest {
 
         // all
         request = new DeleteMultipleObjectsRequest {
-            Bucket       = "bucket",
+            Bucket = "bucket",
             EncodingType = "url",
             Quiet = true,
             Objects = [
@@ -1719,9 +1719,9 @@ public class ModelObjectBasicTest {
 
         // mixed version id
         request = new DeleteMultipleObjectsRequest {
-            Bucket       = "bucket",
+            Bucket = "bucket",
             EncodingType = "url",
-            Quiet        = true,
+            Quiet = true,
             Objects = [
                 new DeleteObject(){Key = "key-1"},
                 new DeleteObject(){Key = "key-2", VersionId = "version-id-2"},
@@ -1754,7 +1754,7 @@ public class ModelObjectBasicTest {
 
         // key with special char
         request = new DeleteMultipleObjectsRequest {
-            Bucket       = "bucket",
+            Bucket = "bucket",
             EncodingType = "url",
             Objects = [
                 new DeleteObject(){Key = "hello<>&\"'world"},
@@ -1900,7 +1900,7 @@ public class ModelObjectBasicTest {
             },
             Body = new MemoryStream(Encoding.UTF8.GetBytes(xml))
         };
-        result     = new DeleteMultipleObjectsResult();
+        result = new DeleteMultipleObjectsResult();
         baseResult = result;
         baseResult = result; Serde.DeserializeOutput(ref baseResult, ref output, Serde.DeserializeDeleteMultipleObjects);
 

@@ -27,22 +27,22 @@ namespace AlibabaCloud.OSS.V2.Transform {
     internal static partial class Serde {
         public static void DeserializeCopyObject(
             ref Models.ResultModel baseResult,
-            ref OperationOutput    output
+            ref OperationOutput output
         ) {
-            var       serializer = new XmlSerializer(typeof(XmlCopyObjectResult));
-            using var body       = output.Body!;
-            var       obj        = serializer.Deserialize(body) as XmlCopyObjectResult;
-            var       result     = baseResult as Models.CopyObjectResult;
+            var serializer = new XmlSerializer(typeof(XmlCopyObjectResult));
+            using var body = output.Body!;
+            var obj = serializer.Deserialize(body) as XmlCopyObjectResult;
+            var result = baseResult as Models.CopyObjectResult;
 
             if (obj == null || result == null) return;
 
-            result.ETag         = obj.ETag;
+            result.ETag = obj.ETag;
             result.LastModified = obj.LastModified;
         }
 
         public static void SerializeDeleteMultipleObjects(
             ref Models.RequestModel req,
-            ref OperationInput      input
+            ref OperationInput input
         ) {
             if (req is not Models.DeleteMultipleObjectsRequest request) {
                 throw new InvalidCastException($"not DeleteMultipleObjectsRequest type, got '{req.GetType()}'");
@@ -79,7 +79,7 @@ namespace AlibabaCloud.OSS.V2.Transform {
 
         public static void DeserializeDeleteMultipleObjects(
             ref Models.ResultModel baseResult,
-            ref OperationOutput    output
+            ref OperationOutput output
         ) {
             // empty body
             using var body = output.Body;
@@ -89,15 +89,15 @@ namespace AlibabaCloud.OSS.V2.Transform {
 
             // non-empty body
             var serializer = new XmlSerializer(typeof(XmlDeleteResult));
-            var       obj        = serializer.Deserialize(body) as XmlDeleteResult;
-            var       result     = baseResult as Models.DeleteMultipleObjectsResult;
+            var obj = serializer.Deserialize(body) as XmlDeleteResult;
+            var result = baseResult as Models.DeleteMultipleObjectsResult;
 
             if (obj == null || result == null) return;
 
             DeserializeDeleteMultipleObjectsEncodingType(ref obj);
 
             result.DeletedObjects = obj.DeletedObjects;
-            result.EncodingType   = obj.EncodingType;
+            result.EncodingType = obj.EncodingType;
         }
 
         private static void DeserializeDeleteMultipleObjectsEncodingType(ref XmlDeleteResult result) {

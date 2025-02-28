@@ -6,8 +6,7 @@ namespace AlibabaCloud.OSS.V2.Internal {
     /// <summary>
     /// A wrapper stream.
     /// </summary>
-    public class WrapperStream : Stream
-    {
+    public class WrapperStream : Stream {
         /// <summary>
         /// Base stream.
         /// </summary>
@@ -49,13 +48,11 @@ namespace AlibabaCloud.OSS.V2.Internal {
         /// Closes the current stream and releases any resources (such as sockets and
         /// file handles) associated with the current stream.
         /// </summary>
-        public override void Close()
-        {
+        public override void Close() {
             BaseStream.Close();
         }
 
-        protected override void Dispose(bool disposing)
-        {
+        protected override void Dispose(bool disposing) {
             base.Dispose(disposing);
             BaseStream.Dispose();
         }
@@ -68,8 +65,7 @@ namespace AlibabaCloud.OSS.V2.Internal {
         /// <summary>
         /// Gets or sets the position within the current stream.
         /// </summary>
-        public override long Position
-        {
+        public override long Position {
             get => BaseStream.Position;
             set => BaseStream.Position = value;
         }
@@ -78,8 +74,7 @@ namespace AlibabaCloud.OSS.V2.Internal {
         /// Gets or sets a value, in milliseconds, that determines how long the stream
         /// will attempt to read before timing out.
         /// </summary>
-        public override int ReadTimeout
-        {
+        public override int ReadTimeout {
             get => BaseStream.ReadTimeout;
             set => BaseStream.ReadTimeout = value;
         }
@@ -88,8 +83,7 @@ namespace AlibabaCloud.OSS.V2.Internal {
         /// Gets or sets a value, in milliseconds, that determines how long the stream
         /// will attempt to write before timing out.
         /// </summary>
-        public override int WriteTimeout
-        {
+        public override int WriteTimeout {
             get => BaseStream.WriteTimeout;
             set => BaseStream.WriteTimeout = value;
         }
@@ -98,8 +92,7 @@ namespace AlibabaCloud.OSS.V2.Internal {
         /// Clears all buffers for this stream and causes any buffered data to be written
         /// to the underlying device.
         /// </summary>
-        public override void Flush()
-        {
+        public override void Flush() {
             BaseStream.Flush();
         }
 
@@ -124,8 +117,7 @@ namespace AlibabaCloud.OSS.V2.Internal {
         /// number of bytes requested if that many bytes are not currently available,
         /// or zero (0) if the end of the stream has been reached.
         /// </returns>
-        public override int Read(byte[] buffer, int offset, int count)
-        {
+        public override int Read(byte[] buffer, int offset, int count) {
             return BaseStream.Read(buffer, offset, count);
         }
 
@@ -137,8 +129,7 @@ namespace AlibabaCloud.OSS.V2.Internal {
         /// A value of type System.IO.SeekOrigin indicating the reference point used
         /// to obtain the new position.</param>
         /// <returns>The new position within the current stream.</returns>
-        public override long Seek(long offset, SeekOrigin origin)
-        {
+        public override long Seek(long offset, SeekOrigin origin) {
             return BaseStream.Seek(offset, origin);
         }
 
@@ -146,8 +137,7 @@ namespace AlibabaCloud.OSS.V2.Internal {
         /// Sets the length of the current stream.
         /// </summary>
         /// <param name="value">The desired length of the current stream in bytes.</param>
-        public override void SetLength(long value)
-        {
+        public override void SetLength(long value) {
             BaseStream.SetLength(value);
         }
 
@@ -163,8 +153,7 @@ namespace AlibabaCloud.OSS.V2.Internal {
         /// current stream.
         /// </param>
         /// <param name="count">The number of bytes to be written to the current stream.</param>
-        public override void Write(byte[] buffer, int offset, int count)
-        {
+        public override void Write(byte[] buffer, int offset, int count) {
             BaseStream.Write(buffer, offset, count);
         }
 

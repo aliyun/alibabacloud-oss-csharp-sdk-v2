@@ -15,8 +15,8 @@ namespace AlibabaCloud.OSS.V2 {
         /// <returns><see cref="Models.PutObjectAclResult" />The result instance.</returns>
         public async Task<Models.PutObjectAclResult> PutObjectAclAsync(
             Models.PutObjectAclRequest request,
-            OperationOptions?          options           = null,
-            CancellationToken          cancellationToken = default
+            OperationOptions? options = null,
+            CancellationToken cancellationToken = default
         ) {
             Ensure.NotNull(request.Bucket, "request.Bucket");
             Ensure.NotNull(request.Key, "request.Key");
@@ -24,7 +24,7 @@ namespace AlibabaCloud.OSS.V2 {
 
             var input = new OperationInput {
                 OperationName = "PutObjectAcl",
-                Method        = "PUT",
+                Method = "PUT",
                 Headers = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase) {
                     { "Content-Type", "application/xml" }
                 },
@@ -32,7 +32,7 @@ namespace AlibabaCloud.OSS.V2 {
                     { "acl", "" }
                 },
                 Bucket = request.Bucket,
-                Key    = request.Key
+                Key = request.Key
             };
 
             Serde.SerializeInput(request, ref input, Serde.AddContentMd5);
@@ -55,20 +55,20 @@ namespace AlibabaCloud.OSS.V2 {
         /// <returns><see cref="Models.GetObjectAclResult" />The result instance.</returns>
         public async Task<Models.GetObjectAclResult> GetObjectAclAsync(
             Models.GetObjectAclRequest request,
-            OperationOptions?          options           = null,
-            CancellationToken          cancellationToken = default
+            OperationOptions? options = null,
+            CancellationToken cancellationToken = default
         ) {
             Ensure.NotNull(request.Bucket, "request.Bucket");
             Ensure.NotNull(request.Key, "request.Key");
 
             var input = new OperationInput {
                 OperationName = "GetObjectAcl",
-                Method        = "GET",
+                Method = "GET",
                 Parameters = new Dictionary<string, string> {
                     { "acl", "" }
                 },
                 Bucket = request.Bucket,
-                Key    = request.Key
+                Key = request.Key
             };
 
             Serde.SerializeInput(request, ref input);

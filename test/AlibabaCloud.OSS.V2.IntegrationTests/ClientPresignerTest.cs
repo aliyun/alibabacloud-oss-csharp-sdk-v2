@@ -392,7 +392,7 @@ public class ClientPresignerTest : IDisposable {
         Assert.True(httpResult.IsSuccessStatusCode);
     }
 
-        [Fact]
+    [Fact]
     public void TestPresignFail() {
         var cfg = Configuration.LoadDefault();
         cfg.CredentialsProvider = new Credentials.StaticCredentialsProvide("", "");
