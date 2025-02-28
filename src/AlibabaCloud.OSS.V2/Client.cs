@@ -7,7 +7,7 @@ namespace AlibabaCloud.OSS.V2 {
         private readonly Internal.ClientImpl _clientImpl;
 
         public Client(
-            Configuration                  config,
+            Configuration config,
             params Action<ClientOptions>[] optFns
         ) {
             _clientImpl = new(config, optFns);
@@ -22,8 +22,8 @@ namespace AlibabaCloud.OSS.V2 {
         /// <returns><see cref="OperationOutput" />The result instance.</returns>
         /// <returns></returns>
         public async Task<OperationOutput> InvokeOperation(
-            OperationInput    input,
-            OperationOptions? options           = null,
+            OperationInput input,
+            OperationOptions? options = null,
             CancellationToken cancellationToken = default
         ) {
             return await _clientImpl.ExecuteAsync(input, options, cancellationToken).ConfigureAwait(false);

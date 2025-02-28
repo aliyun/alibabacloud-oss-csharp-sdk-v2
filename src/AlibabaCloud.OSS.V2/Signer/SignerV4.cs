@@ -8,9 +8,9 @@ using AlibabaCloud.OSS.V2.Extensions;
 
 namespace AlibabaCloud.OSS.V2.Signer {
     public class SignerV4 : ISigner {
-        private const string UnsignedPayload  = "UNSIGNED-PAYLOAD";
-        private const string DateTimeFormat   = "yyyyMMdd'T'HHmmss'Z'";
-        private const string DateFormat       = "yyyyMMdd";
+        private const string UnsignedPayload = "UNSIGNED-PAYLOAD";
+        private const string DateTimeFormat = "yyyyMMdd'T'HHmmss'Z'";
+        private const string DateFormat = "yyyyMMdd";
         private const string Rfc822DateFormat = @"ddd, dd MMM yyyy HH:mm:ss \G\M\T";
 
         public void Sign(SigningContext signingContext) {
@@ -29,19 +29,19 @@ namespace AlibabaCloud.OSS.V2.Signer {
         }
 
         private static void AuthQuery(SigningContext signingContext) {
-            var request     = signingContext.Request;
+            var request = signingContext.Request;
             var credentials = signingContext.Credentials;
-            var region      = signingContext.Region ?? "";
-            var product     = signingContext.Product ?? "";
+            var region = signingContext.Region ?? "";
+            var product = signingContext.Product ?? "";
 
             // Date
             var signTime = signingContext.SignTime ?? DateTime.UtcNow;
             var datetime = FormatDateTime(signTime);
-            var date     = FormatDate(signTime);
+            var date = FormatDate(signTime);
 
             // Expiration 
             var expiration = signingContext.Expiration ?? DateTime.UtcNow.AddMinutes(15);
-            var expires    = ((long)expiration.Subtract(signTime).TotalSeconds).ToString(CultureInfo.InvariantCulture);
+            var expires = ((long)expiration.Subtract(signTime).TotalSeconds).ToString(CultureInfo.InvariantCulture);
 
             // Scope
             var scope = $"{date}/{region}/{product}/aliyun_v4_request";
@@ -92,21 +92,21 @@ namespace AlibabaCloud.OSS.V2.Signer {
             //Console.WriteLine("stringToSign:{0}\n", stringToSign);
             //Console.WriteLine("signature:{0}\n", signature);
             //update
-            signingContext.Request      = request;
-            signingContext.Expiration   = expiration;
+            signingContext.Request = request;
+            signingContext.Expiration = expiration;
             signingContext.StringToSign = stringToSign;
         }
 
         private static void AuthHeader(SigningContext signingContext) {
-            var request     = signingContext.Request;
+            var request = signingContext.Request;
             var credentials = signingContext.Credentials;
-            var region      = signingContext.Region ?? "";
-            var product     = signingContext.Product ?? "";
+            var region = signingContext.Region ?? "";
+            var product = signingContext.Product ?? "";
 
             // Date
-            var signTime    = signingContext.SignTime ?? DateTime.UtcNow;
-            var datetime    = FormatDateTime(signTime);
-            var date        = FormatDate(signTime);
+            var signTime = signingContext.SignTime ?? DateTime.UtcNow;
+            var datetime = FormatDateTime(signTime);
+            var date = FormatDate(signTime);
             var datetimeGmt = FormatRfc822Date(signTime);
 
             // Scope
@@ -118,8 +118,8 @@ namespace AlibabaCloud.OSS.V2.Signer {
 
             // Other Headers
             request!.Headers["x-oss-content-sha256"] = UnsignedPayload;
-            request.Headers["x-oss-date"]            = datetime;
-            request.Headers["Date"]                  = datetimeGmt;
+            request.Headers["x-oss-date"] = datetime;
+            request.Headers["Date"] = datetimeGmt;
 
             // lower key & Sorted Headers
             // the headers is OrdinalIgnoreCase
@@ -177,10 +177,10 @@ namespace AlibabaCloud.OSS.V2.Signer {
         }
 
         private static string CanonicalizeRequest(
-            RequestMessage              request,
-            string                      resourcePath,
+            RequestMessage request,
+            string resourcePath,
             IDictionary<string, string> headers,
-            List<string>                additionalHeaders
+            List<string> additionalHeaders
         ) {
             /*
                 Canonical Request
@@ -200,10 +200,10 @@ namespace AlibabaCloud.OSS.V2.Signer {
             var sortedParameters = new SortedDictionary<string, string>(StringComparer.Ordinal);
 
             if (request.RequestUri.Query.IsNotEmpty()) {
-                var query                        = request.RequestUri.Query;
+                var query = request.RequestUri.Query;
                 if (query.StartsWith("?")) query = query.Substring(1);
 
-                foreach (var param in query.Split(new char[]{ '&' }, StringSplitOptions.RemoveEmptyEntries)) {
+                foreach (var param in query.Split(new char[] { '&' }, StringSplitOptions.RemoveEmptyEntries)) {
                     var parts = param.Split(new char[] { '=' }, 2);
                     sortedParameters.Add(parts[0], parts.Length == 1 ? "" : parts[1]);
                 }
@@ -276,7 +276,7 @@ namespace AlibabaCloud.OSS.V2.Signer {
 
         private static List<string> GetAdditionalHeaders(
             IDictionary<string, string> headers,
-            List<string>?               additionalHeaders
+            List<string>? additionalHeaders
         ) {
             var keys = new List<string>();
 
@@ -304,8 +304,8 @@ namespace AlibabaCloud.OSS.V2.Signer {
             Scope + "\n" +
             Hex(SHA256Hash(Canonical Request))
             */
-            using var hash      = SHA256.Create();
-            var       hashBytes = hash.ComputeHash(Encoding.UTF8.GetBytes(canonicalRequest));
+            using var hash = SHA256.Create();
+            var hashBytes = hash.ComputeHash(Encoding.UTF8.GetBytes(canonicalRequest));
 
             return "OSS4-HMAC-SHA256" +
                 "\n" +

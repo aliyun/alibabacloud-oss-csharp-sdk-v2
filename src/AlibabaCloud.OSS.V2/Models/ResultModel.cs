@@ -4,8 +4,8 @@ using System.Collections.Generic;
 namespace AlibabaCloud.OSS.V2.Models {
     public abstract class ResultModel {
         internal object? InnerBody;
-        internal Type?   BodyType;
-        internal string  BodyFormat = "";
+        internal Type? BodyType;
+        internal string BodyFormat = "";
 
         /// <summary>
         /// Gets The collection of http response header.

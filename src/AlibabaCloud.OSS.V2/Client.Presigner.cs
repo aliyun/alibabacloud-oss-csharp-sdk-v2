@@ -13,16 +13,16 @@ namespace AlibabaCloud.OSS.V2 {
         /// <returns><see cref="Models.PresignResult" />The result instance.</returns>
         public Models.PresignResult Presign(
             Models.GetObjectRequest request,
-            DateTime?                  expiration = null
+            DateTime? expiration = null
         ) {
             Ensure.NotNull(request.Bucket, "request.Bucket");
             Ensure.NotNull(request.Key, "request.Key");
 
             var input = new OperationInput {
                 OperationName = "GetObject",
-                Method        = "GET",
-                Bucket        = request.Bucket,
-                Key           = request.Key
+                Method = "GET",
+                Bucket = request.Bucket,
+                Key = request.Key
             };
 
             Serde.SerializeInput(request, ref input);
@@ -32,9 +32,9 @@ namespace AlibabaCloud.OSS.V2 {
             var result = _clientImpl.PresignInner(input);
 
             return new() {
-                Method        = result.Method,
-                Url           = result.Url,
-                Expiration    = result.Expiration,
+                Method = result.Method,
+                Url = result.Url,
+                Expiration = result.Expiration,
                 SignedHeaders = result.SignedHeaders
             };
         }
@@ -48,16 +48,16 @@ namespace AlibabaCloud.OSS.V2 {
         /// <returns><see cref="Models.PresignResult" />The result instance.</returns>
         public Models.PresignResult Presign(
             Models.PutObjectRequest request,
-            DateTime?               expiration = null
+            DateTime? expiration = null
         ) {
             Ensure.NotNull(request.Bucket, "request.Bucket");
             Ensure.NotNull(request.Key, "request.Key");
 
             var input = new OperationInput {
                 OperationName = "PutObject",
-                Method        = "PUT",
-                Bucket        = request.Bucket,
-                Key           = request.Key
+                Method = "PUT",
+                Bucket = request.Bucket,
+                Key = request.Key
             };
 
             Serde.SerializeInput(request, ref input, Serde.AddMetadata);
@@ -67,9 +67,9 @@ namespace AlibabaCloud.OSS.V2 {
             var result = _clientImpl.PresignInner(input);
 
             return new() {
-                Method        = result.Method,
-                Url           = result.Url,
-                Expiration    = result.Expiration,
+                Method = result.Method,
+                Url = result.Url,
+                Expiration = result.Expiration,
                 SignedHeaders = result.SignedHeaders
             };
         }
@@ -83,16 +83,16 @@ namespace AlibabaCloud.OSS.V2 {
         /// <returns><see cref="Models.PresignResult" />The result instance.</returns>
         public Models.PresignResult Presign(
             Models.HeadObjectRequest request,
-            DateTime?                expiration = null
+            DateTime? expiration = null
         ) {
             Ensure.NotNull(request.Bucket, "request.Bucket");
             Ensure.NotNull(request.Key, "request.Key");
 
             var input = new OperationInput {
                 OperationName = "HeadObject",
-                Method        = "HEAD",
-                Bucket        = request.Bucket,
-                Key           = request.Key
+                Method = "HEAD",
+                Bucket = request.Bucket,
+                Key = request.Key
             };
 
             Serde.SerializeInput(request, ref input);
@@ -102,9 +102,9 @@ namespace AlibabaCloud.OSS.V2 {
             var result = _clientImpl.PresignInner(input);
 
             return new() {
-                Method        = result.Method,
-                Url           = result.Url,
-                Expiration    = result.Expiration,
+                Method = result.Method,
+                Url = result.Url,
+                Expiration = result.Expiration,
                 SignedHeaders = result.SignedHeaders
             };
         }
@@ -118,19 +118,19 @@ namespace AlibabaCloud.OSS.V2 {
         /// <returns><see cref="Models.PresignResult" />The result instance.</returns>
         public Models.PresignResult Presign(
             Models.InitiateMultipartUploadRequest request,
-            DateTime?                             expiration = null
+            DateTime? expiration = null
         ) {
             Ensure.NotNull(request.Bucket, "request.Bucket");
             Ensure.NotNull(request.Key, "request.Key");
 
             var input = new OperationInput {
                 OperationName = "InitiateMultipartUpload",
-                Method        = "POST",
+                Method = "POST",
                 Parameters = new Dictionary<string, string> {
                     { "uploads", "" }
                 },
                 Bucket = request.Bucket,
-                Key    = request.Key
+                Key = request.Key
             };
 
             Serde.SerializeInput(request, ref input, Serde.AddMetadata);
@@ -140,9 +140,9 @@ namespace AlibabaCloud.OSS.V2 {
             var result = _clientImpl.PresignInner(input);
 
             return new() {
-                Method        = result.Method,
-                Url           = result.Url,
-                Expiration    = result.Expiration,
+                Method = result.Method,
+                Url = result.Url,
+                Expiration = result.Expiration,
                 SignedHeaders = result.SignedHeaders
             };
         }
@@ -156,7 +156,7 @@ namespace AlibabaCloud.OSS.V2 {
         /// <returns><see cref="Models.PresignResult" />The result instance.</returns>
         public Models.PresignResult Presign(
             Models.UploadPartRequest request,
-            DateTime?                expiration = null
+            DateTime? expiration = null
         ) {
             Ensure.NotNull(request.Bucket, "request.Bucket");
             Ensure.NotNull(request.Key, "request.Key");
@@ -165,9 +165,9 @@ namespace AlibabaCloud.OSS.V2 {
 
             var input = new OperationInput {
                 OperationName = "UploadPart",
-                Method        = "PUT",
-                Bucket        = request.Bucket,
-                Key           = request.Key
+                Method = "PUT",
+                Bucket = request.Bucket,
+                Key = request.Key
             };
 
             Serde.SerializeInput(request, ref input);
@@ -177,9 +177,9 @@ namespace AlibabaCloud.OSS.V2 {
             var result = _clientImpl.PresignInner(input);
 
             return new() {
-                Method        = result.Method,
-                Url           = result.Url,
-                Expiration    = result.Expiration,
+                Method = result.Method,
+                Url = result.Url,
+                Expiration = result.Expiration,
                 SignedHeaders = result.SignedHeaders
             };
         }
@@ -193,7 +193,7 @@ namespace AlibabaCloud.OSS.V2 {
         /// <returns><see cref="Models.PresignResult" />The result instance.</returns>
         public Models.PresignResult Presign(
             Models.CompleteMultipartUploadRequest request,
-            DateTime?                             expiration = null
+            DateTime? expiration = null
         ) {
             Ensure.NotNull(request.Bucket, "request.Bucket");
             Ensure.NotNull(request.Key, "request.Key");
@@ -201,9 +201,9 @@ namespace AlibabaCloud.OSS.V2 {
 
             var input = new OperationInput {
                 OperationName = "CompleteMultipartUpload",
-                Method        = "POST",
-                Bucket        = request.Bucket,
-                Key           = request.Key
+                Method = "POST",
+                Bucket = request.Bucket,
+                Key = request.Key
             };
 
             Serde.SerializeInput(request, ref input);
@@ -213,9 +213,9 @@ namespace AlibabaCloud.OSS.V2 {
             var result = _clientImpl.PresignInner(input);
 
             return new() {
-                Method        = result.Method,
-                Url           = result.Url,
-                Expiration    = result.Expiration,
+                Method = result.Method,
+                Url = result.Url,
+                Expiration = result.Expiration,
                 SignedHeaders = result.SignedHeaders
             };
         }
@@ -229,7 +229,7 @@ namespace AlibabaCloud.OSS.V2 {
         /// <returns><see cref="Models.PresignResult" />The result instance.</returns>
         public Models.PresignResult Presign(
             Models.AbortMultipartUploadRequest request,
-            DateTime?                          expiration = null
+            DateTime? expiration = null
         ) {
             Ensure.NotNull(request.Bucket, "request.Bucket");
             Ensure.NotNull(request.Key, "request.Key");
@@ -237,9 +237,9 @@ namespace AlibabaCloud.OSS.V2 {
 
             var input = new OperationInput {
                 OperationName = "AbortMultipartUpload",
-                Method        = "DELETE",
-                Bucket        = request.Bucket,
-                Key           = request.Key
+                Method = "DELETE",
+                Bucket = request.Bucket,
+                Key = request.Key
             };
 
             Serde.SerializeInput(request, ref input);
@@ -249,9 +249,9 @@ namespace AlibabaCloud.OSS.V2 {
             var result = _clientImpl.PresignInner(input);
 
             return new() {
-                Method        = result.Method,
-                Url           = result.Url,
-                Expiration    = result.Expiration,
+                Method = result.Method,
+                Url = result.Url,
+                Expiration = result.Expiration,
                 SignedHeaders = result.SignedHeaders
             };
         }

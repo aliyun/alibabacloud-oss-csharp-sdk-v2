@@ -25,7 +25,7 @@ public class ModelObjectAclTest {
         Assert.Null(input.Body);
 
         request = new PutObjectAclRequest {
-            Bucket    = "bucket",
+            Bucket = "bucket",
             Key = "key",
             Acl = "private",
             VersionId = "version-id"
@@ -62,7 +62,7 @@ public class ModelObjectAclTest {
 
         var output = new OperationOutput {
             StatusCode = 200,
-            Status     = "OK",
+            Status = "OK",
             Headers = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase) {
                 {"x-oss-request-id", "123-id"},
                 {"Content-Type","txt"},
@@ -141,7 +141,7 @@ public class ModelObjectAclTest {
 
         var output = new OperationOutput {
             StatusCode = 200,
-            Status     = "OK",
+            Status = "OK",
             Headers = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase) {
                 {"x-oss-request-id", "123-id"},
                 {"Content-Type","txt"}

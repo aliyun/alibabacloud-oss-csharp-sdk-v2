@@ -38,10 +38,10 @@ public class ModelObjectMultipartTest {
         Assert.Null(input.Body);
 
         request = new InitiateMultipartUploadRequest {
-            Bucket          = "bucket",
-            Key             = "key",
+            Bucket = "bucket",
+            Key = "key",
             ForbidOverwrite = true,
-            StorageClass    = "IA",
+            StorageClass = "IA",
             Tagging = "key1=value1&key2=value2",
             ServerSideEncryption = "AES256",
             ServerSideEncryptionKeyId = "kms-key-id",
@@ -149,7 +149,7 @@ public class ModelObjectMultipartTest {
             },
             Body = new MemoryStream(Encoding.UTF8.GetBytes(xml))
         };
-        result                = new InitiateMultipartUploadResult();
+        result = new InitiateMultipartUploadResult();
         ResultModel baseResult = result;
         Serde.DeserializeOutput(ref baseResult, ref output, Serde.DeserializeInitiateMultipartUpload);
 
@@ -174,14 +174,14 @@ public class ModelObjectMultipartTest {
 
         output = new OperationOutput {
             StatusCode = 200,
-            Status     = "OK",
+            Status = "OK",
             Headers = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase) {
                 {"x-oss-request-id", "123-id"},
                 {"Content-Type","txt"}
             },
             Body = new MemoryStream(Encoding.UTF8.GetBytes(xml))
         };
-        result     = new InitiateMultipartUploadResult();
+        result = new InitiateMultipartUploadResult();
         baseResult = result;
         Serde.DeserializeOutput(ref baseResult, ref output, Serde.DeserializeInitiateMultipartUpload);
 
@@ -207,14 +207,14 @@ public class ModelObjectMultipartTest {
 
         output = new OperationOutput {
             StatusCode = 200,
-            Status     = "OK",
+            Status = "OK",
             Headers = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase) {
                 {"x-oss-request-id", "123-id"},
                 {"Content-Type","txt"}
             },
             Body = new MemoryStream(Encoding.UTF8.GetBytes(xml))
         };
-        result     = new InitiateMultipartUploadResult();
+        result = new InitiateMultipartUploadResult();
         baseResult = result;
         Serde.DeserializeOutput(ref baseResult, ref output, Serde.DeserializeInitiateMultipartUpload);
 
@@ -256,7 +256,7 @@ public class ModelObjectMultipartTest {
         request = new UploadPartRequest {
             Bucket = "bucket",
             Key = "key",
-            PartNumber= 1,
+            PartNumber = 1,
             UploadId = "upload-id",
             ContentLength = 12345,
             ContentMd5 = "md5-123",
@@ -465,7 +465,7 @@ public class ModelObjectMultipartTest {
 
         output = new OperationOutput {
             StatusCode = 200,
-            Status     = "OK",
+            Status = "OK",
             Headers = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase) {
                 {"x-oss-request-id", "123-id"},
                 {"Content-Type","txt"},
@@ -641,7 +641,7 @@ public class ModelObjectMultipartTest {
 
         output = new OperationOutput {
             StatusCode = 200,
-            Status     = "OK",
+            Status = "OK",
             Headers = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase) {
                 {"x-oss-request-id", "123-id"},
                 {"Content-Type","txt"},
@@ -678,7 +678,7 @@ public class ModelObjectMultipartTest {
 
         output = new OperationOutput {
             StatusCode = 200,
-            Status     = "OK",
+            Status = "OK",
             Headers = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase) {
                 {"x-oss-request-id", "123-id"},
                 {"Content-Type","txt"},
@@ -687,7 +687,7 @@ public class ModelObjectMultipartTest {
             },
             Body = new MemoryStream(Encoding.UTF8.GetBytes(xml))
         };
-        result     = new CompleteMultipartUploadResult();
+        result = new CompleteMultipartUploadResult();
         baseResult = result;
         Serde.DeserializeOutput(ref baseResult, ref output, Serde.DeserializeCompleteMultipartUpload);
 
@@ -708,7 +708,7 @@ public class ModelObjectMultipartTest {
 
         output = new OperationOutput {
             StatusCode = 200,
-            Status     = "OK",
+            Status = "OK",
             Headers = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase) {
                 {"x-oss-request-id", "123-id"},
                 {"Content-Type","txt"},
@@ -717,7 +717,7 @@ public class ModelObjectMultipartTest {
             },
             Body = new MemoryStream(Encoding.UTF8.GetBytes(xml))
         };
-        result     = new CompleteMultipartUploadResult();
+        result = new CompleteMultipartUploadResult();
         baseResult = result;
         Serde.DeserializeOutput(ref baseResult, ref output, Serde.DeserializeCompleteMultipartUploadCallback);
 
@@ -822,12 +822,12 @@ public class ModelObjectMultipartTest {
         Assert.Null(input.Body);
 
         request = new ListMultipartUploadsRequest {
-            Bucket       = "bucket",
-            Delimiter    = "/",
+            Bucket = "bucket",
+            Delimiter = "/",
             EncodingType = "url",
-            KeyMarker    = "key-01",
-            MaxUploads   = 10001,
-            Prefix       = "prefix-01",
+            KeyMarker = "key-01",
+            MaxUploads = 10001,
+            Prefix = "prefix-01",
             UploadIdMarker = "upload-id-123"
         };
         Assert.Empty(request.Headers);

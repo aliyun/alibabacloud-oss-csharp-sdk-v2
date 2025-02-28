@@ -25,9 +25,10 @@ namespace AlibabaCloud.OSS.V2.Internal {
 
         public override long Length => _lwritten;
 
-        public override long Position { 
-            get => _lwritten; 
-            set => throw new System.NotImplementedException(); }
+        public override long Position {
+            get => _lwritten;
+            set => throw new System.NotImplementedException();
+        }
 
         public override void Flush() {
         }

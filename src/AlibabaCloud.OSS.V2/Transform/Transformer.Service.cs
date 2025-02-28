@@ -30,20 +30,20 @@ namespace AlibabaCloud.OSS.V2.Transform {
     internal static partial class Serde {
         public static void DeserializeListBuckets(
             ref Models.ResultModel baseResult,
-            ref OperationOutput    output
+            ref OperationOutput output
         ) {
-            var       serializer = new XmlSerializer(typeof(XmlListAllMyBucketsResult));
-            using var body       = output.Body!;
-            var       obj        = serializer.Deserialize(body) as XmlListAllMyBucketsResult;
-            var       result     = baseResult as Models.ListBucketsResult;
+            var serializer = new XmlSerializer(typeof(XmlListAllMyBucketsResult));
+            using var body = output.Body!;
+            var obj = serializer.Deserialize(body) as XmlListAllMyBucketsResult;
+            var result = baseResult as Models.ListBucketsResult;
 
-            result!.Prefix     = obj!.Prefix;
-            result.Marker      = obj.Marker;
-            result.MaxKeys     = obj.MaxKeys;
+            result!.Prefix = obj!.Prefix;
+            result.Marker = obj.Marker;
+            result.MaxKeys = obj.MaxKeys;
             result.IsTruncated = obj.IsTruncated;
-            result.NextMarker  = obj.NextMarker;
-            result.Owner       = obj.Owner;
-            result.Buckets     = obj.Buckets;
+            result.NextMarker = obj.NextMarker;
+            result.Owner = obj.Owner;
+            result.Buckets = obj.Buckets;
         }
     }
 }

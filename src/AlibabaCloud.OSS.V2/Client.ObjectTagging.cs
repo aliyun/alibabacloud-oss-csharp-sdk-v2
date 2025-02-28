@@ -15,8 +15,8 @@ namespace AlibabaCloud.OSS.V2 {
         /// <returns><see cref="Models.PutObjectTaggingResult" />The result instance.</returns>
         public async Task<Models.PutObjectTaggingResult> PutObjectTaggingAsync(
             Models.PutObjectTaggingRequest request,
-            OperationOptions?              options           = null,
-            CancellationToken              cancellationToken = default
+            OperationOptions? options = null,
+            CancellationToken cancellationToken = default
         ) {
             Ensure.NotNull(request.Bucket, "request.Bucket");
             Ensure.NotNull(request.Key, "request.Key");
@@ -24,7 +24,7 @@ namespace AlibabaCloud.OSS.V2 {
 
             var input = new OperationInput {
                 OperationName = "PutObjectTagging",
-                Method        = "PUT",
+                Method = "PUT",
                 Headers = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase) {
                     { "Content-Type", "application/xml" }
                 },
@@ -32,7 +32,7 @@ namespace AlibabaCloud.OSS.V2 {
                     { "tagging", "" }
                 },
                 Bucket = request.Bucket,
-                Key    = request.Key
+                Key = request.Key
             };
 
             Serde.SerializeInput(request, ref input, Serde.AddContentMd5);
@@ -55,20 +55,20 @@ namespace AlibabaCloud.OSS.V2 {
         /// <returns><see cref="Models.GetObjectTaggingResult" />The result instance.</returns>
         public async Task<Models.GetObjectTaggingResult> GetObjectTaggingAsync(
             Models.GetObjectTaggingRequest request,
-            OperationOptions?              options           = null,
-            CancellationToken              cancellationToken = default
+            OperationOptions? options = null,
+            CancellationToken cancellationToken = default
         ) {
             Ensure.NotNull(request.Bucket, "request.Bucket");
             Ensure.NotNull(request.Key, "request.Key");
 
             var input = new OperationInput {
                 OperationName = "GetObjectTagging",
-                Method        = "GET",
+                Method = "GET",
                 Parameters = new Dictionary<string, string> {
                     { "tagging", "" }
                 },
                 Bucket = request.Bucket,
-                Key    = request.Key
+                Key = request.Key
             };
 
             Serde.SerializeInput(request, ref input);
@@ -91,15 +91,15 @@ namespace AlibabaCloud.OSS.V2 {
         /// <returns><see cref="Models.DeleteObjectTaggingResult" />The result instance.</returns>
         public async Task<Models.DeleteObjectTaggingResult> DeleteObjectTaggingAsync(
             Models.DeleteObjectTaggingRequest request,
-            OperationOptions?                 options           = null,
-            CancellationToken                 cancellationToken = default
+            OperationOptions? options = null,
+            CancellationToken cancellationToken = default
         ) {
             Ensure.NotNull(request.Bucket, "request.Bucket");
             Ensure.NotNull(request.Key, "request.Key");
 
             var input = new OperationInput {
                 OperationName = "DeleteObjectTagging",
-                Method        = "DELETE",
+                Method = "DELETE",
                 Headers = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase) {
                     { "Content-Type", "application/xml" }
                 },
@@ -107,7 +107,7 @@ namespace AlibabaCloud.OSS.V2 {
                     { "tagging", "" }
                 },
                 Bucket = request.Bucket,
-                Key    = request.Key
+                Key = request.Key
             };
 
             Serde.SerializeInput(request, ref input, Serde.AddContentMd5);

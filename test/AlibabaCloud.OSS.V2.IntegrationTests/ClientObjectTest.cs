@@ -32,14 +32,14 @@ public class ClientObjectTest : IDisposable {
         Assert.NotNull(result.RequestId);
 
         // put object only body
-        var          objectName = Utils.RandomObjectName();
-        const string content    = "hello world";
+        var objectName = Utils.RandomObjectName();
+        const string content = "hello world";
 
         var putResult = await client.PutObjectAsync(
             new() {
                 Bucket = bucketName,
-                Key    = objectName,
-                Body   = new MemoryStream(Encoding.UTF8.GetBytes("hello world"))
+                Key = objectName,
+                Body = new MemoryStream(Encoding.UTF8.GetBytes("hello world"))
             }
         );
 
@@ -50,7 +50,7 @@ public class ClientObjectTest : IDisposable {
         var headResult = await client.HeadObjectAsync(
             new() {
                 Bucket = bucketName,
-                Key    = objectName
+                Key = objectName
             }
         );
         Assert.NotNull(headResult);
@@ -70,7 +70,7 @@ public class ClientObjectTest : IDisposable {
         var getMetaResult = await client.GetObjectMetaAsync(
             new() {
                 Bucket = bucketName,
-                Key    = objectName
+                Key = objectName
             }
         );
         Assert.NotNull(getMetaResult);
@@ -82,7 +82,7 @@ public class ClientObjectTest : IDisposable {
         var getAclResult = await client.GetObjectAclAsync(
             new() {
                 Bucket = bucketName,
-                Key    = objectName
+                Key = objectName
             }
         );
         Assert.NotNull(getAclResult);
@@ -93,7 +93,7 @@ public class ClientObjectTest : IDisposable {
         var getObjectResult = await client.GetObjectAsync(
             new() {
                 Bucket = bucketName,
-                Key    = objectName
+                Key = objectName
             }
         );
         Assert.NotNull(getObjectResult);
@@ -108,14 +108,14 @@ public class ClientObjectTest : IDisposable {
         Assert.NotNull(getObjectResult.Body);
         Assert.False(getObjectResult.Body.CanSeek);
         using var reader = new StreamReader(getObjectResult.Body);
-        var       got    = await reader.ReadToEndAsync();
+        var got = await reader.ReadToEndAsync();
         Assert.Equal(content, got);
 
         // delete object
         var delObjectResult = await client.DeleteObjectAsync(
             new() {
                 Bucket = bucketName,
-                Key    = objectName
+                Key = objectName
             }
         );
         Assert.NotNull(delObjectResult);
@@ -143,27 +143,27 @@ public class ClientObjectTest : IDisposable {
         Assert.NotNull(result.RequestId);
 
         // put object with storage-class, acl, metadata, tagging
-        var          objectName = Utils.RandomObjectName();
-        const string content    = "hello world";
+        var objectName = Utils.RandomObjectName();
+        const string content = "hello world";
 
         var putResult = await client.PutObjectAsync(
             new() {
-                Bucket             = bucketName,
-                Key                = objectName,
-                StorageClass       = "IA",
-                Acl                = "private",
+                Bucket = bucketName,
+                Key = objectName,
+                StorageClass = "IA",
+                Acl = "private",
                 ContentDisposition = "1.txt",
-                CacheControl       = "no-cache",
-                ContentEncoding    = "deflate",
-                Expires            = "Wed, 21 Oct 2015 07:28:00 GMT",
-                ContentType        = "text/txt",
-                ContentMd5         = "XrY7u+Ae7tCTyyK7j1rNww==",
+                CacheControl = "no-cache",
+                ContentEncoding = "deflate",
+                Expires = "Wed, 21 Oct 2015 07:28:00 GMT",
+                ContentType = "text/txt",
+                ContentMd5 = "XrY7u+Ae7tCTyyK7j1rNww==",
                 Metadata = new Dictionary<string, string>() {
                     { "key1", "value1" },
                     { "key2", "value2" }
                 },
                 Tagging = "tag-key1=val1",
-                Body    = new MemoryStream(Encoding.UTF8.GetBytes("hello world"))
+                Body = new MemoryStream(Encoding.UTF8.GetBytes("hello world"))
             }
         );
 
@@ -178,7 +178,7 @@ public class ClientObjectTest : IDisposable {
         var headResult = await client.HeadObjectAsync(
             new() {
                 Bucket = bucketName,
-                Key    = objectName
+                Key = objectName
             }
         );
         Assert.NotNull(headResult);
@@ -203,7 +203,7 @@ public class ClientObjectTest : IDisposable {
         var getAclResult = await client.GetObjectAclAsync(
             new() {
                 Bucket = bucketName,
-                Key    = objectName
+                Key = objectName
             }
         );
         Assert.NotNull(getAclResult);
@@ -214,7 +214,7 @@ public class ClientObjectTest : IDisposable {
         var getTagResult = await client.GetObjectTaggingAsync(
             new() {
                 Bucket = bucketName,
-                Key    = objectName
+                Key = objectName
             }
         );
         Assert.NotNull(getTagResult);
@@ -230,7 +230,7 @@ public class ClientObjectTest : IDisposable {
         var delObjectResult = await client.DeleteObjectAsync(
             new() {
                 Bucket = bucketName,
-                Key    = objectName
+                Key = objectName
             }
         );
         Assert.NotNull(delObjectResult);
@@ -261,7 +261,7 @@ public class ClientObjectTest : IDisposable {
             await invClient.PutObjectAsync(
                 new() {
                     Bucket = bucketName,
-                    Key    = "key"
+                    Key = "key"
                 }
             );
         }
@@ -284,7 +284,7 @@ public class ClientObjectTest : IDisposable {
             await invClient.GetObjectAsync(
                 new() {
                     Bucket = bucketName,
-                    Key    = "key"
+                    Key = "key"
                 }
             );
         }
@@ -307,7 +307,7 @@ public class ClientObjectTest : IDisposable {
             await invClient.HeadObjectAsync(
                 new() {
                     Bucket = bucketName,
-                    Key    = "key"
+                    Key = "key"
                 }
             );
         }
@@ -330,7 +330,7 @@ public class ClientObjectTest : IDisposable {
             await invClient.GetObjectMetaAsync(
                 new() {
                     Bucket = bucketName,
-                    Key    = "key"
+                    Key = "key"
                 }
             );
         }
@@ -353,7 +353,7 @@ public class ClientObjectTest : IDisposable {
             await invClient.DeleteObjectAsync(
                 new() {
                     Bucket = bucketName,
-                    Key    = "key"
+                    Key = "key"
                 }
             );
         }
@@ -390,14 +390,14 @@ public class ClientObjectTest : IDisposable {
         Assert.NotNull(result.RequestId);
 
         // put object only body
-        var          objectName = Utils.RandomObjectName();
-        const string content    = "hello world";
+        var objectName = Utils.RandomObjectName();
+        const string content = "hello world";
 
         var putResult = await client.PutObjectAsync(
             new() {
                 Bucket = bucketName,
-                Key    = objectName,
-                Body   = new MemoryStream(Encoding.UTF8.GetBytes(content))
+                Key = objectName,
+                Body = new MemoryStream(Encoding.UTF8.GetBytes(content))
             }
         );
         Assert.NotNull(putResult);
@@ -408,7 +408,7 @@ public class ClientObjectTest : IDisposable {
         var aclResult = await client.GetObjectAclAsync(
             new() {
                 Bucket = bucketName,
-                Key    = objectName
+                Key = objectName
             }
         );
         Assert.NotNull(aclResult);
@@ -420,8 +420,8 @@ public class ClientObjectTest : IDisposable {
         var putAclResult = await client.PutObjectAclAsync(
             new() {
                 Bucket = bucketName,
-                Key    = objectName,
-                Acl    = "private"
+                Key = objectName,
+                Acl = "private"
             }
         );
         Assert.NotNull(putAclResult);
@@ -431,7 +431,7 @@ public class ClientObjectTest : IDisposable {
         aclResult = await client.GetObjectAclAsync(
             new() {
                 Bucket = bucketName,
-                Key    = objectName
+                Key = objectName
             }
         );
         Assert.NotNull(aclResult);
@@ -464,8 +464,8 @@ public class ClientObjectTest : IDisposable {
             await invClient.PutObjectAclAsync(
                 new() {
                     Bucket = bucketName,
-                    Key    = "key",
-                    Acl    = "private"
+                    Key = "key",
+                    Acl = "private"
                 }
             );
         }
@@ -489,7 +489,7 @@ public class ClientObjectTest : IDisposable {
             await invClient.GetObjectAclAsync(
                 new() {
                     Bucket = bucketName,
-                    Key    = "key"
+                    Key = "key"
                 }
             );
         }
@@ -527,14 +527,14 @@ public class ClientObjectTest : IDisposable {
         Assert.NotNull(result.RequestId);
 
         // put object only body
-        var          objectName = Utils.RandomObjectName();
-        const string content    = "hello world";
+        var objectName = Utils.RandomObjectName();
+        const string content = "hello world";
 
         var putResult = await client.PutObjectAsync(
             new() {
                 Bucket = bucketName,
-                Key    = objectName,
-                Body   = new MemoryStream(Encoding.UTF8.GetBytes(content))
+                Key = objectName,
+                Body = new MemoryStream(Encoding.UTF8.GetBytes(content))
             }
         );
         Assert.NotNull(putResult);
@@ -545,7 +545,7 @@ public class ClientObjectTest : IDisposable {
         var getTagResult = await client.GetObjectTaggingAsync(
             new() {
                 Bucket = bucketName,
-                Key    = objectName
+                Key = objectName
             }
         );
         Assert.NotNull(getTagResult);
@@ -558,7 +558,7 @@ public class ClientObjectTest : IDisposable {
         var putTagResult = await client.PutObjectTaggingAsync(
             new() {
                 Bucket = bucketName,
-                Key    = objectName,
+                Key = objectName,
                 Tagging = new() {
                     TagSet = new() {
                         Tags = [new Models.Tag() { Key = "tagK", Value = "tagV" }]
@@ -574,7 +574,7 @@ public class ClientObjectTest : IDisposable {
         getTagResult = await client.GetObjectTaggingAsync(
             new() {
                 Bucket = bucketName,
-                Key    = objectName
+                Key = objectName
             }
         );
         Assert.NotNull(getTagResult);
@@ -591,7 +591,7 @@ public class ClientObjectTest : IDisposable {
         var delTagResult = await client.DeleteObjectTaggingAsync(
             new() {
                 Bucket = bucketName,
-                Key    = objectName
+                Key = objectName
             }
         );
         Assert.NotNull(delTagResult);
@@ -602,7 +602,7 @@ public class ClientObjectTest : IDisposable {
         getTagResult = await client.GetObjectTaggingAsync(
             new() {
                 Bucket = bucketName,
-                Key    = objectName
+                Key = objectName
             }
         );
         Assert.NotNull(getTagResult);
@@ -637,7 +637,7 @@ public class ClientObjectTest : IDisposable {
             await invClient.PutObjectTaggingAsync(
                 new() {
                     Bucket = bucketName,
-                    Key    = objectName,
+                    Key = objectName,
                     Tagging = new() {
                         TagSet = new() {
                             Tags = [new Models.Tag() { Key = "tagK", Value = "tagV" }]
@@ -666,7 +666,7 @@ public class ClientObjectTest : IDisposable {
             await invClient.GetObjectTaggingAsync(
                 new() {
                     Bucket = bucketName,
-                    Key    = objectName
+                    Key = objectName
                 }
             );
         }
@@ -690,7 +690,7 @@ public class ClientObjectTest : IDisposable {
             await invClient.DeleteObjectTaggingAsync(
                 new() {
                     Bucket = bucketName,
-                    Key    = objectName
+                    Key = objectName
                 }
             );
         }
@@ -728,14 +728,14 @@ public class ClientObjectTest : IDisposable {
         Assert.NotNull(result.RequestId);
 
         // put object only body
-        var          objectName = Utils.RandomObjectName();
-        const string content    = "hello world";
+        var objectName = Utils.RandomObjectName();
+        const string content = "hello world";
 
         var putResult = await client.PutObjectAsync(
             new() {
                 Bucket = bucketName,
-                Key    = objectName,
-                Body   = new MemoryStream(Encoding.UTF8.GetBytes("hello world"))
+                Key = objectName,
+                Body = new MemoryStream(Encoding.UTF8.GetBytes("hello world"))
             }
         );
         Assert.NotNull(putResult);
@@ -745,8 +745,8 @@ public class ClientObjectTest : IDisposable {
         // put object symlink
         var putSymResult = await client.PutSymlinkAsync(
             new() {
-                Bucket        = bucketName,
-                Key           = $"{objectName}-link",
+                Bucket = bucketName,
+                Key = $"{objectName}-link",
                 SymlinkTarget = objectName
             }
         );
@@ -758,7 +758,7 @@ public class ClientObjectTest : IDisposable {
         var getSymResult = await client.GetSymlinkAsync(
             new() {
                 Bucket = bucketName,
-                Key    = $"{objectName}-link"
+                Key = $"{objectName}-link"
             }
         );
         Assert.NotNull(getSymResult);
@@ -770,7 +770,7 @@ public class ClientObjectTest : IDisposable {
         var getObjectResult = await client.GetObjectAsync(
             new() {
                 Bucket = bucketName,
-                Key    = $"{objectName}-link"
+                Key = $"{objectName}-link"
             }
         );
         Assert.NotNull(getObjectResult);
@@ -785,7 +785,7 @@ public class ClientObjectTest : IDisposable {
         Assert.NotNull(getObjectResult.Body);
         Assert.False(getObjectResult.Body.CanSeek);
         using var reader = new StreamReader(getObjectResult.Body);
-        var       got    = await reader.ReadToEndAsync();
+        var got = await reader.ReadToEndAsync();
         Assert.Equal(content, got);
     }
 
@@ -813,7 +813,7 @@ public class ClientObjectTest : IDisposable {
             await invClient.GetSymlinkAsync(
                 new() {
                     Bucket = bucketName,
-                    Key    = "key"
+                    Key = "key"
                 }
             );
         }
@@ -836,8 +836,8 @@ public class ClientObjectTest : IDisposable {
         try {
             await invClient.PutSymlinkAsync(
                 new() {
-                    Bucket        = bucketName,
-                    Key           = "key-link",
+                    Bucket = bucketName,
+                    Key = "key-link",
                     SymlinkTarget = "key"
                 }
             );
@@ -881,10 +881,10 @@ public class ClientObjectTest : IDisposable {
         var appendResult = await client.AppendObjectAsync(
             new(
             ) {
-                Bucket   = bucketName,
-                Key      = objectName,
+                Bucket = bucketName,
+                Key = objectName,
                 Position = 0,
-                Body     = new MemoryStream(Encoding.UTF8.GetBytes("hello "))
+                Body = new MemoryStream(Encoding.UTF8.GetBytes("hello "))
             }
         );
 
@@ -897,8 +897,8 @@ public class ClientObjectTest : IDisposable {
         appendResult = await client.AppendObjectAsync(
             new(
             ) {
-                Bucket   = bucketName,
-                Key      = objectName,
+                Bucket = bucketName,
+                Key = objectName,
                 Position = 6,
                 Body = new MemoryStream(Encoding.UTF8.GetBytes("world"))
             }
@@ -913,7 +913,7 @@ public class ClientObjectTest : IDisposable {
         var getObjectResult = await client.GetObjectAsync(
             new() {
                 Bucket = bucketName,
-                Key    = objectName
+                Key = objectName
             }
         );
         Assert.NotNull(getObjectResult);
@@ -928,7 +928,7 @@ public class ClientObjectTest : IDisposable {
         Assert.NotNull(getObjectResult.Body);
         Assert.False(getObjectResult.Body.CanSeek);
         using var reader = new StreamReader(getObjectResult.Body);
-        var       got    = await reader.ReadToEndAsync();
+        var got = await reader.ReadToEndAsync();
         Assert.Equal("hello world", got);
     }
 
@@ -955,23 +955,23 @@ public class ClientObjectTest : IDisposable {
         var appendResult = await client.AppendObjectAsync(
             new(
             ) {
-                Bucket             = bucketName,
-                Key                = objectName,
-                Position           = 0,
-                StorageClass       = "IA",
-                Acl                = "private",
+                Bucket = bucketName,
+                Key = objectName,
+                Position = 0,
+                StorageClass = "IA",
+                Acl = "private",
                 ContentDisposition = "1.txt",
-                CacheControl       = "no-cache",
-                ContentEncoding    = "deflate",
-                Expires            = "Wed, 21 Oct 2015 07:28:00 GMT",
-                ContentType        = "text/txt",
-                ContentMd5         = "XrY7u+Ae7tCTyyK7j1rNww==",
+                CacheControl = "no-cache",
+                ContentEncoding = "deflate",
+                Expires = "Wed, 21 Oct 2015 07:28:00 GMT",
+                ContentType = "text/txt",
+                ContentMd5 = "XrY7u+Ae7tCTyyK7j1rNww==",
                 Metadata = new Dictionary<string, string>() {
                     { "key1", "value1" },
                     { "key2", "value2" }
                 },
                 Tagging = "tag-key1=val1",
-                Body    = new MemoryStream(Encoding.UTF8.GetBytes("hello world"))
+                Body = new MemoryStream(Encoding.UTF8.GetBytes("hello world"))
             }
         );
 
@@ -984,10 +984,10 @@ public class ClientObjectTest : IDisposable {
         appendResult = await client.AppendObjectAsync(
             new(
             ) {
-                Bucket   = bucketName,
-                Key      = objectName,
+                Bucket = bucketName,
+                Key = objectName,
                 Position = 11,
-                Body     = new MemoryStream(Encoding.UTF8.GetBytes(" 123"))
+                Body = new MemoryStream(Encoding.UTF8.GetBytes(" 123"))
             }
         );
 
@@ -1000,7 +1000,7 @@ public class ClientObjectTest : IDisposable {
         var getObjectResult = await client.GetObjectAsync(
             new() {
                 Bucket = bucketName,
-                Key    = objectName
+                Key = objectName
             }
         );
         Assert.NotNull(getObjectResult);
@@ -1022,7 +1022,7 @@ public class ClientObjectTest : IDisposable {
         Assert.NotNull(getObjectResult.Body);
         Assert.False(getObjectResult.Body.CanSeek);
         using var reader = new StreamReader(getObjectResult.Body);
-        var       got    = await reader.ReadToEndAsync();
+        var got = await reader.ReadToEndAsync();
         Assert.Equal("hello world 123", got);
     }
 
@@ -1049,10 +1049,10 @@ public class ClientObjectTest : IDisposable {
         try {
             await invClient.AppendObjectAsync(
                 new() {
-                    Bucket   = bucketName,
-                    Key      = "key",
+                    Bucket = bucketName,
+                    Key = "key",
                     Position = 0,
-                    Body     = new MemoryStream(Encoding.UTF8.GetBytes(" 123"))
+                    Body = new MemoryStream(Encoding.UTF8.GetBytes(" 123"))
                 }
             );
         }
@@ -1090,14 +1090,14 @@ public class ClientObjectTest : IDisposable {
         Assert.NotNull(result.RequestId);
 
         // put object only body
-        var          objectName = Utils.RandomObjectName();
-        const string content    = "hello world";
+        var objectName = Utils.RandomObjectName();
+        const string content = "hello world";
 
         var putResult = await client.PutObjectAsync(
             new() {
                 Bucket = bucketName,
-                Key    = objectName,
-                Body   = new MemoryStream(Encoding.UTF8.GetBytes("hello world"))
+                Key = objectName,
+                Body = new MemoryStream(Encoding.UTF8.GetBytes("hello world"))
             }
         );
         Assert.NotNull(putResult);
@@ -1107,8 +1107,8 @@ public class ClientObjectTest : IDisposable {
         // copy object
         var copyResult = await client.CopyObjectAsync(
             new() {
-                Bucket    = bucketName,
-                Key       = $"{objectName}-copy",
+                Bucket = bucketName,
+                Key = $"{objectName}-copy",
                 SourceKey = objectName
             }
         );
@@ -1120,7 +1120,7 @@ public class ClientObjectTest : IDisposable {
         var getObjectResult = await client.GetObjectAsync(
             new() {
                 Bucket = bucketName,
-                Key    = $"{objectName}-copy"
+                Key = $"{objectName}-copy"
             }
         );
         Assert.NotNull(getObjectResult);
@@ -1135,7 +1135,7 @@ public class ClientObjectTest : IDisposable {
         Assert.NotNull(getObjectResult.Body);
         Assert.False(getObjectResult.Body.CanSeek);
         using var reader = new StreamReader(getObjectResult.Body);
-        var       got    = await reader.ReadToEndAsync();
+        var got = await reader.ReadToEndAsync();
         Assert.Equal(content, got);
     }
 
@@ -1162,8 +1162,8 @@ public class ClientObjectTest : IDisposable {
         try {
             await invClient.CopyObjectAsync(
                 new() {
-                    Bucket    = bucketName,
-                    Key       = "key-copy",
+                    Bucket = bucketName,
+                    Key = "key-copy",
                     SourceKey = "key"
                 }
             );
@@ -1201,7 +1201,7 @@ public class ClientObjectTest : IDisposable {
         Assert.NotNull(result.RequestId);
 
         // put object only body
-        var objectName  = Utils.RandomObjectName();
+        var objectName = Utils.RandomObjectName();
         var objectName1 = objectName + "-1";
 
         const string content = "hello world";
@@ -1220,10 +1220,10 @@ public class ClientObjectTest : IDisposable {
 
         putResult = await client.PutObjectAsync(
             new() {
-                Bucket       = bucketName,
-                Key          = objectName1,
+                Bucket = bucketName,
+                Key = objectName1,
                 StorageClass = StorageClassType.ColdArchive.GetString(),
-                Body         = new MemoryStream(Encoding.UTF8.GetBytes("hello world 123"))
+                Body = new MemoryStream(Encoding.UTF8.GetBytes("hello world 123"))
             }
         );
         Assert.NotNull(putResult);
@@ -1233,8 +1233,8 @@ public class ClientObjectTest : IDisposable {
         // restore object
         var resResult = await client.RestoreObjectAsync(
             new() {
-                Bucket    = bucketName,
-                Key       = objectName,
+                Bucket = bucketName,
+                Key = objectName,
             }
         );
         Assert.NotNull(resResult);
@@ -1246,7 +1246,7 @@ public class ClientObjectTest : IDisposable {
         resResult = await client.RestoreObjectAsync(
             new() {
                 Bucket = bucketName,
-                Key    = objectName1,
+                Key = objectName1,
                 RestoreRequest = new RestoreRequest() {
                     Days = 7,
                     JobParameters = new JobParameters() {
@@ -1265,7 +1265,7 @@ public class ClientObjectTest : IDisposable {
             await client.RestoreObjectAsync(
                 new() {
                     Bucket = bucketName,
-                    Key    = objectName,
+                    Key = objectName,
                 }
             );
             Assert.Fail("should not here");
@@ -1291,7 +1291,7 @@ public class ClientObjectTest : IDisposable {
             await client.CleanRestoredObjectAsync(
                 new() {
                     Bucket = bucketName,
-                    Key    = objectName,
+                    Key = objectName,
                 }
             );
             Assert.Fail("should not here");
@@ -1702,7 +1702,7 @@ public class ClientObjectTest : IDisposable {
         Assert.Equal(200, result.StatusCode);
         Assert.NotNull(result.RequestId);
 
-          //non emtpy body
+        //non emtpy body
         var objectName = Utils.RandomObjectName();
         var putResult = await client.PutObjectAsync(
             new(

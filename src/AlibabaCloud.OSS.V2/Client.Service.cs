@@ -7,7 +7,7 @@ namespace AlibabaCloud.OSS.V2 {
     public partial class Client {
         public async Task<Models.ListBucketsResult> ListBucketsAsync(
             Models.ListBucketsRequest request,
-            OperationOptions? options = null, 
+            OperationOptions? options = null,
             CancellationToken cancellationToken = default) {
 
             var input = new OperationInput {

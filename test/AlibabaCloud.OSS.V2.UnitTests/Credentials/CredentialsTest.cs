@@ -5,7 +5,7 @@ public class CredentialsTest {
     [Fact]
     public void TestCredentials() {
         V2.Credentials.Credentials cred;
-        
+
         // empty 
         cred = new V2.Credentials.Credentials("", "");
         Assert.Equal("", cred.AccessKeyId);
@@ -54,8 +54,7 @@ public class CredentialsTest {
     }
 
     [Fact]
-    public void TestStaticCredentialsProvide()
-    {
+    public void TestStaticCredentialsProvide() {
         var provider = new V2.Credentials.StaticCredentialsProvide("ak", "sk");
         var cred = provider.GetCredentials();
         Assert.Equal("ak", cred.AccessKeyId);

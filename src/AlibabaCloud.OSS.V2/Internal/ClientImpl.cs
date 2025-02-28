@@ -366,7 +366,8 @@ namespace AlibabaCloud.OSS.V2.Internal {
             // request::body
             if (trackers != null && input.Body != null) {
                 request.Content = new TrackStream(input.Body, trackers.ToArray());
-            } else {
+            }
+            else {
                 request.Content = input.Body;
             }
 
@@ -506,7 +507,7 @@ namespace AlibabaCloud.OSS.V2.Internal {
     }
 
     internal static class OperationInputExtensions {
-        
+
         public static void AddStreamTracker(this OperationInput input, Stream tracker) {
             List<Stream>? trackers = null;
             if (input.OperationMetadata.TryGetValue("opm-request-body-tracker", out var value)) {

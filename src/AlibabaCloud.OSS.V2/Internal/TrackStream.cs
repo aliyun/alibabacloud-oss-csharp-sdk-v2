@@ -13,7 +13,7 @@ namespace AlibabaCloud.OSS.V2.Internal {
 
         public TrackStream(Stream reader, params Stream[] trackers) : base(reader) {
             _trackers = trackers;
-            _position = reader.CanSeek? reader.Position : 0;
+            _position = reader.CanSeek ? reader.Position : 0;
             _hasTrackers = trackers != null && trackers.Length > 0;
         }
 
@@ -28,7 +28,7 @@ namespace AlibabaCloud.OSS.V2.Internal {
         }
 
         public override async Task<int> ReadAsync(byte[] buffer, int offset, int count, CancellationToken cancellationToken) {
-            var n= await base.ReadAsync(buffer, offset, count, cancellationToken).ConfigureAwait(false);
+            var n = await base.ReadAsync(buffer, offset, count, cancellationToken).ConfigureAwait(false);
             if (_hasTrackers) {
                 foreach (var w in _trackers) {
                     await w.WriteAsync(buffer, offset, n, cancellationToken).ConfigureAwait(false);

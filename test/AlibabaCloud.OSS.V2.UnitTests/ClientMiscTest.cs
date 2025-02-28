@@ -428,7 +428,7 @@ public class ClientMiscTest {
         mockHandler.Clear();
         var responseTimeout1 = new HttpResponseMessage() {
             StatusCode = HttpStatusCode.OK,
-            Content =  new StreamContent(
+            Content = new StreamContent(
                 new TimeoutReadStream(
                     new MemoryStream(Encoding.UTF8.GetBytes(content)), TimeSpan.FromSeconds(4))),
         };
@@ -456,7 +456,7 @@ public class ClientMiscTest {
                     Key = "test.txt",
                 },
                 savePath,
-                new OperationOptions() { ReadWriteTimeout=TimeSpan.FromSeconds(2)}
+                new OperationOptions() { ReadWriteTimeout = TimeSpan.FromSeconds(2) }
             );
             Assert.Fail("should not here");
         }

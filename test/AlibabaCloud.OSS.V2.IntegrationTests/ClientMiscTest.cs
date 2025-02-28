@@ -627,7 +627,7 @@ public class ClientMiscTest : IDisposable {
         getResult = await client.GetObjectAsync(new GetObjectRequest() {
             Bucket = bucketName,
             Key = objectName
-        },HttpCompletionOption.ResponseContentRead);
+        }, HttpCompletionOption.ResponseContentRead);
 
         Assert.NotNull(getResult);
         Assert.Equal(200, getResult.StatusCode);

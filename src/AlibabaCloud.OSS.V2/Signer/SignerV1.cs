@@ -9,7 +9,7 @@ namespace AlibabaCloud.OSS.V2.Signer {
     public class SignerV1 : ISigner {
         private const string Rfc822DateFormat = "ddd, dd MMM yyyy HH:mm:ss \\G\\M\\T";
 
-        private static readonly IList<string> ParametersToSign = new List<string> { 
+        private static readonly IList<string> ParametersToSign = new List<string> {
             "acl",
             "bucketInfo",
             "location",
@@ -54,13 +54,13 @@ namespace AlibabaCloud.OSS.V2.Signer {
         }
 
         private static void AuthQuery(SigningContext signingContext) {
-            var request     = signingContext.Request;
+            var request = signingContext.Request;
             var credentials = signingContext.Credentials;
             var subResource = signingContext.SubResource;
 
             // Expiration & Date
             var expiration = signingContext.Expiration ?? DateTime.UtcNow.AddMinutes(15);
-            var date       = FormatUnixTime(expiration);
+            var date = FormatUnixTime(expiration);
 
             // Headers
             var headers = request!.Headers;
@@ -92,19 +92,19 @@ namespace AlibabaCloud.OSS.V2.Signer {
             request.RequestUri = request.RequestUri.AppendToQuery(queryStr);
 
             //update
-            signingContext.Request      = request;
-            signingContext.Expiration   = expiration;
+            signingContext.Request = request;
+            signingContext.Expiration = expiration;
             signingContext.StringToSign = stringToSign;
         }
 
         private static void AuthHeader(SigningContext signingContext) {
-            var request     = signingContext.Request;
+            var request = signingContext.Request;
             var credentials = signingContext.Credentials;
             var subResource = signingContext.SubResource;
 
             // Date
             var signTime = signingContext.SignTime ?? DateTime.UtcNow;
-            var date     = FormatRfc822Date(signTime);
+            var date = FormatRfc822Date(signTime);
 
             // Credentials information
             if (credentials!.SecurityToken.IsNotEmpty())
@@ -154,11 +154,11 @@ namespace AlibabaCloud.OSS.V2.Signer {
         }
 
         private static string CalcStringToSign(
-            RequestMessage              request,
-            string                      resourcePath,
+            RequestMessage request,
+            string resourcePath,
             IDictionary<string, string> headers,
-            string                      date,
-            IList<string>?              subResource
+            string date,
+            IList<string>? subResource
         ) {
             /*
             SignToString =
@@ -170,8 +170,8 @@ namespace AlibabaCloud.OSS.V2.Signer {
             + CanonicalizedResource
             Signature = base64(hmac-sha1(AccessKeySecret, SignToString))
             */
-            var httpMethod  = request.Method.ToUpperInvariant();
-            var contentMd5  = request.Headers.TryGetValue("Content-MD5", out var value) ? value : "";
+            var httpMethod = request.Method.ToUpperInvariant();
+            var contentMd5 = request.Headers.TryGetValue("Content-MD5", out var value) ? value : "";
             var contentType = request.Headers.TryGetValue("Content-Type", out value) ? value : "";
 
             // CanonicalizedOSSHeaders
@@ -199,7 +199,7 @@ namespace AlibabaCloud.OSS.V2.Signer {
             var sortedHeaders = new SortedDictionary<string, string>(StringComparer.Ordinal);
 
             foreach (var header in headers) {
-                var lowerKey                                               = header.Key.ToLowerInvariant();
+                var lowerKey = header.Key.ToLowerInvariant();
                 if (lowerKey.StartsWith("x-oss-")) sortedHeaders[lowerKey] = header.Value;
             }
 
@@ -209,9 +209,9 @@ namespace AlibabaCloud.OSS.V2.Signer {
         }
 
         private static string CanonicalizedResource(
-            string                      resourcePath,
+            string resourcePath,
             IDictionary<string, string> parameters,
-            IList<string>?              subResource
+            IList<string>? subResource
         ) {
             var canonicalizedResource = new StringBuilder();
             canonicalizedResource.Append(resourcePath);

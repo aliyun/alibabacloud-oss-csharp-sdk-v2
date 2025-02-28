@@ -173,7 +173,7 @@ namespace AlibabaCloud.OSS.V2.Models {
 
         public GetBucketVersioningResult() {
             BodyFormat = "xml";
-            BodyType   = typeof(Models.VersioningConfiguration);
+            BodyType = typeof(Models.VersioningConfiguration);
         }
     }
 

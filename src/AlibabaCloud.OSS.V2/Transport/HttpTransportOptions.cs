@@ -2,8 +2,7 @@ using System;
 using System.Net;
 
 namespace AlibabaCloud.OSS.V2.Transport {
-    public class HttpTransportOptions
-    {
+    public class HttpTransportOptions {
         public static readonly TimeSpan DEFAULT_CONNECT_TIMEOUT = TimeSpan.FromSeconds(20);
 
         public static readonly TimeSpan DEFAULT_IDLE_CONNECTION_TIMEOUT = TimeSpan.FromSeconds(50);
@@ -30,38 +29,29 @@ namespace AlibabaCloud.OSS.V2.Transport {
 
         public IWebProxy? HttpProxy { get; set; }
 
-        public HttpTransportOptions Merge(HttpTransportOptions options)
-        {
-            if (options.ConnectTimeout != null)
-            {
+        public HttpTransportOptions Merge(HttpTransportOptions options) {
+            if (options.ConnectTimeout != null) {
                 ConnectTimeout = options.ConnectTimeout;
             }
-            if (options.ExpectContinueTimeout != null)
-            {
+            if (options.ExpectContinueTimeout != null) {
                 ExpectContinueTimeout = options.ExpectContinueTimeout;
             }
-            if (options.IdleConnectionTimeout != null)
-            {
+            if (options.IdleConnectionTimeout != null) {
                 IdleConnectionTimeout = options.IdleConnectionTimeout;
             }
-            if (options.KeepAliveTimeout != null)
-            {
+            if (options.KeepAliveTimeout != null) {
                 KeepAliveTimeout = options.KeepAliveTimeout;
             }
-            if (options.MaxConnections != null)
-            {
+            if (options.MaxConnections != null) {
                 MaxConnections = options.MaxConnections;
             }
-            if (options.EnabledRedirect != null)
-            {
+            if (options.EnabledRedirect != null) {
                 EnabledRedirect = options.EnabledRedirect;
             }
-            if (options.InsecureSkipVerify != null)
-            {
+            if (options.InsecureSkipVerify != null) {
                 InsecureSkipVerify = options.InsecureSkipVerify;
             }
-            if (options.HttpProxy != null)
-            {
+            if (options.HttpProxy != null) {
                 HttpProxy = options.HttpProxy;
             }
             return this;

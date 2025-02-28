@@ -24,10 +24,10 @@
     public static class BucketAclTypeExtensions {
         public static string GetString(this BucketAclType me) {
             return me switch {
-                BucketAclType.Private         => "private",
-                BucketAclType.PublicRead      => "public-read",
+                BucketAclType.Private => "private",
+                BucketAclType.PublicRead => "public-read",
                 BucketAclType.PublicReadWrite => "public-read-write",
-                _                             => "NO VALUE GIVEN"
+                _ => "NO VALUE GIVEN"
             };
         }
     }
@@ -40,9 +40,9 @@
     public static class AccessMonitorStatusTypeExtensions {
         public static string GetString(this AccessMonitorStatusType me) {
             return me switch {
-                AccessMonitorStatusType.Enabled  => "Enabled",
+                AccessMonitorStatusType.Enabled => "Enabled",
                 AccessMonitorStatusType.Disabled => "Disabled",
-                _                                => "NO VALUE GIVEN"
+                _ => "NO VALUE GIVEN"
             };
         }
     }
@@ -84,12 +84,12 @@
     public static class StorageClassTypeExtensions {
         public static string GetString(this StorageClassType me) {
             return me switch {
-                StorageClassType.Standard        => "Standard",
-                StorageClassType.IA              => "IA",
-                StorageClassType.Archive         => "Archive",
-                StorageClassType.ColdArchive     => "ColdArchive",
+                StorageClassType.Standard => "Standard",
+                StorageClassType.IA => "IA",
+                StorageClassType.Archive => "Archive",
+                StorageClassType.ColdArchive => "ColdArchive",
                 StorageClassType.DeepColdArchive => "DeepColdArchive",
-                _                                => "NO VALUE GIVEN"
+                _ => "NO VALUE GIVEN"
             };
         }
     }
@@ -118,7 +118,7 @@
             return me switch {
                 DataRedundancyType.LRS => "LRS",
                 DataRedundancyType.ZRS => "ZRS",
-                _                      => "NO VALUE GIVEN"
+                _ => "NO VALUE GIVEN"
             };
         }
     }
@@ -153,11 +153,11 @@
     public static class ObjectAclTypeExtensions {
         public static string GetString(this ObjectAclType me) {
             return me switch {
-                ObjectAclType.Private         => "private",
-                ObjectAclType.PublicRead      => "public-read",
+                ObjectAclType.Private => "private",
+                ObjectAclType.PublicRead => "public-read",
                 ObjectAclType.PublicReadWrite => "public-read-write",
-                ObjectAclType.Default         => "default",
-                _                             => "NO VALUE GIVEN"
+                ObjectAclType.Default => "default",
+                _ => "NO VALUE GIVEN"
             };
         }
     }
@@ -173,7 +173,7 @@
         public static string GetString(this EncodingType me) {
             return me switch {
                 EncodingType.Url => "url",
-                _              => "NO VALUE GIVEN"
+                _ => "NO VALUE GIVEN"
             };
         }
     }
@@ -189,9 +189,9 @@
     public static class BucketVersioningStatusTypeExtensions {
         public static string GetString(this BucketVersioningStatusType me) {
             return me switch {
-                BucketVersioningStatusType.Enabled   => "Enabled",
+                BucketVersioningStatusType.Enabled => "Enabled",
                 BucketVersioningStatusType.Suspended => "Suspended",
-                _                                    => "NO VALUE GIVEN"
+                _ => "NO VALUE GIVEN"
             };
         }
     }

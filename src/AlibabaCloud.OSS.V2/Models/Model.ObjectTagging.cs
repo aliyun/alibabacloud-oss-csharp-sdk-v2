@@ -83,7 +83,7 @@ namespace AlibabaCloud.OSS.V2.Models {
 
         public GetObjectTaggingResult() {
             BodyFormat = "xml";
-            BodyType   = typeof(Tagging);
+            BodyType = typeof(Tagging);
         }
     }
 

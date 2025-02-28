@@ -26,11 +26,11 @@ public class ModelObjectSymlinkTest {
         Assert.Null(input.Body);
 
         request = new() {
-            Bucket          = "bucket",
-            Key             = "key",
-            SymlinkTarget   = "target-key",
-            ObjectAcl       = "private",
-            StorageClass    = "Standard",
+            Bucket = "bucket",
+            Key = "key",
+            SymlinkTarget = "target-key",
+            ObjectAcl = "private",
+            StorageClass = "Standard",
             ForbidOverwrite = true
         };
 
@@ -70,7 +70,7 @@ public class ModelObjectSymlinkTest {
 
         var output = new OperationOutput {
             StatusCode = 200,
-            Status     = "OK",
+            Status = "OK",
             Headers = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase) {
                 { "x-oss-request-id", "123-id" },
                 { "Content-Type", "txt" },
@@ -105,8 +105,8 @@ public class ModelObjectSymlinkTest {
         Assert.Null(input.Body);
 
         request = new() {
-            Bucket    = "bucket",
-            Key       = "key",
+            Bucket = "bucket",
+            Key = "key",
             VersionId = "version-id"
         };
         Assert.Equal("bucket", request.Bucket);
@@ -140,7 +140,7 @@ public class ModelObjectSymlinkTest {
 
         var output = new OperationOutput {
             StatusCode = 200,
-            Status     = "OK",
+            Status = "OK",
             Headers = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase) {
                 { "x-oss-request-id", "123-id" },
                 { "x-oss-symlink-target", "example.jpg" },

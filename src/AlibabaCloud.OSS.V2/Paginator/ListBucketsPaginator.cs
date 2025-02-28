@@ -9,12 +9,12 @@ namespace AlibabaCloud.OSS.V2.Paginator {
     /// A paginator for ListBuckets
     /// </summary>
     internal sealed class ListBucketsPaginator : IPaginator<ListBucketsResult> {
-        private readonly Client             _client;
+        private readonly Client _client;
         private readonly ListBucketsRequest _request;
-        private          int                _isPaginatorInUse = 0;
+        private int _isPaginatorInUse = 0;
 
         internal ListBucketsPaginator(Client client, ListBucketsRequest request, PaginatorOptions? options) {
-            _client  = client;
+            _client = client;
             _request = request;
 
             if (options?.Limit != null) _request.MaxKeys = options.Limit;
@@ -28,13 +28,13 @@ namespace AlibabaCloud.OSS.V2.Paginator {
                 throw new InvalidOperationException(
                     "Paginator has already been consumed and cannot be reused. Please create a new instance."
                 );
-            var               marker = _request.Marker;
+            var marker = _request.Marker;
             ListBucketsResult result;
 
             do {
                 _request.Marker = marker;
-                result          = _client.ListBucketsAsync(_request).GetAwaiter().GetResult();
-                marker          = result.NextMarker;
+                result = _client.ListBucketsAsync(_request).GetAwaiter().GetResult();
+                marker = result.NextMarker;
                 yield return result;
             } while (result.IsTruncated ?? false);
         }
@@ -49,13 +49,13 @@ namespace AlibabaCloud.OSS.V2.Paginator {
                 throw new InvalidOperationException(
                     "Paginator has already been consumed and cannot be reused. Please create a new instance."
                 );
-            var               marker = _request.Marker;
+            var marker = _request.Marker;
             ListBucketsResult result;
 
             do {
                 _request.Marker = marker;
-                result          = await _client.ListBucketsAsync(_request, null, cancellationToken);
-                marker          = result.NextMarker;
+                result = await _client.ListBucketsAsync(_request, null, cancellationToken);
+                marker = result.NextMarker;
                 yield return result;
             } while (result.IsTruncated ?? false);
         }

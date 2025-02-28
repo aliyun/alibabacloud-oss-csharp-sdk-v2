@@ -3,8 +3,7 @@ using System;
 using System.Collections.Generic;
 
 namespace AlibabaCloud.OSS.V2 {
-    public class ClientOptions
-    {
+    public class ClientOptions {
         public string Product { get; set; } = "";
 
         public string Region { get; set; } = "";

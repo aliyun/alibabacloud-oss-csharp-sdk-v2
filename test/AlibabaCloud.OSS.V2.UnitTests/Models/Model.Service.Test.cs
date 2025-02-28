@@ -26,9 +26,9 @@ public class ModelServiceTest {
 
         request = new ListBucketsRequest {
             ResourceGroupId = "rg-id-123",
-            Prefix          = "prefix-01",
-            MaxKeys         = 10001,
-            Marker          = "bucket-123",
+            Prefix = "prefix-01",
+            MaxKeys = 10001,
+            Marker = "bucket-123",
         };
         Assert.NotEmpty(request.Headers);
         Assert.Equal("rg-id-123", request.ResourceGroupId);

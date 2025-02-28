@@ -15,14 +15,14 @@ namespace AlibabaCloud.OSS.V2 {
         /// <returns><see cref="Models.GetBucketStatResult" />The result instance.</returns>
         public async Task<Models.GetBucketStatResult> GetBucketStatAsync(
             Models.GetBucketStatRequest request,
-            OperationOptions?           options           = null,
-            CancellationToken           cancellationToken = default
+            OperationOptions? options = null,
+            CancellationToken cancellationToken = default
         ) {
             Ensure.NotNull(request.Bucket, "request.Bucket");
 
             var input = new OperationInput {
                 OperationName = "GetBucketStat",
-                Method        = "GET",
+                Method = "GET",
                 Parameters = new Dictionary<string, string> {
                     { "stat", "" }
                 },
@@ -49,14 +49,14 @@ namespace AlibabaCloud.OSS.V2 {
         /// <returns><see cref="Models.PutBucketResult" />The result instance.</returns>
         public async Task<Models.PutBucketResult> PutBucketAsync(
             Models.PutBucketRequest request,
-            OperationOptions?       options           = null,
-            CancellationToken       cancellationToken = default
+            OperationOptions? options = null,
+            CancellationToken cancellationToken = default
         ) {
             Ensure.NotNull(request.Bucket, "request.Bucket");
 
             var input = new OperationInput {
                 OperationName = "PutBucket",
-                Method        = "PUT",
+                Method = "PUT",
                 Headers = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase) {
                     { "Content-Type", "application/xml" }
                 },
@@ -83,14 +83,14 @@ namespace AlibabaCloud.OSS.V2 {
         /// <returns><see cref="Models.DeleteBucketResult" />The result instance.</returns>
         public async Task<Models.DeleteBucketResult> DeleteBucketAsync(
             Models.DeleteBucketRequest request,
-            OperationOptions?          options           = null,
-            CancellationToken          cancellationToken = default
+            OperationOptions? options = null,
+            CancellationToken cancellationToken = default
         ) {
             Ensure.NotNull(request.Bucket, "request.Bucket");
 
             var input = new OperationInput {
                 OperationName = "DeleteBucket",
-                Method        = "DELETE",
+                Method = "DELETE",
                 Headers = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase) {
                     { "Content-Type", "application/xml" }
                 },
@@ -117,14 +117,14 @@ namespace AlibabaCloud.OSS.V2 {
         /// <returns><see cref="Models.ListObjectsResult" />The result instance.</returns>
         public async Task<Models.ListObjectsResult> ListObjectsAsync(
             Models.ListObjectsRequest request,
-            OperationOptions?         options           = null,
-            CancellationToken         cancellationToken = default
+            OperationOptions? options = null,
+            CancellationToken cancellationToken = default
         ) {
             Ensure.NotNull(request.Bucket, "request.Bucket");
 
             var input = new OperationInput {
                 OperationName = "ListObjects",
-                Method        = "GET",
+                Method = "GET",
                 Parameters = new Dictionary<string, string> {
                     { "encoding-type", "url" }
                 },
@@ -151,14 +151,14 @@ namespace AlibabaCloud.OSS.V2 {
         /// <returns><see cref="Models.ListObjectsV2Result" />The result instance.</returns>
         public async Task<Models.ListObjectsV2Result> ListObjectsV2Async(
             Models.ListObjectsV2Request request,
-            OperationOptions?           options           = null,
-            CancellationToken           cancellationToken = default
+            OperationOptions? options = null,
+            CancellationToken cancellationToken = default
         ) {
             Ensure.NotNull(request.Bucket, "request.Bucket");
 
             var input = new OperationInput {
                 OperationName = "ListObjectsV2",
-                Method        = "GET",
+                Method = "GET",
                 Parameters = new Dictionary<string, string> {
                     { "list-type", "2" },
                     { "encoding-type", "url" }
@@ -186,14 +186,14 @@ namespace AlibabaCloud.OSS.V2 {
         /// <returns><see cref="Models.GetBucketInfoResult" />The result instance.</returns>
         public async Task<Models.GetBucketInfoResult> GetBucketInfoAsync(
             Models.GetBucketInfoRequest request,
-            OperationOptions?           options           = null,
-            CancellationToken           cancellationToken = default
+            OperationOptions? options = null,
+            CancellationToken cancellationToken = default
         ) {
             Ensure.NotNull(request.Bucket, "request.Bucket");
 
             var input = new OperationInput {
                 OperationName = "GetBucketInfo",
-                Method        = "GET",
+                Method = "GET",
                 Parameters = new Dictionary<string, string> {
                     { "bucketInfo", "" }
                 },
@@ -220,14 +220,14 @@ namespace AlibabaCloud.OSS.V2 {
         /// <returns><see cref="Models.GetBucketLocationResult" />The result instance.</returns>
         public async Task<Models.GetBucketLocationResult> GetBucketLocationAsync(
             Models.GetBucketLocationRequest request,
-            OperationOptions?               options           = null,
-            CancellationToken               cancellationToken = default
+            OperationOptions? options = null,
+            CancellationToken cancellationToken = default
         ) {
             Ensure.NotNull(request.Bucket, "request.Bucket");
 
             var input = new OperationInput {
                 OperationName = "GetBucketLocation",
-                Method        = "GET",
+                Method = "GET",
                 Parameters = new Dictionary<string, string> {
                     { "location", "" }
                 },

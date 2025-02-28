@@ -13,7 +13,7 @@ namespace AlibabaCloud.OSS.V2.Internal {
 
         public void Reset();
 
-        public int Size {  get; }
+        public int Size { get; }
 
         public int BlockSize { get; }
     }

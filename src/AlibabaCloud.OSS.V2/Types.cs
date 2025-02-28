@@ -7,15 +7,15 @@ namespace AlibabaCloud.OSS.V2 {
         private IDictionary<string, object>? _metadata;
 
         public string OperationName { get; set; } = string.Empty;
-        public string Method        { get; set; } = string.Empty;
+        public string Method { get; set; } = string.Empty;
 
-        public IDictionary<string, string>? Headers    { get; set; }
+        public IDictionary<string, string>? Headers { get; set; }
         public IDictionary<string, string>? Parameters { get; set; }
 
         public Stream? Body { get; set; }
 
         public string? Bucket { get; set; }
-        public string? Key    { get; set; }
+        public string? Key { get; set; }
 
         public IDictionary<string, object> OperationMetadata {
             get {
@@ -27,24 +27,24 @@ namespace AlibabaCloud.OSS.V2 {
     }
 
     public sealed class OperationOutput {
-        public string                       Status            { get; set; } = string.Empty;
-        public int                          StatusCode        { get; set; }
-        public IDictionary<string, string>? Headers           { get; set; }
-        public Stream?                      Body              { get; set; }
+        public string Status { get; set; } = string.Empty;
+        public int StatusCode { get; set; }
+        public IDictionary<string, string>? Headers { get; set; }
+        public Stream? Body { get; set; }
         public IDictionary<string, object>? OperationMetadata { get; set; }
-        public OperationInput?              Input             { get; set; }
+        public OperationInput? Input { get; set; }
     }
 
     public sealed class OperationOptions {
         /// <summary>
         /// The maximum number attempts.
         /// </summary>
-        public int?                  RetryMaxAttempts     { get; set; }
+        public int? RetryMaxAttempts { get; set; }
 
         /// <summary>
         /// read and write timeout
         /// </summary>
-        public TimeSpan?             ReadWriteTimeout     { get; set; }
+        public TimeSpan? ReadWriteTimeout { get; set; }
 
         /// <summary>
         /// The way in which it is signed

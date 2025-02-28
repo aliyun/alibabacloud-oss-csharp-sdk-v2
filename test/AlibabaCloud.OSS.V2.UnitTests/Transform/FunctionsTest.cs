@@ -31,7 +31,7 @@ public class FunctionsTest {
         // case 2
         model = new ModelStub() {
             HeaderParma = "val-1",
-            QueryParma  = "val-2"
+            QueryParma = "val-2"
         };
         input = new OperationInput();
         V2.Transform.Serde.SerializeInput(model, ref input);
@@ -57,10 +57,10 @@ public class FunctionsTest {
         // case 4
         model = new ModelStub() {
             HeaderParma = "val-1",
-            QueryParma  = "val-2"
+            QueryParma = "val-2"
         };
         input = new OperationInput() {
-            Headers    = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase),
+            Headers = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase),
             Parameters = new Dictionary<string, string>(),
         };
         V2.Transform.Serde.SerializeInput(model, ref input);
@@ -85,7 +85,7 @@ public class FunctionsTest {
 
         // InnerBody is not null and InnerBody is Stream
         model = new ModelStub() {
-            InnerBody  = new MemoryStream(),
+            InnerBody = new MemoryStream(),
             BodyFormat = "",
         };
         input = new OperationInput();
@@ -97,7 +97,7 @@ public class FunctionsTest {
 
         // InnerBody is not null and InnerBody is not supported type
         model = new ModelStub() {
-            InnerBody  = "hello world",
+            InnerBody = "hello world",
             BodyFormat = "",
         };
         input = new OperationInput();

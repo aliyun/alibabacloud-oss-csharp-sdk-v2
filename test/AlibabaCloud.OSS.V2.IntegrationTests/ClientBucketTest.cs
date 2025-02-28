@@ -20,7 +20,7 @@ public class ClientBucketTest : IDisposable {
 
         //default
         var bucketName = Utils.RandomBucketName(BucketNamePrefix);
- 
+
         var result = await client.PutBucketAsync(new() {
             Bucket = bucketName,
             CreateBucketConfiguration = new CreateBucketConfiguration() {
@@ -485,7 +485,7 @@ public class ClientBucketTest : IDisposable {
         Assert.Equal(1, count);
 
         // delete all objects
-        paginators = client.ListObjectsPaginator(new ListObjectsRequest() { Bucket = bucketName});
+        paginators = client.ListObjectsPaginator(new ListObjectsRequest() { Bucket = bucketName });
         await foreach (var page in paginators.IterPageAsync()) {
             var obj = new List<Models.DeleteObject>();
             foreach (var version in page.Contents ?? []) {

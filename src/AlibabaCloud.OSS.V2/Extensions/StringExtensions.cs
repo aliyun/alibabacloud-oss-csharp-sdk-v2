@@ -22,7 +22,7 @@ namespace AlibabaCloud.OSS.V2.Extensions {
 
             return ch switch {
                 '-' or '_' or '.' or '~' or '/' => true,
-                _                               => false
+                _ => false
             };
         }
 
@@ -45,7 +45,7 @@ namespace AlibabaCloud.OSS.V2.Extensions {
 
         public static string JoinToString(this IEnumerable<string> strings, string separator) => string.Join(separator, strings);
 
-        public static string SafeString(this string? value) => value?? "";
+        public static string SafeString(this string? value) => value ?? "";
 
         public static string AddScheme(this string input, bool disableSsl) {
             if (input != "" && !Regex.IsMatch(input, @"^([^:]+)://")) {

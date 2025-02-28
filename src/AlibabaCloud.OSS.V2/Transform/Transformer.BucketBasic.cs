@@ -51,12 +51,12 @@ namespace AlibabaCloud.OSS.V2.Transform {
     internal static partial class Serde {
         public static void DeserializeListObjects(
             ref Models.ResultModel baseResult,
-            ref OperationOutput    output
+            ref OperationOutput output
         ) {
-            var       serializer = new XmlSerializer(typeof(XmlListBucketResult));
-            using var body       = output.Body!;
-            var       obj        = serializer.Deserialize(body) as XmlListBucketResult;
-            var       result     = baseResult as Models.ListObjectsResult;
+            var serializer = new XmlSerializer(typeof(XmlListBucketResult));
+            using var body = output.Body!;
+            var obj = serializer.Deserialize(body) as XmlListBucketResult;
+            var result = baseResult as Models.ListObjectsResult;
 
             if (obj == null || result == null) {
                 return;
@@ -64,26 +64,26 @@ namespace AlibabaCloud.OSS.V2.Transform {
 
             DeserializeEncodingType(ref obj);
 
-            result.Name           = obj.Name;
-            result.MaxKeys        = obj.MaxKeys;
-            result.Delimiter      = obj.Delimiter;
-            result.EncodingType   = obj.EncodingType;
-            result.Marker         = obj.Marker;
-            result.NextMarker     = obj.NextMarker;
-            result.Contents       = obj.Contents;
-            result.Prefix         = obj.Prefix;
-            result.IsTruncated    = obj.IsTruncated;
+            result.Name = obj.Name;
+            result.MaxKeys = obj.MaxKeys;
+            result.Delimiter = obj.Delimiter;
+            result.EncodingType = obj.EncodingType;
+            result.Marker = obj.Marker;
+            result.NextMarker = obj.NextMarker;
+            result.Contents = obj.Contents;
+            result.Prefix = obj.Prefix;
+            result.IsTruncated = obj.IsTruncated;
             result.CommonPrefixes = obj.CommonPrefixes;
         }
 
         public static void DeserializeListObjectsV2(
             ref Models.ResultModel baseResult,
-            ref OperationOutput    output
+            ref OperationOutput output
         ) {
-            var       serializer = new XmlSerializer(typeof(XmlListBucketResult));
-            using var body       = output.Body!;
-            var       obj        = serializer.Deserialize(body) as XmlListBucketResult;
-            var       result     = baseResult as Models.ListObjectsV2Result;
+            var serializer = new XmlSerializer(typeof(XmlListBucketResult));
+            using var body = output.Body!;
+            var obj = serializer.Deserialize(body) as XmlListBucketResult;
+            var result = baseResult as Models.ListObjectsV2Result;
 
             if (obj == null || result == null) {
                 return;
@@ -91,18 +91,18 @@ namespace AlibabaCloud.OSS.V2.Transform {
 
             DeserializeEncodingType(ref obj);
 
-            result.Name                  = obj.Name;
-            result.MaxKeys               = obj.MaxKeys;
-            result.Delimiter             = obj.Delimiter;
-            result.EncodingType          = obj.EncodingType;
-            result.StartAfter            = obj.StartAfter;
-            result.ContinuationToken     = obj.ContinuationToken;
+            result.Name = obj.Name;
+            result.MaxKeys = obj.MaxKeys;
+            result.Delimiter = obj.Delimiter;
+            result.EncodingType = obj.EncodingType;
+            result.StartAfter = obj.StartAfter;
+            result.ContinuationToken = obj.ContinuationToken;
             result.NextContinuationToken = obj.NextContinuationToken;
-            result.Contents              = obj.Contents;
-            result.Prefix                = obj.Prefix;
-            result.IsTruncated           = obj.IsTruncated;
-            result.KeyCount              = obj.KeyCount;
-            result.CommonPrefixes        = obj.CommonPrefixes;
+            result.Contents = obj.Contents;
+            result.Prefix = obj.Prefix;
+            result.IsTruncated = obj.IsTruncated;
+            result.KeyCount = obj.KeyCount;
+            result.CommonPrefixes = obj.CommonPrefixes;
         }
 
         private static void DeserializeEncodingType(ref XmlListBucketResult result) {

@@ -8,8 +8,7 @@ namespace AlibabaCloud.OSS.V2.Retry {
     public class FixedDelayBackoff : IBackoffDelayer {
         private TimeSpan _backoff;
 
-        public FixedDelayBackoff(TimeSpan backoff) 
-        {
+        public FixedDelayBackoff(TimeSpan backoff) {
             _backoff = backoff;
         }
 

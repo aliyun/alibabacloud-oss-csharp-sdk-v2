@@ -42,8 +42,8 @@ public class ClientBucketVersioningTest : IDisposable {
         // put bucket versioning status
         var putResult = await client.PutBucketVersioningAsync(new() {
             Bucket = bucketName,
-            VersioningConfiguration = new VersioningConfiguration { 
-                Status= BucketVersioningStatusType.Enabled.GetString()
+            VersioningConfiguration = new VersioningConfiguration {
+                Status = BucketVersioningStatusType.Enabled.GetString()
             }
         });
         Assert.NotNull(putResult);

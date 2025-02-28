@@ -15,15 +15,15 @@ namespace AlibabaCloud.OSS.V2 {
         /// <returns><see cref="Models.PutBucketVersioningResult" />The result instance.</returns>
         public async Task<Models.PutBucketVersioningResult> PutBucketVersioningAsync(
             Models.PutBucketVersioningRequest request,
-            OperationOptions?                 options           = null,
-            CancellationToken                 cancellationToken = default
+            OperationOptions? options = null,
+            CancellationToken cancellationToken = default
         ) {
             Ensure.NotNull(request.Bucket, "request.Bucket");
             Ensure.NotNull(request.VersioningConfiguration, "request.VersioningConfiguration");
 
             var input = new OperationInput {
                 OperationName = "PutBucketVersioning",
-                Method        = "PUT",
+                Method = "PUT",
                 Headers = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase) {
                     { "Content-Type", "application/xml" }
                 },
@@ -53,14 +53,14 @@ namespace AlibabaCloud.OSS.V2 {
         /// <returns><see cref="Models.GetBucketVersioningResult" />The result instance.</returns>
         public async Task<Models.GetBucketVersioningResult> GetBucketVersioningAsync(
             Models.GetBucketVersioningRequest request,
-            OperationOptions?                 options           = null,
-            CancellationToken                 cancellationToken = default
+            OperationOptions? options = null,
+            CancellationToken cancellationToken = default
         ) {
             Ensure.NotNull(request.Bucket, "request.Bucket");
 
             var input = new OperationInput {
                 OperationName = "GetBucketVersioning",
-                Method        = "GET",
+                Method = "GET",
                 Parameters = new Dictionary<string, string> {
                     { "versioning", "" }
                 },
@@ -87,14 +87,14 @@ namespace AlibabaCloud.OSS.V2 {
         /// <returns><see cref="Models.ListObjectVersionsResult" />The result instance.</returns>
         public async Task<Models.ListObjectVersionsResult> ListObjectVersionsAsync(
             Models.ListObjectVersionsRequest request,
-            OperationOptions?                options           = null,
-            CancellationToken                cancellationToken = default
+            OperationOptions? options = null,
+            CancellationToken cancellationToken = default
         ) {
             Ensure.NotNull(request.Bucket, "request.Bucket");
 
             var input = new OperationInput {
                 OperationName = "ListObjectVersions",
-                Method        = "GET",
+                Method = "GET",
                 Parameters = new Dictionary<string, string> {
                     { "versions", "" },
                     { "encoding-type", "url" }

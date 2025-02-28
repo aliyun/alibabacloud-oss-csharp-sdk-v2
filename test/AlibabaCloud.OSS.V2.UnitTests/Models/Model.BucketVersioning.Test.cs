@@ -56,7 +56,7 @@ public class ModelBucketVersioningTest {
 
         var output = new OperationOutput {
             StatusCode = 200,
-            Status     = "OK",
+            Status = "OK",
             Headers = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase) {
                 {"x-oss-request-id", "123-id"},
                 {"Content-Type","txt"}
@@ -116,7 +116,7 @@ public class ModelBucketVersioningTest {
 
         var output = new OperationOutput {
             StatusCode = 200,
-            Status     = "OK",
+            Status = "OK",
             Headers = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase) {
                 {"x-oss-request-id", "123-id"},
                 {"Content-Type","txt"}
@@ -143,7 +143,7 @@ public class ModelBucketVersioningTest {
 
         output = new OperationOutput {
             StatusCode = 200,
-            Status     = "OK",
+            Status = "OK",
             Headers = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase) {
                 {"x-oss-request-id", "123-id"},
                 {"Content-Type","txt"}
@@ -205,13 +205,13 @@ public class ModelBucketVersioningTest {
         Assert.Null(input.Body);
 
         request = new ListObjectVersionsRequest {
-            Bucket          = "bucket",
-            Delimiter       = "/",
-            EncodingType    = "url",
-            KeyMarker       = "key-01",
+            Bucket = "bucket",
+            Delimiter = "/",
+            EncodingType = "url",
+            KeyMarker = "key-01",
             VersionIdMarker = "version-id-01",
-            MaxKeys         = 10001,
-            Prefix          = "prefix-01",
+            MaxKeys = 10001,
+            Prefix = "prefix-01",
         };
         Assert.Empty(request.Headers);
         Assert.Equal("bucket", request.Bucket);

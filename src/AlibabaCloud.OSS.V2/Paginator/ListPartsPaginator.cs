@@ -9,12 +9,12 @@ namespace AlibabaCloud.OSS.V2.Paginator {
     /// A paginator for ListParts
     /// </summary>
     internal sealed class ListPartsPaginator : IPaginator<ListPartsResult> {
-        private readonly Client           _client;
+        private readonly Client _client;
         private readonly ListPartsRequest _request;
-        private          int              _isPaginatorInUse = 0;
+        private int _isPaginatorInUse = 0;
 
         internal ListPartsPaginator(Client client, ListPartsRequest request, PaginatorOptions? options) {
-            _client  = client;
+            _client = client;
             _request = request;
 
             if (options?.Limit != null) _request.MaxParts = options.Limit;
@@ -28,13 +28,13 @@ namespace AlibabaCloud.OSS.V2.Paginator {
                 throw new InvalidOperationException(
                     "Paginator has already been consumed and cannot be reused. Please create a new instance."
                 );
-            var             partNumberMarker = _request.PartNumberMarker;
+            var partNumberMarker = _request.PartNumberMarker;
             ListPartsResult result;
 
             do {
                 _request.PartNumberMarker = partNumberMarker;
-                result                    = _client.ListPartsAsync(_request).GetAwaiter().GetResult();
-                partNumberMarker          = result.NextPartNumberMarker;
+                result = _client.ListPartsAsync(_request).GetAwaiter().GetResult();
+                partNumberMarker = result.NextPartNumberMarker;
                 yield return result;
             } while (result.IsTruncated ?? false);
         }
@@ -49,13 +49,13 @@ namespace AlibabaCloud.OSS.V2.Paginator {
                 throw new InvalidOperationException(
                     "Paginator has already been consumed and cannot be reused. Please create a new instance."
                 );
-            var             partNumberMarker = _request.PartNumberMarker;
+            var partNumberMarker = _request.PartNumberMarker;
             ListPartsResult result;
 
             do {
                 _request.PartNumberMarker = partNumberMarker;
-                result                    = await _client.ListPartsAsync(_request, null, cancellationToken);
-                partNumberMarker          = result.NextPartNumberMarker;
+                result = await _client.ListPartsAsync(_request, null, cancellationToken);
+                partNumberMarker = result.NextPartNumberMarker;
                 yield return result;
             } while (result.IsTruncated ?? false);
         }
