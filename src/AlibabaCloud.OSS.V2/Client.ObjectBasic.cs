@@ -433,7 +433,7 @@ namespace AlibabaCloud.OSS.V2 {
         /// <param name="options"><see cref="OperationOptions"/>Optional, operation options</param>
         /// <param name="cancellationToken"><see cref="CancellationToken"/>Optional,The cancellation token to cancel operation.</param>
         /// <returns><see cref="Models.DeleteMultipleObjectsResult" />The result instance.</returns>
-        public async Task<Models.DeleteMultipleObjectsResult> DeleteMultipleObjects(
+        public async Task<Models.DeleteMultipleObjectsResult> DeleteMultipleObjectsAsync(
             Models.DeleteMultipleObjectsRequest request,
             OperationOptions? options = null,
             CancellationToken cancellationToken = default

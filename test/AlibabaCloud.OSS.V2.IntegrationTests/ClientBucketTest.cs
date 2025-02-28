@@ -494,7 +494,7 @@ public class ClientBucketTest : IDisposable {
                 });
             }
             if (obj.Count > 0) {
-                await client.DeleteMultipleObjects(
+                await client.DeleteMultipleObjectsAsync(
                     new Models.DeleteMultipleObjectsRequest() {
                         Bucket = bucketName,
                         Objects = obj
@@ -624,7 +624,7 @@ public class ClientBucketTest : IDisposable {
                 });
             }
             if (obj.Count > 0) {
-                await client.DeleteMultipleObjects(
+                await client.DeleteMultipleObjectsAsync(
                     new Models.DeleteMultipleObjectsRequest() {
                         Bucket = bucketName,
                         Objects = obj

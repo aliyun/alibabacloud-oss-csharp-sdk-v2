@@ -195,7 +195,7 @@ public class Utils {
             }
             Assert.NotNull(obj);
             if (obj.Count > 0) {
-                client.DeleteMultipleObjects(
+                client.DeleteMultipleObjectsAsync(
                     new Models.DeleteMultipleObjectsRequest() {
                         Bucket = bucket.Name,
                         Objects = obj
