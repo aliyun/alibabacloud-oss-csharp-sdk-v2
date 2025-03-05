@@ -24,7 +24,7 @@ namespace AlibabaCloud.OSS.V2
         /// <param name="cancellationToken"><see cref="CancellationToken"/>Optional,The cancellation token to cancel operation.</param>
         /// <returns><see cref="OperationOutput" />The result instance.</returns>
         /// <returns></returns>
-        public async Task<OperationOutput> InvokeOperation(
+        public async Task<OperationOutput> InvokeOperationAsync(
             OperationInput input,
             OperationOptions? options = null,
             CancellationToken cancellationToken = default

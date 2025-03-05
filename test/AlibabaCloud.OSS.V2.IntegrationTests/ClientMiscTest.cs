@@ -351,7 +351,7 @@ public class ClientMiscTest : IDisposable
         Assert.NotNull(result.RequestId);
 
         // get bucket acl
-        var res = await client.InvokeOperation(
+        var res = await client.InvokeOperationAsync(
             new OperationInput
             {
                 OperationName = "GetBucketAcl",
@@ -390,7 +390,7 @@ public class ClientMiscTest : IDisposable
         Assert.NotNull(result.RequestId);
 
         // get bucket acl
-        var res = await client.InvokeOperation(
+        var res = await client.InvokeOperationAsync(
             new OperationInput
             {
                 OperationName = "GetBucketAcl",
