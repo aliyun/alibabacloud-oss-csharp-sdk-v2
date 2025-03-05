@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace AlibabaCloud.OSS.V2.Models {
-    public abstract class ResultModel {
+namespace AlibabaCloud.OSS.V2.Models
+{
+    public abstract class ResultModel
+    {
         internal object? InnerBody;
         internal Type? BodyType;
         internal string BodyFormat = "";

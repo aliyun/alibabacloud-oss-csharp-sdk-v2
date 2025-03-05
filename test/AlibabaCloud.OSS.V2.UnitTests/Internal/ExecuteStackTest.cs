@@ -2,16 +2,20 @@
 
 namespace AlibabaCloud.OSS.V2.UnitTests.Internal;
 
-public class ExecuteStackTest {
+public class ExecuteStackTest
+{
     [Fact]
-    public void TestExecuteStackNullArg() {
+    public void TestExecuteStackNullArg()
+    {
         var stack = new ExecuteStack(null);
 
-        try {
+        try
+        {
             stack.Resolve();
             Assert.Fail("should not here");
         }
-        catch (Exception e) {
+        catch (Exception e)
+        {
             Assert.Contains("HttpTransport is null", e.ToString());
         }
     }

@@ -1,15 +1,18 @@
 ﻿using System;
 using System.IO;
 
-namespace AlibabaCloud.OSS.V2.Internal {
-    internal class ProgressStream : Stream {
+namespace AlibabaCloud.OSS.V2.Internal
+{
+    internal class ProgressStream : Stream
+    {
         private ProgressFunc _fn;
         private long _written;
         private long _lwritten;
         private long _total;
         private bool _adjust;
 
-        public ProgressStream(ProgressFunc fn, long total = -1) {
+        public ProgressStream(ProgressFunc fn, long total = -1)
+        {
             _fn = fn;
             _total = total;
             _written = 0;
@@ -25,20 +28,25 @@ namespace AlibabaCloud.OSS.V2.Internal {
 
         public override long Length => _lwritten;
 
-        public override long Position {
+        public override long Position
+        {
             get => _lwritten;
             set => throw new System.NotImplementedException();
         }
 
-        public override void Flush() {
+        public override void Flush()
+        {
         }
 
-        public override int Read(byte[] buffer, int offset, int count) {
+        public override int Read(byte[] buffer, int offset, int count)
+        {
             throw new System.NotImplementedException();
         }
 
-        public override long Seek(long offset, SeekOrigin origin) {
-            if (origin == SeekOrigin.Begin && offset == 0) {
+        public override long Seek(long offset, SeekOrigin origin)
+        {
+            if (origin == SeekOrigin.Begin && offset == 0)
+            {
                 _lwritten = _written;
                 _written = 0;
                 _adjust = true;
@@ -47,14 +55,18 @@ namespace AlibabaCloud.OSS.V2.Internal {
             throw new System.NotImplementedException($"seek to beginning only, offset:{offset}, origin:{origin}.");
         }
 
-        public override void SetLength(long value) {
+        public override void SetLength(long value)
+        {
             throw new System.NotImplementedException();
         }
 
-        public override void Write(byte[] buffer, int offset, int count) {
+        public override void Write(byte[] buffer, int offset, int count)
+        {
             _written += count;
-            if (_written > _lwritten) {
-                if (_adjust) {
+            if (_written > _lwritten)
+            {
+                if (_adjust)
+                {
                     _adjust = false;
                     count = (int)Math.Min(_written - _lwritten, count);
                 }

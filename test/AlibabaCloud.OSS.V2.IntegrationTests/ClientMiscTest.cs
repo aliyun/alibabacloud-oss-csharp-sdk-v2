@@ -1,26 +1,30 @@
-﻿using AlibabaCloud.OSS.V2.Models;
-using System.Text;
+﻿using System.Text;
+using AlibabaCloud.OSS.V2.Models;
 
 namespace AlibabaCloud.OSS.V2.IntegrationTests;
 
 
-public class ClientMiscTest : IDisposable {
+public class ClientMiscTest : IDisposable
+{
     private readonly string BucketNamePrefix;
     private readonly string RootPath;
 
-    public void Dispose() {
+    public void Dispose()
+    {
         Utils.CleanBuckets(BucketNamePrefix);
         Utils.CleanPath(RootPath);
     }
 
-    public ClientMiscTest() {
+    public ClientMiscTest()
+    {
         BucketNamePrefix = Utils.RandomBucketNamePrefix();
         RootPath = $"{Utils.GetTempPath()}{Path.DirectorySeparatorChar}";
         Directory.CreateDirectory(RootPath);
     }
 
     [Fact]
-    public async Task TestClientDispose() {
+    public async Task TestClientDispose()
+    {
         using var client = Utils.GetClient(Utils.Region, Utils.Endpoint);
 
         var result = await client.DescribeRegionsAsync(new DescribeRegionsRequest());
@@ -31,8 +35,10 @@ public class ClientMiscTest : IDisposable {
         Assert.NotNull(result.RegionInfoList.RegionInfos);
         Assert.NotEmpty(result.RegionInfoList.RegionInfos);
         var found = false;
-        foreach (var region in result.RegionInfoList.RegionInfos) {
-            if (region.Region == "oss-cn-hangzhou") {
+        foreach (var region in result.RegionInfoList.RegionInfos)
+        {
+            if (region.Region == "oss-cn-hangzhou")
+            {
                 found = true;
                 Assert.Equal("oss-cn-hangzhou.aliyuncs.com", region.InternetEndpoint);
                 Assert.Equal("oss-cn-hangzhou-internal.aliyuncs.com", region.InternalEndpoint);
@@ -43,7 +49,8 @@ public class ClientMiscTest : IDisposable {
     }
 
     [Fact]
-    public async Task TestPaginatorReused() {
+    public async Task TestPaginatorReused()
+    {
         var client = Utils.GetDefaultClient();
 
         //default
@@ -51,7 +58,8 @@ public class ClientMiscTest : IDisposable {
         var objectName = Utils.RandomObjectName();
 
         var result = await client.PutBucketAsync(
-            new() {
+            new()
+            {
                 Bucket = bucketName
             }
         );
@@ -62,157 +70,198 @@ public class ClientMiscTest : IDisposable {
 
         //ListBucketsPaginator
         var paginators = client.ListBucketsPaginator(
-            new ListBucketsRequest() {
+            new ListBucketsRequest()
+            {
                 Prefix = BucketNamePrefix
             });
-        await foreach (var bucket in paginators.IterPageAsync()) {
+        await foreach (var bucket in paginators.IterPageAsync())
+        {
             Assert.NotNull(bucket);
         }
 
         // reuse and fail
-        try {
-            await foreach (var bucket in paginators.IterPageAsync()) {
+        try
+        {
+            await foreach (var bucket in paginators.IterPageAsync())
+            {
                 Assert.NotNull(bucket);
             }
             Assert.Fail("should not here");
         }
-        catch (Exception ex) {
+        catch (Exception ex)
+        {
             Assert.Contains("Paginator has already been consumed and cannot be reused. Please create a new instance.", ex.ToString());
         }
 
-        try {
-            foreach (var bucket in paginators.IterPage()) {
+        try
+        {
+            foreach (var bucket in paginators.IterPage())
+            {
                 Assert.NotNull(bucket);
             }
             Assert.Fail("should not here");
         }
-        catch (Exception ex) {
+        catch (Exception ex)
+        {
             Assert.Contains("Paginator has already been consumed and cannot be reused. Please create a new instance.", ex.ToString());
         }
 
         //ListMultipartUploadsPaginator
         var paginators1 = client.ListMultipartUploadsPaginator(
-            new ListMultipartUploadsRequest() {
+            new ListMultipartUploadsRequest()
+            {
                 Bucket = bucketName
             });
-        await foreach (var bucket in paginators1.IterPageAsync()) {
+        await foreach (var bucket in paginators1.IterPageAsync())
+        {
             Assert.NotNull(bucket);
         }
 
         // reuse and fail
-        try {
-            await foreach (var bucket in paginators1.IterPageAsync()) {
+        try
+        {
+            await foreach (var bucket in paginators1.IterPageAsync())
+            {
                 Assert.NotNull(bucket);
             }
             Assert.Fail("should not here");
         }
-        catch (Exception ex) {
+        catch (Exception ex)
+        {
             Assert.Contains("Paginator has already been consumed and cannot be reused. Please create a new instance.", ex.ToString());
         }
 
-        try {
-            foreach (var bucket in paginators1.IterPage()) {
+        try
+        {
+            foreach (var bucket in paginators1.IterPage())
+            {
                 Assert.NotNull(bucket);
             }
             Assert.Fail("should not here");
         }
-        catch (Exception ex) {
+        catch (Exception ex)
+        {
             Assert.Contains("Paginator has already been consumed and cannot be reused. Please create a new instance.", ex.ToString());
         }
 
         //ListObjectsPaginator
         var paginators2 = client.ListObjectsPaginator(
-            new ListObjectsRequest() {
+            new ListObjectsRequest()
+            {
                 Bucket = bucketName
             });
-        await foreach (var page in paginators2.IterPageAsync()) {
+        await foreach (var page in paginators2.IterPageAsync())
+        {
             Assert.NotNull(page);
         }
 
         // reuse and fail
-        try {
-            await foreach (var page in paginators2.IterPageAsync()) {
+        try
+        {
+            await foreach (var page in paginators2.IterPageAsync())
+            {
                 Assert.NotNull(page);
             }
             Assert.Fail("should not here");
         }
-        catch (Exception ex) {
+        catch (Exception ex)
+        {
             Assert.Contains("Paginator has already been consumed and cannot be reused. Please create a new instance.", ex.ToString());
         }
 
-        try {
-            foreach (var page in paginators2.IterPage()) {
+        try
+        {
+            foreach (var page in paginators2.IterPage())
+            {
                 Assert.NotNull(page);
             }
             Assert.Fail("should not here");
         }
-        catch (Exception ex) {
+        catch (Exception ex)
+        {
             Assert.Contains("Paginator has already been consumed and cannot be reused. Please create a new instance.", ex.ToString());
         }
 
         //ListObjectsV2Paginator
         var paginators3 = client.ListObjectsV2Paginator(
-            new ListObjectsV2Request() {
+            new ListObjectsV2Request()
+            {
                 Bucket = bucketName
             });
-        await foreach (var page in paginators3.IterPageAsync()) {
+        await foreach (var page in paginators3.IterPageAsync())
+        {
             Assert.NotNull(page);
         }
 
         // reuse and fail
-        try {
-            await foreach (var page in paginators3.IterPageAsync()) {
+        try
+        {
+            await foreach (var page in paginators3.IterPageAsync())
+            {
                 Assert.NotNull(page);
             }
             Assert.Fail("should not here");
         }
-        catch (Exception ex) {
+        catch (Exception ex)
+        {
             Assert.Contains("Paginator has already been consumed and cannot be reused. Please create a new instance.", ex.ToString());
         }
 
-        try {
-            foreach (var page in paginators3.IterPage()) {
+        try
+        {
+            foreach (var page in paginators3.IterPage())
+            {
                 Assert.NotNull(page);
             }
             Assert.Fail("should not here");
         }
-        catch (Exception ex) {
+        catch (Exception ex)
+        {
             Assert.Contains("Paginator has already been consumed and cannot be reused. Please create a new instance.", ex.ToString());
         }
 
         //ListObjectVersionsPaginator
         var paginators4 = client.ListObjectVersionsPaginator(
-            new ListObjectVersionsRequest() {
+            new ListObjectVersionsRequest()
+            {
                 Bucket = bucketName
             });
-        await foreach (var page in paginators4.IterPageAsync()) {
+        await foreach (var page in paginators4.IterPageAsync())
+        {
             Assert.NotNull(page);
         }
 
         // reuse and fail
-        try {
-            await foreach (var page in paginators4.IterPageAsync()) {
+        try
+        {
+            await foreach (var page in paginators4.IterPageAsync())
+            {
                 Assert.NotNull(page);
             }
             Assert.Fail("should not here");
         }
-        catch (Exception ex) {
+        catch (Exception ex)
+        {
             Assert.Contains("Paginator has already been consumed and cannot be reused. Please create a new instance.", ex.ToString());
         }
 
-        try {
-            foreach (var page in paginators4.IterPage()) {
+        try
+        {
+            foreach (var page in paginators4.IterPage())
+            {
                 Assert.NotNull(page);
             }
             Assert.Fail("should not here");
         }
-        catch (Exception ex) {
+        catch (Exception ex)
+        {
             Assert.Contains("Paginator has already been consumed and cannot be reused. Please create a new instance.", ex.ToString());
         }
     }
 
     [Fact]
-    public async Task TestListPartsPaginatorReused() {
+    public async Task TestListPartsPaginatorReused()
+    {
         var client = Utils.GetDefaultClient();
 
         //default
@@ -220,7 +269,8 @@ public class ClientMiscTest : IDisposable {
         var objectName = Utils.RandomObjectName();
 
         var result = await client.PutBucketAsync(
-            new() {
+            new()
+            {
                 Bucket = bucketName
             }
         );
@@ -230,7 +280,8 @@ public class ClientMiscTest : IDisposable {
         Assert.NotNull(result.RequestId);
 
         //ListPartsPaginator
-        var initResult = await client.InitiateMultipartUploadAsync(new() {
+        var initResult = await client.InitiateMultipartUploadAsync(new()
+        {
             Bucket = bucketName,
             Key = objectName
         });
@@ -240,39 +291,48 @@ public class ClientMiscTest : IDisposable {
         Assert.Equal("url", initResult.EncodingType);
 
         var paginators5 = client.ListPartsPaginator(
-            new ListPartsRequest() {
+            new ListPartsRequest()
+            {
                 Bucket = bucketName,
                 Key = objectName,
                 UploadId = initResult.UploadId
             });
-        await foreach (var page in paginators5.IterPageAsync()) {
+        await foreach (var page in paginators5.IterPageAsync())
+        {
             Assert.NotNull(page);
         }
 
         // reuse and fail
-        try {
-            await foreach (var page in paginators5.IterPageAsync()) {
+        try
+        {
+            await foreach (var page in paginators5.IterPageAsync())
+            {
                 Assert.NotNull(page);
             }
             Assert.Fail("should not here");
         }
-        catch (Exception ex) {
+        catch (Exception ex)
+        {
             Assert.Contains("Paginator has already been consumed and cannot be reused. Please create a new instance.", ex.ToString());
         }
 
-        try {
-            foreach (var page in paginators5.IterPage()) {
+        try
+        {
+            foreach (var page in paginators5.IterPage())
+            {
                 Assert.NotNull(page);
             }
             Assert.Fail("should not here");
         }
-        catch (Exception ex) {
+        catch (Exception ex)
+        {
             Assert.Contains("Paginator has already been consumed and cannot be reused. Please create a new instance.", ex.ToString());
         }
     }
 
     [Fact]
-    public async Task TestInvokeOperation() {
+    public async Task TestInvokeOperation()
+    {
         var client = Utils.GetDefaultClient();
 
         //default
@@ -280,7 +340,8 @@ public class ClientMiscTest : IDisposable {
         var objectName = Utils.RandomObjectName();
 
         var result = await client.PutBucketAsync(
-            new() {
+            new()
+            {
                 Bucket = bucketName
             }
         );
@@ -291,7 +352,8 @@ public class ClientMiscTest : IDisposable {
 
         // get bucket acl
         var res = await client.InvokeOperation(
-            new OperationInput {
+            new OperationInput
+            {
                 OperationName = "GetBucketAcl",
                 Method = "GET",
                 Parameters = new Dictionary<string, string> {
@@ -308,7 +370,8 @@ public class ClientMiscTest : IDisposable {
     }
 
     [Fact]
-    public async Task TestInvokeOperationAsStream() {
+    public async Task TestInvokeOperationAsStream()
+    {
         var client = Utils.GetDefaultClient();
 
         //default
@@ -316,7 +379,8 @@ public class ClientMiscTest : IDisposable {
         var objectName = Utils.RandomObjectName();
 
         var result = await client.PutBucketAsync(
-            new() {
+            new()
+            {
                 Bucket = bucketName
             }
         );
@@ -327,7 +391,8 @@ public class ClientMiscTest : IDisposable {
 
         // get bucket acl
         var res = await client.InvokeOperation(
-            new OperationInput {
+            new OperationInput
+            {
                 OperationName = "GetBucketAcl",
                 Method = "GET",
                 Parameters = new Dictionary<string, string> {
@@ -346,53 +411,64 @@ public class ClientMiscTest : IDisposable {
     }
 
     [Fact]
-    public async Task TestIsObjectExistFail() {
+    public async Task TestIsObjectExistFail()
+    {
         var client = Utils.GetDefaultClient();
 
         var bucketName = Utils.RandomBucketName(BucketNamePrefix);
 
-        try {
+        try
+        {
             await client.IsObjectExistAsync("", "key");
             Assert.Fail("should not here");
         }
-        catch (Exception e) {
+        catch (Exception e)
+        {
             Assert.Contains("input.Bucket name is invalid", e.ToString());
         }
 
-        try {
+        try
+        {
             await client.IsObjectExistAsync(bucketName, "key");
             Assert.Fail("should not here");
         }
-        catch (Exception e) {
+        catch (Exception e)
+        {
             Assert.Contains("NoSuchBucket", e.ToString());
         }
     }
 
     [Fact]
-    public async Task TestIsBucketExistFail() {
+    public async Task TestIsBucketExistFail()
+    {
         var client = Utils.GetDefaultClient();
 
         var bucketName = Utils.RandomBucketName(BucketNamePrefix);
 
-        try {
+        try
+        {
             await client.IsBucketExistAsync("");
             Assert.Fail("should not here");
         }
-        catch (Exception e) {
+        catch (Exception e)
+        {
             Assert.Contains("input.Bucket name is invalid", e.ToString());
         }
 
-        try {
+        try
+        {
             await client.IsBucketExistAsync("oss-bucket");
             Assert.Fail("should not here");
         }
-        catch (Exception e) {
+        catch (Exception e)
+        {
             Assert.Contains("The bucket you access does not belong to you.", e.ToString());
         }
     }
 
     [Fact]
-    public async Task TestPutGetObjectByFilePath() {
+    public async Task TestPutGetObjectByFilePath()
+    {
         var client = Utils.GetDefaultClient();
 
         //default
@@ -402,7 +478,8 @@ public class ClientMiscTest : IDisposable {
         var saveFilepath = Utils.RandomFilePath(RootPath);
 
         var result = await client.PutBucketAsync(
-            new() {
+            new()
+            {
                 Bucket = bucketName
             }
         );
@@ -411,7 +488,8 @@ public class ClientMiscTest : IDisposable {
         Utils.PrepareSampleFile(filepath, 100);
         Assert.True(File.Exists(filepath));
 
-        var putResult = await client.PutObjectFromFileAsync(new PutObjectRequest() {
+        var putResult = await client.PutObjectFromFileAsync(new PutObjectRequest()
+        {
             Bucket = bucketName,
             Key = objectName
         }, filepath);
@@ -419,7 +497,8 @@ public class ClientMiscTest : IDisposable {
         Assert.NotNull(putResult);
         Assert.Equal(200, putResult.StatusCode);
 
-        var getResult = await client.GetObjectToFileAsync(new GetObjectRequest() {
+        var getResult = await client.GetObjectToFileAsync(new GetObjectRequest()
+        {
             Bucket = bucketName,
             Key = objectName
         }, saveFilepath);
@@ -434,7 +513,8 @@ public class ClientMiscTest : IDisposable {
     }
 
     [Fact]
-    public async Task TestInsecureSkipVerifyTrue() {
+    public async Task TestInsecureSkipVerifyTrue()
+    {
         var cfg = Configuration.LoadDefault();
         cfg.CredentialsProvider = new Credentials.StaticCredentialsProvide(Utils.AccessKeyId, Utils.AccessKeySecret);
         cfg.Region = Utils.Region;
@@ -451,8 +531,10 @@ public class ClientMiscTest : IDisposable {
         Assert.NotNull(result.RegionInfoList.RegionInfos);
         Assert.NotEmpty(result.RegionInfoList.RegionInfos);
         var found = false;
-        foreach (var region in result.RegionInfoList.RegionInfos) {
-            if (region.Region == "oss-cn-hangzhou") {
+        foreach (var region in result.RegionInfoList.RegionInfos)
+        {
+            if (region.Region == "oss-cn-hangzhou")
+            {
                 found = true;
                 Assert.Equal("oss-cn-hangzhou.aliyuncs.com", region.InternetEndpoint);
                 Assert.Equal("oss-cn-hangzhou-internal.aliyuncs.com", region.InternalEndpoint);
@@ -463,7 +545,8 @@ public class ClientMiscTest : IDisposable {
     }
 
     [Fact]
-    public async Task TestAutoDetectMimeType() {
+    public async Task TestAutoDetectMimeType()
+    {
 
         var client = Utils.GetDefaultClient();
 
@@ -471,7 +554,8 @@ public class ClientMiscTest : IDisposable {
         var bucketName = Utils.RandomBucketName(BucketNamePrefix);
 
         var result = await client.PutBucketAsync(
-            new() {
+            new()
+            {
                 Bucket = bucketName
             }
         );
@@ -483,7 +567,8 @@ public class ClientMiscTest : IDisposable {
         const string content = "hello world";
 
         var putResult = await client.PutObjectAsync(
-            new() {
+            new()
+            {
                 Bucket = bucketName,
                 Key = objectName,
                 Body = new MemoryStream(Encoding.UTF8.GetBytes(content))
@@ -492,7 +577,8 @@ public class ClientMiscTest : IDisposable {
 
         // head object
         var headResult = await client.HeadObjectAsync(
-            new() {
+            new()
+            {
                 Bucket = bucketName,
                 Key = objectName
             }
@@ -507,7 +593,8 @@ public class ClientMiscTest : IDisposable {
         // append .json
         objectName = "test.json";
         var appendResult = await client.AppendObjectAsync(
-            new() {
+            new()
+            {
                 Bucket = bucketName,
                 Key = objectName,
                 Position = 0,
@@ -517,7 +604,8 @@ public class ClientMiscTest : IDisposable {
 
         // head object
         headResult = await client.HeadObjectAsync(
-            new() {
+            new()
+            {
                 Bucket = bucketName,
                 Key = objectName
             }
@@ -531,7 +619,8 @@ public class ClientMiscTest : IDisposable {
 
         // init
         objectName = "test.jpg";
-        var initResult = await client.InitiateMultipartUploadAsync(new() {
+        var initResult = await client.InitiateMultipartUploadAsync(new()
+        {
             Bucket = bucketName,
             Key = objectName
         }
@@ -540,7 +629,8 @@ public class ClientMiscTest : IDisposable {
         Assert.Equal(200, initResult.StatusCode);
 
         // upload
-        var upResult = await client.UploadPartAsync(new() {
+        var upResult = await client.UploadPartAsync(new()
+        {
             Bucket = bucketName,
             Key = objectName,
             PartNumber = 1,
@@ -553,7 +643,8 @@ public class ClientMiscTest : IDisposable {
         Assert.NotNull(upResult.RequestId);
 
         // complete
-        var cmResult = await client.CompleteMultipartUploadAsync(new() {
+        var cmResult = await client.CompleteMultipartUploadAsync(new()
+        {
             Bucket = bucketName,
             Key = objectName,
             UploadId = initResult.UploadId,
@@ -566,7 +657,8 @@ public class ClientMiscTest : IDisposable {
 
         // head object
         headResult = await client.HeadObjectAsync(
-            new() {
+            new()
+            {
                 Bucket = bucketName,
                 Key = objectName
             }
@@ -580,7 +672,8 @@ public class ClientMiscTest : IDisposable {
     }
 
     [Fact]
-    public async Task TestGetObjectAsStreamOk() {
+    public async Task TestGetObjectAsStreamOk()
+    {
         var client = Utils.GetDefaultClient();
 
         //default
@@ -591,7 +684,8 @@ public class ClientMiscTest : IDisposable {
         var saveFilepath2 = Utils.RandomFilePath(RootPath);
 
         var result = await client.PutBucketAsync(
-            new() {
+            new()
+            {
                 Bucket = bucketName
             }
         );
@@ -602,7 +696,8 @@ public class ClientMiscTest : IDisposable {
         Utils.PrepareSampleFile(filepath, 100);
         Assert.True(File.Exists(filepath));
 
-        var putResult = await client.PutObjectFromFileAsync(new PutObjectRequest() {
+        var putResult = await client.PutObjectFromFileAsync(new PutObjectRequest()
+        {
             Bucket = bucketName,
             Key = objectName
         }, filepath);
@@ -610,7 +705,8 @@ public class ClientMiscTest : IDisposable {
         Assert.NotNull(putResult);
         Assert.Equal(200, putResult.StatusCode);
 
-        var getResult = await client.GetObjectAsync(new GetObjectRequest() {
+        var getResult = await client.GetObjectAsync(new GetObjectRequest()
+        {
             Bucket = bucketName,
             Key = objectName
         });
@@ -624,7 +720,8 @@ public class ClientMiscTest : IDisposable {
         await getResult.Body.CopyToAsync(saveStream1);
         saveStream1.Close();
 
-        getResult = await client.GetObjectAsync(new GetObjectRequest() {
+        getResult = await client.GetObjectAsync(new GetObjectRequest()
+        {
             Bucket = bucketName,
             Key = objectName
         }, HttpCompletionOption.ResponseContentRead);
@@ -647,19 +744,23 @@ public class ClientMiscTest : IDisposable {
     }
 
     [Fact]
-    public async Task TestGetObjectAsStreamFail() {
+    public async Task TestGetObjectAsStreamFail()
+    {
         var client = Utils.GetDefaultClient();
 
         //default
         var bucketName = Utils.RandomBucketName(BucketNamePrefix);
 
-        try {
-            var getResult = await client.GetObjectAsync(new GetObjectRequest() {
+        try
+        {
+            var getResult = await client.GetObjectAsync(new GetObjectRequest()
+            {
                 Bucket = bucketName,
                 Key = "key-1"
             });
         }
-        catch (Exception e) {
+        catch (Exception e)
+        {
             Assert.IsAssignableFrom<OperationException>(e);
             Assert.StartsWith("operation error GetObject", e.Message);
             Assert.IsAssignableFrom<ServiceException>(e.InnerException);
@@ -669,13 +770,16 @@ public class ClientMiscTest : IDisposable {
             Assert.Equal("NoSuchBucket", se.ErrorCode);
         }
 
-        try {
-            var getResult = await client.GetObjectAsync(new GetObjectRequest() {
+        try
+        {
+            var getResult = await client.GetObjectAsync(new GetObjectRequest()
+            {
                 Bucket = bucketName,
                 Key = "key-2"
             });
         }
-        catch (Exception e) {
+        catch (Exception e)
+        {
             Assert.IsAssignableFrom<OperationException>(e);
             Assert.StartsWith("operation error GetObject", e.Message);
             Assert.IsAssignableFrom<ServiceException>(e.InnerException);
@@ -687,34 +791,40 @@ public class ClientMiscTest : IDisposable {
     }
 
     [Fact]
-    public async Task TestSendRequestWithTimeout() {
+    public async Task TestSendRequestWithTimeout()
+    {
         var client = Utils.GetDefaultClient();
 
         //default
         var bucketName = Utils.RandomBucketName(BucketNamePrefix);
 
         var result = await client.PutBucketAsync(
-            new() {
+            new()
+            {
                 Bucket = bucketName
             }
         );
         Assert.NotNull(result);
         Assert.Equal(200, result.StatusCode);
 
-        try {
-            await client.PutObjectAsync(new PutObjectRequest() {
+        try
+        {
+            await client.PutObjectAsync(new PutObjectRequest()
+            {
                 Bucket = bucketName,
                 Key = "timeout-2-1",
                 Body = new TimeoutReadStream(new MemoryStream(Encoding.UTF8.GetBytes("hello world")), TimeSpan.FromSeconds(2))
             }, new OperationOptions() { ReadWriteTimeout = TimeSpan.FromSeconds(1) });
         }
-        catch (OperationException e) {
+        catch (OperationException e)
+        {
             Assert.StartsWith("operation error PutObject", e.Message);
             Assert.IsAssignableFrom<RequestTimeoutException>(e.InnerException);
             Assert.Contains("The operation was cancelled because it exceeded the configured timeout of 0:00:01", e.Message);
         }
 
-        var putResult = await client.PutObjectAsync(new PutObjectRequest() {
+        var putResult = await client.PutObjectAsync(new PutObjectRequest()
+        {
             Bucket = bucketName,
             Key = "timeout-2-5",
             Body = new TimeoutReadStream(new MemoryStream(Encoding.UTF8.GetBytes("hello world")), TimeSpan.FromSeconds(2))
@@ -724,7 +834,8 @@ public class ClientMiscTest : IDisposable {
     }
 
     [Fact]
-    public async Task TestPutGetObjectByFilePathWithProgress() {
+    public async Task TestPutGetObjectByFilePathWithProgress()
+    {
         var client = Utils.GetDefaultClient();
 
         //default
@@ -734,7 +845,8 @@ public class ClientMiscTest : IDisposable {
         var saveFilepath = Utils.RandomFilePath(RootPath);
 
         var result = await client.PutBucketAsync(
-            new() {
+            new()
+            {
                 Bucket = bucketName
             }
         );
@@ -744,7 +856,8 @@ public class ClientMiscTest : IDisposable {
         Assert.True(File.Exists(filepath));
         var fileInfo = new FileInfo(filepath);
 
-        var putResult = await client.PutObjectFromFileAsync(new PutObjectRequest() {
+        var putResult = await client.PutObjectFromFileAsync(new PutObjectRequest()
+        {
             Bucket = bucketName,
             Key = objectName
         }, filepath);
@@ -756,13 +869,15 @@ public class ClientMiscTest : IDisposable {
         long transferred = 0;
         long total = 0;
 
-        ProgressFunc func = (x, y, z) => {
+        ProgressFunc func = (x, y, z) =>
+        {
             increment += x;
             transferred = y;
             total = z;
         };
 
-        var getResult = await client.GetObjectToFileAsync(new GetObjectRequest() {
+        var getResult = await client.GetObjectToFileAsync(new GetObjectRequest()
+        {
             Bucket = bucketName,
             Key = objectName,
             ProgressFn = func
@@ -796,7 +911,8 @@ public class ClientMiscTest : IDisposable {
         transferred = 0;
         total = 0;
 
-        getResult = await client1.GetObjectToFileAsync(new GetObjectRequest() {
+        getResult = await client1.GetObjectToFileAsync(new GetObjectRequest()
+        {
             Bucket = bucketName,
             Key = objectName,
             ProgressFn = func

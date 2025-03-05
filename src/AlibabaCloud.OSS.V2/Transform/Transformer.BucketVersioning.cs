@@ -6,12 +6,14 @@ using System.Xml.Serialization;
 using AlibabaCloud.OSS.V2.Extensions;
 using AlibabaCloud.OSS.V2.Models;
 
-namespace AlibabaCloud.OSS.V2.Transform {
+namespace AlibabaCloud.OSS.V2.Transform
+{
     /// <summary>
     /// The container that stores the results of the ListObjectVersions (GetBucketVersions) request.
     /// </summary>
     [XmlRoot("ListVersionsResult")]
-    public sealed class XmlListVersionsResult {
+    public sealed class XmlListVersionsResult
+    {
         /// <summary>
         /// Indicates whether the returned results are truncated.- true: indicates that not all results are returned for the request.- false: indicates that all results are returned for the request.
         /// </summary>
@@ -92,7 +94,8 @@ namespace AlibabaCloud.OSS.V2.Transform {
     }
 
     [XmlRoot("VersioningConfiguration")]
-    public sealed class XmlVersioningConfiguration {
+    public sealed class XmlVersioningConfiguration
+    {
         /// <summary>
         /// The versioning state of the bucket.
         /// Sees <see cref="BucketVersioningStatusType"/> for supported values.
@@ -102,17 +105,20 @@ namespace AlibabaCloud.OSS.V2.Transform {
     }
 
 
-    internal static partial class Serde {
+    internal static partial class Serde
+    {
         public static void DeserializeListObjectVersions(
             ref Models.ResultModel baseResult,
             ref OperationOutput output
-        ) {
+        )
+        {
             var serializer = new XmlSerializer(typeof(XmlListVersionsResult));
             using var body = output.Body!;
             var obj = serializer.Deserialize(body) as XmlListVersionsResult;
             var result = baseResult as Models.ListObjectVersionsResult;
 
-            if (obj == null || result == null) {
+            if (obj == null || result == null)
+            {
                 return;
             }
 
@@ -133,46 +139,61 @@ namespace AlibabaCloud.OSS.V2.Transform {
             result.DeleteMarkers = obj.DeleteMarkers;
         }
 
-        private static void DeserializeVersionsEncodingType(ref XmlListVersionsResult result) {
-            if (!string.Equals("url", result.EncodingType)) {
+        private static void DeserializeVersionsEncodingType(ref XmlListVersionsResult result)
+        {
+            if (!string.Equals("url", result.EncodingType))
+            {
                 return;
             }
 
-            if (result.Prefix != null) {
+            if (result.Prefix != null)
+            {
                 result.Prefix = result.Prefix.UrlDecode();
             }
 
-            if (result.KeyMarker != null) {
+            if (result.KeyMarker != null)
+            {
                 result.KeyMarker = result.KeyMarker.UrlDecode();
             }
 
-            if (result.NextKeyMarker != null) {
+            if (result.NextKeyMarker != null)
+            {
                 result.NextKeyMarker = result.NextKeyMarker.UrlDecode();
             }
 
-            if (result.Delimiter != null) {
+            if (result.Delimiter != null)
+            {
                 result.Delimiter = result.Delimiter.UrlDecode();
             }
 
-            if (result.Versions != null) {
-                for (int i = 0; i < result.Versions.Count; i++) {
-                    if (result.Versions[i].Key != null) {
+            if (result.Versions != null)
+            {
+                for (int i = 0; i < result.Versions.Count; i++)
+                {
+                    if (result.Versions[i].Key != null)
+                    {
                         result.Versions[i].Key = result.Versions[i].Key!.UrlDecode();
                     }
                 }
             }
 
-            if (result.DeleteMarkers != null) {
-                for (int i = 0; i < result.DeleteMarkers.Count; i++) {
-                    if (result.DeleteMarkers[i].Key != null) {
+            if (result.DeleteMarkers != null)
+            {
+                for (int i = 0; i < result.DeleteMarkers.Count; i++)
+                {
+                    if (result.DeleteMarkers[i].Key != null)
+                    {
                         result.DeleteMarkers[i].Key = result.DeleteMarkers[i].Key!.UrlDecode();
                     }
                 }
             }
 
-            if (result.CommonPrefixes != null) {
-                for (int i = 0; i < result.CommonPrefixes.Count; i++) {
-                    if (result.CommonPrefixes[i].Prefix != null) {
+            if (result.CommonPrefixes != null)
+            {
+                for (int i = 0; i < result.CommonPrefixes.Count; i++)
+                {
+                    if (result.CommonPrefixes[i].Prefix != null)
+                    {
                         result.CommonPrefixes[i].Prefix = result.CommonPrefixes[i].Prefix!.UrlDecode();
                     }
                 }
@@ -182,36 +203,45 @@ namespace AlibabaCloud.OSS.V2.Transform {
         public static void DeserializeGetBucketVersioning(
         ref Models.ResultModel baseResult,
         ref OperationOutput output
-    ) {
+    )
+        {
             using var body = output.Body!;
             var result = baseResult as Models.GetBucketVersioningResult;
-            if (result == null) {
+            if (result == null)
+            {
                 return;
             }
-            try {
+            try
+            {
                 var serializer = new XmlSerializer(typeof(XmlVersioningConfiguration));
                 var obj = serializer.Deserialize(body) as XmlVersioningConfiguration;
 
-                if (obj == null) {
+                if (obj == null)
+                {
                     return;
                 }
 
-                result.InnerBody = new Models.VersioningConfiguration() {
+                result.InnerBody = new Models.VersioningConfiguration()
+                {
                     Status = obj.Status
                 };
             }
-            catch (InvalidOperationException) {
-                if (!body.CanSeek) {
+            catch (InvalidOperationException)
+            {
+                if (!body.CanSeek)
+                {
                     throw;
                 }
                 body.Seek(0, SeekOrigin.Begin);
                 var xmlDoc = new XmlDocument();
                 xmlDoc.Load(body);
-                if (xmlDoc.FirstChild != null && !string.Equals("VersioningConfiguration", xmlDoc.FirstChild.Name)) {
+                if (xmlDoc.FirstChild != null && !string.Equals("VersioningConfiguration", xmlDoc.FirstChild.Name))
+                {
                     throw;
                 }
                 var node = xmlDoc.SelectSingleNode("/VersioningConfiguration/Status");
-                result.InnerBody = new Models.VersioningConfiguration() {
+                result.InnerBody = new Models.VersioningConfiguration()
+                {
                     Status = node?.InnerText
                 };
             }

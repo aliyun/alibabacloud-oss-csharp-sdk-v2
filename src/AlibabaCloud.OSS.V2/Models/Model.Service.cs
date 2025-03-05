@@ -3,12 +3,14 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Xml.Serialization;
 
-namespace AlibabaCloud.OSS.V2.Models {
+namespace AlibabaCloud.OSS.V2.Models
+{
     /// <summary>
     /// The configuration information for the bucket.
     /// </summary>
     [XmlRoot("Bucket")]
-    public sealed class BucketProperties {
+    public sealed class BucketProperties
+    {
         /// <summary>
         /// The name of the bucket.
         /// </summary>
@@ -62,13 +64,16 @@ namespace AlibabaCloud.OSS.V2.Models {
     /// <summary>
     /// The request for the ListBuckets operation.
     /// </summary>
-    public sealed class ListBucketsRequest : RequestModel {
+    public sealed class ListBucketsRequest : RequestModel
+    {
         /// <summary>
         /// The ID of the resource group to which the bucket belongs.
         /// </summary>
-        public string? ResourceGroupId {
+        public string? ResourceGroupId
+        {
             get => Headers.TryGetValue("x-oss-resource-group-id", out var value) ? value : null;
-            set {
+            set
+            {
                 if (value != null) Headers["x-oss-resource-group-id"] = value;
             }
         }
@@ -76,9 +81,11 @@ namespace AlibabaCloud.OSS.V2.Models {
         /// <summary>
         /// The prefix that the names of returned buckets must contain.
         /// </summary>
-        public string? Prefix {
+        public string? Prefix
+        {
             get => Parameters.TryGetValue("prefix", out var value) ? value : null;
-            set {
+            set
+            {
                 if (value != null) Parameters["prefix"] = value;
             }
         }
@@ -86,9 +93,11 @@ namespace AlibabaCloud.OSS.V2.Models {
         /// <summary>
         /// The name of the bucket from which the list operation begins.
         /// </summary>
-        public string? Marker {
+        public string? Marker
+        {
             get => Parameters.TryGetValue("marker", out var value) ? value : null;
-            set {
+            set
+            {
                 if (value != null) Parameters["marker"] = value;
             }
         }
@@ -96,9 +105,11 @@ namespace AlibabaCloud.OSS.V2.Models {
         /// <summary>
         /// The maximum number of buckets that can be returned in the single query.
         /// </summary>
-        public long? MaxKeys {
+        public long? MaxKeys
+        {
             get => Parameters.TryGetValue("max-keys", out var value) ? Convert.ToInt64(value) : null;
-            set {
+            set
+            {
                 if (value != null) Parameters["max-keys"] = Convert.ToString(value, CultureInfo.InvariantCulture)!;
             }
         }
@@ -107,7 +118,8 @@ namespace AlibabaCloud.OSS.V2.Models {
     /// <summary>
     /// The result for the ListBuckets operation.
     /// </summary>
-    public sealed class ListBucketsResult : ResultModel {
+    public sealed class ListBucketsResult : ResultModel
+    {
         /// <summary>
         /// The prefix contained in the names of the returned bucket.
         /// </summary>

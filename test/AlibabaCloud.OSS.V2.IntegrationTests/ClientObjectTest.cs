@@ -3,26 +3,31 @@ using AlibabaCloud.OSS.V2.Models;
 
 namespace AlibabaCloud.OSS.V2.IntegrationTests;
 
-public class ClientObjectTest : IDisposable {
+public class ClientObjectTest : IDisposable
+{
     private readonly string BucketNamePrefix;
 
-    public void Dispose() {
+    public void Dispose()
+    {
         Utils.CleanBuckets(BucketNamePrefix);
     }
 
-    public ClientObjectTest() {
+    public ClientObjectTest()
+    {
         BucketNamePrefix = Utils.RandomBucketNamePrefix();
     }
 
     [Fact]
-    public async Task TestObjectBasic() {
+    public async Task TestObjectBasic()
+    {
         var client = Utils.GetDefaultClient();
 
         //default
         var bucketName = Utils.RandomBucketName(BucketNamePrefix);
 
         var result = await client.PutBucketAsync(
-            new() {
+            new()
+            {
                 Bucket = bucketName
             }
         );
@@ -36,7 +41,8 @@ public class ClientObjectTest : IDisposable {
         const string content = "hello world";
 
         var putResult = await client.PutObjectAsync(
-            new() {
+            new()
+            {
                 Bucket = bucketName,
                 Key = objectName,
                 Body = new MemoryStream(Encoding.UTF8.GetBytes("hello world"))
@@ -48,7 +54,8 @@ public class ClientObjectTest : IDisposable {
 
         // head object
         var headResult = await client.HeadObjectAsync(
-            new() {
+            new()
+            {
                 Bucket = bucketName,
                 Key = objectName
             }
@@ -68,7 +75,8 @@ public class ClientObjectTest : IDisposable {
 
         // get object metadata
         var getMetaResult = await client.GetObjectMetaAsync(
-            new() {
+            new()
+            {
                 Bucket = bucketName,
                 Key = objectName
             }
@@ -80,7 +88,8 @@ public class ClientObjectTest : IDisposable {
 
         // get object acl
         var getAclResult = await client.GetObjectAclAsync(
-            new() {
+            new()
+            {
                 Bucket = bucketName,
                 Key = objectName
             }
@@ -91,7 +100,8 @@ public class ClientObjectTest : IDisposable {
 
         // get object
         var getObjectResult = await client.GetObjectAsync(
-            new() {
+            new()
+            {
                 Bucket = bucketName,
                 Key = objectName
             }
@@ -113,7 +123,8 @@ public class ClientObjectTest : IDisposable {
 
         // delete object
         var delObjectResult = await client.DeleteObjectAsync(
-            new() {
+            new()
+            {
                 Bucket = bucketName,
                 Key = objectName
             }
@@ -126,14 +137,16 @@ public class ClientObjectTest : IDisposable {
     }
 
     [Fact]
-    public async Task TestPutObjectWithAllProps() {
+    public async Task TestPutObjectWithAllProps()
+    {
         var client = Utils.GetDefaultClient();
 
         //default
         var bucketName = Utils.RandomBucketName(BucketNamePrefix);
 
         var result = await client.PutBucketAsync(
-            new() {
+            new()
+            {
                 Bucket = bucketName
             }
         );
@@ -147,7 +160,8 @@ public class ClientObjectTest : IDisposable {
         const string content = "hello world";
 
         var putResult = await client.PutObjectAsync(
-            new() {
+            new()
+            {
                 Bucket = bucketName,
                 Key = objectName,
                 StorageClass = "IA",
@@ -176,7 +190,8 @@ public class ClientObjectTest : IDisposable {
 
         // head object
         var headResult = await client.HeadObjectAsync(
-            new() {
+            new()
+            {
                 Bucket = bucketName,
                 Key = objectName
             }
@@ -201,7 +216,8 @@ public class ClientObjectTest : IDisposable {
 
         // get object acl
         var getAclResult = await client.GetObjectAclAsync(
-            new() {
+            new()
+            {
                 Bucket = bucketName,
                 Key = objectName
             }
@@ -212,7 +228,8 @@ public class ClientObjectTest : IDisposable {
 
         // get object tagging
         var getTagResult = await client.GetObjectTaggingAsync(
-            new() {
+            new()
+            {
                 Bucket = bucketName,
                 Key = objectName
             }
@@ -228,7 +245,8 @@ public class ClientObjectTest : IDisposable {
 
         // delete object
         var delObjectResult = await client.DeleteObjectAsync(
-            new() {
+            new()
+            {
                 Bucket = bucketName,
                 Key = objectName
             }
@@ -238,14 +256,16 @@ public class ClientObjectTest : IDisposable {
     }
 
     [Fact]
-    public async Task TestObjectBasicFail() {
+    public async Task TestObjectBasicFail()
+    {
         var client = Utils.GetDefaultClient();
 
         //default
         var bucketName = Utils.RandomBucketName(BucketNamePrefix);
 
         var result = await client.PutBucketAsync(
-            new() {
+            new()
+            {
                 Bucket = bucketName
             }
         );
@@ -257,15 +277,18 @@ public class ClientObjectTest : IDisposable {
         var invClient = Utils.GetInvalidAkClient();
 
         // put object
-        try {
+        try
+        {
             await invClient.PutObjectAsync(
-                new() {
+                new()
+                {
                     Bucket = bucketName,
                     Key = "key"
                 }
             );
         }
-        catch (Exception e) {
+        catch (Exception e)
+        {
             Assert.IsAssignableFrom<OperationException>(e);
             Assert.StartsWith("operation error PutObject", e.Message);
             Assert.IsAssignableFrom<ServiceException>(e.InnerException);
@@ -280,15 +303,18 @@ public class ClientObjectTest : IDisposable {
         }
 
         // get object
-        try {
+        try
+        {
             await invClient.GetObjectAsync(
-                new() {
+                new()
+                {
                     Bucket = bucketName,
                     Key = "key"
                 }
             );
         }
-        catch (Exception e) {
+        catch (Exception e)
+        {
             Assert.IsAssignableFrom<OperationException>(e);
             Assert.StartsWith("operation error GetObject", e.Message);
             Assert.IsAssignableFrom<ServiceException>(e.InnerException);
@@ -303,15 +329,18 @@ public class ClientObjectTest : IDisposable {
         }
 
         // head object
-        try {
+        try
+        {
             await invClient.HeadObjectAsync(
-                new() {
+                new()
+                {
                     Bucket = bucketName,
                     Key = "key"
                 }
             );
         }
-        catch (Exception e) {
+        catch (Exception e)
+        {
             Assert.IsAssignableFrom<OperationException>(e);
             Assert.StartsWith("operation error HeadObject", e.Message);
             Assert.IsAssignableFrom<ServiceException>(e.InnerException);
@@ -326,15 +355,18 @@ public class ClientObjectTest : IDisposable {
         }
 
         // get object meta
-        try {
+        try
+        {
             await invClient.GetObjectMetaAsync(
-                new() {
+                new()
+                {
                     Bucket = bucketName,
                     Key = "key"
                 }
             );
         }
-        catch (Exception e) {
+        catch (Exception e)
+        {
             Assert.IsAssignableFrom<OperationException>(e);
             Assert.StartsWith("operation error GetObjectMeta", e.Message);
             Assert.IsAssignableFrom<ServiceException>(e.InnerException);
@@ -349,15 +381,18 @@ public class ClientObjectTest : IDisposable {
         }
 
         // delete object
-        try {
+        try
+        {
             await invClient.DeleteObjectAsync(
-                new() {
+                new()
+                {
                     Bucket = bucketName,
                     Key = "key"
                 }
             );
         }
-        catch (Exception e) {
+        catch (Exception e)
+        {
             Assert.IsAssignableFrom<OperationException>(e);
             Assert.StartsWith("operation error DeleteObject", e.Message);
             Assert.IsAssignableFrom<ServiceException>(e.InnerException);
@@ -373,14 +408,16 @@ public class ClientObjectTest : IDisposable {
     }
 
     [Fact]
-    public async Task TestObjectAcl() {
+    public async Task TestObjectAcl()
+    {
         var client = Utils.GetDefaultClient();
 
         //default
         var bucketName = Utils.RandomBucketName(BucketNamePrefix);
 
         var result = await client.PutBucketAsync(
-            new() {
+            new()
+            {
                 Bucket = bucketName
             }
         );
@@ -394,7 +431,8 @@ public class ClientObjectTest : IDisposable {
         const string content = "hello world";
 
         var putResult = await client.PutObjectAsync(
-            new() {
+            new()
+            {
                 Bucket = bucketName,
                 Key = objectName,
                 Body = new MemoryStream(Encoding.UTF8.GetBytes(content))
@@ -406,7 +444,8 @@ public class ClientObjectTest : IDisposable {
 
         // get object acl
         var aclResult = await client.GetObjectAclAsync(
-            new() {
+            new()
+            {
                 Bucket = bucketName,
                 Key = objectName
             }
@@ -418,7 +457,8 @@ public class ClientObjectTest : IDisposable {
 
         // put object acl
         var putAclResult = await client.PutObjectAclAsync(
-            new() {
+            new()
+            {
                 Bucket = bucketName,
                 Key = objectName,
                 Acl = "private"
@@ -429,7 +469,8 @@ public class ClientObjectTest : IDisposable {
         Assert.NotNull(putAclResult.RequestId);
 
         aclResult = await client.GetObjectAclAsync(
-            new() {
+            new()
+            {
                 Bucket = bucketName,
                 Key = objectName
             }
@@ -441,14 +482,16 @@ public class ClientObjectTest : IDisposable {
     }
 
     [Fact]
-    public async Task TestObjectAclFail() {
+    public async Task TestObjectAclFail()
+    {
         var client = Utils.GetDefaultClient();
 
         //default
         var bucketName = Utils.RandomBucketName(BucketNamePrefix);
 
         var result = await client.PutBucketAsync(
-            new() {
+            new()
+            {
                 Bucket = bucketName
             }
         );
@@ -460,16 +503,19 @@ public class ClientObjectTest : IDisposable {
         var invClient = Utils.GetInvalidAkClient();
 
         // put object acl
-        try {
+        try
+        {
             await invClient.PutObjectAclAsync(
-                new() {
+                new()
+                {
                     Bucket = bucketName,
                     Key = "key",
                     Acl = "private"
                 }
             );
         }
-        catch (Exception e) {
+        catch (Exception e)
+        {
             Assert.IsAssignableFrom<OperationException>(e);
             Assert.StartsWith("operation error PutObjectAcl", e.Message);
             Assert.IsAssignableFrom<ServiceException>(e.InnerException);
@@ -485,15 +531,18 @@ public class ClientObjectTest : IDisposable {
         }
 
         // get object acl
-        try {
+        try
+        {
             await invClient.GetObjectAclAsync(
-                new() {
+                new()
+                {
                     Bucket = bucketName,
                     Key = "key"
                 }
             );
         }
-        catch (Exception e) {
+        catch (Exception e)
+        {
             Assert.IsAssignableFrom<OperationException>(e);
             Assert.StartsWith("operation error GetObjectAcl", e.Message);
             Assert.IsAssignableFrom<ServiceException>(e.InnerException);
@@ -510,14 +559,16 @@ public class ClientObjectTest : IDisposable {
     }
 
     [Fact]
-    public async Task TestObjectTagging() {
+    public async Task TestObjectTagging()
+    {
         var client = Utils.GetDefaultClient();
 
         //default
         var bucketName = Utils.RandomBucketName(BucketNamePrefix);
 
         var result = await client.PutBucketAsync(
-            new() {
+            new()
+            {
                 Bucket = bucketName
             }
         );
@@ -531,7 +582,8 @@ public class ClientObjectTest : IDisposable {
         const string content = "hello world";
 
         var putResult = await client.PutObjectAsync(
-            new() {
+            new()
+            {
                 Bucket = bucketName,
                 Key = objectName,
                 Body = new MemoryStream(Encoding.UTF8.GetBytes(content))
@@ -543,7 +595,8 @@ public class ClientObjectTest : IDisposable {
 
         // get object tagging
         var getTagResult = await client.GetObjectTaggingAsync(
-            new() {
+            new()
+            {
                 Bucket = bucketName,
                 Key = objectName
             }
@@ -556,11 +609,14 @@ public class ClientObjectTest : IDisposable {
 
         // put object tagging
         var putTagResult = await client.PutObjectTaggingAsync(
-            new() {
+            new()
+            {
                 Bucket = bucketName,
                 Key = objectName,
-                Tagging = new() {
-                    TagSet = new() {
+                Tagging = new()
+                {
+                    TagSet = new()
+                    {
                         Tags = [new Models.Tag() { Key = "tagK", Value = "tagV" }]
                     }
                 }
@@ -572,7 +628,8 @@ public class ClientObjectTest : IDisposable {
 
         // get object tagging again
         getTagResult = await client.GetObjectTaggingAsync(
-            new() {
+            new()
+            {
                 Bucket = bucketName,
                 Key = objectName
             }
@@ -589,7 +646,8 @@ public class ClientObjectTest : IDisposable {
 
         // delete object tagging
         var delTagResult = await client.DeleteObjectTaggingAsync(
-            new() {
+            new()
+            {
                 Bucket = bucketName,
                 Key = objectName
             }
@@ -600,7 +658,8 @@ public class ClientObjectTest : IDisposable {
 
         // get object tagging again
         getTagResult = await client.GetObjectTaggingAsync(
-            new() {
+            new()
+            {
                 Bucket = bucketName,
                 Key = objectName
             }
@@ -613,7 +672,8 @@ public class ClientObjectTest : IDisposable {
     }
 
     [Fact]
-    public async Task TestObjectTaggingFail() {
+    public async Task TestObjectTaggingFail()
+    {
         var client = Utils.GetDefaultClient();
 
         //default
@@ -621,7 +681,8 @@ public class ClientObjectTest : IDisposable {
         var objectName = Utils.RandomObjectName();
 
         var result = await client.PutBucketAsync(
-            new() {
+            new()
+            {
                 Bucket = bucketName
             }
         );
@@ -633,20 +694,25 @@ public class ClientObjectTest : IDisposable {
         var invClient = Utils.GetInvalidAkClient();
 
         // put object tagging
-        try {
+        try
+        {
             await invClient.PutObjectTaggingAsync(
-                new() {
+                new()
+                {
                     Bucket = bucketName,
                     Key = objectName,
-                    Tagging = new() {
-                        TagSet = new() {
+                    Tagging = new()
+                    {
+                        TagSet = new()
+                        {
                             Tags = [new Models.Tag() { Key = "tagK", Value = "tagV" }]
                         }
                     }
                 }
             );
         }
-        catch (Exception e) {
+        catch (Exception e)
+        {
             Assert.IsAssignableFrom<OperationException>(e);
             Assert.StartsWith("operation error PutObjectTagging", e.Message);
             Assert.IsAssignableFrom<ServiceException>(e.InnerException);
@@ -662,15 +728,18 @@ public class ClientObjectTest : IDisposable {
         }
 
         // get object tagging
-        try {
+        try
+        {
             await invClient.GetObjectTaggingAsync(
-                new() {
+                new()
+                {
                     Bucket = bucketName,
                     Key = objectName
                 }
             );
         }
-        catch (Exception e) {
+        catch (Exception e)
+        {
             Assert.IsAssignableFrom<OperationException>(e);
             Assert.StartsWith("operation error GetObjectTagging", e.Message);
             Assert.IsAssignableFrom<ServiceException>(e.InnerException);
@@ -686,15 +755,18 @@ public class ClientObjectTest : IDisposable {
         }
 
         // delete object tagging
-        try {
+        try
+        {
             await invClient.DeleteObjectTaggingAsync(
-                new() {
+                new()
+                {
                     Bucket = bucketName,
                     Key = objectName
                 }
             );
         }
-        catch (Exception e) {
+        catch (Exception e)
+        {
             Assert.IsAssignableFrom<OperationException>(e);
             Assert.StartsWith("operation error DeleteObjectTagging", e.Message);
             Assert.IsAssignableFrom<ServiceException>(e.InnerException);
@@ -711,14 +783,16 @@ public class ClientObjectTest : IDisposable {
     }
 
     [Fact]
-    public async Task TestObjectSymlink() {
+    public async Task TestObjectSymlink()
+    {
         var client = Utils.GetDefaultClient();
 
         //default
         var bucketName = Utils.RandomBucketName(BucketNamePrefix);
 
         var result = await client.PutBucketAsync(
-            new() {
+            new()
+            {
                 Bucket = bucketName
             }
         );
@@ -732,7 +806,8 @@ public class ClientObjectTest : IDisposable {
         const string content = "hello world";
 
         var putResult = await client.PutObjectAsync(
-            new() {
+            new()
+            {
                 Bucket = bucketName,
                 Key = objectName,
                 Body = new MemoryStream(Encoding.UTF8.GetBytes("hello world"))
@@ -744,7 +819,8 @@ public class ClientObjectTest : IDisposable {
 
         // put object symlink
         var putSymResult = await client.PutSymlinkAsync(
-            new() {
+            new()
+            {
                 Bucket = bucketName,
                 Key = $"{objectName}-link",
                 SymlinkTarget = objectName
@@ -756,7 +832,8 @@ public class ClientObjectTest : IDisposable {
 
         // get object symlink
         var getSymResult = await client.GetSymlinkAsync(
-            new() {
+            new()
+            {
                 Bucket = bucketName,
                 Key = $"{objectName}-link"
             }
@@ -768,7 +845,8 @@ public class ClientObjectTest : IDisposable {
 
         // get object by symlink
         var getObjectResult = await client.GetObjectAsync(
-            new() {
+            new()
+            {
                 Bucket = bucketName,
                 Key = $"{objectName}-link"
             }
@@ -790,14 +868,16 @@ public class ClientObjectTest : IDisposable {
     }
 
     [Fact]
-    public async Task TestObjectSymlinkFail() {
+    public async Task TestObjectSymlinkFail()
+    {
         var client = Utils.GetDefaultClient();
 
         //default
         var bucketName = Utils.RandomBucketName(BucketNamePrefix);
 
         var result = await client.PutBucketAsync(
-            new() {
+            new()
+            {
                 Bucket = bucketName
             }
         );
@@ -809,15 +889,18 @@ public class ClientObjectTest : IDisposable {
         var invClient = Utils.GetInvalidAkClient();
 
         // get object symlink
-        try {
+        try
+        {
             await invClient.GetSymlinkAsync(
-                new() {
+                new()
+                {
                     Bucket = bucketName,
                     Key = "key"
                 }
             );
         }
-        catch (Exception e) {
+        catch (Exception e)
+        {
             Assert.IsAssignableFrom<OperationException>(e);
             Assert.StartsWith("operation error GetSymlink", e.Message);
             Assert.IsAssignableFrom<ServiceException>(e.InnerException);
@@ -833,16 +916,19 @@ public class ClientObjectTest : IDisposable {
         }
 
         // put object symlink
-        try {
+        try
+        {
             await invClient.PutSymlinkAsync(
-                new() {
+                new()
+                {
                     Bucket = bucketName,
                     Key = "key-link",
                     SymlinkTarget = "key"
                 }
             );
         }
-        catch (Exception e) {
+        catch (Exception e)
+        {
             Assert.IsAssignableFrom<OperationException>(e);
             Assert.StartsWith("operation error PutSymlink", e.Message);
             Assert.IsAssignableFrom<ServiceException>(e.InnerException);
@@ -859,14 +945,16 @@ public class ClientObjectTest : IDisposable {
     }
 
     [Fact]
-    public async Task TestAppendObject() {
+    public async Task TestAppendObject()
+    {
         var client = Utils.GetDefaultClient();
 
         //default
         var bucketName = Utils.RandomBucketName(BucketNamePrefix);
 
         var result = await client.PutBucketAsync(
-            new() {
+            new()
+            {
                 Bucket = bucketName
             }
         );
@@ -880,7 +968,8 @@ public class ClientObjectTest : IDisposable {
         // append 1
         var appendResult = await client.AppendObjectAsync(
             new(
-            ) {
+            )
+            {
                 Bucket = bucketName,
                 Key = objectName,
                 Position = 0,
@@ -896,7 +985,8 @@ public class ClientObjectTest : IDisposable {
         // append 2
         appendResult = await client.AppendObjectAsync(
             new(
-            ) {
+            )
+            {
                 Bucket = bucketName,
                 Key = objectName,
                 Position = 6,
@@ -911,7 +1001,8 @@ public class ClientObjectTest : IDisposable {
 
         // get object
         var getObjectResult = await client.GetObjectAsync(
-            new() {
+            new()
+            {
                 Bucket = bucketName,
                 Key = objectName
             }
@@ -933,14 +1024,16 @@ public class ClientObjectTest : IDisposable {
     }
 
     [Fact]
-    public async Task TestAppendObjectWithAllProps() {
+    public async Task TestAppendObjectWithAllProps()
+    {
         var client = Utils.GetDefaultClient();
 
         //default
         var bucketName = Utils.RandomBucketName(BucketNamePrefix);
 
         var result = await client.PutBucketAsync(
-            new() {
+            new()
+            {
                 Bucket = bucketName
             }
         );
@@ -954,7 +1047,8 @@ public class ClientObjectTest : IDisposable {
         // append 1
         var appendResult = await client.AppendObjectAsync(
             new(
-            ) {
+            )
+            {
                 Bucket = bucketName,
                 Key = objectName,
                 Position = 0,
@@ -983,7 +1077,8 @@ public class ClientObjectTest : IDisposable {
         // append 2
         appendResult = await client.AppendObjectAsync(
             new(
-            ) {
+            )
+            {
                 Bucket = bucketName,
                 Key = objectName,
                 Position = 11,
@@ -998,7 +1093,8 @@ public class ClientObjectTest : IDisposable {
 
         // get object
         var getObjectResult = await client.GetObjectAsync(
-            new() {
+            new()
+            {
                 Bucket = bucketName,
                 Key = objectName
             }
@@ -1027,14 +1123,16 @@ public class ClientObjectTest : IDisposable {
     }
 
     [Fact]
-    public async Task TestAppendObjectFail() {
+    public async Task TestAppendObjectFail()
+    {
         var client = Utils.GetDefaultClient();
 
         //default
         var bucketName = Utils.RandomBucketName(BucketNamePrefix);
 
         var result = await client.PutBucketAsync(
-            new() {
+            new()
+            {
                 Bucket = bucketName
             }
         );
@@ -1046,9 +1144,11 @@ public class ClientObjectTest : IDisposable {
         var invClient = Utils.GetInvalidAkClient();
 
         // append object
-        try {
+        try
+        {
             await invClient.AppendObjectAsync(
-                new() {
+                new()
+                {
                     Bucket = bucketName,
                     Key = "key",
                     Position = 0,
@@ -1056,7 +1156,8 @@ public class ClientObjectTest : IDisposable {
                 }
             );
         }
-        catch (Exception e) {
+        catch (Exception e)
+        {
             Assert.IsAssignableFrom<OperationException>(e);
             Assert.StartsWith("operation error AppendObject", e.Message);
             Assert.IsAssignableFrom<ServiceException>(e.InnerException);
@@ -1073,14 +1174,16 @@ public class ClientObjectTest : IDisposable {
     }
 
     [Fact]
-    public async Task TestCopyObject() {
+    public async Task TestCopyObject()
+    {
         var client = Utils.GetDefaultClient();
 
         //default
         var bucketName = Utils.RandomBucketName(BucketNamePrefix);
 
         var result = await client.PutBucketAsync(
-            new() {
+            new()
+            {
                 Bucket = bucketName
             }
         );
@@ -1094,7 +1197,8 @@ public class ClientObjectTest : IDisposable {
         const string content = "hello world";
 
         var putResult = await client.PutObjectAsync(
-            new() {
+            new()
+            {
                 Bucket = bucketName,
                 Key = objectName,
                 Body = new MemoryStream(Encoding.UTF8.GetBytes("hello world"))
@@ -1106,7 +1210,8 @@ public class ClientObjectTest : IDisposable {
 
         // copy object
         var copyResult = await client.CopyObjectAsync(
-            new() {
+            new()
+            {
                 Bucket = bucketName,
                 Key = $"{objectName}-copy",
                 SourceKey = objectName
@@ -1118,7 +1223,8 @@ public class ClientObjectTest : IDisposable {
 
         // get object by symlink
         var getObjectResult = await client.GetObjectAsync(
-            new() {
+            new()
+            {
                 Bucket = bucketName,
                 Key = $"{objectName}-copy"
             }
@@ -1140,14 +1246,16 @@ public class ClientObjectTest : IDisposable {
     }
 
     [Fact]
-    public async Task TestCopyObjectFail() {
+    public async Task TestCopyObjectFail()
+    {
         var client = Utils.GetDefaultClient();
 
         //default
         var bucketName = Utils.RandomBucketName(BucketNamePrefix);
 
         var result = await client.PutBucketAsync(
-            new() {
+            new()
+            {
                 Bucket = bucketName
             }
         );
@@ -1159,16 +1267,19 @@ public class ClientObjectTest : IDisposable {
         var invClient = Utils.GetInvalidAkClient();
 
         // copy object
-        try {
+        try
+        {
             await invClient.CopyObjectAsync(
-                new() {
+                new()
+                {
                     Bucket = bucketName,
                     Key = "key-copy",
                     SourceKey = "key"
                 }
             );
         }
-        catch (Exception e) {
+        catch (Exception e)
+        {
             Assert.IsAssignableFrom<OperationException>(e);
             Assert.StartsWith("operation error CopyObject", e.Message);
             Assert.IsAssignableFrom<ServiceException>(e.InnerException);
@@ -1184,14 +1295,16 @@ public class ClientObjectTest : IDisposable {
     }
 
     [Fact]
-    public async Task TestRestoreObject() {
+    public async Task TestRestoreObject()
+    {
         var client = Utils.GetDefaultClient();
 
         //default
         var bucketName = Utils.RandomBucketName(BucketNamePrefix);
 
         var result = await client.PutBucketAsync(
-            new() {
+            new()
+            {
                 Bucket = bucketName
             }
         );
@@ -1207,7 +1320,8 @@ public class ClientObjectTest : IDisposable {
         const string content = "hello world";
 
         var putResult = await client.PutObjectAsync(
-            new() {
+            new()
+            {
                 Bucket = bucketName,
                 Key = objectName,
                 StorageClass = StorageClassType.ColdArchive.GetString(),
@@ -1219,7 +1333,8 @@ public class ClientObjectTest : IDisposable {
         Assert.NotNull(putResult.RequestId);
 
         putResult = await client.PutObjectAsync(
-            new() {
+            new()
+            {
                 Bucket = bucketName,
                 Key = objectName1,
                 StorageClass = StorageClassType.ColdArchive.GetString(),
@@ -1232,7 +1347,8 @@ public class ClientObjectTest : IDisposable {
 
         // restore object
         var resResult = await client.RestoreObjectAsync(
-            new() {
+            new()
+            {
                 Bucket = bucketName,
                 Key = objectName,
             }
@@ -1244,12 +1360,15 @@ public class ClientObjectTest : IDisposable {
 
         // restore object
         resResult = await client.RestoreObjectAsync(
-            new() {
+            new()
+            {
                 Bucket = bucketName,
                 Key = objectName1,
-                RestoreRequest = new RestoreRequest() {
+                RestoreRequest = new RestoreRequest()
+                {
                     Days = 7,
-                    JobParameters = new JobParameters() {
+                    JobParameters = new JobParameters()
+                    {
                         Tier = "Bulk"
                     }
                 }
@@ -1261,16 +1380,19 @@ public class ClientObjectTest : IDisposable {
         Assert.Equal("Bulk", resResult.RestorePriority);
 
         // restore  not finished object
-        try {
+        try
+        {
             await client.RestoreObjectAsync(
-                new() {
+                new()
+                {
                     Bucket = bucketName,
                     Key = objectName,
                 }
             );
             Assert.Fail("should not here");
         }
-        catch (Exception e) {
+        catch (Exception e)
+        {
             Assert.IsAssignableFrom<OperationException>(e);
             Assert.StartsWith("operation error RestoreObject", e.Message);
             Assert.IsAssignableFrom<ServiceException>(e.InnerException);
@@ -1287,16 +1409,19 @@ public class ClientObjectTest : IDisposable {
 
 
         // clean restored object
-        try {
+        try
+        {
             await client.CleanRestoredObjectAsync(
-                new() {
+                new()
+                {
                     Bucket = bucketName,
                     Key = objectName,
                 }
             );
             Assert.Fail("should not here");
         }
-        catch (Exception e) {
+        catch (Exception e)
+        {
             Assert.IsAssignableFrom<OperationException>(e);
             Assert.StartsWith("operation error CleanRestoredObject", e.Message);
             Assert.IsAssignableFrom<ServiceException>(e.InnerException);
@@ -1314,14 +1439,16 @@ public class ClientObjectTest : IDisposable {
 
 
     [Fact]
-    public async Task TestAppendObjectWithCrcCheckEnable() {
+    public async Task TestAppendObjectWithCrcCheckEnable()
+    {
         var client = Utils.GetDefaultClient();
 
         //default
         var bucketName = Utils.RandomBucketName(BucketNamePrefix);
 
         var result = await client.PutBucketAsync(
-            new() {
+            new()
+            {
                 Bucket = bucketName
             }
         );
@@ -1336,7 +1463,8 @@ public class ClientObjectTest : IDisposable {
         // append 1
         var appendResult = await client.AppendObjectAsync(
             new(
-            ) {
+            )
+            {
                 Bucket = bucketName,
                 Key = objectName,
                 Position = 0,
@@ -1353,7 +1481,8 @@ public class ClientObjectTest : IDisposable {
         // append 2
         appendResult = await client.AppendObjectAsync(
             new(
-            ) {
+            )
+            {
                 Bucket = bucketName,
                 Key = objectName,
                 Position = 6,
@@ -1369,10 +1498,12 @@ public class ClientObjectTest : IDisposable {
 
         // crc Fail
         objectName = Utils.RandomObjectName();
-        try {
+        try
+        {
             appendResult = await client.AppendObjectAsync(
                 new(
-                ) {
+                )
+                {
                     Bucket = bucketName,
                     Key = objectName,
                     Position = 0,
@@ -1382,7 +1513,8 @@ public class ClientObjectTest : IDisposable {
             );
             Assert.Fail("should not here");
         }
-        catch (Exception e) {
+        catch (Exception e)
+        {
             Assert.IsAssignableFrom<OperationException>(e);
             Assert.StartsWith("operation error AppendObject", e.Message);
             Assert.IsAssignableFrom<NoRetryableInconsistentException>(e.InnerException);
@@ -1391,7 +1523,8 @@ public class ClientObjectTest : IDisposable {
     }
 
     [Fact]
-    public async Task TestAppendObjectWithCrcCheckDisable() {
+    public async Task TestAppendObjectWithCrcCheckDisable()
+    {
         var cfg = Configuration.LoadDefault();
         cfg.CredentialsProvider = new Credentials.StaticCredentialsProvide(Utils.AccessKeyId, Utils.AccessKeySecret);
         cfg.Region = Utils.Region;
@@ -1404,7 +1537,8 @@ public class ClientObjectTest : IDisposable {
         var bucketName = Utils.RandomBucketName(BucketNamePrefix);
 
         var result = await client.PutBucketAsync(
-            new() {
+            new()
+            {
                 Bucket = bucketName
             }
         );
@@ -1418,7 +1552,8 @@ public class ClientObjectTest : IDisposable {
         // invalid crc, but ok
         var appendResult = await client.AppendObjectAsync(
             new(
-            ) {
+            )
+            {
                 Bucket = bucketName,
                 Key = objectName,
                 Position = 0,
@@ -1434,7 +1569,8 @@ public class ClientObjectTest : IDisposable {
     }
 
     [Fact]
-    public async Task TestPutObjectWithCrcCheckDisable() {
+    public async Task TestPutObjectWithCrcCheckDisable()
+    {
         var cfg = Configuration.LoadDefault();
         cfg.CredentialsProvider = new Credentials.StaticCredentialsProvide(Utils.AccessKeyId, Utils.AccessKeySecret);
         cfg.Region = Utils.Region;
@@ -1447,7 +1583,8 @@ public class ClientObjectTest : IDisposable {
         var bucketName = Utils.RandomBucketName(BucketNamePrefix);
 
         var result = await client.PutBucketAsync(
-            new() {
+            new()
+            {
                 Bucket = bucketName
             }
         );
@@ -1460,7 +1597,8 @@ public class ClientObjectTest : IDisposable {
 
         var putResult = await client.PutObjectAsync(
             new(
-            ) {
+            )
+            {
                 Bucket = bucketName,
                 Key = objectName,
                 Body = new MemoryStream(Encoding.UTF8.GetBytes("hello ")),
@@ -1473,14 +1611,16 @@ public class ClientObjectTest : IDisposable {
     }
 
     [Fact]
-    public async Task TestPutObjectWithProgress() {
+    public async Task TestPutObjectWithProgress()
+    {
         var client = Utils.GetDefaultClient();
 
         //default
         var bucketName = Utils.RandomBucketName(BucketNamePrefix);
 
         var result = await client.PutBucketAsync(
-            new() {
+            new()
+            {
                 Bucket = bucketName
             }
         );
@@ -1494,7 +1634,8 @@ public class ClientObjectTest : IDisposable {
         long transferred = 0;
         long total = 0;
 
-        ProgressFunc func = (x, y, z) => {
+        ProgressFunc func = (x, y, z) =>
+        {
             increment += x;
             transferred = y;
             total = z;
@@ -1505,7 +1646,8 @@ public class ClientObjectTest : IDisposable {
 
         var putResult = await client.PutObjectAsync(
             new(
-            ) {
+            )
+            {
                 Bucket = bucketName,
                 Key = objectName,
                 Body = new MemoryStream(Encoding.UTF8.GetBytes(content)),
@@ -1527,7 +1669,8 @@ public class ClientObjectTest : IDisposable {
         objectName = Utils.RandomObjectName();
         var appendResult = await client.AppendObjectAsync(
             new(
-            ) {
+            )
+            {
                 Bucket = bucketName,
                 Key = objectName,
                 Position = 0,
@@ -1546,14 +1689,16 @@ public class ClientObjectTest : IDisposable {
     }
 
     [Fact]
-    public async Task TestGetObjectWithCrcCheckEnable() {
+    public async Task TestGetObjectWithCrcCheckEnable()
+    {
         var client = Utils.GetDefaultClient();
 
         //default
         var bucketName = Utils.RandomBucketName(BucketNamePrefix);
 
         var result = await client.PutBucketAsync(
-            new() {
+            new()
+            {
                 Bucket = bucketName
             }
         );
@@ -1566,7 +1711,8 @@ public class ClientObjectTest : IDisposable {
         var objectName = Utils.RandomObjectName();
         var putResult = await client.PutObjectAsync(
             new(
-            ) {
+            )
+            {
                 Bucket = bucketName,
                 Key = objectName
             }
@@ -1578,7 +1724,8 @@ public class ClientObjectTest : IDisposable {
 
         var getResult = await client.GetObjectAsync(
             new(
-            ) {
+            )
+            {
                 Bucket = bucketName,
                 Key = objectName
             }
@@ -1593,7 +1740,8 @@ public class ClientObjectTest : IDisposable {
         objectName = Utils.RandomObjectName();
         putResult = await client.PutObjectAsync(
             new(
-            ) {
+            )
+            {
                 Bucket = bucketName,
                 Key = objectName,
                 Body = new MemoryStream()
@@ -1606,7 +1754,8 @@ public class ClientObjectTest : IDisposable {
 
         getResult = await client.GetObjectAsync(
             new(
-            ) {
+            )
+            {
                 Bucket = bucketName,
                 Key = objectName
             }
@@ -1621,7 +1770,8 @@ public class ClientObjectTest : IDisposable {
         objectName = Utils.RandomObjectName();
         putResult = await client.PutObjectAsync(
             new(
-            ) {
+            )
+            {
                 Bucket = bucketName,
                 Key = objectName,
                 Body = new MemoryStream(Encoding.UTF8.GetBytes("hello "))
@@ -1634,7 +1784,8 @@ public class ClientObjectTest : IDisposable {
 
         getResult = await client.GetObjectAsync(
             new(
-            ) {
+            )
+            {
                 Bucket = bucketName,
                 Key = objectName
             }
@@ -1649,7 +1800,8 @@ public class ClientObjectTest : IDisposable {
         //range get
         getResult = await client.GetObjectAsync(
             new(
-            ) {
+            )
+            {
                 Bucket = bucketName,
                 Key = objectName,
                 Range = "bytes=1-5"
@@ -1665,7 +1817,8 @@ public class ClientObjectTest : IDisposable {
         //range get
         getResult = await client.GetObjectAsync(
             new(
-            ) {
+            )
+            {
                 Bucket = bucketName,
                 Key = objectName,
                 Range = "bytes=0-"
@@ -1680,7 +1833,8 @@ public class ClientObjectTest : IDisposable {
     }
 
     [Fact]
-    public async Task TestGetObjectWithCrcCheckDisable() {
+    public async Task TestGetObjectWithCrcCheckDisable()
+    {
         var cfg = Configuration.LoadDefault();
         cfg.CredentialsProvider = new Credentials.StaticCredentialsProvide(Utils.AccessKeyId, Utils.AccessKeySecret);
         cfg.Region = Utils.Region;
@@ -1693,7 +1847,8 @@ public class ClientObjectTest : IDisposable {
         var bucketName = Utils.RandomBucketName(BucketNamePrefix);
 
         var result = await client.PutBucketAsync(
-            new() {
+            new()
+            {
                 Bucket = bucketName
             }
         );
@@ -1706,7 +1861,8 @@ public class ClientObjectTest : IDisposable {
         var objectName = Utils.RandomObjectName();
         var putResult = await client.PutObjectAsync(
             new(
-            ) {
+            )
+            {
                 Bucket = bucketName,
                 Key = objectName,
                 Body = new MemoryStream(Encoding.UTF8.GetBytes("hello "))
@@ -1719,7 +1875,8 @@ public class ClientObjectTest : IDisposable {
 
         var getResult = await client.GetObjectAsync(
             new(
-            ) {
+            )
+            {
                 Bucket = bucketName,
                 Key = objectName
             }

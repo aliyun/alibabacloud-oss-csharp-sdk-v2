@@ -1,8 +1,10 @@
 ﻿
 using System;
 
-namespace AlibabaCloud.OSS.V2.Retry {
-    public class StandardRetryer : IRetryer {
+namespace AlibabaCloud.OSS.V2.Retry
+{
+    public class StandardRetryer : IRetryer
+    {
         private int _maxAttempts;
         private IErrorRetryable[] _errorRetryables;
         private IBackoffDelayer _backoffDelayer;
@@ -18,7 +20,8 @@ namespace AlibabaCloud.OSS.V2.Retry {
             TimeSpan? maxBackoff = null,
             TimeSpan? baseDelay = null,
             IErrorRetryable[]? errorRetryables = null,
-            IBackoffDelayer? backoffDelayer = null) {
+            IBackoffDelayer? backoffDelayer = null)
+        {
             _maxAttempts = maxAttempts ?? Defaults.MaxAttpempts;
             _backoffDelayer = backoffDelayer ?? new FullJitterBackoff(
                 maxBackoff ?? Defaults.MaxBackOff,
@@ -26,20 +29,25 @@ namespace AlibabaCloud.OSS.V2.Retry {
             _errorRetryables = errorRetryables ?? defaultErrorRetryables;
         }
 
-        public bool IsErrorRetryable(Exception error) {
-            foreach (var retryable in _errorRetryables) {
-                if (retryable.IsErrorRetryable(error)) {
+        public bool IsErrorRetryable(Exception error)
+        {
+            foreach (var retryable in _errorRetryables)
+            {
+                if (retryable.IsErrorRetryable(error))
+                {
                     return true;
                 }
             }
             return false;
         }
 
-        public int MaxAttempts() {
+        public int MaxAttempts()
+        {
             return _maxAttempts;
         }
 
-        public TimeSpan RetryDelay(int attempt, Exception error) {
+        public TimeSpan RetryDelay(int attempt, Exception error)
+        {
             return _backoffDelayer.BackofDelay(attempt, error);
         }
     }

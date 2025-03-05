@@ -1,8 +1,10 @@
 namespace AlibabaCloud.OSS.V2.UnitTests;
 
-public class MimeUtilsTest {
+public class MimeUtilsTest
+{
     [Fact]
-    public void TestGetMimeType() {
+    public void TestGetMimeType()
+    {
         Assert.Equal("text/html", MimeUtils.GetMimeType("demo.html"));
         Assert.Equal("text/html", MimeUtils.GetMimeType("demo.htm"));
         Assert.Equal("text/plain", MimeUtils.GetMimeType("demo.txt"));
@@ -11,7 +13,8 @@ public class MimeUtilsTest {
     }
 
     [Fact]
-    public void TestGetUserDefindedMimeType() {
+    public void TestGetUserDefindedMimeType()
+    {
         Assert.Equal("", MimeUtils.GetMimeType("demo.my-html"));
 
         MimeUtils.AddMimeType(".my-html", "text/my-html");

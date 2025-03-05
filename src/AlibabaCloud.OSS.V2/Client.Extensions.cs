@@ -1,13 +1,15 @@
-using AlibabaCloud.OSS.V2.Internal;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
+using AlibabaCloud.OSS.V2.Internal;
 
-namespace AlibabaCloud.OSS.V2 {
-    public partial class Client {
+namespace AlibabaCloud.OSS.V2
+{
+    public partial class Client
+    {
         /// <summary>
         /// Checks if the object exists
         /// </summary>
@@ -21,10 +23,13 @@ namespace AlibabaCloud.OSS.V2 {
             string key,
             string? versionId = null,
             CancellationToken cancellationToken = default
-        ) {
-            try {
+        )
+        {
+            try
+            {
                 await GetObjectMetaAsync(
-                    new() {
+                    new()
+                    {
                         Bucket = bucket,
                         Key = key,
                         VersionId = versionId
@@ -35,8 +40,10 @@ namespace AlibabaCloud.OSS.V2 {
 
                 return true;
             }
-            catch (OperationException e) {
-                if (e.InnerException is ServiceException se) {
+            catch (OperationException e)
+            {
+                if (e.InnerException is ServiceException se)
+                {
                     if (string.Equals(se.ErrorCode, "NoSuchKey"))
                         return false;
 
@@ -58,10 +65,13 @@ namespace AlibabaCloud.OSS.V2 {
         public async Task<bool> IsBucketExistAsync(
             string bucket,
             CancellationToken cancellationToken = default
-        ) {
-            try {
+        )
+        {
+            try
+            {
                 await GetBucketAclAsync(
-                    new() {
+                    new()
+                    {
                         Bucket = bucket
                     },
                     null,
@@ -70,7 +80,8 @@ namespace AlibabaCloud.OSS.V2 {
 
                 return true;
             }
-            catch (OperationException e) {
+            catch (OperationException e)
+            {
                 if (e.InnerException is ServiceException se)
                     if (string.Equals(se.ErrorCode, "NoSuchBucket"))
                         return false;
@@ -92,7 +103,8 @@ namespace AlibabaCloud.OSS.V2 {
             string filepath,
             OperationOptions? options = null,
             CancellationToken cancellationToken = default
-        ) {
+        )
+        {
 #if NET5_0_OR_GREATER
             await using var fs = File.Open(filepath, FileMode.Open);
 #else
@@ -115,7 +127,8 @@ namespace AlibabaCloud.OSS.V2 {
             string filepath,
             OperationOptions? options = null,
             CancellationToken cancellationToken = default
-        ) {
+        )
+        {
             var (retry, readTimeout) = _clientImpl.GetRuntimeContext(options);
             Models.GetObjectResult? result;
             Exception? lastEx = null;
@@ -123,39 +136,48 @@ namespace AlibabaCloud.OSS.V2 {
             WriteOnlyHashStream? crcTracker = null;
             Stream? progTracker = null;
             var trackers = new List<Stream>();
-            if (_clientImpl.Options.FeatureFlags.HasFlag(FeatureFlagsType.EnableCrc64CheckDownload)) {
+            if (_clientImpl.Options.FeatureFlags.HasFlag(FeatureFlagsType.EnableCrc64CheckDownload))
+            {
                 crcTracker = new WriteOnlyHashStream(new HashCrc64(0));
                 trackers.Add(crcTracker);
             }
 
-            do {
+            do
+            {
                 result = await GetObjectAsync(request, options, cancellationToken).ConfigureAwait(false);
                 lastEx = null;
-                if (request.ProgressFn != null && progTracker == null) {
+                if (request.ProgressFn != null && progTracker == null)
+                {
                     progTracker = new ProgressStream(request.ProgressFn, result.ContentLength ?? -1);
                     trackers.Add(progTracker);
                 }
 
                 using var cts = new CancellationTokenSource(readTimeout);
                 var linkedCts = CancellationTokenSource.CreateLinkedTokenSource(cts.Token, cancellationToken);
-                try {
+                try
+                {
                     using var fs = File.Open(filepath, FileMode.Create);
                     byte[] buffer = new byte[Defaults.DefaultCopyBufferSize];
                     int count;
 
-                    while ((count = await result.Body!.ReadAsync(buffer, 0, buffer.Length, linkedCts.Token).ConfigureAwait(false)) != 0) {
+                    while ((count = await result.Body!.ReadAsync(buffer, 0, buffer.Length, linkedCts.Token).ConfigureAwait(false)) != 0)
+                    {
                         await fs.WriteAsync(buffer, 0, count, linkedCts.Token).ConfigureAwait(false);
-                        foreach (var t in trackers) {
+                        foreach (var t in trackers)
+                        {
                             t.Write(buffer, 0, count);
                         }
                         cts.CancelAfter(readTimeout);
                     }
 
-                    if (crcTracker != null) {
-                        if (result.Headers.TryGetValue("x-oss-hash-crc64ecma", out var scrc)) {
+                    if (crcTracker != null)
+                    {
+                        if (result.Headers.TryGetValue("x-oss-hash-crc64ecma", out var scrc))
+                        {
                             var val = crcTracker.Hash.Final();
                             var ccrc = Convert.ToString(BitConverter.ToUInt64(val, 0), CultureInfo.InvariantCulture);
-                            if (!string.Equals(ccrc, scrc)) {
+                            if (!string.Equals(ccrc, scrc))
+                            {
                                 result.Headers.TryGetValue("x-oss-request-id", out var requestId);
                                 throw new InconsistentException(ccrc, scrc, requestId ?? "");
                             }
@@ -164,31 +186,39 @@ namespace AlibabaCloud.OSS.V2 {
 
                     break;
                 }
-                catch (OperationCanceledException e) {
+                catch (OperationCanceledException e)
+                {
                     lastEx = e;
-                    if (cts.IsCancellationRequested) {
+                    if (cts.IsCancellationRequested)
+                    {
                         lastEx = new RequestTimeoutException(
                 $"The operation was cancelled because it exceeded the configured timeout of {readTimeout:g}. ", e);
                     }
-                    else if (cancellationToken.IsCancellationRequested) {
+                    else if (cancellationToken.IsCancellationRequested)
+                    {
                         break;
                     }
                 }
-                catch (Exception e) {
+                catch (Exception e)
+                {
                     lastEx = e;
                 }
-                finally {
+                finally
+                {
                     result.Body!.Dispose();
                     result.InnerBody = null;
-                    if (lastEx != null) {
-                        foreach (var t in trackers) {
+                    if (lastEx != null)
+                    {
+                        foreach (var t in trackers)
+                        {
                             t.Seek(0, SeekOrigin.Begin);
                         }
                     }
                 }
             } while (++i < retry);
 
-            if (lastEx != null) {
+            if (lastEx != null)
+            {
                 throw lastEx;
             }
             return result;

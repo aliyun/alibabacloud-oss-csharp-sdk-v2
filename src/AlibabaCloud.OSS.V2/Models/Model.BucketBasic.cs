@@ -3,12 +3,14 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Xml.Serialization;
 
-namespace AlibabaCloud.OSS.V2.Models {
+namespace AlibabaCloud.OSS.V2.Models
+{
     /// <summary>
     /// The container that stores all information returned for the GetBucketStat request.
     /// </summary>
     [XmlRoot("BucketStat")]
-    public sealed class BucketStat {
+    public sealed class BucketStat
+    {
         /// <summary>
         /// The number of multipart parts in the bucket.
         /// </summary>
@@ -140,7 +142,8 @@ namespace AlibabaCloud.OSS.V2.Models {
     /// The character that is used to group the objects that you want to list by name. Objects whose names contain the same string that stretches from the specified prefix to the first occurrence of the delimiter are grouped as a CommonPrefixes element.
     /// </summary>
     [XmlRoot("CommonPrefix")]
-    public sealed class CommonPrefix {
+    public sealed class CommonPrefix
+    {
         /// <summary>
         /// The prefix that must be included in the names of objects you want to list.
         /// </summary>
@@ -152,7 +155,8 @@ namespace AlibabaCloud.OSS.V2.Models {
     /// The server-side encryption configurations of the bucket.
     /// </summary>
     [XmlRoot("ServerSideEncryptionRule")]
-    public sealed class ServerSideEncryptionRule {
+    public sealed class ServerSideEncryptionRule
+    {
         /// <summary>
         /// The default server-side encryption method.Valid values: KMS, AES-256, and SM4.
         /// </summary>
@@ -176,7 +180,8 @@ namespace AlibabaCloud.OSS.V2.Models {
     /// The log configurations of the bucket.
     /// </summary>
     [XmlRoot("BucketPolicy")]
-    public sealed class BucketPolicy {
+    public sealed class BucketPolicy
+    {
         /// <summary>
         /// The name of the bucket that stores the logs.
         /// </summary>
@@ -194,7 +199,8 @@ namespace AlibabaCloud.OSS.V2.Models {
     /// The configurations of the bucket storage class and redundancy type.
     /// </summary>
     [XmlRoot("CreateBucketConfiguration")]
-    public sealed class CreateBucketConfiguration {
+    public sealed class CreateBucketConfiguration
+    {
         /// <summary>
         /// The storage class of the bucket. Valid values:*   Standard (default)*   IA*   Archive*   ColdArchive
         /// Sees <see cref="StorageClassType"/> for supported values.
@@ -214,7 +220,8 @@ namespace AlibabaCloud.OSS.V2.Models {
     /// The container that stores the bucket information.
     /// </summary>
     [XmlRoot("Bucket")]
-    public sealed class BucketInfo {
+    public sealed class BucketInfo
+    {
         /// <summary>
         /// The region in which the bucket is located.
         /// </summary>
@@ -328,7 +335,8 @@ namespace AlibabaCloud.OSS.V2.Models {
     /// The container that stores the information about the bucket.
     /// </summary>
     [XmlRoot("BucketInfo")]
-    public sealed class XmlBucketInfo {
+    public sealed class XmlBucketInfo
+    {
         /// <summary>
         /// The container that stores the bucket information.
         /// </summary>
@@ -340,7 +348,8 @@ namespace AlibabaCloud.OSS.V2.Models {
     /// The container that stores the information about the bucket.
     /// </summary>
     [XmlRoot("LocationConstraint")]
-    public sealed class XmlLocationConstraint {
+    public sealed class XmlLocationConstraint
+    {
         /// <summary>
         /// The container that stores the bucket location.
         /// </summary>
@@ -352,7 +361,8 @@ namespace AlibabaCloud.OSS.V2.Models {
     /// The container that stores the returned object metadata.
     /// </summary>
     //[XmlRoot("Contents")]
-    public sealed class ObjectSummary {
+    public sealed class ObjectSummary
+    {
         /// <summary>
         /// The size of the object. Unit: bytes.
         /// </summary>
@@ -411,7 +421,8 @@ namespace AlibabaCloud.OSS.V2.Models {
     /// <summary>
     /// The request for the GetBucketStat operation.
     /// </summary>
-    public sealed class GetBucketStatRequest : RequestModel {
+    public sealed class GetBucketStatRequest : RequestModel
+    {
         /// <summary>
         /// The bucket about which you want to query the information.
         /// </summary>
@@ -421,13 +432,15 @@ namespace AlibabaCloud.OSS.V2.Models {
     /// <summary>
     /// The result for the GetBucketStat operation.
     /// </summary>
-    public sealed class GetBucketStatResult : ResultModel {
+    public sealed class GetBucketStatResult : ResultModel
+    {
         /// <summary>
         /// The container that stores all information returned for the GetBucketStat request.
         /// </summary>
         public BucketStat? BucketStat => InnerBody as BucketStat;
 
-        public GetBucketStatResult() {
+        public GetBucketStatResult()
+        {
             BodyFormat = "xml";
             BodyType = typeof(BucketStat);
         }
@@ -436,8 +449,10 @@ namespace AlibabaCloud.OSS.V2.Models {
     /// <summary>
     /// The request for the PutBucket operation.
     /// </summary>
-    public sealed class PutBucketRequest : RequestModel {
-        public PutBucketRequest() {
+    public sealed class PutBucketRequest : RequestModel
+    {
+        public PutBucketRequest()
+        {
             BodyFormat = "xml";
         }
 
@@ -449,9 +464,11 @@ namespace AlibabaCloud.OSS.V2.Models {
         /// <summary>
         /// The access control list (ACL) of the bucket to be created. Valid values:*   public-read-write*   public-read*   private (default)For more information, see [Bucket ACL](~~31843~~).
         /// </summary>
-        public string? Acl {
+        public string? Acl
+        {
             get => Headers.TryGetValue("x-oss-acl", out var value) ? value : null;
-            set {
+            set
+            {
                 if (value != null) Headers["x-oss-acl"] = value;
             }
         }
@@ -459,9 +476,11 @@ namespace AlibabaCloud.OSS.V2.Models {
         /// <summary>
         /// The ID of the resource group.*   If you include the header in the request and specify the ID of the resource group, the bucket that you create belongs to the resource group. If the specified resource group ID is rg-default-id, the bucket that you create belongs to the default resource group.*   If you do not include the header in the request, the bucket that you create belongs to the default resource group.You can obtain the ID of a resource group in the Resource Management console or by calling the ListResourceGroups operation. For more information, see [View basic information of a resource group](~~151181~~) and [ListResourceGroups](~~158855~~).  You cannot configure a resource group for an Anywhere Bucket.
         /// </summary>
-        public string? ResourceGroupId {
+        public string? ResourceGroupId
+        {
             get => Headers.TryGetValue("x-oss-resource-group-id", out var value) ? value : null;
-            set {
+            set
+            {
                 if (value != null) Headers["x-oss-resource-group-id"] = value;
             }
         }
@@ -469,9 +488,11 @@ namespace AlibabaCloud.OSS.V2.Models {
         /// <summary>
         /// 
         /// </summary>
-        public string? BucketTagging {
+        public string? BucketTagging
+        {
             get => Headers.TryGetValue("x-oss-bucket-tagging", out var value) ? value : null;
-            set {
+            set
+            {
                 if (value != null) Headers["x-oss-bucket-tagging"] = value;
             }
         }
@@ -479,7 +500,8 @@ namespace AlibabaCloud.OSS.V2.Models {
         /// <summary>
         /// The container that stores the request body.
         /// </summary>
-        public CreateBucketConfiguration? CreateBucketConfiguration {
+        public CreateBucketConfiguration? CreateBucketConfiguration
+        {
             get => InnerBody as CreateBucketConfiguration;
             set => InnerBody = value;
         }
@@ -493,7 +515,8 @@ namespace AlibabaCloud.OSS.V2.Models {
     /// <summary>
     /// The request for the DeleteBucket operation.
     /// </summary>
-    public sealed class DeleteBucketRequest : RequestModel {
+    public sealed class DeleteBucketRequest : RequestModel
+    {
         /// <summary>
         /// The name of the bucket.
         /// </summary>
@@ -508,7 +531,8 @@ namespace AlibabaCloud.OSS.V2.Models {
     /// <summary>
     /// The request for the ListObjects operation.
     /// </summary>
-    public sealed class ListObjectsRequest : RequestModel {
+    public sealed class ListObjectsRequest : RequestModel
+    {
         /// <summary>
         /// The name of the bucket.
         /// </summary>
@@ -517,9 +541,11 @@ namespace AlibabaCloud.OSS.V2.Models {
         /// <summary>
         /// The character that is used to group objects by name. If you specify delimiter in the request, the response contains CommonPrefixes. The objects whose names contain the same string from the prefix to the next occurrence of the delimiter are grouped as a single result element in CommonPrefixes.
         /// </summary>
-        public string? Delimiter {
+        public string? Delimiter
+        {
             get => Parameters.TryGetValue("delimiter", out var value) ? value : null;
-            set {
+            set
+            {
                 if (value != null) Parameters["delimiter"] = value;
             }
         }
@@ -527,9 +553,11 @@ namespace AlibabaCloud.OSS.V2.Models {
         /// <summary>
         /// The name of the object after which the GetBucket (ListObjects) operation begins. If this parameter is specified, objects whose names are alphabetically after the value of marker are returned.The objects are returned by page based on marker. The value of marker can be up to 1,024 bytes.If the value of marker does not exist in the list when you perform a conditional query, the GetBucket (ListObjects) operation starts from the object whose name is alphabetically after the value of marker.
         /// </summary>
-        public string? Marker {
+        public string? Marker
+        {
             get => Parameters.TryGetValue("marker", out var value) ? value : null;
-            set {
+            set
+            {
                 if (value != null) Parameters["marker"] = value;
             }
         }
@@ -537,11 +565,13 @@ namespace AlibabaCloud.OSS.V2.Models {
         /// <summary>
         /// The maximum number of objects that can be returned. If the number of objects to be returned exceeds the value of max-keys specified in the request, NextMarker is included in the returned response. The value of NextMarker is used as the value of marker for the next request.Valid values: 1 to 999.Default value: 100.
         /// </summary>
-        public long? MaxKeys {
+        public long? MaxKeys
+        {
             get => Parameters.TryGetValue("max-keys", out var value)
                 ? Convert.ToInt64(value, CultureInfo.InvariantCulture)
                 : null;
-            set {
+            set
+            {
                 if (value != null) Parameters["max-keys"] = Convert.ToString((long)value, CultureInfo.InvariantCulture);
             }
         }
@@ -549,9 +579,11 @@ namespace AlibabaCloud.OSS.V2.Models {
         /// <summary>
         /// The prefix that must be contained in names of the returned objects.*   The value of prefix can be up to 1,024 bytes in length.*   If you specify prefix, the names of the returned objects contain the prefix.If you set prefix to a directory name, the object whose names start with this prefix are listed. The objects consist of all recursive objects and subdirectories in this directory.If you set prefix to a directory name and set delimiter to a forward slash (/), only the objects in the directory are listed. The subdirectories in the directory are listed in CommonPrefixes. Recursive objects and subdirectories in the subdirectories are not listed.For example, a bucket contains the following three objects: fun/test.jpg, fun/movie/001.avi, and fun/movie/007.avi. If prefix is set to fun/, the three objects are returned. If prefix is set to fun/ and delimiter is set to a forward slash (/), fun/test.jpg and fun/movie/ are returned.
         /// </summary>
-        public string? Prefix {
+        public string? Prefix
+        {
             get => Parameters.TryGetValue("prefix", out var value) ? value : null;
-            set {
+            set
+            {
                 if (value != null) Parameters["prefix"] = value;
             }
         }
@@ -560,9 +592,11 @@ namespace AlibabaCloud.OSS.V2.Models {
         /// The encoding format of the content in the response.  The value of Delimiter, Marker, Prefix, NextMarker, and Key are UTF-8 encoded. If the values of Delimiter, Marker, Prefix, NextMarker, and Key contain a control character that is not supported by Extensible Markup Language (XML) 1.0, you can specify encoding-type to encode the value in the response.
         /// Sees <see cref="Models.EncodingType"/> for supported values.
         /// </summary>
-        public string? EncodingType {
+        public string? EncodingType
+        {
             get => Parameters.TryGetValue("encoding-type", out var value) ? value : null;
-            set {
+            set
+            {
                 if (value != null) Parameters["encoding-type"] = value;
             }
         }
@@ -571,7 +605,8 @@ namespace AlibabaCloud.OSS.V2.Models {
     /// <summary>
     /// The result for the ListObjects operation.
     /// </summary>
-    public sealed class ListObjectsResult : ResultModel {
+    public sealed class ListObjectsResult : ResultModel
+    {
         /// <summary>
         /// The name of the bucket.
         /// </summary>
@@ -628,7 +663,8 @@ namespace AlibabaCloud.OSS.V2.Models {
     /// <summary>
     /// The request for the ListObjectsV2 operation.
     /// </summary>
-    public sealed class ListObjectsV2Request : RequestModel {
+    public sealed class ListObjectsV2Request : RequestModel
+    {
         /// <summary>
         /// The name of the bucket.
         /// </summary>
@@ -637,9 +673,11 @@ namespace AlibabaCloud.OSS.V2.Models {
         /// <summary>
         /// The character that is used to group objects by name. If you specify delimiter in the request, the response contains CommonPrefixes. The objects whose names contain the same string from the prefix to the next occurrence of the delimiter are grouped as a single result element in CommonPrefixes.
         /// </summary>
-        public string? Delimiter {
+        public string? Delimiter
+        {
             get => Parameters.TryGetValue("delimiter", out var value) ? value : null;
-            set {
+            set
+            {
                 if (value != null) Parameters["delimiter"] = value;
             }
         }
@@ -647,11 +685,13 @@ namespace AlibabaCloud.OSS.V2.Models {
         /// <summary>
         /// The maximum number of objects to be returned.Valid values: 1 to 999.Default value: 100.  If the number of returned objects exceeds the value of max-keys, the response contains NextContinuationToken.Use the value of NextContinuationToken as the value of continuation-token in the next request.
         /// </summary>
-        public long? MaxKeys {
+        public long? MaxKeys
+        {
             get => Parameters.TryGetValue("max-keys", out var value)
                 ? Convert.ToInt64(value, CultureInfo.InvariantCulture)
                 : null;
-            set {
+            set
+            {
                 if (value != null) Parameters["max-keys"] = Convert.ToString((long)value, CultureInfo.InvariantCulture);
             }
         }
@@ -659,9 +699,11 @@ namespace AlibabaCloud.OSS.V2.Models {
         /// <summary>
         /// The prefix that must be contained in names of the returned objects.*   The value of prefix can be up to 1,024 bytes in length.*   If you specify prefix, the names of the returned objects contain the prefix.If you set prefix to a directory name, the objects whose names start with this prefix are listed. The objects consist of all objects and subdirectories in this directory.If you set prefix to a directory name and set delimiter to a forward slash (/), only the objects in the directory are listed. The subdirectories in the directory are returned in CommonPrefixes. Objects and subdirectories in the subdirectories are not listed.For example, a bucket contains the following three objects: fun/test.jpg, fun/movie/001.avi, and fun/movie/007.avi. If prefix is set to fun/, the three objects are returned. If prefix is set to fun/ and delimiter is set to a forward slash (/), fun/test.jpg and fun/movie/ are returned.
         /// </summary>
-        public string? Prefix {
+        public string? Prefix
+        {
             get => Parameters.TryGetValue("prefix", out var value) ? value : null;
-            set {
+            set
+            {
                 if (value != null) Parameters["prefix"] = value;
             }
         }
@@ -670,9 +712,11 @@ namespace AlibabaCloud.OSS.V2.Models {
         /// The encoding format of the returned objects in the response.  The values of Delimiter, StartAfter, Prefix, NextContinuationToken, and Key are UTF-8 encoded. If the value of Delimiter, StartAfter, Prefix, NextContinuationToken, or Key contains a control character that is not supported by Extensible Markup Language (XML) 1.0, you can specify encoding-type to encode the value in the response.
         /// Sees <see cref="Models.EncodingType"/> for supported values.
         /// </summary>
-        public string? EncodingType {
+        public string? EncodingType
+        {
             get => Parameters.TryGetValue("encoding-type", out var value) ? value : null;
-            set {
+            set
+            {
                 if (value != null) Parameters["encoding-type"] = value;
             }
         }
@@ -680,11 +724,13 @@ namespace AlibabaCloud.OSS.V2.Models {
         /// <summary>
         /// Specifies whether to include the information about the bucket owner in the response. Valid values:*   true*   false
         /// </summary>
-        public bool? FetchOwner {
+        public bool? FetchOwner
+        {
             get => Parameters.TryGetValue("fetch-owner", out var value)
                 ? Convert.ToBoolean(value, CultureInfo.InvariantCulture)
                 : null;
-            set {
+            set
+            {
                 if (value != null)
                     Parameters["fetch-owner"] = Convert.ToString(value, CultureInfo.InvariantCulture)!.ToLowerInvariant();
             }
@@ -693,9 +739,11 @@ namespace AlibabaCloud.OSS.V2.Models {
         /// <summary>
         /// The name of the object after which the list operation begins. If this parameter is specified, objects whose names are alphabetically after the value of start-after are returned.The objects are returned by page based on start-after. The value of start-after can be up to 1,024 bytes in length.If the value of start-after does not exist when you perform a conditional query, the list starts from the object whose name is alphabetically after the value of start-after.
         /// </summary>
-        public string? StartAfter {
+        public string? StartAfter
+        {
             get => Parameters.TryGetValue("start-after", out var value) ? value : null;
-            set {
+            set
+            {
                 if (value != null) Parameters["start-after"] = value;
             }
         }
@@ -703,9 +751,11 @@ namespace AlibabaCloud.OSS.V2.Models {
         /// <summary>
         /// The token from which the list operation starts. You can obtain the token from NextContinuationToken in the response of the ListObjectsV2 request.
         /// </summary>
-        public string? ContinuationToken {
+        public string? ContinuationToken
+        {
             get => Parameters.TryGetValue("continuation-token", out var value) ? value : null;
-            set {
+            set
+            {
                 if (value != null) Parameters["continuation-token"] = value;
             }
         }
@@ -714,7 +764,8 @@ namespace AlibabaCloud.OSS.V2.Models {
     /// <summary>
     /// The result for the ListObjectsV2 operation.
     /// </summary>
-    public sealed class ListObjectsV2Result : ResultModel {
+    public sealed class ListObjectsV2Result : ResultModel
+    {
         /// <summary>
         /// The name of the bucket.
         /// </summary>
@@ -781,7 +832,8 @@ namespace AlibabaCloud.OSS.V2.Models {
     /// <summary>
     /// The request for the GetBucketInfo operation.
     /// </summary>
-    public sealed class GetBucketInfoRequest : RequestModel {
+    public sealed class GetBucketInfoRequest : RequestModel
+    {
         /// <summary>
         /// The name of the bucket.
         /// </summary>
@@ -791,18 +843,22 @@ namespace AlibabaCloud.OSS.V2.Models {
     /// <summary>
     /// The result for the GetBucketInfo operation.
     /// </summary>
-    public sealed class GetBucketInfoResult : ResultModel {
+    public sealed class GetBucketInfoResult : ResultModel
+    {
         /// <summary>
         /// The container that stores the information about the bucket.
         /// </summary>
-        public BucketInfo? BucketInfo {
-            get {
+        public BucketInfo? BucketInfo
+        {
+            get
+            {
                 var info = InnerBody as XmlBucketInfo;
                 return info?.Bucket;
             }
         }
 
-        public GetBucketInfoResult() {
+        public GetBucketInfoResult()
+        {
             BodyFormat = "xml";
             BodyType = typeof(XmlBucketInfo);
         }
@@ -811,7 +867,8 @@ namespace AlibabaCloud.OSS.V2.Models {
     /// <summary>
     /// The request for the GetBucketLocation operation.
     /// </summary>
-    public sealed class GetBucketLocationRequest : RequestModel {
+    public sealed class GetBucketLocationRequest : RequestModel
+    {
         /// <summary>
         /// The name of the bucket.
         /// </summary>
@@ -821,18 +878,22 @@ namespace AlibabaCloud.OSS.V2.Models {
     /// <summary>
     /// The result for the GetBucketLocation operation.
     /// </summary>
-    public sealed class GetBucketLocationResult : ResultModel {
+    public sealed class GetBucketLocationResult : ResultModel
+    {
         /// <summary>
         /// The region in which the bucket resides.Examples: oss-cn-hangzhou, oss-cn-shanghai, oss-cn-qingdao, oss-cn-beijing, oss-cn-zhangjiakou, oss-cn-hongkong, oss-cn-shenzhen, oss-us-west-1, oss-us-east-1, and oss-ap-southeast-1.For more information about the regions in which buckets reside, see [Regions and endpoints](~~31837~~).
         /// </summary>
-        public string? LocationConstraint {
-            get {
+        public string? LocationConstraint
+        {
+            get
+            {
                 var info = InnerBody as XmlLocationConstraint;
                 return info?.Text;
             }
         }
 
-        public GetBucketLocationResult() {
+        public GetBucketLocationResult()
+        {
             BodyFormat = "xml";
             BodyType = typeof(XmlLocationConstraint);
         }

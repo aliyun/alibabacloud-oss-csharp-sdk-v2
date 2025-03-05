@@ -1,13 +1,15 @@
 ﻿using System.Collections.Generic;
 using System.Xml.Serialization;
 
-namespace AlibabaCloud.OSS.V2.Models {
+namespace AlibabaCloud.OSS.V2.Models
+{
 
     /// <summary>
     /// Stores information about the owner.
     /// </summary>
     [XmlRoot("Owner")]
-    public sealed class Owner {
+    public sealed class Owner
+    {
         /// <summary>
         /// The ID of the owner.
         /// </summary>
@@ -25,7 +27,8 @@ namespace AlibabaCloud.OSS.V2.Models {
     /// Store ACL information.
     /// </summary>
     [XmlRoot("AccessControlList")]
-    public sealed class AccessControlList {
+    public sealed class AccessControlList
+    {
         /// <summary>
         /// The ACL of the bucket or object.
         /// Sees <see cref="BucketAclType"/> or <see cref="ObjectAclType"/> for supported values.
@@ -39,7 +42,8 @@ namespace AlibabaCloud.OSS.V2.Models {
     /// Store access control policy information.
     /// </summary>
     [XmlRoot("AccessControlPolicy")]
-    public sealed class AccessControlPolicy {
+    public sealed class AccessControlPolicy
+    {
         /// <summary>
         /// The container that stores information about the owner.
         /// </summary>
@@ -57,7 +61,8 @@ namespace AlibabaCloud.OSS.V2.Models {
     /// The information about the tag.
     /// </summary>
     [XmlRoot("Tag")]
-    public sealed class Tag {
+    public sealed class Tag
+    {
         /// <summary>
         /// The key of the tag.
         /// </summary>
@@ -75,7 +80,8 @@ namespace AlibabaCloud.OSS.V2.Models {
     /// The collection of tags.
     /// </summary>
     [XmlRoot("TagSet")]
-    public sealed class TagSet {
+    public sealed class TagSet
+    {
         /// <summary>
         /// A list of tags.
         /// </summary>
@@ -87,7 +93,8 @@ namespace AlibabaCloud.OSS.V2.Models {
     /// The container used to store the collection of tags.
     /// </summary>
     [XmlRoot("Tagging")]
-    public sealed class Tagging {
+    public sealed class Tagging
+    {
         /// <summary>
         /// The tag set of the target object.
         /// </summary>

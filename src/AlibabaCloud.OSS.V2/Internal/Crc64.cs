@@ -1,6 +1,8 @@
-﻿namespace AlibabaCloud.OSS.V2.Internal {
+﻿namespace AlibabaCloud.OSS.V2.Internal
+{
 
-    internal class Crc64 {
+    internal class Crc64
+    {
 #pragma warning disable CS8618
         private static ulong[] _table;
 #pragma warning restore CS8618
@@ -8,18 +10,23 @@
         private const int GF2_DIM = 64; /* dimension of GF(2) vectors (length of CRC) */
         private static ulong _poly;
 
-        private static void GenStdCrcTable(ulong poly) {
+        private static void GenStdCrcTable(ulong poly)
+        {
             _poly = poly;
 
             _table = new ulong[256];
 
-            for (uint n = 0; n < 256; n++) {
+            for (uint n = 0; n < 256; n++)
+            {
                 ulong crc = n;
-                for (int k = 0; k < 8; k++) {
-                    if ((crc & 1) == 1) {
+                for (int k = 0; k < 8; k++)
+                {
+                    if ((crc & 1) == 1)
+                    {
                         crc = (crc >> 1) ^ poly;
                     }
-                    else {
+                    else
+                    {
                         crc = (crc >> 1);
                     }
                 }
@@ -27,39 +34,50 @@
             }
         }
 
-        private static ulong TableValue(ulong[] table, byte b, ulong crc) {
-            unchecked {
+        private static ulong TableValue(ulong[] table, byte b, ulong crc)
+        {
+            unchecked
+            {
                 return (crc >> 8) ^ table[(crc ^ b) & 0xffUL];
             }
         }
 
-        public static void Init(ulong poly) {
-            if (_table == null) {
-                lock (_lock) {
-                    if (_table == null) {
+        public static void Init(ulong poly)
+        {
+            if (_table == null)
+            {
+                lock (_lock)
+                {
+                    if (_table == null)
+                    {
                         GenStdCrcTable(poly);
                     }
                 }
             }
         }
 
-        public static void InitECMA() {
+        public static void InitECMA()
+        {
             Init(0xC96C5795D7870F42);
         }
 
-        public static ulong Compute(byte[] bytes, int start, int size, ulong crc = 0) {
+        public static ulong Compute(byte[] bytes, int start, int size, ulong crc = 0)
+        {
             crc = ~crc;
-            for (var i = start; i < start + size; i++) {
+            for (var i = start; i < start + size; i++)
+            {
                 crc = TableValue(_table, bytes[i], crc);
             }
             crc = ~crc;
             return crc;
         }
 
-        private static ulong Gf2MatrixTimes(ulong[] mat, ulong vec) {
+        private static ulong Gf2MatrixTimes(ulong[] mat, ulong vec)
+        {
             ulong sum = 0;
             int idx = 0;
-            while (vec != 0) {
+            while (vec != 0)
+            {
                 if ((vec & 1) == 1)
                     sum ^= mat[idx];
                 vec >>= 1;
@@ -68,7 +86,8 @@
             return sum;
         }
 
-        private static void Gf2MatrixSquare(ulong[] square, ulong[] mat) {
+        private static void Gf2MatrixSquare(ulong[] square, ulong[] mat)
+        {
             for (int n = 0; n < GF2_DIM; n++)
                 square[n] = Gf2MatrixTimes(mat, mat[n]);
         }
@@ -82,7 +101,8 @@
         /// <param name="crc1">Crc1.</param>
         /// <param name="crc2">Crc2.</param>
         /// <param name="len2">Len2.</param>
-        static public ulong Combine(ulong crc1, ulong crc2, long len2) {
+        static public ulong Combine(ulong crc1, ulong crc2, long len2)
+        {
             // degenerate case.
             if (len2 == 0)
                 return crc1;
@@ -96,7 +116,8 @@
             odd[0] = _poly;      // CRC-64 polynomial
 
             row = 1;
-            for (n = 1; n < GF2_DIM; n++) {
+            for (n = 1; n < GF2_DIM; n++)
+            {
                 odd[n] = row;
                 row <<= 1;
             }
@@ -109,7 +130,8 @@
 
             // apply len2 zeros to crc1 (first square will put the operator for one
             // zero byte, eight zero bits, in even)
-            do {
+            do
+            {
                 // apply zeros operator for this bit of len2
                 Gf2MatrixSquare(even, odd);
                 if ((len2 & 1) == 1)

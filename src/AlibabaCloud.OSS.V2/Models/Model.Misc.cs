@@ -1,11 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace AlibabaCloud.OSS.V2.Models {
+namespace AlibabaCloud.OSS.V2.Models
+{
     /// <summary>
     /// The result for the presign operation.
     /// </summary>
-    public sealed class PresignResult {
+    public sealed class PresignResult
+    {
         /// <summary>
         /// The HTTP method, which corresponds to the operation.
         /// For example, the HTTP method of the GetObject operation is GET.

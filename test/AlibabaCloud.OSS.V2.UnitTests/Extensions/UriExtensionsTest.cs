@@ -2,10 +2,12 @@ using AlibabaCloud.OSS.V2.Extensions;
 
 namespace AlibabaCloud.OSS.V2.UnitTests.Extensions;
 
-public class UriExtensionsTest {
+public class UriExtensionsTest
+{
 
     [Fact]
-    public void TestIsHostIp() {
+    public void TestIsHostIp()
+    {
         var uri = new Uri("http://www.test.com");
         Assert.False(uri.IsHostIp());
 
@@ -20,7 +22,8 @@ public class UriExtensionsTest {
     }
 
     [Fact]
-    public void TestAppendToQuery() {
+    public void TestAppendToQuery()
+    {
         var uri = new Uri("http://www.test.com");
         var uri1 = uri.AppendToQuery("param=1");
         Assert.Equal("http://www.test.com/", uri.AbsoluteUri);
@@ -38,7 +41,8 @@ public class UriExtensionsTest {
     }
 
     [Fact]
-    public void TestAppendToPath() {
+    public void TestAppendToPath()
+    {
         var uri = new Uri("http://www.test.com");
         var uri1 = uri.AppendToPath("objectname");
         Assert.Equal("http://www.test.com/", uri.AbsoluteUri);
@@ -50,7 +54,8 @@ public class UriExtensionsTest {
         Assert.Equal("http://www.test.com/key1/objectname", uri1.AbsoluteUri);
     }
     [Fact]
-    public void TestReplaceQuery() {
+    public void TestReplaceQuery()
+    {
         var uri = new Uri("http://www.test.com");
         var uri1 = uri.ReplaceQuery("param=1");
         Assert.Equal("http://www.test.com/", uri.AbsoluteUri);
@@ -68,7 +73,8 @@ public class UriExtensionsTest {
     }
 
     [Fact]
-    public void TestGetPath() {
+    public void TestGetPath()
+    {
         var uri = new Uri("http://www.test.com/key1");
         Assert.Equal("key1", uri.GetPath());
 
@@ -76,7 +82,8 @@ public class UriExtensionsTest {
         Assert.Equal("", uri.GetPath());
     }
     [Fact]
-    public void TestGetQueryParameters() {
+    public void TestGetQueryParameters()
+    {
         var uri = new Uri("http://www.test.com/?%2Bparam1=value3&%2Bparam2&%7Cparam1=value4&%7Cparam2&param1=value1&param2");
         var queries = uri.GetQueryParameters();
 

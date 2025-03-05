@@ -4,8 +4,10 @@ using System.Threading;
 using System.Threading.Tasks;
 using AlibabaCloud.OSS.V2.Transform;
 
-namespace AlibabaCloud.OSS.V2 {
-    public partial class Client {
+namespace AlibabaCloud.OSS.V2
+{
+    public partial class Client
+    {
         /// <summary>
         /// Configures or modifies the access control list (ACL) for a bucket.
         /// </summary>
@@ -17,11 +19,13 @@ namespace AlibabaCloud.OSS.V2 {
             Models.PutBucketAclRequest request,
             OperationOptions? options = null,
             CancellationToken cancellationToken = default
-        ) {
+        )
+        {
             Ensure.NotNull(request.Bucket, "request.Bucket");
             Ensure.NotNull(request.Acl, "request.Acl");
 
-            var input = new OperationInput {
+            var input = new OperationInput
+            {
                 OperationName = "PutBucketAcl",
                 Method = "PUT",
                 Headers = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase) {
@@ -55,10 +59,12 @@ namespace AlibabaCloud.OSS.V2 {
             Models.GetBucketAclRequest request,
             OperationOptions? options = null,
             CancellationToken cancellationToken = default
-        ) {
+        )
+        {
             Ensure.NotNull(request.Bucket, "request.Bucket");
 
-            var input = new OperationInput {
+            var input = new OperationInput
+            {
                 OperationName = "GetBucketAcl",
                 Method = "GET",
                 Parameters = new Dictionary<string, string> {

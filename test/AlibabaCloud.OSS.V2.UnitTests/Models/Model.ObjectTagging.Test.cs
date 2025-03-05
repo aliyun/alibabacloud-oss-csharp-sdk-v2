@@ -4,9 +4,11 @@ using AlibabaCloud.OSS.V2.Transform;
 
 namespace AlibabaCloud.OSS.V2.UnitTests.Models;
 
-public class ModelObjectTaggingTest {
+public class ModelObjectTaggingTest
+{
     [Fact]
-    public void TestPutObjectTaggingRequest() {
+    public void TestPutObjectTaggingRequest()
+    {
         var request = new PutObjectTaggingRequest();
         Assert.Empty(request.Headers);
         Assert.Empty(request.Parameters);
@@ -24,12 +26,15 @@ public class ModelObjectTaggingTest {
         Assert.Null(input.Parameters);
         Assert.Null(input.Body);
 
-        request = new PutObjectTaggingRequest {
+        request = new PutObjectTaggingRequest
+        {
             Bucket = "bucket",
             Key = "key",
             VersionId = "version-id",
-            Tagging = new Tagging() {
-                TagSet = new TagSet() {
+            Tagging = new Tagging()
+            {
+                TagSet = new TagSet()
+                {
                     Tags = [
                         new Tag() {
                             Key   = "key1",
@@ -85,14 +90,16 @@ public class ModelObjectTaggingTest {
     }
 
     [Fact]
-    public void TestPutObjectTaggingResult() {
+    public void TestPutObjectTaggingResult()
+    {
         var result = new PutObjectTaggingResult();
         Assert.Equal(0, result.StatusCode);
         Assert.Equal("", result.Status);
         Assert.Equal("", result.RequestId);
         Assert.Empty(result.Headers);
 
-        var output = new OperationOutput {
+        var output = new OperationOutput
+        {
             StatusCode = 200,
             Status = "OK",
             Headers = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase) {
@@ -114,7 +121,8 @@ public class ModelObjectTaggingTest {
     }
 
     [Fact]
-    public void TestGetObjectTaggingRequest() {
+    public void TestGetObjectTaggingRequest()
+    {
         var request = new GetObjectTaggingRequest();
         Assert.Empty(request.Headers);
         Assert.Empty(request.Parameters);
@@ -129,7 +137,8 @@ public class ModelObjectTaggingTest {
         Assert.Null(input.Parameters);
         Assert.Null(input.Body);
 
-        request = new GetObjectTaggingRequest {
+        request = new GetObjectTaggingRequest
+        {
             Bucket = "bucket",
             Key = "key",
             VersionId = "version-id"
@@ -150,7 +159,8 @@ public class ModelObjectTaggingTest {
     }
 
     [Fact]
-    public void TestGetObjectTaggingResult() {
+    public void TestGetObjectTaggingResult()
+    {
         var result = new GetObjectTaggingResult();
         Assert.Equal(0, result.StatusCode);
         Assert.Equal("", result.Status);
@@ -175,7 +185,8 @@ public class ModelObjectTaggingTest {
 </Tagging>
 """;
 
-        var output = new OperationOutput {
+        var output = new OperationOutput
+        {
             StatusCode = 200,
             Status = "OK",
             Headers = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase) {
@@ -203,7 +214,8 @@ public class ModelObjectTaggingTest {
     }
 
     [Fact]
-    public void TestDeleteObjectTaggingRequest() {
+    public void TestDeleteObjectTaggingRequest()
+    {
         var request = new DeleteObjectTaggingRequest();
         Assert.Empty(request.Headers);
         Assert.Empty(request.Parameters);
@@ -220,7 +232,8 @@ public class ModelObjectTaggingTest {
         Assert.Null(input.Parameters);
         Assert.Null(input.Body);
 
-        request = new DeleteObjectTaggingRequest {
+        request = new DeleteObjectTaggingRequest
+        {
             Bucket = "bucket",
             Key = "key",
             VersionId = "version-id"
@@ -243,14 +256,16 @@ public class ModelObjectTaggingTest {
     }
 
     [Fact]
-    public void TestDeleteObjectTaggingResult() {
+    public void TestDeleteObjectTaggingResult()
+    {
         var result = new DeleteObjectTaggingResult();
         Assert.Equal(0, result.StatusCode);
         Assert.Equal("", result.Status);
         Assert.Equal("", result.RequestId);
         Assert.Empty(result.Headers);
 
-        var output = new OperationOutput {
+        var output = new OperationOutput
+        {
             StatusCode = 200,
             Status = "OK",
             Headers = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase) {

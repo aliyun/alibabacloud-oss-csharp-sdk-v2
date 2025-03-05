@@ -1,31 +1,36 @@
-﻿using AlibabaCloud.OSS.V2.Models;
-using System.Globalization;
+﻿using System.Globalization;
 using System.Net.Http.Headers;
 using System.Text;
+using AlibabaCloud.OSS.V2.Models;
 
 namespace AlibabaCloud.OSS.V2.IntegrationTests;
 
 
-public class ClientPresignerTest : IDisposable {
+public class ClientPresignerTest : IDisposable
+{
     private readonly string BucketNamePrefix;
 
-    public void Dispose() {
+    public void Dispose()
+    {
         Utils.CleanBuckets(BucketNamePrefix);
     }
 
-    public ClientPresignerTest() {
+    public ClientPresignerTest()
+    {
         BucketNamePrefix = Utils.RandomBucketNamePrefix();
     }
 
     [Fact]
-    public async Task TestPresignGetAndPutObject() {
+    public async Task TestPresignGetAndPutObject()
+    {
         var client = Utils.GetDefaultClient();
 
         //default
         var bucketName = Utils.RandomBucketName(BucketNamePrefix);
 
         var result = await client.PutBucketAsync(
-            new() {
+            new()
+            {
                 Bucket = bucketName
             }
         );
@@ -39,7 +44,8 @@ public class ClientPresignerTest : IDisposable {
         const string content = "hello world, hi oss!";
 
         var preResult = client.Presign(
-            new PutObjectRequest {
+            new PutObjectRequest
+            {
                 Bucket = bucketName,
                 Key = objectName
             }
@@ -56,7 +62,8 @@ public class ClientPresignerTest : IDisposable {
         Assert.True(httpResult.IsSuccessStatusCode);
 
         preResult = client.Presign(
-            new GetObjectRequest {
+            new GetObjectRequest
+            {
                 Bucket = bucketName,
                 Key = objectName
             }
@@ -76,7 +83,8 @@ public class ClientPresignerTest : IDisposable {
 
         // full props
         preResult = client.Presign(
-            new PutObjectRequest() {
+            new PutObjectRequest()
+            {
                 Bucket = bucketName,
                 Key = objectName,
                 StorageClass = "IA",
@@ -102,8 +110,10 @@ public class ClientPresignerTest : IDisposable {
         var content1 = "hello world";
         var requestMessage = new HttpRequestMessage(HttpMethod.Put, new Uri(preResult.Url));
         requestMessage.Content = new ByteArrayContent(Encoding.UTF8.GetBytes(content1));
-        foreach (var item in preResult.SignedHeaders) {
-            switch (item.Key.ToLower()) {
+        foreach (var item in preResult.SignedHeaders)
+        {
+            switch (item.Key.ToLower())
+            {
                 case "content-disposition":
                     requestMessage.Content.Headers.ContentDisposition = ContentDispositionHeaderValue.Parse(item.Value);
                     break;
@@ -142,7 +152,8 @@ public class ClientPresignerTest : IDisposable {
         Assert.True(httpResult.IsSuccessStatusCode);
 
         preResult = client.Presign(
-            new GetObjectRequest {
+            new GetObjectRequest
+            {
                 Bucket = bucketName,
                 Key = objectName
             }
@@ -163,7 +174,8 @@ public class ClientPresignerTest : IDisposable {
 
         // head object
         preResult = client.Presign(
-            new HeadObjectRequest {
+            new HeadObjectRequest
+            {
                 Bucket = bucketName,
                 Key = objectName
             }
@@ -181,7 +193,8 @@ public class ClientPresignerTest : IDisposable {
     }
 
     [Fact]
-    public async Task TestPresignGetAndPutObjectV1() {
+    public async Task TestPresignGetAndPutObjectV1()
+    {
         var cfg = Configuration.LoadDefault();
         cfg.CredentialsProvider = new Credentials.StaticCredentialsProvide(Utils.AccessKeyId, Utils.AccessKeySecret);
         cfg.Region = "cn-shenzhen";
@@ -193,7 +206,8 @@ public class ClientPresignerTest : IDisposable {
         var bucketName = Utils.RandomBucketName(BucketNamePrefix);
 
         var result = await client.PutBucketAsync(
-            new() {
+            new()
+            {
                 Bucket = bucketName
             }
         );
@@ -207,7 +221,8 @@ public class ClientPresignerTest : IDisposable {
         const string content = "hello world, hi oss!";
 
         var preResult = client.Presign(
-            new PutObjectRequest {
+            new PutObjectRequest
+            {
                 Bucket = bucketName,
                 Key = objectName
             }
@@ -224,7 +239,8 @@ public class ClientPresignerTest : IDisposable {
         Assert.True(httpResult.IsSuccessStatusCode);
 
         preResult = client.Presign(
-            new GetObjectRequest {
+            new GetObjectRequest
+            {
                 Bucket = bucketName,
                 Key = objectName
             }
@@ -244,14 +260,16 @@ public class ClientPresignerTest : IDisposable {
     }
 
     [Fact]
-    public async Task TestPresignMulitipartObject() {
+    public async Task TestPresignMulitipartObject()
+    {
         var client = Utils.GetDefaultClient();
 
         //default
         var bucketName = Utils.RandomBucketName(BucketNamePrefix);
 
         var result = await client.PutBucketAsync(
-            new() {
+            new()
+            {
                 Bucket = bucketName
             }
         );
@@ -268,7 +286,8 @@ public class ClientPresignerTest : IDisposable {
 
         // init
         var preResult = client.Presign(
-            new InitiateMultipartUploadRequest {
+            new InitiateMultipartUploadRequest
+            {
                 Bucket = bucketName,
                 Key = objectName
             }
@@ -283,7 +302,8 @@ public class ClientPresignerTest : IDisposable {
         Assert.NotNull(httpResult);
         Assert.True(httpResult.IsSuccessStatusCode);
 
-        var initResult = await client.InitiateMultipartUploadAsync(new() {
+        var initResult = await client.InitiateMultipartUploadAsync(new()
+        {
             Bucket = bucketName,
             Key = objectName
         });
@@ -294,7 +314,8 @@ public class ClientPresignerTest : IDisposable {
 
         // upload part
         preResult = client.Presign(
-            new UploadPartRequest {
+            new UploadPartRequest
+            {
                 Bucket = bucketName,
                 Key = objectName,
                 UploadId = initResult.UploadId,
@@ -314,7 +335,8 @@ public class ClientPresignerTest : IDisposable {
 
         // complete
         preResult = client.Presign(
-            new CompleteMultipartUploadRequest {
+            new CompleteMultipartUploadRequest
+            {
                 Bucket = bucketName,
                 Key = objectName,
                 UploadId = initResult.UploadId,
@@ -334,7 +356,8 @@ public class ClientPresignerTest : IDisposable {
 
         // get object
         var getObjectResult = await client.GetObjectAsync(
-            new() {
+            new()
+            {
                 Bucket = bucketName,
                 Key = objectName
             }
@@ -351,14 +374,16 @@ public class ClientPresignerTest : IDisposable {
     }
 
     [Fact]
-    public async Task TestPresignAbortMultipartUpload() {
+    public async Task TestPresignAbortMultipartUpload()
+    {
         var client = Utils.GetDefaultClient();
 
         //default
         var bucketName = Utils.RandomBucketName(BucketNamePrefix);
 
         var result = await client.PutBucketAsync(
-            new() {
+            new()
+            {
                 Bucket = bucketName
             }
         );
@@ -368,7 +393,8 @@ public class ClientPresignerTest : IDisposable {
         Assert.NotNull(result.RequestId);
 
         var objectName = Utils.RandomObjectName();
-        var initResult = await client.InitiateMultipartUploadAsync(new() {
+        var initResult = await client.InitiateMultipartUploadAsync(new()
+        {
             Bucket = bucketName,
             Key = objectName
         });
@@ -378,7 +404,8 @@ public class ClientPresignerTest : IDisposable {
         Assert.Equal("url", initResult.EncodingType);
 
         var preResult = client.Presign(
-            new AbortMultipartUploadRequest {
+            new AbortMultipartUploadRequest
+            {
                 Bucket = bucketName,
                 Key = objectName,
                 UploadId = initResult.UploadId,
@@ -393,7 +420,8 @@ public class ClientPresignerTest : IDisposable {
     }
 
     [Fact]
-    public void TestPresignFail() {
+    public void TestPresignFail()
+    {
         var cfg = Configuration.LoadDefault();
         cfg.CredentialsProvider = new Credentials.StaticCredentialsProvide("", "");
         cfg.Region = Utils.Region;
@@ -404,97 +432,119 @@ public class ClientPresignerTest : IDisposable {
         var objectName = "object-name";
 
         // get object
-        try {
+        try
+        {
             client.Presign(
-            new GetObjectRequest {
+            new GetObjectRequest
+            {
                 Bucket = bucketName,
                 Key = objectName
             });
         }
-        catch (Exception e) {
+        catch (Exception e)
+        {
             Assert.Contains("Credentials is null or empty", e.Message);
         }
 
         // put object
-        try {
+        try
+        {
             client.Presign(
-            new PutObjectRequest {
+            new PutObjectRequest
+            {
                 Bucket = bucketName,
                 Key = objectName
             });
         }
-        catch (Exception e) {
+        catch (Exception e)
+        {
             Assert.Contains("Credentials is null or empty", e.Message);
         }
 
         // head object
-        try {
+        try
+        {
             client.Presign(
-            new HeadObjectRequest {
+            new HeadObjectRequest
+            {
                 Bucket = bucketName,
                 Key = objectName
             });
         }
-        catch (Exception e) {
+        catch (Exception e)
+        {
             Assert.Contains("Credentials is null or empty", e.Message);
         }
 
         // InitiateMultipartUpload
-        try {
+        try
+        {
             client.Presign(
-            new InitiateMultipartUploadRequest {
+            new InitiateMultipartUploadRequest
+            {
                 Bucket = bucketName,
                 Key = objectName
             });
         }
-        catch (Exception e) {
+        catch (Exception e)
+        {
             Assert.Contains("Credentials is null or empty", e.Message);
         }
 
         // UploadPart
-        try {
+        try
+        {
             client.Presign(
-            new UploadPartRequest {
+            new UploadPartRequest
+            {
                 Bucket = bucketName,
                 Key = objectName,
                 PartNumber = 1,
                 UploadId = "upload-id"
             });
         }
-        catch (Exception e) {
+        catch (Exception e)
+        {
             Assert.Contains("Credentials is null or empty", e.Message);
         }
 
         // CompleteMultipartUpload
-        try {
+        try
+        {
             client.Presign(
-            new CompleteMultipartUploadRequest {
+            new CompleteMultipartUploadRequest
+            {
                 Bucket = bucketName,
                 Key = objectName,
                 UploadId = "upload-id",
                 CompleteAll = "yes"
             });
         }
-        catch (Exception e) {
+        catch (Exception e)
+        {
             Assert.Contains("Credentials is null or empty", e.Message);
         }
 
         // AbortMultipartUpload
-        try {
+        try
+        {
             client.Presign(
-            new AbortMultipartUploadRequest {
+            new AbortMultipartUploadRequest
+            {
                 Bucket = bucketName,
                 Key = objectName,
                 UploadId = "upload-id",
             });
         }
-        catch (Exception e) {
+        catch (Exception e)
+        {
             Assert.Contains("Credentials is null or empty", e.Message);
         }
     }
 
     [Fact]
-    public void TestPresignWithExpirationTimeV4() {
+    public void TestPresignWithExpirationTimeV4()
+    {
         var cfg = Configuration.LoadDefault();
         cfg.CredentialsProvider = new Credentials.StaticCredentialsProvide("ak", "sk");
         cfg.Region = "cn-shenzhen";
@@ -508,7 +558,8 @@ public class ClientPresignerTest : IDisposable {
 
         // put object
         var preResult = client.Presign(
-            new PutObjectRequest {
+            new PutObjectRequest
+            {
                 Bucket = bucketName,
                 Key = objectName
             },
@@ -523,7 +574,8 @@ public class ClientPresignerTest : IDisposable {
 
         // get object
         preResult = client.Presign(
-            new GetObjectRequest {
+            new GetObjectRequest
+            {
                 Bucket = bucketName,
                 Key = objectName
             },
@@ -537,7 +589,8 @@ public class ClientPresignerTest : IDisposable {
 
         // head object
         preResult = client.Presign(
-            new HeadObjectRequest {
+            new HeadObjectRequest
+            {
                 Bucket = bucketName,
                 Key = objectName
             },
@@ -551,7 +604,8 @@ public class ClientPresignerTest : IDisposable {
 
         // init
         preResult = client.Presign(
-            new InitiateMultipartUploadRequest {
+            new InitiateMultipartUploadRequest
+            {
                 Bucket = bucketName,
                 Key = objectName
             },
@@ -565,7 +619,8 @@ public class ClientPresignerTest : IDisposable {
 
         // upload part
         preResult = client.Presign(
-            new UploadPartRequest {
+            new UploadPartRequest
+            {
                 Bucket = bucketName,
                 Key = objectName,
                 UploadId = "upload-id",
@@ -581,7 +636,8 @@ public class ClientPresignerTest : IDisposable {
 
         // complete
         preResult = client.Presign(
-            new CompleteMultipartUploadRequest {
+            new CompleteMultipartUploadRequest
+            {
                 Bucket = bucketName,
                 Key = objectName,
                 UploadId = "upload-id",
@@ -596,7 +652,8 @@ public class ClientPresignerTest : IDisposable {
         Assert.Contains("x-oss-expires=-", preResult.Url);
 
         preResult = client.Presign(
-            new AbortMultipartUploadRequest {
+            new AbortMultipartUploadRequest
+            {
                 Bucket = bucketName,
                 Key = objectName,
                 UploadId = "upload-id",
@@ -611,7 +668,8 @@ public class ClientPresignerTest : IDisposable {
     }
 
     [Fact]
-    public void TestPresignWithExpirationTimeV1() {
+    public void TestPresignWithExpirationTimeV1()
+    {
         var cfg = Configuration.LoadDefault();
         cfg.CredentialsProvider = new Credentials.StaticCredentialsProvide("ak", "sk");
         cfg.Region = "cn-shenzhen";
@@ -627,7 +685,8 @@ public class ClientPresignerTest : IDisposable {
 
         // put object
         var preResult = client.Presign(
-            new PutObjectRequest {
+            new PutObjectRequest
+            {
                 Bucket = bucketName,
                 Key = objectName
             },
@@ -642,7 +701,8 @@ public class ClientPresignerTest : IDisposable {
 
         // get object
         preResult = client.Presign(
-            new GetObjectRequest {
+            new GetObjectRequest
+            {
                 Bucket = bucketName,
                 Key = objectName
             },
@@ -656,7 +716,8 @@ public class ClientPresignerTest : IDisposable {
 
         // head object
         preResult = client.Presign(
-            new HeadObjectRequest {
+            new HeadObjectRequest
+            {
                 Bucket = bucketName,
                 Key = objectName
             },
@@ -670,7 +731,8 @@ public class ClientPresignerTest : IDisposable {
 
         // init
         preResult = client.Presign(
-            new InitiateMultipartUploadRequest {
+            new InitiateMultipartUploadRequest
+            {
                 Bucket = bucketName,
                 Key = objectName
             },
@@ -684,7 +746,8 @@ public class ClientPresignerTest : IDisposable {
 
         // upload part
         preResult = client.Presign(
-            new UploadPartRequest {
+            new UploadPartRequest
+            {
                 Bucket = bucketName,
                 Key = objectName,
                 UploadId = "upload-id",
@@ -700,7 +763,8 @@ public class ClientPresignerTest : IDisposable {
 
         // complete
         preResult = client.Presign(
-            new CompleteMultipartUploadRequest {
+            new CompleteMultipartUploadRequest
+            {
                 Bucket = bucketName,
                 Key = objectName,
                 UploadId = "upload-id",
@@ -715,7 +779,8 @@ public class ClientPresignerTest : IDisposable {
         Assert.Contains($"Expires={expires}", preResult.Url);
 
         preResult = client.Presign(
-            new AbortMultipartUploadRequest {
+            new AbortMultipartUploadRequest
+            {
                 Bucket = bucketName,
                 Key = objectName,
                 UploadId = "upload-id",
@@ -730,7 +795,8 @@ public class ClientPresignerTest : IDisposable {
     }
 
     [Fact]
-    public void TestPresignWithPresignExpirationException() {
+    public void TestPresignWithPresignExpirationException()
+    {
 
         // v1 supports > 7 days Expiration
         var cfg = Configuration.LoadDefault();
@@ -748,7 +814,8 @@ public class ClientPresignerTest : IDisposable {
 
         // put object
         var preResult = client.Presign(
-            new PutObjectRequest {
+            new PutObjectRequest
+            {
                 Bucket = bucketName,
                 Key = objectName
             },
@@ -773,9 +840,11 @@ public class ClientPresignerTest : IDisposable {
         expiration = DateTime.UtcNow.AddDays(8);
 
         // put object
-        try {
+        try
+        {
             preResult = client1.Presign(
-                new PutObjectRequest {
+                new PutObjectRequest
+                {
                     Bucket = bucketName,
                     Key = objectName
                 },
@@ -783,12 +852,14 @@ public class ClientPresignerTest : IDisposable {
             );
             Assert.Fail("should not here");
         }
-        catch (PresignExpirationException e) {
+        catch (PresignExpirationException e)
+        {
             Assert.Contains("Expires should be not greater than 604800 s (seven days)", e.ToString());
         }
     }
 
-    private static string FormatUnixTime(DateTime time) {
+    private static string FormatUnixTime(DateTime time)
+    {
         const long ticksOf1970 = 621355968000000000;
         return ((time.ToUniversalTime().Ticks - ticksOf1970) / 10000000L).ToString(CultureInfo.InvariantCulture);
     }

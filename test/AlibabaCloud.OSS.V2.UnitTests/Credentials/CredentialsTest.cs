@@ -1,9 +1,11 @@
 namespace AlibabaCloud.OSS.V2.UnitTests.Credentials;
 
-public class CredentialsTest {
+public class CredentialsTest
+{
 
     [Fact]
-    public void TestCredentials() {
+    public void TestCredentials()
+    {
         V2.Credentials.Credentials cred;
 
         // empty 
@@ -54,7 +56,8 @@ public class CredentialsTest {
     }
 
     [Fact]
-    public void TestStaticCredentialsProvide() {
+    public void TestStaticCredentialsProvide()
+    {
         var provider = new V2.Credentials.StaticCredentialsProvide("ak", "sk");
         var cred = provider.GetCredentials();
         Assert.Equal("ak", cred.AccessKeyId);
@@ -75,7 +78,8 @@ public class CredentialsTest {
     }
 
     [Fact]
-    public void TestAnonymousCredentialsProvider() {
+    public void TestAnonymousCredentialsProvider()
+    {
         var provider = new V2.Credentials.AnonymousCredentialsProvider();
         var cred = provider.GetCredentials();
         Assert.Equal("", cred.AccessKeyId);
@@ -87,7 +91,8 @@ public class CredentialsTest {
     }
 
     [Fact]
-    public void TestCredentialsProvideFunc() {
+    public void TestCredentialsProvideFunc()
+    {
 
         var provider = new V2.Credentials.CredentialsProvideFunc(() => new V2.Credentials.Credentials("ak", "sk"));
         var cred = provider.GetCredentials();

@@ -4,9 +4,11 @@ using AlibabaCloud.OSS.V2.Transform;
 
 namespace AlibabaCloud.OSS.V2.UnitTests.Models;
 
-public class ModelObjectAclTest {
+public class ModelObjectAclTest
+{
     [Fact]
-    public void TestPutObjectAclRequest() {
+    public void TestPutObjectAclRequest()
+    {
         var request = new PutObjectAclRequest();
         Assert.Empty(request.Headers);
         Assert.Empty(request.Parameters);
@@ -24,7 +26,8 @@ public class ModelObjectAclTest {
         Assert.Null(input.Parameters);
         Assert.Null(input.Body);
 
-        request = new PutObjectAclRequest {
+        request = new PutObjectAclRequest
+        {
             Bucket = "bucket",
             Key = "key",
             Acl = "private",
@@ -52,7 +55,8 @@ public class ModelObjectAclTest {
     }
 
     [Fact]
-    public void TestPutObjectAclResult() {
+    public void TestPutObjectAclResult()
+    {
         var result = new PutObjectAclResult();
         Assert.Equal(0, result.StatusCode);
         Assert.Equal("", result.Status);
@@ -60,7 +64,8 @@ public class ModelObjectAclTest {
         Assert.Empty(result.Headers);
         Assert.Null(result.VersionId);
 
-        var output = new OperationOutput {
+        var output = new OperationOutput
+        {
             StatusCode = 200,
             Status = "OK",
             Headers = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase) {
@@ -81,7 +86,8 @@ public class ModelObjectAclTest {
     }
 
     [Fact]
-    public void TestGetObjectAclRequest() {
+    public void TestGetObjectAclRequest()
+    {
         var request = new GetObjectAclRequest();
         Assert.Empty(request.Headers);
         Assert.Empty(request.Parameters);
@@ -96,7 +102,8 @@ public class ModelObjectAclTest {
         Assert.Null(input.Parameters);
         Assert.Null(input.Body);
 
-        request = new GetObjectAclRequest {
+        request = new GetObjectAclRequest
+        {
             Bucket = "bucket",
             Key = "key",
             VersionId = "version-id"
@@ -119,7 +126,8 @@ public class ModelObjectAclTest {
     }
 
     [Fact]
-    public void TestGetObjectAclResult() {
+    public void TestGetObjectAclResult()
+    {
         var result = new GetObjectAclResult();
         Assert.Equal(0, result.StatusCode);
         Assert.Equal("", result.Status);
@@ -139,7 +147,8 @@ public class ModelObjectAclTest {
 </AccessControlPolicy>
 """;
 
-        var output = new OperationOutput {
+        var output = new OperationOutput
+        {
             StatusCode = 200,
             Status = "OK",
             Headers = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase) {

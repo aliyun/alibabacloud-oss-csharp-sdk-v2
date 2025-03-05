@@ -2,9 +2,11 @@ using AlibabaCloud.OSS.V2.Extensions;
 
 namespace AlibabaCloud.OSS.V2.UnitTests.Extensions;
 
-public class StringExtensionsTest {
+public class StringExtensionsTest
+{
     [Fact]
-    public void TestUrlDecode() {
+    public void TestUrlDecode()
+    {
         var val = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789.-_~";
         Assert.Equal("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789.-_~", val.UrlDecode());
 
@@ -16,7 +18,8 @@ public class StringExtensionsTest {
     }
 
     [Fact]
-    public void TestUrlEncode() {
+    public void TestUrlEncode()
+    {
         var val = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789.-_!()*";
         Assert.Equal("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789.-_!()*", val.UrlEncode());
 
@@ -28,7 +31,8 @@ public class StringExtensionsTest {
     }
 
     [Fact]
-    public void TestUrlEncodePath() {
+    public void TestUrlEncodePath()
+    {
         var val = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789.-_/";
         Assert.Equal("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789.-_/", val.UrlEncodePath());
 
@@ -59,7 +63,8 @@ public class StringExtensionsTest {
     public void TestSafeString() { }
 
     [Fact]
-    public void TestAddScheme() {
+    public void TestAddScheme()
+    {
         var input = "";
         Assert.NotNull(input);
         Assert.Equal("", input.AddScheme(true));
@@ -79,7 +84,8 @@ public class StringExtensionsTest {
     }
 
     [Fact]
-    public void TestIsValidRegion() {
+    public void TestIsValidRegion()
+    {
         string[] regions = ["cn-hangzhou", "us-east-1"];
         foreach (var region in regions) Assert.True(region.IsValidRegion());
 
@@ -88,7 +94,8 @@ public class StringExtensionsTest {
     }
 
     [Fact]
-    public void TestToEndpoint() {
+    public void TestToEndpoint()
+    {
         const string region = "cn-hangzhou";
         Assert.Equal("https://oss-cn-hangzhou-internal.aliyuncs.com", region.ToEndpoint(false, "internal"));
         Assert.Equal("http://oss-cn-hangzhou-internal.aliyuncs.com", region.ToEndpoint(true, "internal"));
@@ -107,7 +114,8 @@ public class StringExtensionsTest {
     }
 
     [Fact]
-    public void TestToUri() {
+    public void TestToUri()
+    {
         string url = null;
         Assert.Null(url.ToUri());
 
@@ -125,7 +133,8 @@ public class StringExtensionsTest {
     }
 
     [Fact]
-    public void TestIsValidBucketName() {
+    public void TestIsValidBucketName()
+    {
         string[] buckets = [
             "123",
             "test",
@@ -149,7 +158,8 @@ public class StringExtensionsTest {
     }
 
     [Fact]
-    public void TestIsValidObjectName() {
+    public void TestIsValidObjectName()
+    {
         string[] keys = [
             "123",
             "#ADfa",

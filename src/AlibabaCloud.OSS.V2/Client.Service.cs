@@ -1,16 +1,20 @@
 ﻿
-using AlibabaCloud.OSS.V2.Transform;
 using System.Threading;
 using System.Threading.Tasks;
+using AlibabaCloud.OSS.V2.Transform;
 
-namespace AlibabaCloud.OSS.V2 {
-    public partial class Client {
+namespace AlibabaCloud.OSS.V2
+{
+    public partial class Client
+    {
         public async Task<Models.ListBucketsResult> ListBucketsAsync(
             Models.ListBucketsRequest request,
             OperationOptions? options = null,
-            CancellationToken cancellationToken = default) {
+            CancellationToken cancellationToken = default)
+        {
 
-            var input = new OperationInput {
+            var input = new OperationInput
+            {
                 OperationName = "ListBuckets",
                 Method = "GET",
             };

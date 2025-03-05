@@ -4,11 +4,13 @@ using System.Runtime.CompilerServices;
 using System.Threading;
 using AlibabaCloud.OSS.V2.Models;
 
-namespace AlibabaCloud.OSS.V2.Paginator {
+namespace AlibabaCloud.OSS.V2.Paginator
+{
     /// <summary>
     /// A paginator for ListMultipartUploads
     /// </summary>
-    internal sealed class ListMultipartUploadsPaginator : IPaginator<ListMultipartUploadsResult> {
+    internal sealed class ListMultipartUploadsPaginator : IPaginator<ListMultipartUploadsResult>
+    {
         private readonly Client _client;
         private readonly ListMultipartUploadsRequest _request;
         private int _isPaginatorInUse = 0;
@@ -17,7 +19,8 @@ namespace AlibabaCloud.OSS.V2.Paginator {
             Client client,
             ListMultipartUploadsRequest request,
             PaginatorOptions? options
-        ) {
+        )
+        {
             _client = client;
             _request = request;
 
@@ -27,7 +30,8 @@ namespace AlibabaCloud.OSS.V2.Paginator {
         /// <summary>
         /// Iterates over the multipart uploads.
         /// </summary>
-        public IEnumerable<ListMultipartUploadsResult> IterPage() {
+        public IEnumerable<ListMultipartUploadsResult> IterPage()
+        {
             if (Interlocked.Exchange(ref _isPaginatorInUse, 1) != 0)
                 throw new InvalidOperationException(
                     "Paginator has already been consumed and cannot be reused. Please create a new instance."
@@ -36,7 +40,8 @@ namespace AlibabaCloud.OSS.V2.Paginator {
             var keyMarker = _request.KeyMarker;
             ListMultipartUploadsResult result;
 
-            do {
+            do
+            {
                 _request.UploadIdMarker = uploadIdMarker;
                 _request.KeyMarker = keyMarker;
                 result = _client.ListMultipartUploadsAsync(_request).GetAwaiter().GetResult();
@@ -51,7 +56,8 @@ namespace AlibabaCloud.OSS.V2.Paginator {
         /// </summary>
         public async IAsyncEnumerable<ListMultipartUploadsResult> IterPageAsync(
             [EnumeratorCancellation] CancellationToken cancellationToken = default
-        ) {
+        )
+        {
             if (Interlocked.Exchange(ref _isPaginatorInUse, 1) != 0)
                 throw new InvalidOperationException(
                     "Paginator has already been consumed and cannot be reused. Please create a new instance."
@@ -60,7 +66,8 @@ namespace AlibabaCloud.OSS.V2.Paginator {
             var keyMarker = _request.KeyMarker;
             ListMultipartUploadsResult result;
 
-            do {
+            do
+            {
                 _request.UploadIdMarker = uploadIdMarker;
                 _request.KeyMarker = keyMarker;
                 result = await _client.ListMultipartUploadsAsync(_request, null, cancellationToken);

@@ -1,8 +1,10 @@
 ﻿
 using System;
 
-namespace AlibabaCloud.OSS.V2.Credentials {
-    public class Credentials {
+namespace AlibabaCloud.OSS.V2.Credentials
+{
+    public class Credentials
+    {
         #region Properties
 
         /// <summary>
@@ -46,7 +48,8 @@ namespace AlibabaCloud.OSS.V2.Credentials {
         /// <param name="accessKeyId"></param>
         /// <param name="accessKeySecret"></param>
         /// <param name="securityToken">Optional. Can be set to null or empty for non-session credentials.</param>
-        public Credentials(string accessKeyId, string accessKeySecret, string securityToken) {
+        public Credentials(string accessKeyId, string accessKeySecret, string securityToken)
+        {
             AccessKeyId = accessKeyId;
             AccessKeySecret = accessKeySecret;
             SecurityToken = securityToken;
@@ -57,7 +60,8 @@ namespace AlibabaCloud.OSS.V2.Credentials {
         /// </summary>
         /// <param name="accessKeyId"></param>
         /// <param name="accessKeySecret"></param>
-        public Credentials(string accessKeyId, string accessKeySecret) {
+        public Credentials(string accessKeyId, string accessKeySecret)
+        {
             AccessKeyId = accessKeyId;
             AccessKeySecret = accessKeySecret;
             SecurityToken = string.Empty;
@@ -70,7 +74,8 @@ namespace AlibabaCloud.OSS.V2.Credentials {
         /// <param name="accessKeySecret"></param>
         /// <param name="securityToken">Optional. Can be set to null or empty for non-session credentials.</param>
         /// <param name="expiration">Optional.The token's expiration time.</param>
-        public Credentials(string accessKeyId, string accessKeySecret, string securityToken, DateTime? expiration) {
+        public Credentials(string accessKeyId, string accessKeySecret, string securityToken, DateTime? expiration)
+        {
             AccessKeyId = accessKeyId;
             AccessKeySecret = accessKeySecret;
             SecurityToken = securityToken;

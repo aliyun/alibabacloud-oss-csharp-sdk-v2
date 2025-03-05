@@ -2,8 +2,10 @@
 using System.Collections.Generic;
 using AlibabaCloud.OSS.V2.Transform;
 
-namespace AlibabaCloud.OSS.V2 {
-    public partial class Client {
+namespace AlibabaCloud.OSS.V2
+{
+    public partial class Client
+    {
         /// <summary>
         /// Generates the pre-signed URL for GetObject operation.
         /// If you do not specify expiration, the pre-signed URL uses 15 minutes as default.
@@ -14,11 +16,13 @@ namespace AlibabaCloud.OSS.V2 {
         public Models.PresignResult Presign(
             Models.GetObjectRequest request,
             DateTime? expiration = null
-        ) {
+        )
+        {
             Ensure.NotNull(request.Bucket, "request.Bucket");
             Ensure.NotNull(request.Key, "request.Key");
 
-            var input = new OperationInput {
+            var input = new OperationInput
+            {
                 OperationName = "GetObject",
                 Method = "GET",
                 Bucket = request.Bucket,
@@ -31,7 +35,8 @@ namespace AlibabaCloud.OSS.V2 {
 
             var result = _clientImpl.PresignInner(input);
 
-            return new() {
+            return new()
+            {
                 Method = result.Method,
                 Url = result.Url,
                 Expiration = result.Expiration,
@@ -49,11 +54,13 @@ namespace AlibabaCloud.OSS.V2 {
         public Models.PresignResult Presign(
             Models.PutObjectRequest request,
             DateTime? expiration = null
-        ) {
+        )
+        {
             Ensure.NotNull(request.Bucket, "request.Bucket");
             Ensure.NotNull(request.Key, "request.Key");
 
-            var input = new OperationInput {
+            var input = new OperationInput
+            {
                 OperationName = "PutObject",
                 Method = "PUT",
                 Bucket = request.Bucket,
@@ -66,7 +73,8 @@ namespace AlibabaCloud.OSS.V2 {
 
             var result = _clientImpl.PresignInner(input);
 
-            return new() {
+            return new()
+            {
                 Method = result.Method,
                 Url = result.Url,
                 Expiration = result.Expiration,
@@ -84,11 +92,13 @@ namespace AlibabaCloud.OSS.V2 {
         public Models.PresignResult Presign(
             Models.HeadObjectRequest request,
             DateTime? expiration = null
-        ) {
+        )
+        {
             Ensure.NotNull(request.Bucket, "request.Bucket");
             Ensure.NotNull(request.Key, "request.Key");
 
-            var input = new OperationInput {
+            var input = new OperationInput
+            {
                 OperationName = "HeadObject",
                 Method = "HEAD",
                 Bucket = request.Bucket,
@@ -101,7 +111,8 @@ namespace AlibabaCloud.OSS.V2 {
 
             var result = _clientImpl.PresignInner(input);
 
-            return new() {
+            return new()
+            {
                 Method = result.Method,
                 Url = result.Url,
                 Expiration = result.Expiration,
@@ -119,11 +130,13 @@ namespace AlibabaCloud.OSS.V2 {
         public Models.PresignResult Presign(
             Models.InitiateMultipartUploadRequest request,
             DateTime? expiration = null
-        ) {
+        )
+        {
             Ensure.NotNull(request.Bucket, "request.Bucket");
             Ensure.NotNull(request.Key, "request.Key");
 
-            var input = new OperationInput {
+            var input = new OperationInput
+            {
                 OperationName = "InitiateMultipartUpload",
                 Method = "POST",
                 Parameters = new Dictionary<string, string> {
@@ -139,7 +152,8 @@ namespace AlibabaCloud.OSS.V2 {
 
             var result = _clientImpl.PresignInner(input);
 
-            return new() {
+            return new()
+            {
                 Method = result.Method,
                 Url = result.Url,
                 Expiration = result.Expiration,
@@ -157,13 +171,15 @@ namespace AlibabaCloud.OSS.V2 {
         public Models.PresignResult Presign(
             Models.UploadPartRequest request,
             DateTime? expiration = null
-        ) {
+        )
+        {
             Ensure.NotNull(request.Bucket, "request.Bucket");
             Ensure.NotNull(request.Key, "request.Key");
             Ensure.NotNull(request.UploadId, "request.UploadId");
             Ensure.NotNull(request.PartNumber, "request.PartNumber");
 
-            var input = new OperationInput {
+            var input = new OperationInput
+            {
                 OperationName = "UploadPart",
                 Method = "PUT",
                 Bucket = request.Bucket,
@@ -176,7 +192,8 @@ namespace AlibabaCloud.OSS.V2 {
 
             var result = _clientImpl.PresignInner(input);
 
-            return new() {
+            return new()
+            {
                 Method = result.Method,
                 Url = result.Url,
                 Expiration = result.Expiration,
@@ -194,12 +211,14 @@ namespace AlibabaCloud.OSS.V2 {
         public Models.PresignResult Presign(
             Models.CompleteMultipartUploadRequest request,
             DateTime? expiration = null
-        ) {
+        )
+        {
             Ensure.NotNull(request.Bucket, "request.Bucket");
             Ensure.NotNull(request.Key, "request.Key");
             Ensure.NotNull(request.UploadId, "request.UploadId");
 
-            var input = new OperationInput {
+            var input = new OperationInput
+            {
                 OperationName = "CompleteMultipartUpload",
                 Method = "POST",
                 Bucket = request.Bucket,
@@ -212,7 +231,8 @@ namespace AlibabaCloud.OSS.V2 {
 
             var result = _clientImpl.PresignInner(input);
 
-            return new() {
+            return new()
+            {
                 Method = result.Method,
                 Url = result.Url,
                 Expiration = result.Expiration,
@@ -230,12 +250,14 @@ namespace AlibabaCloud.OSS.V2 {
         public Models.PresignResult Presign(
             Models.AbortMultipartUploadRequest request,
             DateTime? expiration = null
-        ) {
+        )
+        {
             Ensure.NotNull(request.Bucket, "request.Bucket");
             Ensure.NotNull(request.Key, "request.Key");
             Ensure.NotNull(request.UploadId, "request.UploadId");
 
-            var input = new OperationInput {
+            var input = new OperationInput
+            {
                 OperationName = "AbortMultipartUpload",
                 Method = "DELETE",
                 Bucket = request.Bucket,
@@ -248,7 +270,8 @@ namespace AlibabaCloud.OSS.V2 {
 
             var result = _clientImpl.PresignInner(input);
 
-            return new() {
+            return new()
+            {
                 Method = result.Method,
                 Url = result.Url,
                 Expiration = result.Expiration,

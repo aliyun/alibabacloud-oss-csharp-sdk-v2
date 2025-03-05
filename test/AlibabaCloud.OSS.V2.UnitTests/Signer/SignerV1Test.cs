@@ -2,9 +2,11 @@ using AlibabaCloud.OSS.V2.Extensions;
 
 namespace AlibabaCloud.OSS.V2.UnitTests.Signer;
 
-public class SignerV1Test {
+public class SignerV1Test
+{
     [Fact]
-    public void TestAuthHeader() {
+    public void TestAuthHeader()
+    {
         var provider = new V2.Credentials.StaticCredentialsProvide("ak", "sk");
         var cred = provider.GetCredentials();
 
@@ -18,7 +20,8 @@ public class SignerV1Test {
         request.Headers.Add("x-oss-date", "Wed, 28 Dec 2022 10:27:41 GMT");
         var signTime = DateTimeOffset.FromUnixTimeSeconds(1672223261).UtcDateTime;
 
-        var signCtx = new V2.Signer.SigningContext() {
+        var signCtx = new V2.Signer.SigningContext()
+        {
             Bucket = "examplebucket",
             Key = "nelson",
             Request = request,
@@ -44,7 +47,8 @@ public class SignerV1Test {
         request.Headers.Add("x-oss-date", "Wed, 28 Dec 2022 10:27:41 GMT");
         signTime = DateTimeOffset.FromUnixTimeSeconds(1672223261).UtcDateTime;
 
-        signCtx = new V2.Signer.SigningContext() {
+        signCtx = new V2.Signer.SigningContext()
+        {
             Bucket = "examplebucket",
             Key = "nelson",
             Request = request,
@@ -69,7 +73,8 @@ public class SignerV1Test {
         request.Headers.Add("User-Agent", "test");
         signTime = DateTimeOffset.FromUnixTimeSeconds(1672223261).UtcDateTime;
 
-        signCtx = new V2.Signer.SigningContext() {
+        signCtx = new V2.Signer.SigningContext()
+        {
             Bucket = "examplebucket",
             Key = "nelson",
             Request = request,
@@ -89,7 +94,8 @@ public class SignerV1Test {
         request.Headers.Add("x-oss-date", "Wed, 28 Dec 2022 10:27:41 GMT");
         signTime = DateTimeOffset.FromUnixTimeSeconds(1672223261).UtcDateTime;
 
-        signCtx = new V2.Signer.SigningContext() {
+        signCtx = new V2.Signer.SigningContext()
+        {
             Bucket = "examplebucket",
             Request = request,
             Credentials = cred,
@@ -105,7 +111,8 @@ public class SignerV1Test {
     }
 
     [Fact]
-    public void TestAuthHeaderToken() {
+    public void TestAuthHeaderToken()
+    {
         var provider = new V2.Credentials.StaticCredentialsProvide("ak", "sk", "token");
         var cred = provider.GetCredentials();
 
@@ -119,7 +126,8 @@ public class SignerV1Test {
         request.Headers.Add("x-oss-date", "Wed, 28 Dec 2022 10:27:41 GMT");
         var signTime = DateTimeOffset.FromUnixTimeSeconds(1672223261).UtcDateTime;
 
-        var signCtx = new V2.Signer.SigningContext() {
+        var signCtx = new V2.Signer.SigningContext()
+        {
             Bucket = "examplebucket",
             Key = "nelson",
             Request = request,
@@ -138,7 +146,8 @@ public class SignerV1Test {
     }
 
     [Fact]
-    public void TestAuthQuery() {
+    public void TestAuthQuery()
+    {
         var provider = new V2.Credentials.StaticCredentialsProvide("ak", "sk");
         var cred = provider.GetCredentials();
 
@@ -148,7 +157,8 @@ public class SignerV1Test {
 
         var expiration = DateTimeOffset.FromUnixTimeSeconds(1699807420).UtcDateTime;
 
-        var signCtx = new V2.Signer.SigningContext() {
+        var signCtx = new V2.Signer.SigningContext()
+        {
             Bucket = "bucket",
             Key = "key",
             Request = request,
@@ -171,7 +181,8 @@ public class SignerV1Test {
     }
 
     [Fact]
-    public void TestAuthQueryToken() {
+    public void TestAuthQueryToken()
+    {
         var provider = new V2.Credentials.StaticCredentialsProvide("ak", "sk", "token");
         var cred = provider.GetCredentials();
 
@@ -181,7 +192,8 @@ public class SignerV1Test {
 
         var expiration = DateTimeOffset.FromUnixTimeSeconds(1699808204).UtcDateTime;
 
-        var signCtx = new V2.Signer.SigningContext() {
+        var signCtx = new V2.Signer.SigningContext()
+        {
             Bucket = "bucket",
             Key = "key+123",
             Request = request,

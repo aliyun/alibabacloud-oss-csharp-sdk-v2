@@ -6,11 +6,13 @@ using System.Threading.Tasks;
 using System.Net.Security;
 #endif
 
-namespace AlibabaCloud.OSS.V2.Transport {
+namespace AlibabaCloud.OSS.V2.Transport
+{
     /// <summary>
     /// An implementation that uses <see cref="HttpClient"/> as the transport.
     /// </summary>
-    public class HttpTransport : IDisposable {
+    public class HttpTransport : IDisposable
+    {
         /// <summary>
         /// A shared instance of <see cref="HttpTransport"/> with default parameters.
         /// </summary>
@@ -29,7 +31,8 @@ namespace AlibabaCloud.OSS.V2.Transport {
         /// Creates a new instance of <see cref="HttpTransport"/> using the provided client instance.
         /// </summary>
         /// <param name="messageHandler">The instance of <see cref="HttpMessageHandler"/> to use.</param>
-        public HttpTransport(HttpMessageHandler messageHandler) {
+        public HttpTransport(HttpMessageHandler messageHandler)
+        {
             Client = new HttpClient(messageHandler) ?? throw new ArgumentNullException(nameof(messageHandler));
         }
 
@@ -39,7 +42,8 @@ namespace AlibabaCloud.OSS.V2.Transport {
         /// <param name="client">The instance of <see cref="HttpClient"/> to use.</param>
         /// <param name="disposeClient">true if the inner client should be disposed of by Dispose(), false if you intend
         /// to reuse the inner client.</param>
-        public HttpTransport(HttpClient client, bool disposeClient = true) {
+        public HttpTransport(HttpClient client, bool disposeClient = true)
+        {
             Client = client ?? throw new ArgumentNullException(nameof(client));
             _disposeClient = disposeClient;
         }
@@ -51,16 +55,20 @@ namespace AlibabaCloud.OSS.V2.Transport {
         /// reading the whole response content)</param>
         /// <param name="cancellationToken">The cancellation token to cancel operation.</param>
         /// </summary>
-        public Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, HttpCompletionOption completionOption, CancellationToken cancellationToken) {
+        public Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, HttpCompletionOption completionOption, CancellationToken cancellationToken)
+        {
             return Client.SendAsync(request, completionOption, cancellationToken);
         }
 
         /// <summary>
         /// Disposes the underlying <see cref="HttpClient"/>.
         /// </summary>
-        public void Dispose() {
-            if (this != Shared) {
-                if (_disposeClient) {
+        public void Dispose()
+        {
+            if (this != Shared)
+            {
+                if (_disposeClient)
+                {
                     Client.Dispose();
                 }
             }
@@ -68,13 +76,16 @@ namespace AlibabaCloud.OSS.V2.Transport {
             GC.SuppressFinalize(this);
         }
 
-        static HttpClient CreateDefaultClient(HttpTransportOptions? options = null) {
+        static HttpClient CreateDefaultClient(HttpTransportOptions? options = null)
+        {
             return CreateCustomClient();
         }
 
-        public static HttpClient CreateCustomClient(HttpTransportOptions? options = null) {
+        public static HttpClient CreateCustomClient(HttpTransportOptions? options = null)
+        {
             var httpMessageHandler = CreateDefaultHandler(options);
-            return new HttpClient(httpMessageHandler) {
+            return new HttpClient(httpMessageHandler)
+            {
                 // Timeouts are handled by the pipeline
                 Timeout = Timeout.InfiniteTimeSpan,
             };
@@ -103,14 +114,17 @@ namespace AlibabaCloud.OSS.V2.Transport {
             return handler;
         }
 #else
-        private static HttpMessageHandler CreateDefaultHandler(HttpTransportOptions? options = null) {
+        private static HttpMessageHandler CreateDefaultHandler(HttpTransportOptions? options = null)
+        {
             var opt = options ?? new HttpTransportOptions();
-            var handler = new HttpClientHandler {
+            var handler = new HttpClientHandler
+            {
                 MaxConnectionsPerServer = opt.MaxConnections.GetValueOrDefault(HttpTransportOptions.DEFAULT_MAX_CONNECTIONS),
                 AllowAutoRedirect = opt.EnabledRedirect.GetValueOrDefault(false),
                 Proxy = opt.HttpProxy
             };
-            if (opt.InsecureSkipVerify.GetValueOrDefault(false)) {
+            if (opt.InsecureSkipVerify.GetValueOrDefault(false))
+            {
                 handler.ServerCertificateCustomValidationCallback = delegate { return true; };
             }
             return handler;

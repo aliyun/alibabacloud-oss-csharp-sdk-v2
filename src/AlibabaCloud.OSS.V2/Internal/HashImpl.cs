@@ -1,11 +1,13 @@
 ﻿using System;
 
-namespace AlibabaCloud.OSS.V2.Internal {
+namespace AlibabaCloud.OSS.V2.Internal
+{
 
     /// <summary>
     /// Hash is the common interface implemented by all hash functions.
     /// </summary>
-    public interface IHash {
+    public interface IHash
+    {
 
         public void Update(byte[] buffer, int offset, int count);
 
@@ -18,15 +20,18 @@ namespace AlibabaCloud.OSS.V2.Internal {
         public int BlockSize { get; }
     }
 
-    public class HashCrc64 : IHash {
+    public class HashCrc64 : IHash
+    {
         private ulong _init;
         private ulong _crc;
 
         public HashCrc64(byte[] init) :
-            this(BitConverter.ToUInt64(init, 0)) {
+            this(BitConverter.ToUInt64(init, 0))
+        {
         }
 
-        internal HashCrc64(ulong init) {
+        internal HashCrc64(ulong init)
+        {
             _init = init;
             _crc = _init;
             Crc64.InitECMA();
@@ -36,15 +41,18 @@ namespace AlibabaCloud.OSS.V2.Internal {
 
         public int Size => 8;
 
-        public void Reset() {
+        public void Reset()
+        {
             _crc = _init;
         }
 
-        public void Update(byte[] buffer, int offset, int count) {
+        public void Update(byte[] buffer, int offset, int count)
+        {
             _crc = Crc64.Compute(buffer, offset, count, _crc);
         }
 
-        public byte[] Final() {
+        public byte[] Final()
+        {
             return BitConverter.GetBytes(_crc);
         }
     }

@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace AlibabaCloud.OSS.V2.Signer {
-    public class SigningContext {
+namespace AlibabaCloud.OSS.V2.Signer
+{
+    public class SigningContext
+    {
         public string? Product { get; set; }
 
         public string? Region { get; set; }

@@ -1,9 +1,11 @@
-﻿using AlibabaCloud.OSS.V2.Transport;
-using System;
+﻿using System;
 using System.Collections.Generic;
+using AlibabaCloud.OSS.V2.Transport;
 
-namespace AlibabaCloud.OSS.V2 {
-    public class Configuration {
+namespace AlibabaCloud.OSS.V2
+{
+    public class Configuration
+    {
         /// <summary>
         /// The region in which the bucket is located.
         /// </summary>
@@ -134,7 +136,8 @@ namespace AlibabaCloud.OSS.V2 {
         public string? UserAgent { get; set; }
 
 
-        public static Configuration LoadDefault() {
+        public static Configuration LoadDefault()
+        {
             return new Configuration();
         }
     }

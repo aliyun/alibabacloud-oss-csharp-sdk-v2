@@ -2,9 +2,11 @@ using AlibabaCloud.OSS.V2.Extensions;
 
 namespace AlibabaCloud.OSS.V2.UnitTests.Signer;
 
-public class SignerV4Test {
+public class SignerV4Test
+{
     [Fact]
-    public void TestAuthHeader() {
+    public void TestAuthHeader()
+    {
         var provider = new V2.Credentials.StaticCredentialsProvide("ak", "sk");
         var cred = provider.GetCredentials();
 
@@ -20,7 +22,8 @@ public class SignerV4Test {
 
         var signTime = DateTimeOffset.FromUnixTimeSeconds(1702743657).UtcDateTime;
 
-        var signCtx = new V2.Signer.SigningContext() {
+        var signCtx = new V2.Signer.SigningContext()
+        {
             Bucket = "bucket",
             Key = "1234+-/123/1.txt",
             Request = request,
@@ -41,7 +44,8 @@ public class SignerV4Test {
 
         var queryStr = parameters
         .Select(
-            x => {
+            x =>
+            {
                 return x.Value.IsEmpty() ? x.Key.UrlEncode() : x.Key.UrlEncode() + "=" + x.Value.UrlEncode();
             })
         .JoinToString("&");
@@ -58,7 +62,8 @@ public class SignerV4Test {
     }
 
     [Fact]
-    public void TestAuthHeaderToken() {
+    public void TestAuthHeaderToken()
+    {
         var provider = new V2.Credentials.StaticCredentialsProvide("ak", "sk", "token");
         var cred = provider.GetCredentials();
 
@@ -74,7 +79,8 @@ public class SignerV4Test {
 
         var signTime = DateTimeOffset.FromUnixTimeSeconds(1702784856).UtcDateTime;
 
-        var signCtx = new V2.Signer.SigningContext() {
+        var signCtx = new V2.Signer.SigningContext()
+        {
             Bucket = "bucket",
             Key = "1234+-/123/1.txt",
             Request = request,
@@ -95,7 +101,8 @@ public class SignerV4Test {
 
         var queryStr = parameters
         .Select(
-            x => {
+            x =>
+            {
                 return x.Value.IsEmpty() ? x.Key.UrlEncode() : x.Key.UrlEncode() + "=" + x.Value.UrlEncode();
             })
         .JoinToString("&");
@@ -112,7 +119,8 @@ public class SignerV4Test {
     }
 
     [Fact]
-    public void TestAuthHeaderWithAdditionalHeaders() {
+    public void TestAuthHeaderWithAdditionalHeaders()
+    {
         var provider = new V2.Credentials.StaticCredentialsProvide("ak", "sk");
         var cred = provider.GetCredentials();
 
@@ -128,7 +136,8 @@ public class SignerV4Test {
 
         var signTime = DateTimeOffset.FromUnixTimeSeconds(1702747512).UtcDateTime;
 
-        var signCtx = new V2.Signer.SigningContext() {
+        var signCtx = new V2.Signer.SigningContext()
+        {
             Bucket = "bucket",
             Key = "1234+-/123/1.txt",
             Request = request,
@@ -150,7 +159,8 @@ public class SignerV4Test {
 
         var queryStr = parameters
         .Select(
-            x => {
+            x =>
+            {
                 return x.Value.IsEmpty() ? x.Key.UrlEncode() : x.Key.UrlEncode() + "=" + x.Value.UrlEncode();
             })
         .JoinToString("&");
@@ -176,7 +186,8 @@ public class SignerV4Test {
 
         signTime = DateTimeOffset.FromUnixTimeSeconds(1702747512).UtcDateTime;
 
-        signCtx = new V2.Signer.SigningContext() {
+        signCtx = new V2.Signer.SigningContext()
+        {
             Bucket = "bucket",
             Key = "1234+-/123/1.txt",
             Request = request,
@@ -197,7 +208,8 @@ public class SignerV4Test {
     }
 
     [Fact]
-    public void TestAuthQuery() {
+    public void TestAuthQuery()
+    {
         var provider = new V2.Credentials.StaticCredentialsProvide("ak", "sk");
         var cred = provider.GetCredentials();
 
@@ -213,7 +225,8 @@ public class SignerV4Test {
         var signTime = DateTimeOffset.FromUnixTimeSeconds(1702781677).UtcDateTime;
         var expiration = DateTimeOffset.FromUnixTimeSeconds(1702782276).UtcDateTime;
 
-        var signCtx = new V2.Signer.SigningContext() {
+        var signCtx = new V2.Signer.SigningContext()
+        {
             Bucket = "bucket",
             Key = "1234+-/123/1.txt",
             Request = request,
@@ -236,7 +249,8 @@ public class SignerV4Test {
 
         var queryStr = parameters
         .Select(
-            x => {
+            x =>
+            {
                 return x.Value.IsEmpty() ? x.Key.UrlEncode() : x.Key.UrlEncode() + "=" + x.Value.UrlEncode();
             })
         .JoinToString("&");
@@ -256,7 +270,8 @@ public class SignerV4Test {
     }
 
     [Fact]
-    public void TestAuthQueryToken() {
+    public void TestAuthQueryToken()
+    {
         var provider = new V2.Credentials.StaticCredentialsProvide("ak", "sk", "token");
         var cred = provider.GetCredentials();
 
@@ -272,7 +287,8 @@ public class SignerV4Test {
         var signTime = DateTimeOffset.FromUnixTimeSeconds(1702785388).UtcDateTime;
         var expiration = DateTimeOffset.FromUnixTimeSeconds(1702785987).UtcDateTime;
 
-        var signCtx = new V2.Signer.SigningContext() {
+        var signCtx = new V2.Signer.SigningContext()
+        {
             Bucket = "bucket",
             Key = "1234+-/123/1.txt",
             Request = request,
@@ -295,7 +311,8 @@ public class SignerV4Test {
 
         var queryStr = parameters
         .Select(
-            x => {
+            x =>
+            {
                 return x.Value.IsEmpty() ? x.Key.UrlEncode() : x.Key.UrlEncode() + "=" + x.Value.UrlEncode();
             })
         .JoinToString("&");
@@ -317,7 +334,8 @@ public class SignerV4Test {
     }
 
     [Fact]
-    public void TestAuthQueryWithAdditionalHeaders() {
+    public void TestAuthQueryWithAdditionalHeaders()
+    {
         var provider = new V2.Credentials.StaticCredentialsProvide("ak", "sk");
         var cred = provider.GetCredentials();
 
@@ -333,7 +351,8 @@ public class SignerV4Test {
         var signTime = DateTimeOffset.FromUnixTimeSeconds(1702783809).UtcDateTime;
         var expiration = DateTimeOffset.FromUnixTimeSeconds(1702784408).UtcDateTime;
 
-        var signCtx = new V2.Signer.SigningContext() {
+        var signCtx = new V2.Signer.SigningContext()
+        {
             Bucket = "bucket",
             Key = "1234+-/123/1.txt",
             Request = request,
@@ -357,7 +376,8 @@ public class SignerV4Test {
 
         var queryStr = parameters
         .Select(
-            x => {
+            x =>
+            {
                 return x.Value.IsEmpty() ? x.Key.UrlEncode() : x.Key.UrlEncode() + "=" + x.Value.UrlEncode();
             })
         .JoinToString("&");
@@ -388,7 +408,8 @@ public class SignerV4Test {
         signTime = DateTimeOffset.FromUnixTimeSeconds(1702783809).UtcDateTime;
         expiration = DateTimeOffset.FromUnixTimeSeconds(1702784408).UtcDateTime;
 
-        signCtx = new V2.Signer.SigningContext() {
+        signCtx = new V2.Signer.SigningContext()
+        {
             Bucket = "bucket",
             Key = "1234+-/123/1.txt",
             Request = request,

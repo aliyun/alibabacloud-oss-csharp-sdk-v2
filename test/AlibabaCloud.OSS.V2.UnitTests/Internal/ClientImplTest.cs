@@ -1,23 +1,26 @@
+using System.Globalization;
 using System.Net;
+using System.Text;
+using AlibabaCloud.OSS.V2.Credentials;
 using AlibabaCloud.OSS.V2.Internal;
 using AlibabaCloud.OSS.V2.Retry;
-using AlibabaCloud.OSS.V2.Credentials;
 using AlibabaCloud.OSS.V2.Signer;
 using AlibabaCloud.OSS.V2.Transport;
-using System.Text;
-using System.Globalization;
 
 namespace AlibabaCloud.OSS.V2.UnitTests.Internal;
 
 
-public class NonSeekableStream(Stream baseStream) : WrapperStream(baseStream) {
+public class NonSeekableStream(Stream baseStream) : WrapperStream(baseStream)
+{
     public override bool CanSeek => false;
 }
 
 
-public class ClientImplTest {
+public class ClientImplTest
+{
     [Fact]
-    public void TestDefaultConfiguration() {
+    public void TestDefaultConfiguration()
+    {
         var config = Configuration.LoadDefault();
         config.Region = "cn-hangzhou";
         config.CredentialsProvider = new AnonymousCredentialsProvider();
@@ -48,7 +51,8 @@ public class ClientImplTest {
     }
 
     [Fact]
-    public void TestConfigSignatureVersion() {
+    public void TestConfigSignatureVersion()
+    {
         var config = Configuration.LoadDefault();
         config.Region = "cn-hangzhou";
         config.CredentialsProvider = new AnonymousCredentialsProvider();
@@ -75,7 +79,8 @@ public class ClientImplTest {
     }
 
     [Fact]
-    public void TestConfigEndpoint() {
+    public void TestConfigEndpoint()
+    {
         var config = Configuration.LoadDefault();
         config.Region = "cn-hangzhou";
         config.CredentialsProvider = new AnonymousCredentialsProvider();
@@ -88,7 +93,8 @@ public class ClientImplTest {
         Assert.Equal("https", client.Options.Endpoint.Scheme);
 
         // internal
-        config = new() {
+        config = new()
+        {
             Region = "cn-shanghai",
             CredentialsProvider = new AnonymousCredentialsProvider(),
             UseInternalEndpoint = true
@@ -99,7 +105,8 @@ public class ClientImplTest {
         Assert.Equal("https", client.Options.Endpoint.Scheme);
 
         // accelerate
-        config = new() {
+        config = new()
+        {
             Region = "cn-hangzhou",
             CredentialsProvider = new AnonymousCredentialsProvider(),
             UseAccelerateEndpoint = true
@@ -110,7 +117,8 @@ public class ClientImplTest {
         Assert.Equal("https", client.Options.Endpoint.Scheme);
 
         // dual stack
-        config = new() {
+        config = new()
+        {
             Region = "cn-shenzhen",
             CredentialsProvider = new AnonymousCredentialsProvider(),
             UseDualStackEndpoint = true
@@ -121,7 +129,8 @@ public class ClientImplTest {
         Assert.Equal("https", client.Options.Endpoint.Scheme);
 
         // set endpoint
-        config = new() {
+        config = new()
+        {
             Region = "cn-hangzhou",
             CredentialsProvider = new AnonymousCredentialsProvider(),
             Endpoint = "http://oss-cn-shenzhen.aliyuncs.com"
@@ -132,7 +141,8 @@ public class ClientImplTest {
         Assert.Equal("http", client.Options.Endpoint.Scheme);
 
         // disable ssl
-        config = new() {
+        config = new()
+        {
             Region = "cn-shanghai",
             CredentialsProvider = new AnonymousCredentialsProvider(),
             UseInternalEndpoint = true,
@@ -145,9 +155,11 @@ public class ClientImplTest {
     }
 
     [Fact]
-    public void TestConfigAddressStyle() {
+    public void TestConfigAddressStyle()
+    {
         //default
-        var config = new Configuration() {
+        var config = new Configuration()
+        {
             Region = "cn-hangzhou",
             CredentialsProvider = new AnonymousCredentialsProvider()
         };
@@ -156,7 +168,8 @@ public class ClientImplTest {
         Assert.Equal(AddressStyleType.VirtualHosted, client.Options.AddressStyle);
 
         // cname
-        config = new() {
+        config = new()
+        {
             Region = "cn-hangzhou",
             CredentialsProvider = new AnonymousCredentialsProvider(),
             UseCName = true
@@ -166,7 +179,8 @@ public class ClientImplTest {
         Assert.Equal(AddressStyleType.CName, client.Options.AddressStyle);
 
         // path-style
-        config = new() {
+        config = new()
+        {
             Region = "cn-hangzhou",
             CredentialsProvider = new AnonymousCredentialsProvider(),
             UsePathStyle = true
@@ -176,7 +190,8 @@ public class ClientImplTest {
         Assert.Equal(AddressStyleType.Path, client.Options.AddressStyle);
 
         // ip endpoint
-        config = new() {
+        config = new()
+        {
             Region = "cn-hangzhou",
             CredentialsProvider = new AnonymousCredentialsProvider(),
             Endpoint = "127.0.0.1"
@@ -187,9 +202,11 @@ public class ClientImplTest {
     }
 
     [Fact]
-    public void TestConfigAuthMethod() {
+    public void TestConfigAuthMethod()
+    {
         //default
-        var config = new Configuration() {
+        var config = new Configuration()
+        {
             Region = "cn-hangzhou",
             CredentialsProvider = new AnonymousCredentialsProvider()
         };
@@ -198,7 +215,8 @@ public class ClientImplTest {
         Assert.Equal(AuthMethodType.Header, client.Options.AuthMethod);
 
         // auth query
-        config = new() {
+        config = new()
+        {
             Region = "cn-hangzhou",
             CredentialsProvider = new AnonymousCredentialsProvider()
         };
@@ -208,9 +226,11 @@ public class ClientImplTest {
     }
 
     [Fact]
-    public void TestConfigProduct() {
+    public void TestConfigProduct()
+    {
         //default
-        var config = new Configuration() {
+        var config = new Configuration()
+        {
             Region = "cn-hangzhou",
             CredentialsProvider = new AnonymousCredentialsProvider()
         };
@@ -218,7 +238,8 @@ public class ClientImplTest {
         Assert.Equal("oss", client.Options.Product);
 
         // auth query
-        config = new() {
+        config = new()
+        {
             Region = "cn-hangzhou",
             CredentialsProvider = new AnonymousCredentialsProvider()
         };
@@ -227,9 +248,11 @@ public class ClientImplTest {
     }
 
     [Fact]
-    public void TestConfigRetryer() {
+    public void TestConfigRetryer()
+    {
         //default
-        var config = new Configuration() {
+        var config = new Configuration()
+        {
             Region = "cn-hangzhou",
             CredentialsProvider = new AnonymousCredentialsProvider()
         };
@@ -238,7 +261,8 @@ public class ClientImplTest {
         Assert.Equal(Defaults.MaxAttpempts, client.Options.Retryer.MaxAttempts());
 
         // set retryer
-        config = new() {
+        config = new()
+        {
             Region = "cn-hangzhou",
             CredentialsProvider = new AnonymousCredentialsProvider(),
             Retryer = new NopRetryer()
@@ -248,7 +272,8 @@ public class ClientImplTest {
         Assert.Equal(1, client.Options.Retryer.MaxAttempts());
 
         //set MaxAttempts in retryer
-        config = new() {
+        config = new()
+        {
             Region = "cn-hangzhou",
             CredentialsProvider = new AnonymousCredentialsProvider(),
             Retryer = new StandardRetryer(5)
@@ -258,7 +283,8 @@ public class ClientImplTest {
         Assert.Equal(5, client.Options.Retryer.MaxAttempts());
 
         //set MaxAttempts in configuration
-        config = new() {
+        config = new()
+        {
             Region = "cn-hangzhou",
             CredentialsProvider = new AnonymousCredentialsProvider(),
             RetryMaxAttempts = 10
@@ -269,9 +295,11 @@ public class ClientImplTest {
     }
 
     [Fact]
-    public void TestTimeout() {
+    public void TestTimeout()
+    {
         //default
-        var config = new Configuration() {
+        var config = new Configuration()
+        {
             Region = "cn-hangzhou",
             CredentialsProvider = new AnonymousCredentialsProvider()
         };
@@ -280,7 +308,8 @@ public class ClientImplTest {
         Assert.Equal(Defaults.ReadWriteTimeout, client.Options.RequestOnceTimeout);
 
         // set read-write timeout
-        config = new Configuration() {
+        config = new Configuration()
+        {
             Region = "cn-hangzhou",
             CredentialsProvider = new AnonymousCredentialsProvider(),
             ReadWriteTimeout = TimeSpan.FromSeconds(50)
@@ -300,7 +329,8 @@ public class ClientImplTest {
         Assert.Equal(TimeSpan.FromSeconds(50), client.Options.ReadWriteTimeout);
         Assert.Equal(TimeSpan.FromSeconds(50), client.Options.RequestOnceTimeout);
 #else
-        config = new Configuration() {
+        config = new Configuration()
+        {
             Region = "cn-hangzhou",
             CredentialsProvider = new AnonymousCredentialsProvider(),
             ConnectTimeout = TimeSpan.FromSeconds(60),
@@ -313,9 +343,11 @@ public class ClientImplTest {
     }
 
     [Fact]
-    public void TestConfigHttpClient() {
+    public void TestConfigHttpClient()
+    {
         //default
-        var config = new Configuration() {
+        var config = new Configuration()
+        {
             Region = "cn-hangzhou",
             CredentialsProvider = new AnonymousCredentialsProvider()
         };
@@ -323,7 +355,8 @@ public class ClientImplTest {
         Assert.NotNull(client.Options.HttpTransport);
 
         // Set InsecureSkipVerify, EnabledRedirect
-        config = new Configuration() {
+        config = new Configuration()
+        {
             Region = "cn-hangzhou",
             CredentialsProvider = new AnonymousCredentialsProvider(),
             InsecureSkipVerify = true,
@@ -334,9 +367,11 @@ public class ClientImplTest {
     }
 
     [Fact]
-    public void TestProxyHost() {
+    public void TestProxyHost()
+    {
         //default
-        var config = new Configuration() {
+        var config = new Configuration()
+        {
             Region = "cn-hangzhou",
             CredentialsProvider = new AnonymousCredentialsProvider()
         };
@@ -344,7 +379,8 @@ public class ClientImplTest {
         Assert.NotNull(client.Options.HttpTransport);
 
         // set proxy
-        config = new Configuration() {
+        config = new Configuration()
+        {
             Region = "cn-hangzhou",
             CredentialsProvider = new AnonymousCredentialsProvider(),
             ProxyHost = "http://127.0.0.1:8080"
@@ -353,7 +389,8 @@ public class ClientImplTest {
         Assert.NotNull(client.Options.HttpTransport);
 
         // set invalid proxy
-        config = new Configuration() {
+        config = new Configuration()
+        {
             Region = "cn-hangzhou",
             CredentialsProvider = new AnonymousCredentialsProvider(),
             ProxyHost = "123456"
@@ -364,15 +401,18 @@ public class ClientImplTest {
 
 
     [Fact]
-    public void TestConfigUserAgent() {
-        var config = new Configuration() {
+    public void TestConfigUserAgent()
+    {
+        var config = new Configuration()
+        {
             Region = "cn-hangzhou",
             CredentialsProvider = new AnonymousCredentialsProvider()
         };
         var client = new ClientImpl(config);
         Assert.StartsWith("alibabacloud-dotnet-sdk-v2/0.", client.InnerOptions.UserAgent);
 
-        config = new() {
+        config = new()
+        {
             Region = "cn-hangzhou",
             CredentialsProvider = new AnonymousCredentialsProvider(),
             UserAgent = "my-agent"
@@ -383,9 +423,11 @@ public class ClientImplTest {
     }
 
     [Fact]
-    public void TestConfigCrcCheck() {
+    public void TestConfigCrcCheck()
+    {
         //default
-        var config = new Configuration() {
+        var config = new Configuration()
+        {
             Region = "cn-hangzhou",
             CredentialsProvider = new AnonymousCredentialsProvider()
         };
@@ -394,7 +436,8 @@ public class ClientImplTest {
         Assert.Equal(flags, client.Options.FeatureFlags);
 
         // disable download and upload crc check
-        config = new() {
+        config = new()
+        {
             Region = "cn-hangzhou",
             CredentialsProvider = new AnonymousCredentialsProvider(),
             DisableDownloadCrc64Check = true,
@@ -405,7 +448,8 @@ public class ClientImplTest {
         Assert.Equal(flags, client.Options.FeatureFlags);
 
         // disable download
-        config = new() {
+        config = new()
+        {
             Region = "cn-hangzhou",
             CredentialsProvider = new AnonymousCredentialsProvider(),
             DisableDownloadCrc64Check = true
@@ -418,7 +462,8 @@ public class ClientImplTest {
         Assert.Equal(flags, client.Options.FeatureFlags);
 
         // disable upload
-        config = new() {
+        config = new()
+        {
             Region = "cn-hangzhou",
             CredentialsProvider = new AnonymousCredentialsProvider(),
             DisableUploadCrc64Check = true
@@ -432,9 +477,11 @@ public class ClientImplTest {
     }
 
     [Fact]
-    public void TestConfigAdditionalHeaders() {
+    public void TestConfigAdditionalHeaders()
+    {
         //default
-        var config = new Configuration() {
+        var config = new Configuration()
+        {
             Region = "cn-hangzhou",
             CredentialsProvider = new AnonymousCredentialsProvider()
         };
@@ -442,7 +489,8 @@ public class ClientImplTest {
         Assert.Empty(client.Options.AdditionalHeaders);
 
         //set values
-        config = new() {
+        config = new()
+        {
             Region = "cn-hangzhou",
             CredentialsProvider = new AnonymousCredentialsProvider(),
             AdditionalHeaders = ["host", "content-length"]
@@ -454,9 +502,11 @@ public class ClientImplTest {
     }
 
     [Fact]
-    public async Task TestRetryMaxAttemptsClientOptions() {
+    public async Task TestRetryMaxAttemptsClientOptions()
+    {
         var mockHandler = new MockHttpMessageHandler();
-        var config = new Configuration() {
+        var config = new Configuration()
+        {
             Region = "cn-hangzhou",
             CredentialsProvider = new AnonymousCredentialsProvider(),
             HttpTransport = new HttpTransport(mockHandler),
@@ -483,7 +533,8 @@ public class ClientImplTest {
                 Content    = new StringContent("")
             }];
 
-        var input = new OperationInput {
+        var input = new OperationInput
+        {
             OperationName = "PutBucketAcl",
             Method = "PUT",
             Headers = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase) {
@@ -495,10 +546,12 @@ public class ClientImplTest {
             Bucket = "bucket"
         };
 
-        try {
+        try
+        {
             await client.ExecuteAsync(input);
         }
-        catch (Exception) {
+        catch (Exception)
+        {
             //Ignore
         }
         Assert.Equal(Defaults.MaxAttpempts, mockHandler.Requests.Count);
@@ -527,7 +580,8 @@ public class ClientImplTest {
                 Content    = new StringContent("")
             }];
 
-        input = new OperationInput {
+        input = new OperationInput
+        {
             OperationName = "PutBucketAcl",
             Method = "PUT",
             Headers = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase) {
@@ -539,10 +593,12 @@ public class ClientImplTest {
             Bucket = "bucket"
         };
 
-        try {
+        try
+        {
             await client.ExecuteAsync(input);
         }
-        catch (Exception) {
+        catch (Exception)
+        {
             //Ignore
         }
         Assert.Equal(4, mockHandler.Requests.Count);
@@ -550,9 +606,11 @@ public class ClientImplTest {
     }
 
     [Fact]
-    public async Task TestRetryMaxAttemptsFromOperationOptions() {
+    public async Task TestRetryMaxAttemptsFromOperationOptions()
+    {
         var mockHandler = new MockHttpMessageHandler();
-        var config = new Configuration() {
+        var config = new Configuration()
+        {
             Region = "cn-hangzhou",
             CredentialsProvider = new AnonymousCredentialsProvider(),
             HttpTransport = new HttpTransport(mockHandler),
@@ -578,7 +636,8 @@ public class ClientImplTest {
                 Content    = new StringContent("")
             }];
 
-        var input = new OperationInput {
+        var input = new OperationInput
+        {
             OperationName = "PutBucketAcl",
             Method = "PUT",
             Headers = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase) {
@@ -590,14 +649,17 @@ public class ClientImplTest {
             Bucket = "bucket"
         };
 
-        try {
+        try
+        {
             // set max retry attempts from operation options
-            var opOptions = new OperationOptions() {
+            var opOptions = new OperationOptions()
+            {
                 RetryMaxAttempts = 2
             };
             await client.ExecuteAsync(input, opOptions);
         }
-        catch (Exception) {
+        catch (Exception)
+        {
             //Ignore
         }
         Assert.Equal(2, mockHandler.Requests.Count);
@@ -605,9 +667,11 @@ public class ClientImplTest {
     }
 
     [Fact]
-    public async Task TestRetryMaxAttemptsNopRetryer() {
+    public async Task TestRetryMaxAttemptsNopRetryer()
+    {
         var mockHandler = new MockHttpMessageHandler();
-        var config = new Configuration() {
+        var config = new Configuration()
+        {
             Region = "cn-hangzhou",
             CredentialsProvider = new AnonymousCredentialsProvider(),
             HttpTransport = new HttpTransport(mockHandler),
@@ -635,7 +699,8 @@ public class ClientImplTest {
                 Content    = new StringContent("")
             }];
 
-        var input = new OperationInput {
+        var input = new OperationInput
+        {
             OperationName = "PutBucketAcl",
             Method = "PUT",
             Headers = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase) {
@@ -647,13 +712,16 @@ public class ClientImplTest {
             Bucket = "bucket"
         };
 
-        try {
-            var opOptions = new OperationOptions() {
+        try
+        {
+            var opOptions = new OperationOptions()
+            {
                 RetryMaxAttempts = 2
             };
             await client.ExecuteAsync(input, opOptions);
         }
-        catch (Exception) {
+        catch (Exception)
+        {
             //Ignore
         }
 
@@ -663,9 +731,11 @@ public class ClientImplTest {
     }
 
     [Fact]
-    public async Task TestNoRetryError() {
+    public async Task TestNoRetryError()
+    {
         var mockHandler = new MockHttpMessageHandler();
-        var config = new Configuration() {
+        var config = new Configuration()
+        {
             Region = "cn-hangzhou",
             CredentialsProvider = new AnonymousCredentialsProvider(),
             HttpTransport = new HttpTransport(mockHandler),
@@ -691,7 +761,8 @@ public class ClientImplTest {
                 Content    = new StringContent("")
             }];
 
-        var input = new OperationInput {
+        var input = new OperationInput
+        {
             OperationName = "PutBucketAcl",
             Method = "PUT",
             Headers = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase) {
@@ -703,10 +774,12 @@ public class ClientImplTest {
             Bucket = "bucket"
         };
 
-        try {
+        try
+        {
             await client.ExecuteAsync(input);
         }
-        catch (Exception) {
+        catch (Exception)
+        {
             //Ignore
         }
 
@@ -716,9 +789,11 @@ public class ClientImplTest {
     }
 
     [Fact]
-    public async Task TestNoSeekableStream() {
+    public async Task TestNoSeekableStream()
+    {
         var mockHandler = new MockHttpMessageHandler();
-        var config = new Configuration() {
+        var config = new Configuration()
+        {
             Region = "cn-hangzhou",
             CredentialsProvider = new AnonymousCredentialsProvider(),
             HttpTransport = new HttpTransport(mockHandler),
@@ -744,7 +819,8 @@ public class ClientImplTest {
                 Content    = new StringContent("")
             }];
 
-        var input = new OperationInput {
+        var input = new OperationInput
+        {
             OperationName = "PutBucketAcl",
             Method = "PUT",
             Headers = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase) {
@@ -757,10 +833,12 @@ public class ClientImplTest {
             Body = new NonSeekableStream(new MemoryStream(Encoding.UTF8.GetBytes("hello world")))
         };
 
-        try {
+        try
+        {
             await client.ExecuteAsync(input);
         }
-        catch (Exception) {
+        catch (Exception)
+        {
             //Ignore
         }
 
@@ -770,9 +848,11 @@ public class ClientImplTest {
     }
 
     [Fact]
-    public async Task TestSignerV4() {
+    public async Task TestSignerV4()
+    {
         var mockHandler = new MockHttpMessageHandler();
-        var config = new Configuration() {
+        var config = new Configuration()
+        {
             Region = "cn-hangzhou",
             CredentialsProvider = new StaticCredentialsProvide("ak", "sk"),
             HttpTransport = new HttpTransport(mockHandler),
@@ -786,7 +866,8 @@ public class ClientImplTest {
                 Content    = new StringContent("")
             }];
 
-        var input = new OperationInput {
+        var input = new OperationInput
+        {
             OperationName = "PutBucketAcl",
             Method = "PUT",
             Headers = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase) {
@@ -805,9 +886,11 @@ public class ClientImplTest {
     }
 
     [Fact]
-    public async Task TestSignerV1() {
+    public async Task TestSignerV1()
+    {
         var mockHandler = new MockHttpMessageHandler();
-        var config = new Configuration() {
+        var config = new Configuration()
+        {
             Region = "cn-hangzhou",
             CredentialsProvider = new StaticCredentialsProvide("ak", "sk"),
             HttpTransport = new HttpTransport(mockHandler),
@@ -822,7 +905,8 @@ public class ClientImplTest {
                 Content    = new StringContent("")
             }];
 
-        var input = new OperationInput {
+        var input = new OperationInput
+        {
             OperationName = "PutBucketAcl",
             Method = "PUT",
             Headers = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase) {
@@ -841,9 +925,11 @@ public class ClientImplTest {
     }
 
     [Fact]
-    public async Task TestAnonymousRequest() {
+    public async Task TestAnonymousRequest()
+    {
         var mockHandler = new MockHttpMessageHandler();
-        var config = new Configuration() {
+        var config = new Configuration()
+        {
             Region = "cn-hangzhou",
             CredentialsProvider = new AnonymousCredentialsProvider(),
             HttpTransport = new HttpTransport(mockHandler),
@@ -857,7 +943,8 @@ public class ClientImplTest {
                 Content    = new StringContent("")
             }];
 
-        var input = new OperationInput {
+        var input = new OperationInput
+        {
             OperationName = "PutBucketAcl",
             Method = "PUT",
             Headers = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase) {
@@ -876,9 +963,11 @@ public class ClientImplTest {
     }
 
     [Fact]
-    public async Task TestAddressingModeVirtualHost() {
+    public async Task TestAddressingModeVirtualHost()
+    {
         var mockHandler = new MockHttpMessageHandler();
-        var config = new Configuration() {
+        var config = new Configuration()
+        {
             Region = "cn-hangzhou",
             CredentialsProvider = new AnonymousCredentialsProvider(),
             HttpTransport = new HttpTransport(mockHandler),
@@ -893,7 +982,8 @@ public class ClientImplTest {
                 Content    = new StringContent("")
             }];
 
-        var input = new OperationInput {
+        var input = new OperationInput
+        {
             OperationName = "InvokeOperation",
             Method = "PUT",
             Parameters = new Dictionary<string, string> {
@@ -914,7 +1004,8 @@ public class ClientImplTest {
                 Content    = new StringContent("")
             }];
 
-        input = new OperationInput {
+        input = new OperationInput
+        {
             OperationName = "InvokeOperation",
             Method = "PUT",
             Parameters = new Dictionary<string, string> {
@@ -936,7 +1027,8 @@ public class ClientImplTest {
                 Content    = new StringContent("")
             }];
 
-        input = new OperationInput {
+        input = new OperationInput
+        {
             OperationName = "InvokeOperation",
             Method = "PUT",
             Parameters = new Dictionary<string, string> {
@@ -953,9 +1045,11 @@ public class ClientImplTest {
     }
 
     [Fact]
-    public async Task TestAddressingModePath() {
+    public async Task TestAddressingModePath()
+    {
         var mockHandler = new MockHttpMessageHandler();
-        var config = new Configuration() {
+        var config = new Configuration()
+        {
             Region = "cn-hangzhou",
             CredentialsProvider = new AnonymousCredentialsProvider(),
             HttpTransport = new HttpTransport(mockHandler),
@@ -971,7 +1065,8 @@ public class ClientImplTest {
                 Content    = new StringContent("")
             }];
 
-        var input = new OperationInput {
+        var input = new OperationInput
+        {
             OperationName = "InvokeOperation",
             Method = "PUT",
             Parameters = new Dictionary<string, string> {
@@ -992,7 +1087,8 @@ public class ClientImplTest {
                 Content    = new StringContent("")
             }];
 
-        input = new OperationInput {
+        input = new OperationInput
+        {
             OperationName = "InvokeOperation",
             Method = "PUT",
             Parameters = new Dictionary<string, string> {
@@ -1014,7 +1110,8 @@ public class ClientImplTest {
                 Content    = new StringContent("")
             }];
 
-        input = new OperationInput {
+        input = new OperationInput
+        {
             OperationName = "InvokeOperation",
             Method = "PUT",
             Parameters = new Dictionary<string, string> {
@@ -1031,9 +1128,11 @@ public class ClientImplTest {
     }
 
     [Fact]
-    public async Task TestAddressingModeCName() {
+    public async Task TestAddressingModeCName()
+    {
         var mockHandler = new MockHttpMessageHandler();
-        var config = new Configuration() {
+        var config = new Configuration()
+        {
             Region = "cn-hangzhou",
             CredentialsProvider = new AnonymousCredentialsProvider(),
             HttpTransport = new HttpTransport(mockHandler),
@@ -1050,7 +1149,8 @@ public class ClientImplTest {
                 Content    = new StringContent("")
             }];
 
-        var input = new OperationInput {
+        var input = new OperationInput
+        {
             OperationName = "InvokeOperation",
             Method = "PUT",
             Parameters = new Dictionary<string, string> {
@@ -1071,7 +1171,8 @@ public class ClientImplTest {
                 Content    = new StringContent("")
             }];
 
-        input = new OperationInput {
+        input = new OperationInput
+        {
             OperationName = "InvokeOperation",
             Method = "PUT",
             Parameters = new Dictionary<string, string> {
@@ -1093,7 +1194,8 @@ public class ClientImplTest {
                 Content    = new StringContent("")
             }];
 
-        input = new OperationInput {
+        input = new OperationInput
+        {
             OperationName = "InvokeOperation",
             Method = "PUT",
             Parameters = new Dictionary<string, string> {
@@ -1110,9 +1212,11 @@ public class ClientImplTest {
     }
 
     [Fact]
-    public async Task TestAddressingModeIpEndpoint() {
+    public async Task TestAddressingModeIpEndpoint()
+    {
         var mockHandler = new MockHttpMessageHandler();
-        var config = new Configuration() {
+        var config = new Configuration()
+        {
             Region = "cn-hangzhou",
             CredentialsProvider = new AnonymousCredentialsProvider(),
             HttpTransport = new HttpTransport(mockHandler),
@@ -1128,7 +1232,8 @@ public class ClientImplTest {
                 Content    = new StringContent("")
             }];
 
-        var input = new OperationInput {
+        var input = new OperationInput
+        {
             OperationName = "InvokeOperation",
             Method = "PUT",
             Parameters = new Dictionary<string, string> {
@@ -1149,7 +1254,8 @@ public class ClientImplTest {
                 Content    = new StringContent("")
             }];
 
-        input = new OperationInput {
+        input = new OperationInput
+        {
             OperationName = "InvokeOperation",
             Method = "PUT",
             Parameters = new Dictionary<string, string> {
@@ -1171,7 +1277,8 @@ public class ClientImplTest {
                 Content    = new StringContent("")
             }];
 
-        input = new OperationInput {
+        input = new OperationInput
+        {
             OperationName = "InvokeOperation",
             Method = "PUT",
             Parameters = new Dictionary<string, string> {
@@ -1188,9 +1295,11 @@ public class ClientImplTest {
     }
 
     [Fact]
-    public async Task TestEndpointWithQuery() {
+    public async Task TestEndpointWithQuery()
+    {
         var mockHandler = new MockHttpMessageHandler();
-        var config = new Configuration() {
+        var config = new Configuration()
+        {
             Region = "cn-hangzhou",
             CredentialsProvider = new AnonymousCredentialsProvider(),
             HttpTransport = new HttpTransport(mockHandler),
@@ -1207,7 +1316,8 @@ public class ClientImplTest {
                 Content    = new StringContent("")
             }];
 
-        var input = new OperationInput {
+        var input = new OperationInput
+        {
             OperationName = "InvokeOperation",
             Method = "PUT",
             Parameters = new Dictionary<string, string> {
@@ -1232,7 +1342,8 @@ public class ClientImplTest {
                 Content    = new StringContent("")
             }];
 
-        input = new OperationInput {
+        input = new OperationInput
+        {
             OperationName = "InvokeOperation",
             Method = "PUT",
             Parameters = new Dictionary<string, string> {
@@ -1259,7 +1370,8 @@ public class ClientImplTest {
                 Content    = new StringContent("")
             }];
 
-        input = new OperationInput {
+        input = new OperationInput
+        {
             OperationName = "InvokeOperation",
             Method = "PUT",
             Parameters = new Dictionary<string, string> {
@@ -1275,10 +1387,12 @@ public class ClientImplTest {
     }
 
     [Fact]
-    public async Task TestVerifyExecuteAsyncArgs() {
+    public async Task TestVerifyExecuteAsyncArgs()
+    {
         var mockHandler = new MockHttpMessageHandler();
 
-        var config = new Configuration() {
+        var config = new Configuration()
+        {
             Region = "cn-hangzhou",
             CredentialsProvider = new AnonymousCredentialsProvider(),
             HttpTransport = new HttpTransport(mockHandler),
@@ -1293,7 +1407,8 @@ public class ClientImplTest {
                 Content    = new StringContent("")
             }
         ];
-        var input = new OperationInput {
+        var input = new OperationInput
+        {
             OperationName = "InvokeOperation",
             Method = "PUT",
             Parameters = new Dictionary<string, string> {
@@ -1302,17 +1417,20 @@ public class ClientImplTest {
             Bucket = "",
         };
 
-        try {
+        try
+        {
             await client.ExecuteAsync(input);
             Assert.Fail("should not here");
         }
-        catch (Exception e) {
+        catch (Exception e)
+        {
             Assert.Contains("input.Bucket name is invalid", e.ToString());
         }
         Assert.Null(mockHandler.LastRequest);
 
         // key is invalid
-        input = new OperationInput {
+        input = new OperationInput
+        {
             OperationName = "InvokeOperation",
             Method = "PUT",
             Parameters = new Dictionary<string, string> {
@@ -1322,21 +1440,25 @@ public class ClientImplTest {
             Key = ""
         };
 
-        try {
+        try
+        {
             await client.ExecuteAsync(input);
             Assert.Fail("should not here");
         }
-        catch (Exception e) {
+        catch (Exception e)
+        {
             Assert.Contains("input.Key is invalid", e.ToString());
         }
         Assert.Null(mockHandler.LastRequest);
     }
 
     [Fact]
-    public async Task TestInvalidEndpoint() {
+    public async Task TestInvalidEndpoint()
+    {
         var mockHandler = new MockHttpMessageHandler();
 
-        var config = new Configuration() {
+        var config = new Configuration()
+        {
             Region = "cn-hangzhou",
             CredentialsProvider = new AnonymousCredentialsProvider(),
             HttpTransport = new HttpTransport(mockHandler),
@@ -1351,7 +1473,8 @@ public class ClientImplTest {
                 Content    = new StringContent("")
             }
         ];
-        var input = new OperationInput {
+        var input = new OperationInput
+        {
             OperationName = "InvokeOperation",
             Method = "PUT",
             Parameters = new Dictionary<string, string> {
@@ -1360,21 +1483,25 @@ public class ClientImplTest {
             Bucket = "bucket",
         };
 
-        try {
+        try
+        {
             await client.ExecuteAsync(input);
             Assert.Fail("should not here");
         }
-        catch (Exception e) {
+        catch (Exception e)
+        {
             Assert.Contains("Endpoint invalid.", e.ToString());
         }
         Assert.Null(mockHandler.LastRequest);
     }
 
     [Fact]
-    public async Task TestServiceError() {
+    public async Task TestServiceError()
+    {
         var mockHandler = new MockHttpMessageHandler();
 
-        var config = new Configuration() {
+        var config = new Configuration()
+        {
             Region = "cn-hangzhou",
             CredentialsProvider = new AnonymousCredentialsProvider(),
             HttpTransport = new HttpTransport(mockHandler),
@@ -1402,7 +1529,8 @@ public class ClientImplTest {
                 Content    = new StringContent(errXml)
             }
         ];
-        var input = new OperationInput {
+        var input = new OperationInput
+        {
             OperationName = "InvokeOperation",
             Method = "PUT",
             Parameters = new Dictionary<string, string> {
@@ -1411,11 +1539,13 @@ public class ClientImplTest {
             Bucket = "bucket",
         };
 
-        try {
+        try
+        {
             await client.ExecuteAsync(input);
             Assert.Fail("should not here");
         }
-        catch (Exception e) {
+        catch (Exception e)
+        {
             Assert.IsAssignableFrom<OperationException>(e);
             Assert.IsAssignableFrom<ServiceException>(e.InnerException);
             var se = e.InnerException as ServiceException;
@@ -1431,7 +1561,8 @@ public class ClientImplTest {
 
         // error in header
         var errXmlBase64 = "PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiPz4NCjxFcnJvcj4NCiA8Q29kZT5JbnZhbGlkQWNjZXNzS2V5SWQ8L0NvZGU+DQogPE1lc3NhZ2U+VGhlIE9TUyBBY2Nlc3MgS2V5IElkIHlvdSBwcm92aWRlZCBkb2VzIG5vdCBleGlzdCBpbiBvdXIgcmVjb3Jkcy48L01lc3NhZ2U+DQogPEhvc3RJZD5vc3MtY24taGFuZ3pob3UuYWxpeXVuY3MuY29tPC9Ib3N0SWQ+DQogPE9TU0FjY2Vzc0tleUlkPmFrPC9PU1NBY2Nlc3NLZXlJZD4NCjwvRXJyb3I+";
-        var response = new HttpResponseMessage() {
+        var response = new HttpResponseMessage()
+        {
             StatusCode = HttpStatusCode.Forbidden,
             Content = new StringContent(""),
         };
@@ -1440,7 +1571,8 @@ public class ClientImplTest {
         response.Headers.Add("x-oss-ec", "0002-00000901");
         mockHandler.Clear();
         mockHandler.Responses = [response];
-        input = new OperationInput {
+        input = new OperationInput
+        {
             OperationName = "InvokeOperation",
             Method = "PUT",
             Parameters = new Dictionary<string, string> {
@@ -1449,11 +1581,13 @@ public class ClientImplTest {
             Bucket = "bucket",
         };
 
-        try {
+        try
+        {
             await client.ExecuteAsync(input);
             Assert.Fail("should not here");
         }
-        catch (Exception e) {
+        catch (Exception e)
+        {
             Assert.IsAssignableFrom<OperationException>(e);
             Assert.IsAssignableFrom<ServiceException>(e.InnerException);
             var se = e.InnerException as ServiceException;
@@ -1483,7 +1617,8 @@ public class ClientImplTest {
                 Content    = new StringContent(errXml)
             }
         ];
-        input = new OperationInput {
+        input = new OperationInput
+        {
             OperationName = "InvokeOperation",
             Method = "PUT",
             Parameters = new Dictionary<string, string> {
@@ -1492,11 +1627,13 @@ public class ClientImplTest {
             Bucket = "bucket",
         };
 
-        try {
+        try
+        {
             await client.ExecuteAsync(input);
             Assert.Fail("should not here");
         }
-        catch (Exception e) {
+        catch (Exception e)
+        {
             Assert.IsAssignableFrom<OperationException>(e);
             Assert.IsAssignableFrom<ServiceException>(e.InnerException);
             var se = e.InnerException as ServiceException;
@@ -1516,7 +1653,8 @@ public class ClientImplTest {
                 Content    = new StringContent(errXml)
             }
         ];
-        input = new OperationInput {
+        input = new OperationInput
+        {
             OperationName = "InvokeOperation",
             Method = "PUT",
             Parameters = new Dictionary<string, string> {
@@ -1525,11 +1663,13 @@ public class ClientImplTest {
             Bucket = "bucket",
         };
 
-        try {
+        try
+        {
             await client.ExecuteAsync(input);
             Assert.Fail("should not here");
         }
-        catch (Exception e) {
+        catch (Exception e)
+        {
             Assert.IsAssignableFrom<OperationException>(e);
             Assert.IsAssignableFrom<ServiceException>(e.InnerException);
             var se = e.InnerException as ServiceException;
@@ -1547,7 +1687,8 @@ public class ClientImplTest {
                 StatusCode = HttpStatusCode.Forbidden
             }
         ];
-        input = new OperationInput {
+        input = new OperationInput
+        {
             OperationName = "InvokeOperation",
             Method = "PUT",
             Parameters = new Dictionary<string, string> {
@@ -1556,11 +1697,13 @@ public class ClientImplTest {
             Bucket = "bucket",
         };
 
-        try {
+        try
+        {
             await client.ExecuteAsync(input);
             Assert.Fail("should not here");
         }
-        catch (Exception e) {
+        catch (Exception e)
+        {
             Assert.IsAssignableFrom<OperationException>(e);
             Assert.IsAssignableFrom<ServiceException>(e.InnerException);
             var se = e.InnerException as ServiceException;
@@ -1573,19 +1716,22 @@ public class ClientImplTest {
     }
 
     [Fact]
-    public void TestPresignInnerV4() {
+    public void TestPresignInnerV4()
+    {
         var mockHandler = new MockHttpMessageHandler();
         var opOptions = new OperationOptions();
 
         // ak sk
-        var config = new Configuration() {
+        var config = new Configuration()
+        {
             Region = "cn-hangzhou",
             CredentialsProvider = new StaticCredentialsProvide("ak", "sk"),
             HttpTransport = new HttpTransport(mockHandler),
         };
         var client = new ClientImpl(config);
 
-        var input = new OperationInput {
+        var input = new OperationInput
+        {
             OperationName = "GetObject",
             Method = "GET",
             Bucket = "bucket",
@@ -1608,7 +1754,8 @@ public class ClientImplTest {
         Assert.Empty(result.SignedHeaders);
 
         // default signed headers
-        input = new OperationInput {
+        input = new OperationInput
+        {
             OperationName = "PutObject",
             Method = "PUT",
             Bucket = "bucket",
@@ -1645,14 +1792,16 @@ public class ClientImplTest {
         Assert.Equal("value1", result.SignedHeaders["x-oss-meta-key1"]);
 
         // additional-headers
-        config = new Configuration() {
+        config = new Configuration()
+        {
             Region = "cn-hangzhou",
             CredentialsProvider = new StaticCredentialsProvide("ak", "sk"),
             HttpTransport = new HttpTransport(mockHandler),
             AdditionalHeaders = ["Abc"]
         };
         client = new ClientImpl(config);
-        input = new OperationInput {
+        input = new OperationInput
+        {
             OperationName = "PutObject",
             Method = "PUT",
             Bucket = "bucket",
@@ -1690,14 +1839,16 @@ public class ClientImplTest {
         Assert.Equal("abc-value1", result.SignedHeaders["abc"]);
 
         // token
-        config = new Configuration() {
+        config = new Configuration()
+        {
             Region = "cn-hangzhou",
             CredentialsProvider = new StaticCredentialsProvide("ak", "sk", "token"),
             HttpTransport = new HttpTransport(mockHandler),
         };
         client = new ClientImpl(config);
 
-        input = new OperationInput {
+        input = new OperationInput
+        {
             OperationName = "GetObject",
             Method = "GET",
             Bucket = "bucket",
@@ -1722,19 +1873,22 @@ public class ClientImplTest {
     }
 
     [Fact]
-    public void TestPresignInnerV4DefaultExpiration() {
+    public void TestPresignInnerV4DefaultExpiration()
+    {
         var mockHandler = new MockHttpMessageHandler();
         var opOptions = new OperationOptions();
 
         // ak sk
-        var config = new Configuration() {
+        var config = new Configuration()
+        {
             Region = "cn-hangzhou",
             CredentialsProvider = new StaticCredentialsProvide("ak", "sk"),
             HttpTransport = new HttpTransport(mockHandler),
         };
         var client = new ClientImpl(config);
 
-        var input = new OperationInput {
+        var input = new OperationInput
+        {
             OperationName = "GetObject",
             Method = "GET",
             Bucket = "bucket",
@@ -1756,12 +1910,14 @@ public class ClientImplTest {
     }
 
     [Fact]
-    public void TestPresignInnerV1() {
+    public void TestPresignInnerV1()
+    {
         var mockHandler = new MockHttpMessageHandler();
         var opOptions = new OperationOptions();
 
         // ak sk
-        var config = new Configuration() {
+        var config = new Configuration()
+        {
             Region = "cn-hangzhou",
             CredentialsProvider = new StaticCredentialsProvide("ak", "sk"),
             HttpTransport = new HttpTransport(mockHandler),
@@ -1769,7 +1925,8 @@ public class ClientImplTest {
         };
         var client = new ClientImpl(config);
 
-        var input = new OperationInput {
+        var input = new OperationInput
+        {
             OperationName = "GetObject",
             Method = "GET",
             Bucket = "bucket",
@@ -1790,7 +1947,8 @@ public class ClientImplTest {
         Assert.Empty(result.SignedHeaders);
 
         // default signed headers
-        input = new OperationInput {
+        input = new OperationInput
+        {
             OperationName = "PutObject",
             Method = "PUT",
             Bucket = "bucket",
@@ -1824,7 +1982,8 @@ public class ClientImplTest {
         Assert.Equal("value1", result.SignedHeaders["x-oss-meta-key1"]);
 
         // additional-headers
-        config = new Configuration() {
+        config = new Configuration()
+        {
             Region = "cn-hangzhou",
             CredentialsProvider = new StaticCredentialsProvide("ak", "sk"),
             HttpTransport = new HttpTransport(mockHandler),
@@ -1832,7 +1991,8 @@ public class ClientImplTest {
             AdditionalHeaders = ["Abc"]
         };
         client = new ClientImpl(config);
-        input = new OperationInput {
+        input = new OperationInput
+        {
             OperationName = "PutObject",
             Method = "PUT",
             Bucket = "bucket",
@@ -1866,7 +2026,8 @@ public class ClientImplTest {
         Assert.Equal("value1", result.SignedHeaders["x-oss-meta-key1"]);
 
         // token
-        config = new Configuration() {
+        config = new Configuration()
+        {
             Region = "cn-hangzhou",
             CredentialsProvider = new StaticCredentialsProvide("ak", "sk", "token"),
             HttpTransport = new HttpTransport(mockHandler),
@@ -1874,7 +2035,8 @@ public class ClientImplTest {
         };
         client = new ClientImpl(config);
 
-        input = new OperationInput {
+        input = new OperationInput
+        {
             OperationName = "GetObject",
             Method = "GET",
             Bucket = "bucket",
@@ -1897,12 +2059,14 @@ public class ClientImplTest {
     }
 
     [Fact]
-    public void TestPresignInnerV1DefaultExpiration() {
+    public void TestPresignInnerV1DefaultExpiration()
+    {
         var mockHandler = new MockHttpMessageHandler();
         var opOptions = new OperationOptions();
 
         // ak sk
-        var config = new Configuration() {
+        var config = new Configuration()
+        {
             Region = "cn-hangzhou",
             CredentialsProvider = new StaticCredentialsProvide("ak", "sk"),
             HttpTransport = new HttpTransport(mockHandler),
@@ -1910,7 +2074,8 @@ public class ClientImplTest {
         };
         var client = new ClientImpl(config);
 
-        var input = new OperationInput {
+        var input = new OperationInput
+        {
             OperationName = "GetObject",
             Method = "GET",
             Bucket = "bucket",
@@ -1932,19 +2097,22 @@ public class ClientImplTest {
     }
 
     [Fact]
-    public void TestPresignMisc() {
+    public void TestPresignMisc()
+    {
         var mockHandler = new MockHttpMessageHandler();
         var opOptions = new OperationOptions();
 
         // _defaultPresignOpOptions
-        var config = new Configuration() {
+        var config = new Configuration()
+        {
             Region = "cn-hangzhou",
             CredentialsProvider = new StaticCredentialsProvide("ak", "sk"),
             HttpTransport = new HttpTransport(mockHandler),
         };
         var client = new ClientImpl(config);
 
-        var input = new OperationInput {
+        var input = new OperationInput
+        {
             OperationName = "GetObject",
             Method = "GET",
             Bucket = "bucket",
@@ -1966,13 +2134,15 @@ public class ClientImplTest {
         Assert.Empty(result.SignedHeaders);
 
         // Null CredentialsProvider
-        config = new Configuration() {
+        config = new Configuration()
+        {
             Region = "cn-hangzhou",
             HttpTransport = new HttpTransport(mockHandler),
         };
         client = new ClientImpl(config);
 
-        input = new OperationInput {
+        input = new OperationInput
+        {
             OperationName = "GetObject",
             Method = "GET",
             Bucket = "bucket",
@@ -1991,37 +2161,43 @@ public class ClientImplTest {
         Assert.Null(result.SignedHeaders);
 
         // empty ak&sk
-        config = new Configuration() {
+        config = new Configuration()
+        {
             Region = "cn-hangzhou",
             CredentialsProvider = new StaticCredentialsProvide("", ""),
             HttpTransport = new HttpTransport(mockHandler),
         };
         client = new ClientImpl(config);
 
-        input = new OperationInput {
+        input = new OperationInput
+        {
             OperationName = "GetObject",
             Method = "GET",
             Bucket = "bucket",
             Key = "key",
         };
 
-        try {
+        try
+        {
             client.PresignInner(input, opOptions);
             Assert.Fail("should not here");
         }
-        catch (Exception e) {
+        catch (Exception e)
+        {
             Assert.Contains("Credentials is null or empty", e.ToString());
         }
 
         // invalid expiration-time type
-        config = new Configuration() {
+        config = new Configuration()
+        {
             Region = "cn-hangzhou",
             CredentialsProvider = new StaticCredentialsProvide("ak", "sk"),
             HttpTransport = new HttpTransport(mockHandler),
         };
         client = new ClientImpl(config);
 
-        input = new OperationInput {
+        input = new OperationInput
+        {
             OperationName = "GetObject",
             Method = "GET",
             Bucket = "bucket",
@@ -2043,17 +2219,20 @@ public class ClientImplTest {
     }
 
     [Fact]
-    public void TestDispose() {
+    public void TestDispose()
+    {
         var mockHandler = new MockHttpMessageHandler();
 
-        var config = new Configuration() {
+        var config = new Configuration()
+        {
             Region = "cn-hangzhou",
             CredentialsProvider = new StaticCredentialsProvide("ak", "sk"),
             HttpTransport = new HttpTransport(mockHandler),
         };
         using var client = new ClientImpl(config);
 
-        var input = new OperationInput {
+        var input = new OperationInput
+        {
             OperationName = "GetObject",
             Method = "GET",
             Bucket = "bucket",
@@ -2075,7 +2254,8 @@ public class ClientImplTest {
         Assert.Empty(result.SignedHeaders);
     }
 
-    private static string FormatUnixTime(DateTime time) {
+    private static string FormatUnixTime(DateTime time)
+    {
         const long ticksOf1970 = 621355968000000000;
         return ((time.ToUniversalTime().Ticks - ticksOf1970) / 10000000L).ToString(CultureInfo.InvariantCulture);
     }

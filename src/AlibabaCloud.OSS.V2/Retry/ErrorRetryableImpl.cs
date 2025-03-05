@@ -1,11 +1,15 @@
 ﻿using System;
 
-namespace AlibabaCloud.OSS.V2.Retry {
-    internal class HttpStatusCodeRetryable : IErrorRetryable {
+namespace AlibabaCloud.OSS.V2.Retry
+{
+    internal class HttpStatusCodeRetryable : IErrorRetryable
+    {
         private readonly int[] _statusCodes = new int[] { 401, 408, 429 };
 
-        public bool IsErrorRetryable(Exception error) {
-            if (error is ServiceException exception) {
+        public bool IsErrorRetryable(Exception error)
+        {
+            if (error is ServiceException exception)
+            {
                 var statusCode = exception.StatusCode;
                 if (statusCode >= 500) return true;
 
@@ -18,10 +22,12 @@ namespace AlibabaCloud.OSS.V2.Retry {
         }
     }
 
-    internal class ServiceErrorCodeRetryable : IErrorRetryable {
+    internal class ServiceErrorCodeRetryable : IErrorRetryable
+    {
         private readonly string[] _errorCodes = { "RequestTimeTooSkewed", "BadRequest" };
 
-        public bool IsErrorRetryable(Exception error) {
+        public bool IsErrorRetryable(Exception error)
+        {
             if (error is ServiceException exception)
                 foreach (var code in _errorCodes)
                     if (exception.ErrorCode == code)
@@ -31,9 +37,12 @@ namespace AlibabaCloud.OSS.V2.Retry {
         }
     }
 
-    internal class ClientExceptionRetryable : IErrorRetryable {
-        public bool IsErrorRetryable(Exception error) {
-            return error switch {
+    internal class ClientExceptionRetryable : IErrorRetryable
+    {
+        public bool IsErrorRetryable(Exception error)
+        {
+            return error switch
+            {
                 InconsistentException => true,
                 RequestFailedException => true,
                 RequestTimeoutException => true,

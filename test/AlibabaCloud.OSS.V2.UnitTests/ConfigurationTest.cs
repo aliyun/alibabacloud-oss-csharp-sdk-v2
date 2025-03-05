@@ -1,18 +1,23 @@
 namespace AlibabaCloud.OSS.V2.UnitTests;
 
-public class ConfigurationTest {
+public class ConfigurationTest
+{
     [Fact]
-    public void TestWithRequiredArgs() {
+    public void TestWithRequiredArgs()
+    {
         var region = "cn-hangzhou";
-        var config = new Configuration() {
+        var config = new Configuration()
+        {
             Region = region
         };
         Assert.Equal(region, config.Region);
     }
 
     [Fact]
-    public void TestWithOptionalArgs() {
-        var config = new Configuration() {
+    public void TestWithOptionalArgs()
+    {
+        var config = new Configuration()
+        {
             Region = "cn-hangzhou",
             Endpoint = "oss-cn-hangzhou.aliyuncs.com",
             SignatureVersion = "v4",
@@ -63,7 +68,8 @@ public class ConfigurationTest {
     }
 
     [Fact]
-    public void TestWithDefaultValues() {
+    public void TestWithDefaultValues()
+    {
         var config = Configuration.LoadDefault();
         Assert.Null(config.Region);
         Assert.Null(config.Endpoint);

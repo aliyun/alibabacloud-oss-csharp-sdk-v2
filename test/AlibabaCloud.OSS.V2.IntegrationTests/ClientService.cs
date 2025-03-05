@@ -3,25 +3,31 @@
 namespace AlibabaCloud.OSS.V2.IntegrationTests;
 
 
-public class ClientServiceTest : IDisposable {
+public class ClientServiceTest : IDisposable
+{
     private readonly string BucketNamePrefix;
 
-    public void Dispose() {
+    public void Dispose()
+    {
         Utils.CleanBuckets(BucketNamePrefix);
     }
 
-    public ClientServiceTest() {
+    public ClientServiceTest()
+    {
         BucketNamePrefix = Utils.RandomBucketNamePrefix();
     }
 
     [Fact]
-    public async Task TestListBuckets() {
+    public async Task TestListBuckets()
+    {
         var client = Utils.GetDefaultClient();
 
         var bucketNamePrefix = Utils.RandomBucketName(BucketNamePrefix) + "list-b-";
 
-        for (var i = 0; i < 10; i++) {
-            var result = await client.PutBucketAsync(new() {
+        for (var i = 0; i < 10; i++)
+        {
+            var result = await client.PutBucketAsync(new()
+            {
                 Bucket = $"{bucketNamePrefix}{i}",
             });
             Assert.NotNull(result);
@@ -39,7 +45,8 @@ public class ClientServiceTest : IDisposable {
         Assert.True(listResult.Buckets.Count > 10);
 
         //list with prefix
-        listResult = await client.ListBucketsAsync(new ListBucketsRequest() {
+        listResult = await client.ListBucketsAsync(new ListBucketsRequest()
+        {
             MaxKeys = 50,
             Prefix = bucketNamePrefix
         });
@@ -51,13 +58,16 @@ public class ClientServiceTest : IDisposable {
     }
 
     [Fact]
-    public async Task TestListBucketsByPaginators() {
+    public async Task TestListBucketsByPaginators()
+    {
         var client = Utils.GetDefaultClient();
 
         var bucketNamePrefix = Utils.RandomBucketName(BucketNamePrefix) + "list-c-";
 
-        for (var i = 0; i < 10; i++) {
-            var result = await client.PutBucketAsync(new() {
+        for (var i = 0; i < 10; i++)
+        {
+            var result = await client.PutBucketAsync(new()
+            {
                 Bucket = $"{bucketNamePrefix}{i}",
             });
             Assert.NotNull(result);
@@ -69,7 +79,8 @@ public class ClientServiceTest : IDisposable {
         //default
         var count = 0;
         var paginators = client.ListBucketsPaginator(new ListBucketsRequest());
-        await foreach (var bucket in paginators.IterPageAsync()) {
+        await foreach (var bucket in paginators.IterPageAsync())
+        {
             Assert.NotNull(bucket);
             Assert.NotNull(bucket.Buckets);
             Assert.NotEmpty(bucket.Buckets);
@@ -82,7 +93,8 @@ public class ClientServiceTest : IDisposable {
             new ListBucketsRequest() { Prefix = bucketNamePrefix },
             new Paginator.PaginatorOptions() { Limit = 1 });
         count = 0;
-        await foreach (var bucket in paginators.IterPageAsync()) {
+        await foreach (var bucket in paginators.IterPageAsync())
+        {
             Assert.NotNull(bucket);
             Assert.NotNull(bucket.Buckets);
             Assert.Single(bucket.Buckets);
@@ -93,7 +105,8 @@ public class ClientServiceTest : IDisposable {
         //default
         paginators = client.ListBucketsPaginator(new ListBucketsRequest());
         count = 0;
-        foreach (var bucket in paginators.IterPage()) {
+        foreach (var bucket in paginators.IterPage())
+        {
             Assert.NotNull(bucket);
             Assert.NotNull(bucket.Buckets);
             Assert.NotEmpty(bucket.Buckets);
@@ -106,7 +119,8 @@ public class ClientServiceTest : IDisposable {
             new ListBucketsRequest() { Prefix = bucketNamePrefix },
             new Paginator.PaginatorOptions() { Limit = 1 });
         count = 0;
-        foreach (var bucket in paginators.IterPage()) {
+        foreach (var bucket in paginators.IterPage())
+        {
             Assert.NotNull(bucket);
             Assert.NotNull(bucket.Buckets);
             Assert.Single(bucket.Buckets);
@@ -116,13 +130,16 @@ public class ClientServiceTest : IDisposable {
     }
 
     [Fact]
-    public async Task TestListBucketsFail() {
+    public async Task TestListBucketsFail()
+    {
         var invClient = Utils.GetInvalidAkClient();
 
-        try {
+        try
+        {
             await invClient.ListBucketsAsync(new ListBucketsRequest());
         }
-        catch (Exception e) {
+        catch (Exception e)
+        {
             Assert.IsAssignableFrom<OperationException>(e);
             Assert.StartsWith("operation error ListBuckets", e.Message);
             Assert.IsAssignableFrom<ServiceException>(e.InnerException);

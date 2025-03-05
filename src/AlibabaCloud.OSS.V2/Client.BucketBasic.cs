@@ -4,8 +4,10 @@ using System.Threading;
 using System.Threading.Tasks;
 using AlibabaCloud.OSS.V2.Transform;
 
-namespace AlibabaCloud.OSS.V2 {
-    public partial class Client {
+namespace AlibabaCloud.OSS.V2
+{
+    public partial class Client
+    {
         /// <summary>
         /// Queries the storage capacity of a bucket and the number of objects that are stored in the bucket.
         /// </summary>
@@ -17,10 +19,12 @@ namespace AlibabaCloud.OSS.V2 {
             Models.GetBucketStatRequest request,
             OperationOptions? options = null,
             CancellationToken cancellationToken = default
-        ) {
+        )
+        {
             Ensure.NotNull(request.Bucket, "request.Bucket");
 
-            var input = new OperationInput {
+            var input = new OperationInput
+            {
                 OperationName = "GetBucketStat",
                 Method = "GET",
                 Parameters = new Dictionary<string, string> {
@@ -51,10 +55,12 @@ namespace AlibabaCloud.OSS.V2 {
             Models.PutBucketRequest request,
             OperationOptions? options = null,
             CancellationToken cancellationToken = default
-        ) {
+        )
+        {
             Ensure.NotNull(request.Bucket, "request.Bucket");
 
-            var input = new OperationInput {
+            var input = new OperationInput
+            {
                 OperationName = "PutBucket",
                 Method = "PUT",
                 Headers = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase) {
@@ -85,10 +91,12 @@ namespace AlibabaCloud.OSS.V2 {
             Models.DeleteBucketRequest request,
             OperationOptions? options = null,
             CancellationToken cancellationToken = default
-        ) {
+        )
+        {
             Ensure.NotNull(request.Bucket, "request.Bucket");
 
-            var input = new OperationInput {
+            var input = new OperationInput
+            {
                 OperationName = "DeleteBucket",
                 Method = "DELETE",
                 Headers = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase) {
@@ -119,10 +127,12 @@ namespace AlibabaCloud.OSS.V2 {
             Models.ListObjectsRequest request,
             OperationOptions? options = null,
             CancellationToken cancellationToken = default
-        ) {
+        )
+        {
             Ensure.NotNull(request.Bucket, "request.Bucket");
 
-            var input = new OperationInput {
+            var input = new OperationInput
+            {
                 OperationName = "ListObjects",
                 Method = "GET",
                 Parameters = new Dictionary<string, string> {
@@ -153,10 +163,12 @@ namespace AlibabaCloud.OSS.V2 {
             Models.ListObjectsV2Request request,
             OperationOptions? options = null,
             CancellationToken cancellationToken = default
-        ) {
+        )
+        {
             Ensure.NotNull(request.Bucket, "request.Bucket");
 
-            var input = new OperationInput {
+            var input = new OperationInput
+            {
                 OperationName = "ListObjectsV2",
                 Method = "GET",
                 Parameters = new Dictionary<string, string> {
@@ -188,10 +200,12 @@ namespace AlibabaCloud.OSS.V2 {
             Models.GetBucketInfoRequest request,
             OperationOptions? options = null,
             CancellationToken cancellationToken = default
-        ) {
+        )
+        {
             Ensure.NotNull(request.Bucket, "request.Bucket");
 
-            var input = new OperationInput {
+            var input = new OperationInput
+            {
                 OperationName = "GetBucketInfo",
                 Method = "GET",
                 Parameters = new Dictionary<string, string> {
@@ -222,10 +236,12 @@ namespace AlibabaCloud.OSS.V2 {
             Models.GetBucketLocationRequest request,
             OperationOptions? options = null,
             CancellationToken cancellationToken = default
-        ) {
+        )
+        {
             Ensure.NotNull(request.Bucket, "request.Bucket");
 
-            var input = new OperationInput {
+            var input = new OperationInput
+            {
                 OperationName = "GetBucketLocation",
                 Method = "GET",
                 Parameters = new Dictionary<string, string> {

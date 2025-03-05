@@ -5,8 +5,10 @@ using System.Threading.Tasks;
 using AlibabaCloud.OSS.V2.Transform;
 
 
-namespace AlibabaCloud.OSS.V2 {
-    public partial class Client {
+namespace AlibabaCloud.OSS.V2
+{
+    public partial class Client
+    {
         /// <summary>
         /// You can create a symbolic link for a target object.
         /// </summary>
@@ -18,12 +20,14 @@ namespace AlibabaCloud.OSS.V2 {
             Models.PutSymlinkRequest request,
             OperationOptions? options = null,
             CancellationToken cancellationToken = default
-        ) {
+        )
+        {
             Ensure.NotNull(request.Bucket, "request.Bucket");
             Ensure.NotNull(request.Key, "request.Key");
             Ensure.NotNull(request.SymlinkTarget, "request.SymlinkTarget");
 
-            var input = new OperationInput {
+            var input = new OperationInput
+            {
                 OperationName = "PutSymlink",
                 Method = "PUT",
                 Headers = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase) {
@@ -58,11 +62,13 @@ namespace AlibabaCloud.OSS.V2 {
             Models.GetSymlinkRequest request,
             OperationOptions? options = null,
             CancellationToken cancellationToken = default
-        ) {
+        )
+        {
             Ensure.NotNull(request.Bucket, "request.Bucket");
             Ensure.NotNull(request.Key, "request.Key");
 
-            var input = new OperationInput {
+            var input = new OperationInput
+            {
                 OperationName = "GetSymlink",
                 Method = "GET",
                 Parameters = new Dictionary<string, string> {

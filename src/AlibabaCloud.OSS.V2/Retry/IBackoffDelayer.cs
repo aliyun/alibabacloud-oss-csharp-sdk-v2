@@ -1,8 +1,10 @@
 ﻿
 using System;
 
-namespace AlibabaCloud.OSS.V2.Retry {
-    public interface IBackoffDelayer {
+namespace AlibabaCloud.OSS.V2.Retry
+{
+    public interface IBackoffDelayer
+    {
         /// <summary>
         /// Returns the delay that should be used before retrying the attempt.
         /// </summary>

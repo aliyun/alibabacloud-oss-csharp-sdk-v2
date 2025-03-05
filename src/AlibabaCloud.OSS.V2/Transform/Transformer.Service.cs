@@ -1,10 +1,12 @@
 ﻿using System.Collections.Generic;
 using System.Xml.Serialization;
 
-namespace AlibabaCloud.OSS.V2.Transform {
+namespace AlibabaCloud.OSS.V2.Transform
+{
 
     [XmlRoot("ListAllMyBucketsResult")]
-    public sealed class XmlListAllMyBucketsResult {
+    public sealed class XmlListAllMyBucketsResult
+    {
         [XmlElement(ElementName = "Prefix")]
         public string? Prefix { get; set; }
 
@@ -27,11 +29,13 @@ namespace AlibabaCloud.OSS.V2.Transform {
         public List<Models.BucketProperties>? Buckets { get; set; }
     }
 
-    internal static partial class Serde {
+    internal static partial class Serde
+    {
         public static void DeserializeListBuckets(
             ref Models.ResultModel baseResult,
             ref OperationOutput output
-        ) {
+        )
+        {
             var serializer = new XmlSerializer(typeof(XmlListAllMyBucketsResult));
             using var body = output.Body!;
             var obj = serializer.Deserialize(body) as XmlListAllMyBucketsResult;

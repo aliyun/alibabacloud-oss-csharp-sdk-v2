@@ -4,9 +4,11 @@ using AlibabaCloud.OSS.V2.Transform;
 
 namespace AlibabaCloud.OSS.V2.UnitTests.Models;
 
-public class ModelRegionTest {
+public class ModelRegionTest
+{
     [Fact]
-    public void TestDescribeRegionsRequest() {
+    public void TestDescribeRegionsRequest()
+    {
         var request = new DescribeRegionsRequest();
         Assert.Empty(request.Headers);
         Assert.Empty(request.Parameters);
@@ -21,7 +23,8 @@ public class ModelRegionTest {
         Assert.Null(input.Parameters);
         Assert.Null(input.Body);
 
-        request = new DescribeRegionsRequest {
+        request = new DescribeRegionsRequest
+        {
             Regions = "oss-cn-hangzhou",
         };
         Assert.Single(request.Parameters);
@@ -37,7 +40,8 @@ public class ModelRegionTest {
     }
 
     [Fact]
-    public void TestDescribeRegionsResult() {
+    public void TestDescribeRegionsResult()
+    {
         var result = new DescribeRegionsResult();
         Assert.Equal(0, result.StatusCode);
         Assert.Equal("", result.Status);
@@ -50,7 +54,8 @@ public class ModelRegionTest {
 </RegionInfoList>
 """;
 
-        var output = new OperationOutput {
+        var output = new OperationOutput
+        {
             StatusCode = 200,
             Status = "OK",
             Headers = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase) {
@@ -89,7 +94,8 @@ public class ModelRegionTest {
 </RegionInfoList>
 """;
 
-        output = new OperationOutput {
+        output = new OperationOutput
+        {
             StatusCode = 200,
             Status = "OK",
             Headers = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase) {

@@ -1,8 +1,10 @@
-﻿namespace AlibabaCloud.OSS.V2.Models {
+﻿namespace AlibabaCloud.OSS.V2.Models
+{
     /// <summary>
     /// The access control list (ACL) of the bucket
     /// </summary>
-    public enum BucketAclType {
+    public enum BucketAclType
+    {
         /// <summary>
         /// Only the bucket owner can perform read and write operations on objects in the bucket.
         /// Other users cannot access the objects in the bucket.
@@ -21,9 +23,12 @@
         PublicReadWrite
     }
 
-    public static class BucketAclTypeExtensions {
-        public static string GetString(this BucketAclType me) {
-            return me switch {
+    public static class BucketAclTypeExtensions
+    {
+        public static string GetString(this BucketAclType me)
+        {
+            return me switch
+            {
                 BucketAclType.Private => "private",
                 BucketAclType.PublicRead => "public-read",
                 BucketAclType.PublicReadWrite => "public-read-write",
@@ -32,14 +37,18 @@
         }
     }
 
-    public enum AccessMonitorStatusType {
+    public enum AccessMonitorStatusType
+    {
         Enabled,
         Disabled
     }
 
-    public static class AccessMonitorStatusTypeExtensions {
-        public static string GetString(this AccessMonitorStatusType me) {
-            return me switch {
+    public static class AccessMonitorStatusTypeExtensions
+    {
+        public static string GetString(this AccessMonitorStatusType me)
+        {
+            return me switch
+            {
                 AccessMonitorStatusType.Enabled => "Enabled",
                 AccessMonitorStatusType.Disabled => "Disabled",
                 _ => "NO VALUE GIVEN"
@@ -50,7 +59,8 @@
     /// <summary>
     /// The storage class of the bucket or object.
     /// </summary>
-    public enum StorageClassType {
+    public enum StorageClassType
+    {
         /// <summary>
         /// Standard provides highly reliable, highly available and high-performance object storage  for data that is frequently accessed.
         /// </summary>
@@ -81,9 +91,12 @@
         DeepColdArchive
     }
 
-    public static class StorageClassTypeExtensions {
-        public static string GetString(this StorageClassType me) {
-            return me switch {
+    public static class StorageClassTypeExtensions
+    {
+        public static string GetString(this StorageClassType me)
+        {
+            return me switch
+            {
                 StorageClassType.Standard => "Standard",
                 StorageClassType.IA => "IA",
                 StorageClassType.Archive => "Archive",
@@ -97,7 +110,8 @@
     /// <summary>
     /// The redundancy type of the bucket.
     /// </summary>
-    public enum DataRedundancyType {
+    public enum DataRedundancyType
+    {
         /// <summary>
         /// LRS Locally redundant storage(LRS) stores copies of each object across different devices
         /// in the same zone. This ensures data reliability and availability even if two storage devices
@@ -113,9 +127,12 @@
         ZRS,
     }
 
-    public static class DataRedundancyTypeExtensions {
-        public static string GetString(this DataRedundancyType me) {
-            return me switch {
+    public static class DataRedundancyTypeExtensions
+    {
+        public static string GetString(this DataRedundancyType me)
+        {
+            return me switch
+            {
                 DataRedundancyType.LRS => "LRS",
                 DataRedundancyType.ZRS => "ZRS",
                 _ => "NO VALUE GIVEN"
@@ -126,7 +143,8 @@
     /// <summary>
     /// The access control list (ACL) of the object
     /// </summary>
-    public enum ObjectAclType {
+    public enum ObjectAclType
+    {
         /// <summary>
         /// Only the object owner is allowed to perform read and write operations on the object.
         /// Other users cannot access the object.
@@ -150,9 +168,12 @@
         Default
     }
 
-    public static class ObjectAclTypeExtensions {
-        public static string GetString(this ObjectAclType me) {
-            return me switch {
+    public static class ObjectAclTypeExtensions
+    {
+        public static string GetString(this ObjectAclType me)
+        {
+            return me switch
+            {
                 ObjectAclType.Private => "private",
                 ObjectAclType.PublicRead => "public-read",
                 ObjectAclType.PublicReadWrite => "public-read-write",
@@ -165,13 +186,17 @@
     /// <summary>
     /// specifies the encoding method to use
     /// </summary>
-    public enum EncodingType {
+    public enum EncodingType
+    {
         Url
     }
 
-    public static class EncodingTypeExtensions {
-        public static string GetString(this EncodingType me) {
-            return me switch {
+    public static class EncodingTypeExtensions
+    {
+        public static string GetString(this EncodingType me)
+        {
+            return me switch
+            {
                 EncodingType.Url => "url",
                 _ => "NO VALUE GIVEN"
             };
@@ -181,14 +206,18 @@
     /// <summary>
     /// The bucket's versioning status
     /// </summary>
-    public enum BucketVersioningStatusType {
+    public enum BucketVersioningStatusType
+    {
         Enabled,
         Suspended
     }
 
-    public static class BucketVersioningStatusTypeExtensions {
-        public static string GetString(this BucketVersioningStatusType me) {
-            return me switch {
+    public static class BucketVersioningStatusTypeExtensions
+    {
+        public static string GetString(this BucketVersioningStatusType me)
+        {
+            return me switch
+            {
                 BucketVersioningStatusType.Enabled => "Enabled",
                 BucketVersioningStatusType.Suspended => "Suspended",
                 _ => "NO VALUE GIVEN"

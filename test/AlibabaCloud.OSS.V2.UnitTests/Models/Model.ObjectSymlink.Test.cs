@@ -3,9 +3,11 @@ using AlibabaCloud.OSS.V2.Transform;
 
 namespace AlibabaCloud.OSS.V2.UnitTests.Models;
 
-public class ModelObjectSymlinkTest {
+public class ModelObjectSymlinkTest
+{
     [Fact]
-    public void TestPutSymlinkRequest() {
+    public void TestPutSymlinkRequest()
+    {
         var request = new PutSymlinkRequest();
         Assert.Empty(request.Headers);
         Assert.Empty(request.Parameters);
@@ -25,7 +27,8 @@ public class ModelObjectSymlinkTest {
         Assert.Null(input.Parameters);
         Assert.Null(input.Body);
 
-        request = new() {
+        request = new()
+        {
             Bucket = "bucket",
             Key = "key",
             SymlinkTarget = "target-key",
@@ -61,14 +64,16 @@ public class ModelObjectSymlinkTest {
     }
 
     [Fact]
-    public void TestPutSymlinkResult() {
+    public void TestPutSymlinkResult()
+    {
         var result = new PutSymlinkResult();
         Assert.Equal(0, result.StatusCode);
         Assert.Equal("", result.Status);
         Assert.Equal("", result.RequestId);
         Assert.Empty(result.Headers);
 
-        var output = new OperationOutput {
+        var output = new OperationOutput
+        {
             StatusCode = 200,
             Status = "OK",
             Headers = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase) {
@@ -89,7 +94,8 @@ public class ModelObjectSymlinkTest {
     }
 
     [Fact]
-    public void TestGetSymlinkRequest() {
+    public void TestGetSymlinkRequest()
+    {
         var request = new GetSymlinkRequest();
         Assert.Empty(request.Headers);
         Assert.Empty(request.Parameters);
@@ -104,7 +110,8 @@ public class ModelObjectSymlinkTest {
         Assert.Null(input.Parameters);
         Assert.Null(input.Body);
 
-        request = new() {
+        request = new()
+        {
             Bucket = "bucket",
             Key = "key",
             VersionId = "version-id"
@@ -125,7 +132,8 @@ public class ModelObjectSymlinkTest {
     }
 
     [Fact]
-    public void TestGetSymlinkResult() {
+    public void TestGetSymlinkResult()
+    {
         var result = new GetSymlinkResult();
         Assert.Equal(0, result.StatusCode);
         Assert.Equal("", result.Status);
@@ -138,7 +146,8 @@ public class ModelObjectSymlinkTest {
         Assert.NotNull(result.Metadata);
         Assert.Empty(result.Metadata);
 
-        var output = new OperationOutput {
+        var output = new OperationOutput
+        {
             StatusCode = 200,
             Status = "OK",
             Headers = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase) {

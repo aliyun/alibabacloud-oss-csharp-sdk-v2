@@ -4,7 +4,8 @@ using AlibabaCloud.OSS.V2.Models;
 
 namespace AlibabaCloud.OSS.V2.IntegrationTests;
 
-public class Utils {
+public class Utils
+{
     private static readonly string _endpoint = null; // your endpoint
     private static readonly string _region = null; // your region
     private static readonly string _accessKeyId = null; // your access key id
@@ -48,7 +49,8 @@ public class Utils {
     public static string PayerUid
         => _payerUid ?? Environment.GetEnvironmentVariable("OSS_TEST_PAYER_UID");
 
-    public static Client GetDefaultClient() {
+    public static Client GetDefaultClient()
+    {
         if (_client != null) return _client;
 
         var cfg = Configuration.LoadDefault();
@@ -61,7 +63,8 @@ public class Utils {
         return _client;
     }
 
-    public static Client GetClient(string region, string endpoint) {
+    public static Client GetClient(string region, string endpoint)
+    {
         var cfg = Configuration.LoadDefault();
         cfg.CredentialsProvider = new Credentials.StaticCredentialsProvide(AccessKeyId, AccessKeySecret);
         cfg.Region = region;
@@ -70,7 +73,8 @@ public class Utils {
         return new(cfg);
     }
 
-    public static Client GetInvalidAkClient() {
+    public static Client GetInvalidAkClient()
+    {
         if (_invalidClient != null) return _invalidClient;
 
         var cfg = Configuration.LoadDefault();
@@ -83,91 +87,111 @@ public class Utils {
         return _invalidClient;
     }
 
-    public static string GetTempFileName() {
+    public static string GetTempFileName()
+    {
         return $"file-{Guid.NewGuid().ToString()}.tmp";
     }
 
-    public static string GetTempPath() {
+    public static string GetTempPath()
+    {
         //return Path.Join(Path.GetTempPath(), $"csharp-sdk-test-{Guid.NewGuid().ToString()}");
         return $"{Path.GetTempPath()}csharp-sdk-test-{Guid.NewGuid().ToString()}";
     }
 
-    public static string RandomFilePath(string root) {
+    public static string RandomFilePath(string root)
+    {
         var uid = Guid.NewGuid().ToString();
         return $"{root}{Path.DirectorySeparatorChar}file-{Guid.NewGuid().ToString()}.tmp";
     }
 
-    public static string NowTimeStamp() {
+    public static string NowTimeStamp()
+    {
         return Convert.ToString((long)DateTime.UtcNow.Subtract(new DateTime(1970, 1, 1)).TotalMilliseconds);
     }
 
-    public static string RandomBucketNamePrefix() {
+    public static string RandomBucketNamePrefix()
+    {
         var uid = Guid.NewGuid().ToString();
         return $"{BucketNamePrefix}{uid.Substring(0, 6)}-{NowTimeStamp()}";
     }
 
-    public static string RandomBucketName(string prefix) {
+    public static string RandomBucketName(string prefix)
+    {
         var uid = Guid.NewGuid().ToString();
         return $"{prefix}-{uid.Substring(0, 6)}";
     }
 
-    public static string RandomBucketName() {
+    public static string RandomBucketName()
+    {
         var ran = new Random();
         var n = ran.Next(1000);
         return $"{BucketNamePrefix}{Convert.ToString(n)}-{NowTimeStamp()}";
     }
 
-    public static string RandomObjectName() {
+    public static string RandomObjectName()
+    {
         var ran = new Random();
         var n = ran.Next(100);
         return $"{ObjectNamePrefix}{Convert.ToString(n)}-{NowTimeStamp()}";
     }
 
-    public static char GetRandomChar(Random rnd) {
+    public static char GetRandomChar(Random rnd)
+    {
         var ret = rnd.Next(122);
         while (ret is < 48 or > 57 and < 65 or > 90 and < 97) ret = rnd.Next(122);
         return (char)ret;
     }
 
-    public static string GetRandomString(int length) {
+    public static string GetRandomString(int length)
+    {
         var rnd = new Random();
         var sb = new StringBuilder(length);
         for (var i = 0; i < length; i++) sb.Append(GetRandomChar(rnd));
         return sb.ToString();
     }
 
-    public static void WaitFor(int sec) {
+    public static void WaitFor(int sec)
+    {
         Thread.Sleep(sec * 1000);
     }
 
-    public static void CleanBuckets(string prefix) {
+    public static void CleanBuckets(string prefix)
+    {
         Assert.NotEmpty(prefix);
         var client = GetDefaultClient();
         var paginator = client.ListBucketsPaginator(
-            new ListBucketsRequest() {
+            new ListBucketsRequest()
+            {
                 Prefix = prefix
             }
         );
 
-        foreach (var page in paginator.IterPage()) {
-            foreach (var bucket in page.Buckets ?? []) {
-                try {
+        foreach (var page in paginator.IterPage())
+        {
+            foreach (var bucket in page.Buckets ?? [])
+            {
+                try
+                {
                     CleanBucket(bucket);
                 }
-                catch (Exception) {
+                catch (Exception)
+                {
                     //IGNORE
                 }
             }
         }
     }
 
-    private static void CleanBucket(BucketProperties bucket) {
+    private static void CleanBucket(BucketProperties bucket)
+    {
         var client = GetDefaultClient();
 
-        if (!string.Equals(Region, bucket.Region)) {
+        if (!string.Equals(Region, bucket.Region))
+        {
             var endpoint = bucket.ExtranetEndpoint;
 
-            if (Endpoint != null) {
+            if (Endpoint != null)
+            {
                 if (Endpoint.Contains("-internal.")) endpoint = bucket.IntranetEndpoint;
 
                 if (Endpoint.StartsWith("http://")) endpoint = $"http://{endpoint}";
@@ -179,24 +203,30 @@ public class Utils {
         // list all objects & delete
         var paginator = client.ListObjectVersionsPaginator(
             new ListObjectVersionsRequest(
-            ) {
+            )
+            {
                 Bucket = bucket.Name,
                 MaxKeys = 1000
             }
         );
 
-        foreach (var page in paginator.IterPage()) {
+        foreach (var page in paginator.IterPage())
+        {
             var obj = new List<Models.DeleteObject>();
-            foreach (var version in page.Versions ?? []) {
-                obj.Add(new DeleteObject() {
+            foreach (var version in page.Versions ?? [])
+            {
+                obj.Add(new DeleteObject()
+                {
                     Key = version.Key,
                     VersionId = version.VersionId
                 });
             }
             Assert.NotNull(obj);
-            if (obj.Count > 0) {
+            if (obj.Count > 0)
+            {
                 client.DeleteMultipleObjectsAsync(
-                    new Models.DeleteMultipleObjectsRequest() {
+                    new Models.DeleteMultipleObjectsRequest()
+                    {
                         Bucket = bucket.Name,
                         Objects = obj
                     }
@@ -205,12 +235,16 @@ public class Utils {
         }
 
         var mpPaginators = client.ListMultipartUploadsPaginator(
-            new ListMultipartUploadsRequest() {
+            new ListMultipartUploadsRequest()
+            {
                 Bucket = bucket.Name
             });
-        foreach (var page in mpPaginators.IterPage()) {
-            foreach (var upload in page.Uploads) {
-                client.AbortMultipartUploadAsync(new AbortMultipartUploadRequest() {
+        foreach (var page in mpPaginators.IterPage())
+        {
+            foreach (var upload in page.Uploads)
+            {
+                client.AbortMultipartUploadAsync(new AbortMultipartUploadRequest()
+                {
                     Bucket = bucket.Name,
                     UploadId = upload.UploadId,
                     Key = upload.Key,
@@ -219,27 +253,33 @@ public class Utils {
         }
 
         var result = client.DeleteBucketAsync(
-            new DeleteBucketRequest() {
+            new DeleteBucketRequest()
+            {
                 Bucket = bucket.Name
             }
         ).GetAwaiter().GetResult();
         Assert.NotNull(result);
     }
 
-    public static void CleanPath(string path) {
-        if (Directory.Exists(path)) {
+    public static void CleanPath(string path)
+    {
+        if (Directory.Exists(path))
+        {
             Directory.Delete(path, true);
         }
-        else if (File.Exists(path)) {
+        else if (File.Exists(path))
+        {
             File.Delete(path);
         }
     }
 
-    public static void PrepareSampleFile(string filePath, int numberOfKbs) {
+    public static void PrepareSampleFile(string filePath, int numberOfKbs)
+    {
         if (File.Exists(filePath)) return;
 
         using var file = new StreamWriter(filePath);
-        for (var i = 0; i < numberOfKbs; i++) {
+        for (var i = 0; i < numberOfKbs; i++)
+        {
             file.WriteLine(GenerateOneKb());
         }
         file.Flush();
@@ -247,20 +287,25 @@ public class Utils {
 
     private const string AvailableCharacters = "01234567890abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
     private const int OneKbCount = 1024;
-    public static string GenerateOneKb() {
+    public static string GenerateOneKb()
+    {
         var r = new Random();
         var sb = new StringBuilder();
         var i = 0;
-        while (i++ < OneKbCount) {
+        while (i++ < OneKbCount)
+        {
             var pos = r.Next(AvailableCharacters.Length);
             sb.Append(AvailableCharacters[pos]);
         }
         return sb.ToString();
     }
 
-    public static string ComputeContentMd5(string inputFile) {
-        using (Stream inputStream = File.OpenRead(inputFile)) {
-            using (var md5 = MD5.Create()) {
+    public static string ComputeContentMd5(string inputFile)
+    {
+        using (Stream inputStream = File.OpenRead(inputFile))
+        {
+            using (var md5 = MD5.Create())
+            {
                 // Compute hash data of the input stream.
 
                 var data = md5.ComputeHash(inputStream);
@@ -270,7 +315,8 @@ public class Utils {
 
                 // Loop through each byte of the hashed data
                 // and format each one as a hexadecimal string.
-                foreach (var t in data) {
+                foreach (var t in data)
+                {
                     sBuilder.Append(t.ToString("x2"));
                 }
 
@@ -280,11 +326,14 @@ public class Utils {
         }
     }
 
-    public static string ComputeContentMd5(Stream inputStream) {
-        using (var md5 = MD5.Create()) {
+    public static string ComputeContentMd5(Stream inputStream)
+    {
+        using (var md5 = MD5.Create())
+        {
             var data = md5.ComputeHash(inputStream);
             var sBuilder = new StringBuilder();
-            foreach (var t in data) {
+            foreach (var t in data)
+            {
                 sBuilder.Append(t.ToString("x2"));
             }
             return sBuilder.ToString();

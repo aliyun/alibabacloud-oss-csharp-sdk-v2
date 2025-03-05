@@ -5,9 +5,11 @@ using System.Text;
 using System.Xml.Serialization;
 using AlibabaCloud.OSS.V2.Extensions;
 
-namespace AlibabaCloud.OSS.V2.Transform {
+namespace AlibabaCloud.OSS.V2.Transform
+{
     [XmlRoot("CopyObjectResult")]
-    public sealed class XmlCopyObjectResult {
+    public sealed class XmlCopyObjectResult
+    {
         [XmlElement("LastModified")]
         public DateTime? LastModified { get; set; }
 
@@ -16,7 +18,8 @@ namespace AlibabaCloud.OSS.V2.Transform {
     }
 
     [XmlRoot("DeleteResult")]
-    public sealed class XmlDeleteResult {
+    public sealed class XmlDeleteResult
+    {
         [XmlElement("EncodingType")]
         public string? EncodingType { get; set; }
 
@@ -24,11 +27,13 @@ namespace AlibabaCloud.OSS.V2.Transform {
         public List<Models.DeletedInfo>? DeletedObjects { get; set; }
     }
 
-    internal static partial class Serde {
+    internal static partial class Serde
+    {
         public static void DeserializeCopyObject(
             ref Models.ResultModel baseResult,
             ref OperationOutput output
-        ) {
+        )
+        {
             var serializer = new XmlSerializer(typeof(XmlCopyObjectResult));
             using var body = output.Body!;
             var obj = serializer.Deserialize(body) as XmlCopyObjectResult;
@@ -43,8 +48,10 @@ namespace AlibabaCloud.OSS.V2.Transform {
         public static void SerializeDeleteMultipleObjects(
             ref Models.RequestModel req,
             ref OperationInput input
-        ) {
-            if (req is not Models.DeleteMultipleObjectsRequest request) {
+        )
+        {
+            if (req is not Models.DeleteMultipleObjectsRequest request)
+            {
                 throw new InvalidCastException($"not DeleteMultipleObjectsRequest type, got '{req.GetType()}'");
             }
 
@@ -52,19 +59,24 @@ namespace AlibabaCloud.OSS.V2.Transform {
             var sb = new StringBuilder();
             sb.Append("<Delete>");
 
-            if (request.Quiet != null) {
+            if (request.Quiet != null)
+            {
                 sb.Append($"<Quiet>{Convert.ToString((bool)request.Quiet).ToLowerInvariant()}</Quiet>");
             }
 
-            if (request.Objects != null) {
-                foreach (var o in request.Objects) {
+            if (request.Objects != null)
+            {
+                foreach (var o in request.Objects)
+                {
                     sb.Append("<Object>");
 
-                    if (!string.IsNullOrEmpty(o.Key)) {
+                    if (!string.IsNullOrEmpty(o.Key))
+                    {
                         sb.Append($"<Key>{EscapeXml(o.Key)}</Key>");
                     }
 
-                    if (!string.IsNullOrEmpty(o.VersionId)) {
+                    if (!string.IsNullOrEmpty(o.VersionId))
+                    {
                         sb.Append($"<VersionId>{o.VersionId}</VersionId>");
                     }
 
@@ -80,10 +92,12 @@ namespace AlibabaCloud.OSS.V2.Transform {
         public static void DeserializeDeleteMultipleObjects(
             ref Models.ResultModel baseResult,
             ref OperationOutput output
-        ) {
+        )
+        {
             // empty body
             using var body = output.Body;
-            if (body == null || body.Length == 0) {
+            if (body == null || body.Length == 0)
+            {
                 return;
             }
 
@@ -100,14 +114,19 @@ namespace AlibabaCloud.OSS.V2.Transform {
             result.EncodingType = obj.EncodingType;
         }
 
-        private static void DeserializeDeleteMultipleObjectsEncodingType(ref XmlDeleteResult result) {
-            if (!string.Equals("url", result.EncodingType)) {
+        private static void DeserializeDeleteMultipleObjectsEncodingType(ref XmlDeleteResult result)
+        {
+            if (!string.Equals("url", result.EncodingType))
+            {
                 return;
             }
 
-            if (result.DeletedObjects != null) {
-                for (int i = 0; i < result.DeletedObjects.Count; i++) {
-                    if (result.DeletedObjects[i].Key != null) {
+            if (result.DeletedObjects != null)
+            {
+                for (int i = 0; i < result.DeletedObjects.Count; i++)
+                {
+                    if (result.DeletedObjects[i].Key != null)
+                    {
                         result.DeletedObjects[i].Key = result.DeletedObjects[i].Key!.UrlDecode();
                     }
                 }

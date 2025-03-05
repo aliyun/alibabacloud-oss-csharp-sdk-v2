@@ -1,8 +1,10 @@
-namespace AlibabaCloud.OSS.V2.Models {
+namespace AlibabaCloud.OSS.V2.Models
+{
     /// <summary>
     /// The request for the PutObjectAcl operation.
     /// </summary>
-    public sealed class PutObjectAclRequest : RequestModel {
+    public sealed class PutObjectAclRequest : RequestModel
+    {
         /// <summary>
         /// The name of the bucket.
         /// </summary>
@@ -17,9 +19,11 @@ namespace AlibabaCloud.OSS.V2.Models {
         /// The access control list (ACL) of the object.
         /// Sees <see cref="ObjectAclType"/> for supported values. 
         /// </summary>
-        public string? Acl {
+        public string? Acl
+        {
             get => Headers.TryGetValue("x-oss-object-acl", out var value) ? value : null;
-            set {
+            set
+            {
                 if (value != null) Headers["x-oss-object-acl"] = value;
             }
         }
@@ -27,9 +31,11 @@ namespace AlibabaCloud.OSS.V2.Models {
         /// <summary>
         /// The version id of the object.
         /// </summary>
-        public string? VersionId {
+        public string? VersionId
+        {
             get => Parameters.TryGetValue("versionId", out var value) ? value : null;
-            set {
+            set
+            {
                 if (value != null) Parameters["versionId"] = value;
             }
         }
@@ -38,7 +44,8 @@ namespace AlibabaCloud.OSS.V2.Models {
     /// <summary>
     /// The result for the PutObjectAcl operation.
     /// </summary>
-    public sealed class PutObjectAclResult : ResultModel {
+    public sealed class PutObjectAclResult : ResultModel
+    {
         /// <summary>
         /// Version of the object.
         /// </summary>
@@ -48,7 +55,8 @@ namespace AlibabaCloud.OSS.V2.Models {
     /// <summary>
     /// The request for the GetObjectAcl operation.
     /// </summary>
-    public sealed class GetObjectAclRequest : RequestModel {
+    public sealed class GetObjectAclRequest : RequestModel
+    {
         /// <summary>
         /// The name of the bucket.
         /// </summary>
@@ -62,9 +70,11 @@ namespace AlibabaCloud.OSS.V2.Models {
         /// <summary>
         /// The version id of the target object.
         /// </summary>
-        public string? VersionId {
+        public string? VersionId
+        {
             get => Parameters.TryGetValue("versionId", out var value) ? value : null;
-            set {
+            set
+            {
                 if (value != null) Parameters["versionId"] = value;
             }
         }
@@ -73,7 +83,8 @@ namespace AlibabaCloud.OSS.V2.Models {
     /// <summary>
     /// The result for the GetObjectAcl operation.
     /// </summary>
-    public sealed class GetObjectAclResult : ResultModel {
+    public sealed class GetObjectAclResult : ResultModel
+    {
         /// <summary>
         /// The container that stores the results of the GetObjectACL request.
         /// </summary>
@@ -83,14 +94,17 @@ namespace AlibabaCloud.OSS.V2.Models {
         /// The ACL of the object.
         /// Sees <see cref="ObjectAclType"/> for supported values.
         /// </summary>
-        public string? Acl {
-            get {
+        public string? Acl
+        {
+            get
+            {
                 if (InnerBody is AccessControlPolicy acl) return acl?.AccessControlList?.Grant;
                 return null;
             }
         }
 
-        public GetObjectAclResult() {
+        public GetObjectAclResult()
+        {
             BodyFormat = "xml";
             BodyType = typeof(AccessControlPolicy);
         }

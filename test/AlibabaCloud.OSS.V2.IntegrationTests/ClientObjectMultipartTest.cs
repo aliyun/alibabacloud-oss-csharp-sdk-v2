@@ -4,25 +4,30 @@ using AlibabaCloud.OSS.V2.Models;
 namespace AlibabaCloud.OSS.V2.IntegrationTests;
 
 
-public class ClientObjectMultipartTest : IDisposable {
+public class ClientObjectMultipartTest : IDisposable
+{
     private readonly string BucketNamePrefix;
 
-    public void Dispose() {
+    public void Dispose()
+    {
         Utils.CleanBuckets(BucketNamePrefix);
     }
 
-    public ClientObjectMultipartTest() {
+    public ClientObjectMultipartTest()
+    {
         BucketNamePrefix = Utils.RandomBucketNamePrefix();
     }
 
     [Fact]
-    public async Task TestUploadPart() {
+    public async Task TestUploadPart()
+    {
         var client = Utils.GetDefaultClient();
 
         //default
         var bucketName = Utils.RandomBucketName(BucketNamePrefix);
 
-        var result = await client.PutBucketAsync(new() {
+        var result = await client.PutBucketAsync(new()
+        {
             Bucket = bucketName
         });
 
@@ -32,7 +37,8 @@ public class ClientObjectMultipartTest : IDisposable {
 
         // init
         var objectName = Utils.RandomObjectName();
-        var initResult = await client.InitiateMultipartUploadAsync(new() {
+        var initResult = await client.InitiateMultipartUploadAsync(new()
+        {
             Bucket = bucketName,
             Key = objectName
         }
@@ -44,7 +50,8 @@ public class ClientObjectMultipartTest : IDisposable {
 
         // upload
         var content = "hello world";
-        var upResult = await client.UploadPartAsync(new() {
+        var upResult = await client.UploadPartAsync(new()
+        {
             Bucket = bucketName,
             Key = objectName,
             PartNumber = 1,
@@ -57,7 +64,8 @@ public class ClientObjectMultipartTest : IDisposable {
         Assert.NotNull(upResult.RequestId);
 
         // list parts
-        var listResult = await client.ListPartsAsync(new ListPartsRequest() {
+        var listResult = await client.ListPartsAsync(new ListPartsRequest()
+        {
             Bucket = bucketName,
             Key = objectName,
             UploadId = initResult.UploadId,
@@ -71,11 +79,13 @@ public class ClientObjectMultipartTest : IDisposable {
         Assert.Equal(11, listResult.Parts[0].Size);
 
         // complete
-        var cmResult = await client.CompleteMultipartUploadAsync(new() {
+        var cmResult = await client.CompleteMultipartUploadAsync(new()
+        {
             Bucket = bucketName,
             Key = objectName,
             UploadId = initResult.UploadId,
-            CompleteMultipartUpload = new CompleteMultipartUpload() {
+            CompleteMultipartUpload = new CompleteMultipartUpload()
+            {
                 Parts = [
                   new UploadPart(){ ETag = upResult.ETag, PartNumber =1}
                 ],
@@ -88,7 +98,8 @@ public class ClientObjectMultipartTest : IDisposable {
 
         // get object
         var getObjectResult = await client.GetObjectAsync(
-            new() {
+            new()
+            {
                 Bucket = bucketName,
                 Key = objectName
             }
@@ -110,13 +121,15 @@ public class ClientObjectMultipartTest : IDisposable {
     }
 
     [Fact]
-    public async Task TestUploadPartCopy() {
+    public async Task TestUploadPartCopy()
+    {
         var client = Utils.GetDefaultClient();
 
         //default
         var bucketName = Utils.RandomBucketName(BucketNamePrefix);
 
-        var result = await client.PutBucketAsync(new() {
+        var result = await client.PutBucketAsync(new()
+        {
             Bucket = bucketName
         });
 
@@ -132,7 +145,8 @@ public class ClientObjectMultipartTest : IDisposable {
         var content = "hello world";
 
         var putResult = await client.PutObjectAsync(
-            new() {
+            new()
+            {
                 Bucket = bucketName,
                 Key = srcObjectName,
                 Body = new MemoryStream(Encoding.UTF8.GetBytes(content))
@@ -143,7 +157,8 @@ public class ClientObjectMultipartTest : IDisposable {
         Assert.NotNull(putResult.RequestId);
 
         // init
-        var initResult = await client.InitiateMultipartUploadAsync(new() {
+        var initResult = await client.InitiateMultipartUploadAsync(new()
+        {
             Bucket = bucketName,
             Key = dstObjectName
         }
@@ -155,7 +170,8 @@ public class ClientObjectMultipartTest : IDisposable {
         Assert.Equal(dstObjectName, initResult.Key);
 
         // upload part copy
-        var upResult = await client.UploadPartCopyAsync(new() {
+        var upResult = await client.UploadPartCopyAsync(new()
+        {
             Bucket = bucketName,
             Key = dstObjectName,
             PartNumber = 1,
@@ -168,7 +184,8 @@ public class ClientObjectMultipartTest : IDisposable {
         Assert.NotNull(upResult.RequestId);
 
         // list parts
-        var listResult = await client.ListPartsAsync(new ListPartsRequest() {
+        var listResult = await client.ListPartsAsync(new ListPartsRequest()
+        {
             Bucket = bucketName,
             Key = dstObjectName,
             UploadId = initResult.UploadId,
@@ -182,11 +199,13 @@ public class ClientObjectMultipartTest : IDisposable {
         Assert.Equal(11, listResult.Parts[0].Size);
 
         // complete
-        var cmResult = await client.CompleteMultipartUploadAsync(new() {
+        var cmResult = await client.CompleteMultipartUploadAsync(new()
+        {
             Bucket = bucketName,
             Key = dstObjectName,
             UploadId = initResult.UploadId,
-            CompleteMultipartUpload = new CompleteMultipartUpload() {
+            CompleteMultipartUpload = new CompleteMultipartUpload()
+            {
                 Parts = [
                   new UploadPart(){ ETag = upResult.ETag, PartNumber =1}
                 ],
@@ -200,7 +219,8 @@ public class ClientObjectMultipartTest : IDisposable {
 
         // get object
         var getObjectResult = await client.GetObjectAsync(
-            new() {
+            new()
+            {
                 Bucket = bucketName,
                 Key = dstObjectName
             }
@@ -222,13 +242,15 @@ public class ClientObjectMultipartTest : IDisposable {
     }
 
     [Fact]
-    public async Task TestAbortMultipartUpload() {
+    public async Task TestAbortMultipartUpload()
+    {
         var client = Utils.GetDefaultClient();
 
         //default
         var bucketName = Utils.RandomBucketName(BucketNamePrefix);
 
-        var result = await client.PutBucketAsync(new() {
+        var result = await client.PutBucketAsync(new()
+        {
             Bucket = bucketName
         });
 
@@ -238,7 +260,8 @@ public class ClientObjectMultipartTest : IDisposable {
 
         // init
         var objectName = Utils.RandomObjectName();
-        var initResult = await client.InitiateMultipartUploadAsync(new() {
+        var initResult = await client.InitiateMultipartUploadAsync(new()
+        {
             Bucket = bucketName,
             Key = objectName
         }
@@ -249,7 +272,8 @@ public class ClientObjectMultipartTest : IDisposable {
         Assert.Equal("url", initResult.EncodingType);
 
         // abort
-        var abortResult = await client.AbortMultipartUploadAsync(new() {
+        var abortResult = await client.AbortMultipartUploadAsync(new()
+        {
             Bucket = bucketName,
             Key = objectName,
             UploadId = initResult.UploadId
@@ -260,13 +284,15 @@ public class ClientObjectMultipartTest : IDisposable {
     }
 
     [Fact]
-    public async Task TestListMultipartUploads() {
+    public async Task TestListMultipartUploads()
+    {
         var client = Utils.GetDefaultClient();
 
         //default
         var bucketName = Utils.RandomBucketName(BucketNamePrefix);
 
-        var result = await client.PutBucketAsync(new() {
+        var result = await client.PutBucketAsync(new()
+        {
             Bucket = bucketName
         });
 
@@ -275,9 +301,12 @@ public class ClientObjectMultipartTest : IDisposable {
         Assert.NotNull(result.RequestId);
 
         // init
-        for (var i = 0; i < 10; i++) {
-            for (var j = 0; j < 2; j++) {
-                var initResult = await client.InitiateMultipartUploadAsync(new() {
+        for (var i = 0; i < 10; i++)
+        {
+            for (var j = 0; j < 2; j++)
+            {
+                var initResult = await client.InitiateMultipartUploadAsync(new()
+                {
                     Bucket = bucketName,
                     Key = $"folder-1/{i}"
                 });
@@ -288,8 +317,10 @@ public class ClientObjectMultipartTest : IDisposable {
             }
         }
 
-        for (var i = 0; i < 10; i++) {
-            var initResult = await client.InitiateMultipartUploadAsync(new() {
+        for (var i = 0; i < 10; i++)
+        {
+            var initResult = await client.InitiateMultipartUploadAsync(new()
+            {
                 Bucket = bucketName,
                 Key = $"folder-2/{i}"
             });
@@ -300,11 +331,13 @@ public class ClientObjectMultipartTest : IDisposable {
         }
 
         // list default
-        var paginators = client.ListMultipartUploadsPaginator(new ListMultipartUploadsRequest() {
+        var paginators = client.ListMultipartUploadsPaginator(new ListMultipartUploadsRequest()
+        {
             Bucket = bucketName
         });
         var count = 0;
-        await foreach (var page in paginators.IterPageAsync()) {
+        await foreach (var page in paginators.IterPageAsync())
+        {
             Assert.NotNull(page.Uploads);
             Assert.NotEmpty(page.Uploads);
             count += page.Uploads.Count;
@@ -313,15 +346,18 @@ public class ClientObjectMultipartTest : IDisposable {
 
         // list with prefix and Limit
         paginators = client.ListMultipartUploadsPaginator(
-            new ListMultipartUploadsRequest() {
+            new ListMultipartUploadsRequest()
+            {
                 Bucket = bucketName,
                 Prefix = "folder-1/",
             },
-            new Paginator.PaginatorOptions() {
+            new Paginator.PaginatorOptions()
+            {
                 Limit = 1
             });
         count = 0;
-        await foreach (var page in paginators.IterPageAsync()) {
+        await foreach (var page in paginators.IterPageAsync())
+        {
             Assert.NotNull(page.Uploads);
             Assert.Single(page.Uploads);
             Assert.StartsWith("folder-1/", page.Uploads[0].Key);
@@ -332,12 +368,14 @@ public class ClientObjectMultipartTest : IDisposable {
 
         // list sync
         paginators = client.ListMultipartUploadsPaginator(
-            new ListMultipartUploadsRequest() {
+            new ListMultipartUploadsRequest()
+            {
                 Bucket = bucketName,
                 Prefix = "folder-2/",
             });
         count = 0;
-        foreach (var page in paginators.IterPage()) {
+        foreach (var page in paginators.IterPage())
+        {
             Assert.NotNull(page.Uploads);
             Assert.StartsWith("folder-2/", page.Uploads[0].Key);
             Assert.Equal("url", page.EncodingType);
@@ -347,16 +385,20 @@ public class ClientObjectMultipartTest : IDisposable {
 
         //abort multipart upload
         paginators = client.ListMultipartUploadsPaginator(
-            new ListMultipartUploadsRequest() {
+            new ListMultipartUploadsRequest()
+            {
                 Bucket = bucketName
             },
-            new Paginator.PaginatorOptions() {
+            new Paginator.PaginatorOptions()
+            {
                 Limit = 1
             });
-        foreach (var page in paginators.IterPage()) {
+        foreach (var page in paginators.IterPage())
+        {
             Assert.NotNull(page.Uploads);
             Assert.Single(page.Uploads);
-            var abortResult = await client.AbortMultipartUploadAsync(new() {
+            var abortResult = await client.AbortMultipartUploadAsync(new()
+            {
                 Bucket = page.Bucket,
                 Key = page.Uploads[0].Key,
                 UploadId = page.Uploads[0].UploadId
@@ -366,7 +408,8 @@ public class ClientObjectMultipartTest : IDisposable {
             Assert.NotNull(abortResult.RequestId);
         }
 
-        var delResult = await client.DeleteBucketAsync(new() {
+        var delResult = await client.DeleteBucketAsync(new()
+        {
             Bucket = bucketName,
         });
 
@@ -375,13 +418,15 @@ public class ClientObjectMultipartTest : IDisposable {
     }
 
     [Fact]
-    public async Task TestListParts() {
+    public async Task TestListParts()
+    {
         var client = Utils.GetDefaultClient();
 
         //default
         var bucketName = Utils.RandomBucketName(BucketNamePrefix);
 
-        var result = await client.PutBucketAsync(new() {
+        var result = await client.PutBucketAsync(new()
+        {
             Bucket = bucketName
         });
 
@@ -391,7 +436,8 @@ public class ClientObjectMultipartTest : IDisposable {
 
         // init
         var objectName = Utils.RandomObjectName();
-        var initResult = await client.InitiateMultipartUploadAsync(new() {
+        var initResult = await client.InitiateMultipartUploadAsync(new()
+        {
             Bucket = bucketName,
             Key = objectName
         }
@@ -403,8 +449,10 @@ public class ClientObjectMultipartTest : IDisposable {
 
         var content = "hello world";
         // uploadpart
-        for (var i = 0; i < 10; i++) {
-            var upResult = await client.UploadPartAsync(new() {
+        for (var i = 0; i < 10; i++)
+        {
+            var upResult = await client.UploadPartAsync(new()
+            {
                 Bucket = bucketName,
                 Key = objectName,
                 PartNumber = i + 1,
@@ -418,13 +466,15 @@ public class ClientObjectMultipartTest : IDisposable {
         }
 
         // list default
-        var paginators = client.ListPartsPaginator(new ListPartsRequest() {
+        var paginators = client.ListPartsPaginator(new ListPartsRequest()
+        {
             Bucket = bucketName,
             Key = objectName,
             UploadId = initResult.UploadId
         });
         var count = 0;
-        await foreach (var page in paginators.IterPageAsync()) {
+        await foreach (var page in paginators.IterPageAsync())
+        {
             Assert.NotNull(page.Parts);
             Assert.NotEmpty(page.Parts);
             count += page.Parts.Count;
@@ -433,16 +483,19 @@ public class ClientObjectMultipartTest : IDisposable {
 
         // list Limit
         paginators = client.ListPartsPaginator(
-            new ListPartsRequest() {
+            new ListPartsRequest()
+            {
                 Bucket = bucketName,
                 Key = objectName,
                 UploadId = initResult.UploadId
             },
-            new Paginator.PaginatorOptions() {
+            new Paginator.PaginatorOptions()
+            {
                 Limit = 1
             });
         count = 0;
-        await foreach (var page in paginators.IterPageAsync()) {
+        await foreach (var page in paginators.IterPageAsync())
+        {
             Assert.NotNull(page.Parts);
             Assert.Single(page.Parts);
             Assert.Equal("url", page.EncodingType);
@@ -453,13 +506,15 @@ public class ClientObjectMultipartTest : IDisposable {
 
         // list sync
         paginators = client.ListPartsPaginator(
-            new ListPartsRequest() {
+            new ListPartsRequest()
+            {
                 Bucket = bucketName,
                 Key = objectName,
                 UploadId = initResult.UploadId
             });
         count = 0;
-        foreach (var page in paginators.IterPage()) {
+        foreach (var page in paginators.IterPage())
+        {
             Assert.NotNull(page.Parts);
             Assert.Equal("url", page.EncodingType);
             count += page.Parts.Count;
@@ -467,16 +522,19 @@ public class ClientObjectMultipartTest : IDisposable {
         Assert.Equal(10, count);
 
         paginators = client.ListPartsPaginator(
-        new ListPartsRequest() {
+        new ListPartsRequest()
+        {
             Bucket = bucketName,
             Key = objectName,
             UploadId = initResult.UploadId
         },
-        new Paginator.PaginatorOptions() {
+        new Paginator.PaginatorOptions()
+        {
             Limit = 1
         });
         count = 0;
-        foreach (var page in paginators.IterPage()) {
+        foreach (var page in paginators.IterPage())
+        {
             Assert.NotNull(page.Parts);
             Assert.Single(page.Parts);
             Assert.Equal("url", page.EncodingType);
@@ -485,7 +543,8 @@ public class ClientObjectMultipartTest : IDisposable {
         Assert.Equal(10, count);
 
         // abort
-        var abortResult = await client.AbortMultipartUploadAsync(new() {
+        var abortResult = await client.AbortMultipartUploadAsync(new()
+        {
             Bucket = bucketName,
             Key = objectName,
             UploadId = initResult.UploadId
@@ -496,13 +555,15 @@ public class ClientObjectMultipartTest : IDisposable {
     }
 
     [Fact]
-    public async Task TestMultipartUploadFail() {
+    public async Task TestMultipartUploadFail()
+    {
         var client = Utils.GetDefaultClient();
 
         //default
         var bucketName = Utils.RandomBucketName(BucketNamePrefix);
 
-        var result = await client.PutBucketAsync(new() {
+        var result = await client.PutBucketAsync(new()
+        {
             Bucket = bucketName,
         });
 
@@ -514,15 +575,18 @@ public class ClientObjectMultipartTest : IDisposable {
         var objectName = Utils.RandomObjectName();
 
         // InitiateMultipartUpload
-        try {
+        try
+        {
             await invClient.InitiateMultipartUploadAsync(
-                new() {
+                new()
+                {
                     Bucket = bucketName,
                     Key = objectName,
                 }
             );
         }
-        catch (Exception e) {
+        catch (Exception e)
+        {
             Assert.IsAssignableFrom<OperationException>(e);
             Assert.StartsWith("operation error InitiateMultipartUpload", e.Message);
             Assert.IsAssignableFrom<ServiceException>(e.InnerException);
@@ -539,9 +603,11 @@ public class ClientObjectMultipartTest : IDisposable {
         }
 
         // UploadPart
-        try {
+        try
+        {
             await invClient.UploadPartAsync(
-                new() {
+                new()
+                {
                     Bucket = bucketName,
                     Key = objectName,
                     PartNumber = 1,
@@ -549,7 +615,8 @@ public class ClientObjectMultipartTest : IDisposable {
                 }
             );
         }
-        catch (Exception e) {
+        catch (Exception e)
+        {
             Assert.IsAssignableFrom<OperationException>(e);
             Assert.StartsWith("operation error UploadPart", e.Message);
             Assert.IsAssignableFrom<ServiceException>(e.InnerException);
@@ -566,9 +633,11 @@ public class ClientObjectMultipartTest : IDisposable {
         }
 
         // UploadPartCopy
-        try {
+        try
+        {
             await invClient.UploadPartCopyAsync(
-                new() {
+                new()
+                {
                     Bucket = bucketName,
                     Key = objectName,
                     PartNumber = 1,
@@ -577,7 +646,8 @@ public class ClientObjectMultipartTest : IDisposable {
                 }
             );
         }
-        catch (Exception e) {
+        catch (Exception e)
+        {
             Assert.IsAssignableFrom<OperationException>(e);
             Assert.StartsWith("operation error UploadPartCopy", e.Message);
             Assert.IsAssignableFrom<ServiceException>(e.InnerException);
@@ -594,16 +664,19 @@ public class ClientObjectMultipartTest : IDisposable {
         }
 
         // CompleteMultipartUpload
-        try {
+        try
+        {
             await invClient.CompleteMultipartUploadAsync(
-                new() {
+                new()
+                {
                     Bucket = bucketName,
                     Key = objectName,
                     UploadId = "id-123"
                 }
             );
         }
-        catch (Exception e) {
+        catch (Exception e)
+        {
             Assert.IsAssignableFrom<OperationException>(e);
             Assert.StartsWith("operation error CompleteMultipartUpload", e.Message);
             Assert.IsAssignableFrom<ServiceException>(e.InnerException);
@@ -620,16 +693,19 @@ public class ClientObjectMultipartTest : IDisposable {
         }
 
         // AbortMultipartUpload
-        try {
+        try
+        {
             await invClient.AbortMultipartUploadAsync(
-                new() {
+                new()
+                {
                     Bucket = bucketName,
                     Key = objectName,
                     UploadId = "id-123"
                 }
             );
         }
-        catch (Exception e) {
+        catch (Exception e)
+        {
             Assert.IsAssignableFrom<OperationException>(e);
             Assert.StartsWith("operation error AbortMultipartUpload", e.Message);
             Assert.IsAssignableFrom<ServiceException>(e.InnerException);
@@ -645,16 +721,19 @@ public class ClientObjectMultipartTest : IDisposable {
         }
 
         // ListParts
-        try {
+        try
+        {
             await invClient.ListPartsAsync(
-                new() {
+                new()
+                {
                     Bucket = bucketName,
                     Key = objectName,
                     UploadId = "id-123"
                 }
             );
         }
-        catch (Exception e) {
+        catch (Exception e)
+        {
             Assert.IsAssignableFrom<OperationException>(e);
             Assert.StartsWith("operation error ListParts", e.Message);
             Assert.IsAssignableFrom<ServiceException>(e.InnerException);
@@ -671,14 +750,17 @@ public class ClientObjectMultipartTest : IDisposable {
         }
 
         // ListMultipartUploads
-        try {
+        try
+        {
             await invClient.ListMultipartUploadsAsync(
-                new() {
+                new()
+                {
                     Bucket = bucketName
                 }
             );
         }
-        catch (Exception e) {
+        catch (Exception e)
+        {
             Assert.IsAssignableFrom<OperationException>(e);
             Assert.StartsWith("operation error ListMultipartUploads", e.Message);
             Assert.IsAssignableFrom<ServiceException>(e.InnerException);
@@ -696,7 +778,8 @@ public class ClientObjectMultipartTest : IDisposable {
     }
 
     [Fact]
-    public async Task TestUploadPartWithCrcCheckDisable() {
+    public async Task TestUploadPartWithCrcCheckDisable()
+    {
         var cfg = Configuration.LoadDefault();
         cfg.CredentialsProvider = new Credentials.StaticCredentialsProvide(Utils.AccessKeyId, Utils.AccessKeySecret);
         cfg.Region = Utils.Region;
@@ -708,7 +791,8 @@ public class ClientObjectMultipartTest : IDisposable {
         //default
         var bucketName = Utils.RandomBucketName(BucketNamePrefix);
 
-        var result = await client.PutBucketAsync(new() {
+        var result = await client.PutBucketAsync(new()
+        {
             Bucket = bucketName
         });
 
@@ -718,7 +802,8 @@ public class ClientObjectMultipartTest : IDisposable {
 
         // init
         var objectName = Utils.RandomObjectName();
-        var initResult = await client.InitiateMultipartUploadAsync(new() {
+        var initResult = await client.InitiateMultipartUploadAsync(new()
+        {
             Bucket = bucketName,
             Key = objectName
         }
@@ -730,7 +815,8 @@ public class ClientObjectMultipartTest : IDisposable {
 
         // upload
         var content = "hello world";
-        var upResult = await client.UploadPartAsync(new() {
+        var upResult = await client.UploadPartAsync(new()
+        {
             Bucket = bucketName,
             Key = objectName,
             PartNumber = 1,
@@ -743,11 +829,13 @@ public class ClientObjectMultipartTest : IDisposable {
         Assert.NotNull(upResult.RequestId);
 
         // complete
-        var cmResult = await client.CompleteMultipartUploadAsync(new() {
+        var cmResult = await client.CompleteMultipartUploadAsync(new()
+        {
             Bucket = bucketName,
             Key = objectName,
             UploadId = initResult.UploadId,
-            CompleteMultipartUpload = new CompleteMultipartUpload() {
+            CompleteMultipartUpload = new CompleteMultipartUpload()
+            {
                 Parts = [
                   new UploadPart(){ ETag = upResult.ETag, PartNumber =1}
                 ],
@@ -760,7 +848,8 @@ public class ClientObjectMultipartTest : IDisposable {
 
         // get object
         var getObjectResult = await client.GetObjectAsync(
-            new() {
+            new()
+            {
                 Bucket = bucketName,
                 Key = objectName
             }
@@ -782,13 +871,15 @@ public class ClientObjectMultipartTest : IDisposable {
     }
 
     [Fact]
-    public async Task TestUploadPartWithProgress() {
+    public async Task TestUploadPartWithProgress()
+    {
         var client = Utils.GetDefaultClient();
 
         //default
         var bucketName = Utils.RandomBucketName(BucketNamePrefix);
 
-        var result = await client.PutBucketAsync(new() {
+        var result = await client.PutBucketAsync(new()
+        {
             Bucket = bucketName
         });
 
@@ -798,7 +889,8 @@ public class ClientObjectMultipartTest : IDisposable {
 
         // init
         var objectName = Utils.RandomObjectName();
-        var initResult = await client.InitiateMultipartUploadAsync(new() {
+        var initResult = await client.InitiateMultipartUploadAsync(new()
+        {
             Bucket = bucketName,
             Key = objectName
         }
@@ -812,7 +904,8 @@ public class ClientObjectMultipartTest : IDisposable {
         long transferred = 0;
         long total = 0;
 
-        ProgressFunc func = (x, y, z) => {
+        ProgressFunc func = (x, y, z) =>
+        {
             increment += x;
             transferred = y;
             total = z;
@@ -821,7 +914,8 @@ public class ClientObjectMultipartTest : IDisposable {
         // upload
         var lenght = 1024 * 100 + 123;
         var content = Utils.GetRandomString(lenght);
-        var upResult = await client.UploadPartAsync(new() {
+        var upResult = await client.UploadPartAsync(new()
+        {
             Bucket = bucketName,
             Key = objectName,
             PartNumber = 1,
@@ -838,11 +932,13 @@ public class ClientObjectMultipartTest : IDisposable {
         Assert.Equal(lenght, increment);
 
         // complete
-        var cmResult = await client.CompleteMultipartUploadAsync(new() {
+        var cmResult = await client.CompleteMultipartUploadAsync(new()
+        {
             Bucket = bucketName,
             Key = objectName,
             UploadId = initResult.UploadId,
-            CompleteMultipartUpload = new CompleteMultipartUpload() {
+            CompleteMultipartUpload = new CompleteMultipartUpload()
+            {
                 Parts = [
                   new UploadPart(){ ETag = upResult.ETag, PartNumber =1}
                 ],
@@ -855,7 +951,8 @@ public class ClientObjectMultipartTest : IDisposable {
 
         // get object
         var getObjectResult = await client.GetObjectAsync(
-            new() {
+            new()
+            {
                 Bucket = bucketName,
                 Key = objectName
             }

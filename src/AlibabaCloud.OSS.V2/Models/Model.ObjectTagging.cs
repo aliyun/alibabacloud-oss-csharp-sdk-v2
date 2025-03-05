@@ -1,10 +1,13 @@
-namespace AlibabaCloud.OSS.V2.Models {
+namespace AlibabaCloud.OSS.V2.Models
+{
 
     /// <summary>
     /// The request for the PutObjectTagging operation.
     /// </summary>
-    public sealed class PutObjectTaggingRequest : RequestModel {
-        public PutObjectTaggingRequest() {
+    public sealed class PutObjectTaggingRequest : RequestModel
+    {
+        public PutObjectTaggingRequest()
+        {
             BodyFormat = "xml";
         }
 
@@ -21,9 +24,11 @@ namespace AlibabaCloud.OSS.V2.Models {
         /// <summary>
         /// The version id of the target object.
         /// </summary>
-        public string? VersionId {
+        public string? VersionId
+        {
             get => Parameters.TryGetValue("versionId", out var value) ? value : null;
-            set {
+            set
+            {
                 if (value != null) Parameters["versionId"] = value;
             }
         }
@@ -31,7 +36,8 @@ namespace AlibabaCloud.OSS.V2.Models {
         /// <summary>
         /// The request body schema.
         /// </summary>
-        public Tagging? Tagging {
+        public Tagging? Tagging
+        {
             get => InnerBody as Tagging;
             set => InnerBody = value;
         }
@@ -40,7 +46,8 @@ namespace AlibabaCloud.OSS.V2.Models {
     /// <summary>
     /// The result for the PutObjectTagging operation.
     /// </summary>
-    public sealed class PutObjectTaggingResult : ResultModel {
+    public sealed class PutObjectTaggingResult : ResultModel
+    {
         /// <summary>
         /// The object version id.
         /// </summary>
@@ -50,7 +57,8 @@ namespace AlibabaCloud.OSS.V2.Models {
     /// <summary>
     /// The request for the GetObjectTagging operation.
     /// </summary>
-    public sealed class GetObjectTaggingRequest : RequestModel {
+    public sealed class GetObjectTaggingRequest : RequestModel
+    {
         /// <summary>
         /// The name of the bucket.
         /// </summary>
@@ -64,9 +72,11 @@ namespace AlibabaCloud.OSS.V2.Models {
         /// <summary>
         /// The version id of the object that you want to query.
         /// </summary>
-        public string? VersionId {
+        public string? VersionId
+        {
             get => Parameters.TryGetValue("versionId", out var value) ? value : null;
-            set {
+            set
+            {
                 if (value != null) Parameters["versionId"] = value;
             }
         }
@@ -75,13 +85,15 @@ namespace AlibabaCloud.OSS.V2.Models {
     /// <summary>
     /// The result for the GetObjectTagging operation.
     /// </summary>
-    public sealed class GetObjectTaggingResult : ResultModel {
+    public sealed class GetObjectTaggingResult : ResultModel
+    {
         /// <summary>
         /// The container that stores the returned tag of the bucket.
         /// </summary>
         public Tagging? Tagging => InnerBody as Tagging;
 
-        public GetObjectTaggingResult() {
+        public GetObjectTaggingResult()
+        {
             BodyFormat = "xml";
             BodyType = typeof(Tagging);
         }
@@ -90,7 +102,8 @@ namespace AlibabaCloud.OSS.V2.Models {
     /// <summary>
     /// The request for the DeleteObjectTagging operation.
     /// </summary>
-    public sealed class DeleteObjectTaggingRequest : RequestModel {
+    public sealed class DeleteObjectTaggingRequest : RequestModel
+    {
         /// <summary>
         /// The name of the bucket.
         /// </summary>
@@ -104,9 +117,11 @@ namespace AlibabaCloud.OSS.V2.Models {
         /// <summary>
         /// The version ID of the object that you want to delete.
         /// </summary>
-        public string? VersionId {
+        public string? VersionId
+        {
             get => Parameters.TryGetValue("versionId", out var value) ? value : null;
-            set {
+            set
+            {
                 if (value != null) Parameters["versionId"] = value;
             }
         }

@@ -2,9 +2,11 @@
 
 namespace AlibabaCloud.OSS.V2.UnitTests.Retry;
 
-public class ErrorRetryableTest {
+public class ErrorRetryableTest
+{
     [Fact]
-    public void TestHttpStatusCodeRetryable() {
+    public void TestHttpStatusCodeRetryable()
+    {
         var retry = new HttpStatusCodeRetryable();
         Assert.False(retry.IsErrorRetryable(new Exception("")));
         Assert.False(retry.IsErrorRetryable(new V2.ServiceException(404, null)));
@@ -18,7 +20,8 @@ public class ErrorRetryableTest {
 
 
     [Fact]
-    public void TestServiceErrorCodeRetryable() {
+    public void TestServiceErrorCodeRetryable()
+    {
         var retry = new ServiceErrorCodeRetryable();
         var details = new Dictionary<string, string>();
         Assert.False(retry.IsErrorRetryable(new Exception("")));
@@ -41,7 +44,8 @@ public class ErrorRetryableTest {
     }
 
     [Fact]
-    public void TestClientExceptionRetryable() {
+    public void TestClientExceptionRetryable()
+    {
         var retry = new ClientExceptionRetryable();
         Assert.False(retry.IsErrorRetryable(new Exception("")));
 

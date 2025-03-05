@@ -2,9 +2,11 @@
 using System.Xml.Serialization;
 using AlibabaCloud.OSS.V2.Extensions;
 
-namespace AlibabaCloud.OSS.V2.Transform {
+namespace AlibabaCloud.OSS.V2.Transform
+{
     [XmlRoot("ListBucketResult")]
-    public sealed class XmlListBucketResult {
+    public sealed class XmlListBucketResult
+    {
         [XmlElement("Name")]
         public string? Name { get; set; }
 
@@ -48,17 +50,20 @@ namespace AlibabaCloud.OSS.V2.Transform {
         public List<Models.CommonPrefix>? CommonPrefixes { get; set; }
     }
 
-    internal static partial class Serde {
+    internal static partial class Serde
+    {
         public static void DeserializeListObjects(
             ref Models.ResultModel baseResult,
             ref OperationOutput output
-        ) {
+        )
+        {
             var serializer = new XmlSerializer(typeof(XmlListBucketResult));
             using var body = output.Body!;
             var obj = serializer.Deserialize(body) as XmlListBucketResult;
             var result = baseResult as Models.ListObjectsResult;
 
-            if (obj == null || result == null) {
+            if (obj == null || result == null)
+            {
                 return;
             }
 
@@ -79,13 +84,15 @@ namespace AlibabaCloud.OSS.V2.Transform {
         public static void DeserializeListObjectsV2(
             ref Models.ResultModel baseResult,
             ref OperationOutput output
-        ) {
+        )
+        {
             var serializer = new XmlSerializer(typeof(XmlListBucketResult));
             using var body = output.Body!;
             var obj = serializer.Deserialize(body) as XmlListBucketResult;
             var result = baseResult as Models.ListObjectsV2Result;
 
-            if (obj == null || result == null) {
+            if (obj == null || result == null)
+            {
                 return;
             }
 
@@ -105,50 +112,65 @@ namespace AlibabaCloud.OSS.V2.Transform {
             result.CommonPrefixes = obj.CommonPrefixes;
         }
 
-        private static void DeserializeEncodingType(ref XmlListBucketResult result) {
-            if (!string.Equals("url", result.EncodingType)) {
+        private static void DeserializeEncodingType(ref XmlListBucketResult result)
+        {
+            if (!string.Equals("url", result.EncodingType))
+            {
                 return;
             }
 
-            if (result.Prefix != null) {
+            if (result.Prefix != null)
+            {
                 result.Prefix = result.Prefix.UrlDecode();
             }
 
-            if (result.Marker != null) {
+            if (result.Marker != null)
+            {
                 result.Marker = result.Marker.UrlDecode();
             }
 
-            if (result.NextMarker != null) {
+            if (result.NextMarker != null)
+            {
                 result.NextMarker = result.NextMarker.UrlDecode();
             }
 
-            if (result.Delimiter != null) {
+            if (result.Delimiter != null)
+            {
                 result.Delimiter = result.Delimiter.UrlDecode();
             }
 
-            if (result.StartAfter != null) {
+            if (result.StartAfter != null)
+            {
                 result.StartAfter = result.StartAfter.UrlDecode();
             }
 
-            if (result.ContinuationToken != null) {
+            if (result.ContinuationToken != null)
+            {
                 result.ContinuationToken = result.ContinuationToken.UrlDecode();
             }
 
-            if (result.NextContinuationToken != null) {
+            if (result.NextContinuationToken != null)
+            {
                 result.NextContinuationToken = result.NextContinuationToken.UrlDecode();
             }
 
-            if (result.Contents != null) {
-                for (var i = 0; i < result.Contents.Count; i++) {
-                    if (result.Contents[i].Key != null) {
+            if (result.Contents != null)
+            {
+                for (var i = 0; i < result.Contents.Count; i++)
+                {
+                    if (result.Contents[i].Key != null)
+                    {
                         result.Contents[i].Key = result.Contents[i].Key!.UrlDecode();
                     }
                 }
             }
 
-            if (result.CommonPrefixes != null) {
-                for (var i = 0; i < result.CommonPrefixes.Count; i++) {
-                    if (result.CommonPrefixes[i].Prefix != null) {
+            if (result.CommonPrefixes != null)
+            {
+                for (var i = 0; i < result.CommonPrefixes.Count; i++)
+                {
+                    if (result.CommonPrefixes[i].Prefix != null)
+                    {
                         result.CommonPrefixes[i].Prefix = result.CommonPrefixes[i].Prefix!.UrlDecode();
                     }
                 }

@@ -4,9 +4,11 @@ using AlibabaCloud.OSS.V2.Transform;
 
 namespace AlibabaCloud.OSS.V2.UnitTests.Models;
 
-public class ModelServiceTest {
+public class ModelServiceTest
+{
     [Fact]
-    public void TestListBucketsRequest() {
+    public void TestListBucketsRequest()
+    {
         var request = new ListBucketsRequest();
         Assert.Empty(request.Headers);
         Assert.Empty(request.Parameters);
@@ -24,7 +26,8 @@ public class ModelServiceTest {
         Assert.Null(input.Parameters);
         Assert.Null(input.Body);
 
-        request = new ListBucketsRequest {
+        request = new ListBucketsRequest
+        {
             ResourceGroupId = "rg-id-123",
             Prefix = "prefix-01",
             MaxKeys = 10001,
@@ -52,7 +55,8 @@ public class ModelServiceTest {
     }
 
     [Fact]
-    public void TestListBucketsResult() {
+    public void TestListBucketsResult()
+    {
         var result = new ListBucketsResult();
         Assert.Equal(0, result.StatusCode);
         Assert.Equal("", result.Status);
@@ -74,7 +78,8 @@ public class ModelServiceTest {
 </ListAllMyBucketsResult>
 """;
 
-        var output = new OperationOutput {
+        var output = new OperationOutput
+        {
             StatusCode = 200,
             Status = "OK",
             Headers = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase) {
@@ -135,7 +140,8 @@ public class ModelServiceTest {
   </Buckets>
 </ListAllMyBucketsResult>
 """;
-        output = new OperationOutput {
+        output = new OperationOutput
+        {
             StatusCode = 200,
             Status = "OK",
             Headers = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase) {

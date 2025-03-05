@@ -1,5 +1,4 @@
-﻿using AlibabaCloud.OSS.V2.Extensions;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -9,20 +8,25 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Xml;
+using AlibabaCloud.OSS.V2.Extensions;
 
-namespace AlibabaCloud.OSS.V2.Internal {
-    internal class InnerOptions {
+namespace AlibabaCloud.OSS.V2.Internal
+{
+    internal class InnerOptions
+    {
         public string UserAgent { get; set; } = "";
     }
 
-    internal class PresignInnerResult {
+    internal class PresignInnerResult
+    {
         public string? Url;
         public string? Method;
         public DateTime? Expiration;
         public Dictionary<string, string>? SignedHeaders;
     }
 
-    internal class ClientImpl : IDisposable {
+    internal class ClientImpl : IDisposable
+    {
         internal readonly Configuration Config;
         internal readonly ClientOptions Options;
         internal readonly InnerOptions InnerOptions;
@@ -31,17 +35,20 @@ namespace AlibabaCloud.OSS.V2.Internal {
         private readonly OperationOptions _defaultOpOptions = new();
         private readonly OperationOptions _defaultPresignOpOptions = new() { AuthMethod = AuthMethodType.Query };
 
-        public ClientImpl(Configuration config, params Action<ClientOptions>[] optFns) {
+        public ClientImpl(Configuration config, params Action<ClientOptions>[] optFns)
+        {
             // apply config & options
             var opts = ResolveConfig(config);
 
-            foreach (var fn in optFns) {
+            foreach (var fn in optFns)
+            {
                 fn(opts);
             }
 
             Config = config;
             Options = opts;
-            InnerOptions = new InnerOptions() {
+            InnerOptions = new InnerOptions()
+            {
                 UserAgent = ResolveUserAgent(config)
             };
 
@@ -69,7 +76,8 @@ namespace AlibabaCloud.OSS.V2.Internal {
             OperationInput input,
             OperationOptions? options = null,
             CancellationToken cancellationToken = default
-        ) {
+        )
+        {
             // verify input
             VerifyOperation(ref input);
 
@@ -78,10 +86,12 @@ namespace AlibabaCloud.OSS.V2.Internal {
             context.ApiCallCancellationToken = cancellationToken;
 
             // execute and wait result
-            try {
+            try
+            {
                 var result = await _executeStack.ExecuteAsync(request, context).ConfigureAwait(false);
 
-                return new() {
+                return new()
+                {
                     StatusCode = result.StatusCode,
                     Status = result.Status,
                     Headers = result.Headers,
@@ -89,7 +99,8 @@ namespace AlibabaCloud.OSS.V2.Internal {
                     Input = input
                 };
             }
-            catch (Exception ex) {
+            catch (Exception ex)
+            {
                 throw new OperationException(input.OperationName, ex);
             }
         }
@@ -97,7 +108,8 @@ namespace AlibabaCloud.OSS.V2.Internal {
         public PresignInnerResult PresignInner(
             OperationInput input,
             OperationOptions? options = null
-        ) {
+        )
+        {
             // verify input
             VerifyOperation(ref input);
 
@@ -108,7 +120,8 @@ namespace AlibabaCloud.OSS.V2.Internal {
 
             if (provider != null &&
                 provider is not Credentials.AnonymousCredentialsProvider &&
-                context.SigningContext != null) {
+                context.SigningContext != null)
+            {
                 var cred = provider.GetCredentials();
                 var singer = Options.Signer;
                 if (!cred.HasKeys) throw new("Credentials is null or empty");
@@ -123,18 +136,22 @@ namespace AlibabaCloud.OSS.V2.Internal {
                 // signed headers
                 // content-type, content-md5, x-oss- and additionalHeaders in sign v4
                 var expect = new List<string> { "content-type", "content-md5" };
-                if (singer is Signer.SignerV4) {
-                    if (context.SigningContext.AdditionalHeaders != null) {
+                if (singer is Signer.SignerV4)
+                {
+                    if (context.SigningContext.AdditionalHeaders != null)
+                    {
                         expect.AddRange(context.SigningContext.AdditionalHeaders.Select(h => h.ToLowerInvariant()));
                     }
                     var now = DateTime.UtcNow;
-                    if (result.Expiration - now > TimeSpan.FromDays(7)) {
+                    if (result.Expiration - now > TimeSpan.FromDays(7))
+                    {
                         throw new PresignExpirationException();
                     }
                 }
 
                 var signedHeaders = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
-                foreach (var header in request.Headers) {
+                foreach (var header in request.Headers)
+                {
                     var low = header.Key.ToLowerInvariant();
                     if (expect.Contains(low) || low.StartsWith("x-oss-")) signedHeaders[header.Key] = header.Value;
                 }
@@ -148,12 +165,15 @@ namespace AlibabaCloud.OSS.V2.Internal {
             return result;
         }
 
-        public void Dispose() {
+        public void Dispose()
+        {
             _executeStack.Dispose();
         }
 
-        private static ClientOptions ResolveConfig(Configuration config) {
-            var opt = new ClientOptions() {
+        private static ClientOptions ResolveConfig(Configuration config)
+        {
+            var opt = new ClientOptions()
+            {
                 Product = Defaults.Product,
                 Region = config.Region.SafeString(),
                 Endpoint = ResolveEndpoint(config),
@@ -168,11 +188,13 @@ namespace AlibabaCloud.OSS.V2.Internal {
             opt.AdditionalHeaders = config.AdditionalHeaders ?? opt.AdditionalHeaders;
             opt.ReadWriteTimeout = config.ReadWriteTimeout ?? opt.ReadWriteTimeout;
 
-            if (config.DisableUploadCrc64Check.GetValueOrDefault(false)) {
+            if (config.DisableUploadCrc64Check.GetValueOrDefault(false))
+            {
                 opt.FeatureFlags &= ~FeatureFlagsType.EnableCrc64CheckUpload;
             }
 
-            if (config.DisableDownloadCrc64Check.GetValueOrDefault(false)) {
+            if (config.DisableDownloadCrc64Check.GetValueOrDefault(false))
+            {
                 opt.FeatureFlags &= ~FeatureFlagsType.EnableCrc64CheckDownload;
             }
 
@@ -186,26 +208,33 @@ namespace AlibabaCloud.OSS.V2.Internal {
             return opt;
         }
 
-        private static Uri? ResolveEndpoint(Configuration config) {
+        private static Uri? ResolveEndpoint(Configuration config)
+        {
             var disableSsl = config.DisableSsl.GetValueOrDefault(false);
             var endpoint = config.Endpoint.SafeString();
             var region = config.Region.SafeString();
 
-            if (endpoint != "") {
+            if (endpoint != "")
+            {
                 endpoint = endpoint.AddScheme(disableSsl);
             }
-            else if (region.IsValidRegion()) {
+            else if (region.IsValidRegion())
+            {
                 string type;
-                if (config.UseDualStackEndpoint.GetValueOrDefault(false)) {
+                if (config.UseDualStackEndpoint.GetValueOrDefault(false))
+                {
                     type = "dual-stack";
                 }
-                else if (config.UseInternalEndpoint.GetValueOrDefault(false)) {
+                else if (config.UseInternalEndpoint.GetValueOrDefault(false))
+                {
                     type = "internal";
                 }
-                else if (config.UseAccelerateEndpoint.GetValueOrDefault(false)) {
+                else if (config.UseAccelerateEndpoint.GetValueOrDefault(false))
+                {
                     type = "accelerate";
                 }
-                else {
+                else
+                {
                     type = "default";
                 }
 
@@ -215,35 +244,44 @@ namespace AlibabaCloud.OSS.V2.Internal {
             return endpoint.ToUri();
         }
 
-        private static Retry.IRetryer ResolveRetryer(Configuration config) {
+        private static Retry.IRetryer ResolveRetryer(Configuration config)
+        {
             return config.Retryer ?? new Retry.StandardRetryer(maxAttempts: config.RetryMaxAttempts);
         }
 
-        private static Signer.ISigner ResolveSigner(Configuration config) {
-            return config.SignatureVersion.SafeString() switch {
+        private static Signer.ISigner ResolveSigner(Configuration config)
+        {
+            return config.SignatureVersion.SafeString() switch
+            {
                 "v1" => new Signer.SignerV1(),
                 _ => new Signer.SignerV4(),
             };
         }
 
-        private static Transport.HttpTransport ResolveHttpTransport(Configuration config) {
-            if (config.HttpTransport != null) {
+        private static Transport.HttpTransport ResolveHttpTransport(Configuration config)
+        {
+            if (config.HttpTransport != null)
+            {
                 return config.HttpTransport;
             }
 
-            var httpOpt = new Transport.HttpTransportOptions() {
+            var httpOpt = new Transport.HttpTransportOptions()
+            {
                 InsecureSkipVerify = config.InsecureSkipVerify,
                 EnabledRedirect = config.EnabledRedirect,
                 ConnectTimeout = config.ConnectTimeout,
             };
 
             // Proxy
-            if (config.ProxyHost != null) {
-                try {
+            if (config.ProxyHost != null)
+            {
+                try
+                {
                     var address = new Uri(config.ProxyHost);
                     httpOpt.HttpProxy = new WebProxy(address);
                 }
-                catch (Exception) {
+                catch (Exception)
+                {
                     // ignored
                 }
             }
@@ -252,19 +290,24 @@ namespace AlibabaCloud.OSS.V2.Internal {
             return new Transport.HttpTransport(client);
         }
 
-        private static AddressStyleType ResolveAddressStyle(Configuration config, Uri? endpoint) {
+        private static AddressStyleType ResolveAddressStyle(Configuration config, Uri? endpoint)
+        {
             var style = AddressStyleType.VirtualHosted;
 
-            if (config.UseCName.GetValueOrDefault(false)) {
+            if (config.UseCName.GetValueOrDefault(false))
+            {
                 style = AddressStyleType.CName;
             }
-            else if (config.UsePathStyle.GetValueOrDefault(false)) {
+            else if (config.UsePathStyle.GetValueOrDefault(false))
+            {
                 style = AddressStyleType.Path;
             }
 
             //if the endpoint is ip, set to path-style
-            if (endpoint != null) {
-                if (endpoint.IsHostIp()) {
+            if (endpoint != null)
+            {
+                if (endpoint.IsHostIp())
+                {
                     style = AddressStyleType.Path;
                 }
             }
@@ -272,7 +315,8 @@ namespace AlibabaCloud.OSS.V2.Internal {
             return style;
         }
 
-        private static string ResolveUserAgent(Configuration config) {
+        private static string ResolveUserAgent(Configuration config)
+        {
             // sys-info = {platform.system}/{platform.release}/{platform.machine}
             // user-agent =alibabacloud-dotnet-sdk-v2/sdk-version (sys-info)
             var osVersion = Environment.OSVersion.Version;
@@ -281,7 +325,8 @@ namespace AlibabaCloud.OSS.V2.Internal {
             var info = $"{osPlatform}/{osVersion}/{runtimeVersion}";
             var sdkVersion = typeof(Configuration).Assembly.GetName().Version;
             var useragent = $"alibabacloud-dotnet-sdk-v2/{sdkVersion} ({info})";
-            if (config.UserAgent != null) {
+            if (config.UserAgent != null)
+            {
                 return $"{useragent}/{config.UserAgent}";
             }
             return useragent;
@@ -290,40 +335,50 @@ namespace AlibabaCloud.OSS.V2.Internal {
         private (RequestMessage first, ExecuteContext second) BuildRequestContext(
             OperationInput input,
             OperationOptions opOpts
-        ) {
+        )
+        {
             // default api options
-            var context = new ExecuteContext {
+            var context = new ExecuteContext
+            {
                 RetryMaxAttempts = opOpts.RetryMaxAttempts ?? Options.Retryer!.MaxAttempts(),
                 RequestOnceTimeout = opOpts.ReadWriteTimeout ?? Options.RequestOnceTimeout,
                 OnResponseMessage = new List<Action<ResponseMessage>> { OnServiceError }
             };
 
             // HttpCompletionOption
-            if (input.OperationMetadata.TryGetValue("http-completion-option", out var value)) {
-                if (value is HttpCompletionOption s) {
+            if (input.OperationMetadata.TryGetValue("http-completion-option", out var value))
+            {
+                if (value is HttpCompletionOption s)
+                {
                     context.HttpCompletionOption = s;
                 }
             }
 
             // trackers
             List<Stream>? trackers = null;
-            if (input.OperationMetadata.TryGetValue("opm-request-body-tracker", out value)) {
-                if (value is List<Stream> s) {
+            if (input.OperationMetadata.TryGetValue("opm-request-body-tracker", out value))
+            {
+                if (value is List<Stream> s)
+                {
                     trackers = s;
                 }
             }
 
             // response handlers
-            if (input.OperationMetadata.TryGetValue("opm-response-handler", out value)) {
-                if (value is List<Action<ResponseMessage>> fns) {
-                    foreach (var fn in fns) {
+            if (input.OperationMetadata.TryGetValue("opm-response-handler", out value))
+            {
+                if (value is List<Action<ResponseMessage>> fns)
+                {
+                    foreach (var fn in fns)
+                    {
                         context.OnResponseMessage.Add(fn);
                     }
                 }
             }
 
             // signing context
-            context.SigningContext = new() {
+            context.SigningContext = new()
+            {
                 Product = Options.Product,
                 Region = Options.Region,
                 Bucket = input.Bucket,
@@ -333,8 +388,10 @@ namespace AlibabaCloud.OSS.V2.Internal {
             };
 
             // signing time from user
-            if (input.OperationMetadata.TryGetValue("expiration-time", out var expirationTime)) {
-                if (expirationTime is DateTime time) {
+            if (input.OperationMetadata.TryGetValue("expiration-time", out var expirationTime))
+            {
+                if (expirationTime is DateTime time)
+                {
                     context.SigningContext.Expiration = time;
                 }
             }
@@ -346,7 +403,8 @@ namespace AlibabaCloud.OSS.V2.Internal {
             var url = $"{endpoint.Scheme}://{baseUrl}";
             var query = CombineQueryString(input.Parameters);
 
-            if (query != "") {
+            if (query != "")
+            {
                 url += "?" + query;
             }
 
@@ -357,50 +415,62 @@ namespace AlibabaCloud.OSS.V2.Internal {
             // request::headers
             request.Headers.Add("User-Agent", InnerOptions.UserAgent);
 
-            if (input.Headers != null) {
-                foreach (var item in input.Headers) {
+            if (input.Headers != null)
+            {
+                foreach (var item in input.Headers)
+                {
                     request.Headers.Add(item.Key, item.Value);
                 }
             }
 
             // request::body
-            if (trackers != null && input.Body != null) {
+            if (trackers != null && input.Body != null)
+            {
                 request.Content = new TrackStream(input.Body, trackers.ToArray());
             }
-            else {
+            else
+            {
                 request.Content = input.Body;
             }
 
             return (request, context);
         }
 
-        internal (int retry, TimeSpan timeout) GetRuntimeContext(OperationOptions? opOpts) {
+        internal (int retry, TimeSpan timeout) GetRuntimeContext(OperationOptions? opOpts)
+        {
             opOpts ??= _defaultOpOptions;
             var RetryMaxAttempts = opOpts.RetryMaxAttempts ?? Options.Retryer!.MaxAttempts();
             var RequestOnceTimeout = opOpts.ReadWriteTimeout ?? Options.RequestOnceTimeout;
             return (RetryMaxAttempts, RequestOnceTimeout);
         }
 
-        private static void VerifyOperation(ref OperationInput input) {
-            if (input.Bucket != null && !input.Bucket.IsValidBucketName()) {
+        private static void VerifyOperation(ref OperationInput input)
+        {
+            if (input.Bucket != null && !input.Bucket.IsValidBucketName())
+            {
                 throw new ArgumentException($"input.Bucket name is invalid, got {input.Bucket}.");
             }
 
-            if (input.Key != null && !input.Key.IsValidObjectName()) {
+            if (input.Key != null && !input.Key.IsValidObjectName())
+            {
                 throw new ArgumentException($"input.Key is invalid, got {input.Key}.");
             }
         }
 
-        private string BuildHostPath(ref OperationInput input, string baseUrl) {
+        private string BuildHostPath(ref OperationInput input, string baseUrl)
+        {
             var paths = new List<string>();
             var host = baseUrl;
 
-            if (input.Bucket != null) {
-                switch (Options.AddressStyle) {
+            if (input.Bucket != null)
+            {
+                switch (Options.AddressStyle)
+                {
                     case AddressStyleType.Path:
                         paths.Add(input.Bucket);
 
-                        if (input.Key == null) {
+                        if (input.Key == null)
+                        {
                             paths.Add("");
                         }
 
@@ -414,22 +484,26 @@ namespace AlibabaCloud.OSS.V2.Internal {
                 }
             }
 
-            if (input.Key != null) {
+            if (input.Key != null)
+            {
                 paths.Add(input.Key.UrlEncodePath());
             }
 
             return $"{host}/{paths.JoinToString("/")}";
         }
 
-        private static string CombineQueryString(IDictionary<string, string>? parameters) {
-            if (parameters == null) {
+        private static string CombineQueryString(IDictionary<string, string>? parameters)
+        {
+            if (parameters == null)
+            {
                 return "";
             }
 
             var isFirst = true;
             var queryString = new StringBuilder();
 
-            foreach (var p in parameters) {
+            foreach (var p in parameters)
+            {
                 if (!isFirst)
                     queryString.Append("&");
 
@@ -444,7 +518,8 @@ namespace AlibabaCloud.OSS.V2.Internal {
             return queryString.ToString();
         }
 
-        private static void OnServiceError(ResponseMessage response) {
+        private static void OnServiceError(ResponseMessage response)
+        {
             var statusCode = response.StatusCode;
 
             if (statusCode / 100 == 2) return;
@@ -459,12 +534,14 @@ namespace AlibabaCloud.OSS.V2.Internal {
             if (string.IsNullOrEmpty(content) && response.Headers.TryGetValue("x-oss-err", out var val))
                 content = Encoding.UTF8.GetString(Convert.FromBase64String(val));
 
-            try {
+            try
+            {
                 var xmlDoc = new XmlDocument();
                 xmlDoc.LoadXml(content);
                 var rootNode = xmlDoc.SelectSingleNode("Error");
 
-                if (rootNode != null) {
+                if (rootNode != null)
+                {
                     foreach (XmlNode node in rootNode.ChildNodes) errorFields[node.Name] = node.InnerText;
 
                     errorFields.TryGetValue("Message", out message);
@@ -472,12 +549,14 @@ namespace AlibabaCloud.OSS.V2.Internal {
                     errorFields.TryGetValue("RequestId", out requestId);
                     errorFields.TryGetValue("EC", out ec);
                 }
-                else {
+                else
+                {
                     message =
                         $"Not found tag <Error>, part response body {content.Substring(0, Math.Min(256, content.Length))}";
                 }
             }
-            catch (Exception) {
+            catch (Exception)
+            {
                 //Ignore
             }
 
@@ -506,12 +585,16 @@ namespace AlibabaCloud.OSS.V2.Internal {
         }
     }
 
-    internal static class OperationInputExtensions {
+    internal static class OperationInputExtensions
+    {
 
-        public static void AddStreamTracker(this OperationInput input, Stream tracker) {
+        public static void AddStreamTracker(this OperationInput input, Stream tracker)
+        {
             List<Stream>? trackers = null;
-            if (input.OperationMetadata.TryGetValue("opm-request-body-tracker", out var value)) {
-                if (value is List<Stream> val) {
+            if (input.OperationMetadata.TryGetValue("opm-request-body-tracker", out var value))
+            {
+                if (value is List<Stream> val)
+                {
                     trackers = val;
                 }
             }
@@ -520,10 +603,13 @@ namespace AlibabaCloud.OSS.V2.Internal {
             input.OperationMetadata["opm-request-body-tracker"] = trackers;
         }
 
-        public static void AddResponseHandler(this OperationInput input, Action<ResponseMessage> handler) {
+        public static void AddResponseHandler(this OperationInput input, Action<ResponseMessage> handler)
+        {
             List<Action<ResponseMessage>>? handlers = null;
-            if (input.OperationMetadata.TryGetValue("opm-response-handler", out var value)) {
-                if (value is List<Action<ResponseMessage>> val) {
+            if (input.OperationMetadata.TryGetValue("opm-response-handler", out var value))
+            {
+                if (value is List<Action<ResponseMessage>> val)
+                {
                     handlers = val;
                 }
             }

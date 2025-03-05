@@ -1,10 +1,12 @@
 ﻿using AlibabaCloud.OSS.V2.Extensions;
 
 namespace AlibabaCloud.OSS.V2.UnitTests.Extensions;
-public class CollectionExtensionsTest {
+public class CollectionExtensionsTest
+{
 
     [Fact]
-    public void TestForEach() {
+    public void TestForEach()
+    {
         var headers = new Dictionary<string, string> {
             {"X-Oss-Meta-Key-1", "value1"},
             {"X-Oss-Meta-Key-2", "value2"},

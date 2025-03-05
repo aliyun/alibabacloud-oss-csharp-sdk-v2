@@ -4,8 +4,10 @@ using System.Threading;
 using System.Threading.Tasks;
 using AlibabaCloud.OSS.V2.Transform;
 
-namespace AlibabaCloud.OSS.V2 {
-    public partial class Client {
+namespace AlibabaCloud.OSS.V2
+{
+    public partial class Client
+    {
         /// <summary>
         /// You can call this operation to modify the ACL of an object.
         /// </summary>
@@ -17,12 +19,14 @@ namespace AlibabaCloud.OSS.V2 {
             Models.PutObjectAclRequest request,
             OperationOptions? options = null,
             CancellationToken cancellationToken = default
-        ) {
+        )
+        {
             Ensure.NotNull(request.Bucket, "request.Bucket");
             Ensure.NotNull(request.Key, "request.Key");
             Ensure.NotNull(request.Acl, "request.Acl");
 
-            var input = new OperationInput {
+            var input = new OperationInput
+            {
                 OperationName = "PutObjectAcl",
                 Method = "PUT",
                 Headers = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase) {
@@ -57,11 +61,13 @@ namespace AlibabaCloud.OSS.V2 {
             Models.GetObjectAclRequest request,
             OperationOptions? options = null,
             CancellationToken cancellationToken = default
-        ) {
+        )
+        {
             Ensure.NotNull(request.Bucket, "request.Bucket");
             Ensure.NotNull(request.Key, "request.Key");
 
-            var input = new OperationInput {
+            var input = new OperationInput
+            {
                 OperationName = "GetObjectAcl",
                 Method = "GET",
                 Parameters = new Dictionary<string, string> {

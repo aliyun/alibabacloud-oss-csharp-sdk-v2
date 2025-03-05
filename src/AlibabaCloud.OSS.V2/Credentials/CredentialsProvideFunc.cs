@@ -1,10 +1,12 @@
 ﻿
-namespace AlibabaCloud.OSS.V2.Credentials {
+namespace AlibabaCloud.OSS.V2.Credentials
+{
     /// <summary>
     /// CredentialsProviderFunc provides a helper wrapping a function value
     /// to satisfy the ICredentialsProvider interface.
     /// </summary>
-    public class CredentialsProvideFunc : ICredentialsProvider {
+    public class CredentialsProvideFunc : ICredentialsProvider
+    {
         public delegate Credentials GetCredentialsFunc();
 
         private readonly GetCredentialsFunc _func;
@@ -15,7 +17,8 @@ namespace AlibabaCloud.OSS.V2.Credentials {
         public CredentialsProvideFunc(GetCredentialsFunc func) => _func = func;
 
         /// <inheritdoc/>
-        public Credentials GetCredentials() {
+        public Credentials GetCredentials()
+        {
             return _func();
         }
     }

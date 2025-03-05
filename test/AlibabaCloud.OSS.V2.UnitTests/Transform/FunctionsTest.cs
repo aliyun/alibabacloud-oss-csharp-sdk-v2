@@ -1,25 +1,32 @@
 ﻿namespace AlibabaCloud.OSS.V2.UnitTests.Transform;
 
-class ModelStub : V2.Models.RequestModel {
+class ModelStub : V2.Models.RequestModel
+{
 
-    public string HeaderParma {
+    public string HeaderParma
+    {
         get => Headers.TryGetValue("header-param-1", out var value) ? value : null;
-        set {
+        set
+        {
             if (value != null) Headers["header-param-1"] = value;
         }
     }
 
-    public string QueryParma {
+    public string QueryParma
+    {
         get => Parameters.TryGetValue("query-param-1", out var value) ? value : null;
-        set {
+        set
+        {
             if (value != null) Parameters["query-param-1"] = value;
         }
     }
 }
 
-public class FunctionsTest {
+public class FunctionsTest
+{
     [Fact]
-    public void TestSerializeInputHeaderAndParameters() {
+    public void TestSerializeInputHeaderAndParameters()
+    {
         // case 1
         var model = new ModelStub();
         var input = new OperationInput();
@@ -29,7 +36,8 @@ public class FunctionsTest {
         Assert.Null(input.Body);
 
         // case 2
-        model = new ModelStub() {
+        model = new ModelStub()
+        {
             HeaderParma = "val-1",
             QueryParma = "val-2"
         };
@@ -43,7 +51,8 @@ public class FunctionsTest {
 
         // case 3
         model = new ModelStub();
-        input = new OperationInput() {
+        input = new OperationInput()
+        {
             Headers = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase),
             Parameters = new Dictionary<string, string>(),
         };
@@ -55,11 +64,13 @@ public class FunctionsTest {
         Assert.Null(input.Body);
 
         // case 4
-        model = new ModelStub() {
+        model = new ModelStub()
+        {
             HeaderParma = "val-1",
             QueryParma = "val-2"
         };
-        input = new OperationInput() {
+        input = new OperationInput()
+        {
             Headers = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase),
             Parameters = new Dictionary<string, string>(),
         };
@@ -72,7 +83,8 @@ public class FunctionsTest {
     }
 
     [Fact]
-    public void TestSerializeInputBody() {
+    public void TestSerializeInputBody()
+    {
         // InnerBody is null
         var model = new ModelStub();
         var input = new OperationInput();
@@ -84,7 +96,8 @@ public class FunctionsTest {
         // InnerBody is not null and BodyFormat is xml
 
         // InnerBody is not null and InnerBody is Stream
-        model = new ModelStub() {
+        model = new ModelStub()
+        {
             InnerBody = new MemoryStream(),
             BodyFormat = "",
         };
@@ -96,23 +109,27 @@ public class FunctionsTest {
         Assert.IsAssignableFrom<MemoryStream>(input.Body);
 
         // InnerBody is not null and InnerBody is not supported type
-        model = new ModelStub() {
+        model = new ModelStub()
+        {
             InnerBody = "hello world",
             BodyFormat = "",
         };
         input = new OperationInput();
 
-        try {
+        try
+        {
             V2.Transform.Serde.SerializeInput(model, ref input);
             Assert.Fail("should not here");
         }
-        catch (Exception e) {
+        catch (Exception e)
+        {
             Assert.Contains("not support body type", e.ToString());
         }
     }
 
     [Fact]
-    public void TestToBool() {
+    public void TestToBool()
+    {
         Assert.True(Convert.ToBoolean("true"));
         Assert.True(Convert.ToBoolean("True"));
         Assert.False(Convert.ToBoolean("false"));
@@ -122,7 +139,8 @@ public class FunctionsTest {
     }
 
     [Fact]
-    public void TestEscape() {
+    public void TestEscape()
+    {
         Assert.Null(V2.Transform.Serde.EscapeXml(null));
         Assert.Equal("", V2.Transform.Serde.EscapeXml(""));
         Assert.Equal("hello world", V2.Transform.Serde.EscapeXml("hello world"));

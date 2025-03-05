@@ -1,29 +1,35 @@
-﻿using AlibabaCloud.OSS.V2.Models;
-using System.Text;
+﻿using System.Text;
+using AlibabaCloud.OSS.V2.Models;
 
 namespace AlibabaCloud.OSS.V2.IntegrationTests;
 
-public class ClientBucketTest : IDisposable {
+public class ClientBucketTest : IDisposable
+{
     private readonly string BucketNamePrefix;
 
-    public void Dispose() {
+    public void Dispose()
+    {
         Utils.CleanBuckets(BucketNamePrefix);
     }
 
-    public ClientBucketTest() {
+    public ClientBucketTest()
+    {
         BucketNamePrefix = Utils.RandomBucketNamePrefix();
     }
 
     [Fact]
-    public async Task TestBucketBasic() {
+    public async Task TestBucketBasic()
+    {
         var client = Utils.GetDefaultClient();
 
         //default
         var bucketName = Utils.RandomBucketName(BucketNamePrefix);
 
-        var result = await client.PutBucketAsync(new() {
+        var result = await client.PutBucketAsync(new()
+        {
             Bucket = bucketName,
-            CreateBucketConfiguration = new CreateBucketConfiguration() {
+            CreateBucketConfiguration = new CreateBucketConfiguration()
+            {
                 StorageClass = Models.StorageClassType.IA.GetString(),
             }
         });
@@ -37,7 +43,8 @@ public class ClientBucketTest : IDisposable {
 
         // bucket stat
         var stat = await client.GetBucketStatAsync(
-            new GetBucketStatRequest() {
+            new GetBucketStatRequest()
+            {
                 Bucket = bucketName
             }
         );
@@ -49,7 +56,8 @@ public class ClientBucketTest : IDisposable {
 
         // bucket info
         var info = await client.GetBucketInfoAsync(
-            new GetBucketInfoRequest() {
+            new GetBucketInfoRequest()
+            {
                 Bucket = bucketName
             }
         );
@@ -66,7 +74,8 @@ public class ClientBucketTest : IDisposable {
 
         // bucket location
         var location = await client.GetBucketLocationAsync(
-            new GetBucketLocationRequest() {
+            new GetBucketLocationRequest()
+            {
                 Bucket = bucketName
             }
         );
@@ -76,7 +85,8 @@ public class ClientBucketTest : IDisposable {
         Assert.NotNull(location.LocationConstraint);
         Assert.Equal($"oss-{Utils.Region}", location.LocationConstraint);
 
-        var result1 = await client.DeleteBucketAsync(new() {
+        var result1 = await client.DeleteBucketAsync(new()
+        {
             Bucket = bucketName,
         });
 
@@ -90,13 +100,15 @@ public class ClientBucketTest : IDisposable {
     }
 
     [Fact]
-    public async Task TestBucketBasicFail() {
+    public async Task TestBucketBasicFail()
+    {
         var client = Utils.GetDefaultClient();
 
         //default
         var bucketName = Utils.RandomBucketName(BucketNamePrefix);
 
-        var result = await client.PutBucketAsync(new() {
+        var result = await client.PutBucketAsync(new()
+        {
             Bucket = bucketName,
         });
 
@@ -107,14 +119,17 @@ public class ClientBucketTest : IDisposable {
         var invClient = Utils.GetInvalidAkClient();
 
         // put bucket
-        try {
+        try
+        {
             await invClient.PutBucketAsync(
-                new() {
+                new()
+                {
                     Bucket = bucketName,
                 }
             );
         }
-        catch (Exception e) {
+        catch (Exception e)
+        {
             Assert.IsAssignableFrom<OperationException>(e);
             Assert.StartsWith("operation error PutBucket", e.Message);
             Assert.IsAssignableFrom<ServiceException>(e.InnerException);
@@ -129,14 +144,17 @@ public class ClientBucketTest : IDisposable {
         }
 
         // delete bucket
-        try {
+        try
+        {
             await invClient.DeleteBucketAsync(
-                new() {
+                new()
+                {
                     Bucket = bucketName,
                 }
             );
         }
-        catch (Exception e) {
+        catch (Exception e)
+        {
             Assert.IsAssignableFrom<OperationException>(e);
             Assert.StartsWith("operation error DeleteBucket", e.Message);
             Assert.IsAssignableFrom<ServiceException>(e.InnerException);
@@ -151,14 +169,17 @@ public class ClientBucketTest : IDisposable {
         }
 
         // bucket stat
-        try {
+        try
+        {
             await invClient.GetBucketStatAsync(
-                new() {
+                new()
+                {
                     Bucket = bucketName,
                 }
             );
         }
-        catch (Exception e) {
+        catch (Exception e)
+        {
             Assert.IsAssignableFrom<OperationException>(e);
             Assert.StartsWith("operation error GetBucketStat", e.Message);
             Assert.IsAssignableFrom<ServiceException>(e.InnerException);
@@ -174,14 +195,17 @@ public class ClientBucketTest : IDisposable {
         }
 
         // bucket info
-        try {
+        try
+        {
             await invClient.GetBucketInfoAsync(
-                new() {
+                new()
+                {
                     Bucket = bucketName,
                 }
             );
         }
-        catch (Exception e) {
+        catch (Exception e)
+        {
             Assert.IsAssignableFrom<OperationException>(e);
             Assert.StartsWith("operation error GetBucketInfo", e.Message);
             Assert.IsAssignableFrom<ServiceException>(e.InnerException);
@@ -197,14 +221,17 @@ public class ClientBucketTest : IDisposable {
         }
 
         // bucket location
-        try {
+        try
+        {
             await invClient.GetBucketLocationAsync(
-                new() {
+                new()
+                {
                     Bucket = bucketName,
                 }
             );
         }
-        catch (Exception e) {
+        catch (Exception e)
+        {
             Assert.IsAssignableFrom<OperationException>(e);
             Assert.StartsWith("operation error GetBucketLocation", e.Message);
             Assert.IsAssignableFrom<ServiceException>(e.InnerException);
@@ -220,14 +247,17 @@ public class ClientBucketTest : IDisposable {
         }
 
         // list objects
-        try {
+        try
+        {
             await invClient.ListObjectsAsync(
-                new() {
+                new()
+                {
                     Bucket = bucketName,
                 }
             );
         }
-        catch (Exception e) {
+        catch (Exception e)
+        {
             Assert.IsAssignableFrom<OperationException>(e);
             Assert.StartsWith("operation error ListObjects", e.Message);
             Assert.IsAssignableFrom<ServiceException>(e.InnerException);
@@ -243,14 +273,17 @@ public class ClientBucketTest : IDisposable {
         }
 
         // list objects v2
-        try {
+        try
+        {
             await invClient.ListObjectsV2Async(
-                new() {
+                new()
+                {
                     Bucket = bucketName,
                 }
             );
         }
-        catch (Exception e) {
+        catch (Exception e)
+        {
             Assert.IsAssignableFrom<OperationException>(e);
             Assert.StartsWith("operation error ListObjectsV2", e.Message);
             Assert.IsAssignableFrom<ServiceException>(e.InnerException);
@@ -268,13 +301,15 @@ public class ClientBucketTest : IDisposable {
     }
 
     [Fact]
-    public async Task TestBucketAcl() {
+    public async Task TestBucketAcl()
+    {
         var client = Utils.GetDefaultClient();
 
         //default
         var bucketName = Utils.RandomBucketName(BucketNamePrefix);
 
-        var result = await client.PutBucketAsync(new() {
+        var result = await client.PutBucketAsync(new()
+        {
             Bucket = bucketName,
         });
 
@@ -283,7 +318,8 @@ public class ClientBucketTest : IDisposable {
         Assert.NotNull(result.RequestId);
 
         var result1 = await client.GetBucketAclAsync(
-            new() {
+            new()
+            {
                 Bucket = bucketName
             }
         );
@@ -295,7 +331,8 @@ public class ClientBucketTest : IDisposable {
         Assert.Equal("private", result1.AccessControlPolicy.AccessControlList.Grant);
 
         var result2 = await client.PutBucketAclAsync(
-            new() {
+            new()
+            {
                 Bucket = bucketName,
                 Acl = "public-read"
             }
@@ -305,7 +342,8 @@ public class ClientBucketTest : IDisposable {
         Assert.NotNull(result2.RequestId);
 
         result1 = await client.GetBucketAclAsync(
-            new() {
+            new()
+            {
                 Bucket = bucketName
             }
         );
@@ -317,13 +355,15 @@ public class ClientBucketTest : IDisposable {
 
 
     [Fact]
-    public async Task TestBucketAclFail() {
+    public async Task TestBucketAclFail()
+    {
         var client = Utils.GetDefaultClient();
 
         //default
         var bucketName = Utils.RandomBucketName(BucketNamePrefix);
 
-        var result = await client.PutBucketAsync(new() {
+        var result = await client.PutBucketAsync(new()
+        {
             Bucket = bucketName,
         });
 
@@ -334,15 +374,18 @@ public class ClientBucketTest : IDisposable {
         var invClient = Utils.GetInvalidAkClient();
 
         // put bucket acl
-        try {
+        try
+        {
             await invClient.PutBucketAclAsync(
-                new() {
+                new()
+                {
                     Bucket = bucketName,
                     Acl = "private"
                 }
             );
         }
-        catch (Exception e) {
+        catch (Exception e)
+        {
             Assert.IsAssignableFrom<OperationException>(e);
             Assert.StartsWith("operation error PutBucketAcl", e.Message);
             Assert.IsAssignableFrom<ServiceException>(e.InnerException);
@@ -358,14 +401,17 @@ public class ClientBucketTest : IDisposable {
         }
 
         // get bucket acl
-        try {
+        try
+        {
             await invClient.GetBucketAclAsync(
-                new() {
+                new()
+                {
                     Bucket = bucketName
                 }
             );
         }
-        catch (Exception e) {
+        catch (Exception e)
+        {
             Assert.IsAssignableFrom<OperationException>(e);
             Assert.StartsWith("operation error GetBucketAcl", e.Message);
             Assert.IsAssignableFrom<ServiceException>(e.InnerException);
@@ -382,13 +428,15 @@ public class ClientBucketTest : IDisposable {
     }
 
     [Fact]
-    public async Task TestListObjectsByPaginators() {
+    public async Task TestListObjectsByPaginators()
+    {
         var client = Utils.GetDefaultClient();
 
         //default
         var bucketName = Utils.RandomBucketName(BucketNamePrefix);
 
-        var result = await client.PutBucketAsync(new() {
+        var result = await client.PutBucketAsync(new()
+        {
             Bucket = bucketName
         });
         Assert.NotNull(result);
@@ -396,17 +444,20 @@ public class ClientBucketTest : IDisposable {
         Assert.NotNull(result.RequestId);
 
         // paginator
-        var paginators = client.ListObjectsPaginator(new ListObjectsRequest() {
+        var paginators = client.ListObjectsPaginator(new ListObjectsRequest()
+        {
             Bucket = bucketName
         });
-        await foreach (var page in paginators.IterPageAsync()) {
+        await foreach (var page in paginators.IterPageAsync())
+        {
             Assert.NotNull(page.Contents);
             Assert.Empty(page.Contents);
         }
 
         // put object
         var normalKeyPrefix = "normal/key-";
-        for (var i = 0; i < 10; i++) {
+        for (var i = 0; i < 10; i++)
+        {
             await client.PutObjectAsync(new() { Bucket = bucketName, Key = $"{normalKeyPrefix}{i}" });
         }
         var specialKeyPrefix = "special/key-";
@@ -416,11 +467,13 @@ public class ClientBucketTest : IDisposable {
         await client.PutObjectAsync(new() { Bucket = bucketName, Key = $"{specialKeyPrefix}{charStr}123" });
 
         // list default
-        paginators = client.ListObjectsPaginator(new ListObjectsRequest() {
+        paginators = client.ListObjectsPaginator(new ListObjectsRequest()
+        {
             Bucket = bucketName
         });
         var count = 0;
-        await foreach (var page in paginators.IterPageAsync()) {
+        await foreach (var page in paginators.IterPageAsync())
+        {
             Assert.NotNull(page.Contents);
             Assert.NotEmpty(page.Contents);
             count += page.Contents.Count;
@@ -429,15 +482,18 @@ public class ClientBucketTest : IDisposable {
 
         // list with prefix and Limit
         paginators = client.ListObjectsPaginator(
-            new ListObjectsRequest() {
+            new ListObjectsRequest()
+            {
                 Bucket = bucketName,
                 Prefix = specialKeyPrefix,
             },
-            new Paginator.PaginatorOptions() {
+            new Paginator.PaginatorOptions()
+            {
                 Limit = 1
             });
         count = 0;
-        await foreach (var page in paginators.IterPageAsync()) {
+        await foreach (var page in paginators.IterPageAsync())
+        {
             Assert.NotNull(page.Contents);
             Assert.Single(page.Contents);
             Assert.StartsWith(specialKeyPrefix, page.Contents[0].Key);
@@ -448,12 +504,14 @@ public class ClientBucketTest : IDisposable {
 
         // list sync
         paginators = client.ListObjectsPaginator(
-            new ListObjectsRequest() {
+            new ListObjectsRequest()
+            {
                 Bucket = bucketName,
                 Prefix = normalKeyPrefix,
             });
         count = 0;
-        foreach (var page in paginators.IterPage()) {
+        foreach (var page in paginators.IterPage())
+        {
             Assert.NotNull(page.Contents);
             Assert.Equal(10, page.Contents.Count);
             Assert.StartsWith(normalKeyPrefix, page.Contents[0].Key);
@@ -464,15 +522,18 @@ public class ClientBucketTest : IDisposable {
 
         // common prefix
         paginators = client.ListObjectsPaginator(
-            new ListObjectsRequest() {
+            new ListObjectsRequest()
+            {
                 Bucket = bucketName,
                 Delimiter = "/"
             },
-            new Paginator.PaginatorOptions() {
+            new Paginator.PaginatorOptions()
+            {
                 Limit = 100
             });
         count = 0;
-        foreach (var page in paginators.IterPage()) {
+        foreach (var page in paginators.IterPage())
+        {
             Assert.NotNull(page.Contents);
             Assert.Empty(page.Contents);
             Assert.Equal("url", page.EncodingType);
@@ -486,16 +547,21 @@ public class ClientBucketTest : IDisposable {
 
         // delete all objects
         paginators = client.ListObjectsPaginator(new ListObjectsRequest() { Bucket = bucketName });
-        await foreach (var page in paginators.IterPageAsync()) {
+        await foreach (var page in paginators.IterPageAsync())
+        {
             var obj = new List<Models.DeleteObject>();
-            foreach (var version in page.Contents ?? []) {
-                obj.Add(new DeleteObject() {
+            foreach (var version in page.Contents ?? [])
+            {
+                obj.Add(new DeleteObject()
+                {
                     Key = version.Key
                 });
             }
-            if (obj.Count > 0) {
+            if (obj.Count > 0)
+            {
                 await client.DeleteMultipleObjectsAsync(
-                    new Models.DeleteMultipleObjectsRequest() {
+                    new Models.DeleteMultipleObjectsRequest()
+                    {
                         Bucket = bucketName,
                         Objects = obj
                     }
@@ -503,7 +569,8 @@ public class ClientBucketTest : IDisposable {
             }
         }
 
-        var delResult = await client.DeleteBucketAsync(new() {
+        var delResult = await client.DeleteBucketAsync(new()
+        {
             Bucket = bucketName,
         });
 
@@ -512,13 +579,15 @@ public class ClientBucketTest : IDisposable {
     }
 
     [Fact]
-    public async Task TestListObjectsV2ByPaginators() {
+    public async Task TestListObjectsV2ByPaginators()
+    {
         var client = Utils.GetDefaultClient();
 
         //default
         var bucketName = Utils.RandomBucketName(BucketNamePrefix);
 
-        var result = await client.PutBucketAsync(new() {
+        var result = await client.PutBucketAsync(new()
+        {
             Bucket = bucketName
         });
         Assert.NotNull(result);
@@ -526,17 +595,20 @@ public class ClientBucketTest : IDisposable {
         Assert.NotNull(result.RequestId);
 
         // paginator
-        var paginators = client.ListObjectsV2Paginator(new ListObjectsV2Request() {
+        var paginators = client.ListObjectsV2Paginator(new ListObjectsV2Request()
+        {
             Bucket = bucketName
         });
-        await foreach (var page in paginators.IterPageAsync()) {
+        await foreach (var page in paginators.IterPageAsync())
+        {
             Assert.NotNull(page.Contents);
             Assert.Empty(page.Contents);
         }
 
         // put object
         var normalKeyPrefix = "normal/key-";
-        for (var i = 0; i < 10; i++) {
+        for (var i = 0; i < 10; i++)
+        {
             await client.PutObjectAsync(new() { Bucket = bucketName, Key = $"{normalKeyPrefix}{i}" });
         }
         var specialKeyPrefix = "special/key-";
@@ -546,11 +618,13 @@ public class ClientBucketTest : IDisposable {
         await client.PutObjectAsync(new() { Bucket = bucketName, Key = $"{specialKeyPrefix}{charStr}123" });
 
         // list default
-        paginators = client.ListObjectsV2Paginator(new ListObjectsV2Request() {
+        paginators = client.ListObjectsV2Paginator(new ListObjectsV2Request()
+        {
             Bucket = bucketName
         });
         var count = 0;
-        await foreach (var page in paginators.IterPageAsync()) {
+        await foreach (var page in paginators.IterPageAsync())
+        {
             Assert.NotNull(page.Contents);
             Assert.NotEmpty(page.Contents);
             count += page.Contents.Count;
@@ -559,15 +633,18 @@ public class ClientBucketTest : IDisposable {
 
         // list with prefix and Limit
         paginators = client.ListObjectsV2Paginator(
-            new ListObjectsV2Request() {
+            new ListObjectsV2Request()
+            {
                 Bucket = bucketName,
                 Prefix = specialKeyPrefix,
             },
-            new Paginator.PaginatorOptions() {
+            new Paginator.PaginatorOptions()
+            {
                 Limit = 1
             });
         count = 0;
-        await foreach (var page in paginators.IterPageAsync()) {
+        await foreach (var page in paginators.IterPageAsync())
+        {
             Assert.NotNull(page.Contents);
             Assert.Single(page.Contents);
             Assert.StartsWith(specialKeyPrefix, page.Contents[0].Key);
@@ -578,12 +655,14 @@ public class ClientBucketTest : IDisposable {
 
         // list sync
         paginators = client.ListObjectsV2Paginator(
-            new ListObjectsV2Request() {
+            new ListObjectsV2Request()
+            {
                 Bucket = bucketName,
                 Prefix = normalKeyPrefix,
             });
         count = 0;
-        foreach (var page in paginators.IterPage()) {
+        foreach (var page in paginators.IterPage())
+        {
             Assert.NotNull(page.Contents);
             Assert.Equal(10, page.Contents.Count);
             Assert.StartsWith(normalKeyPrefix, page.Contents[0].Key);
@@ -594,15 +673,18 @@ public class ClientBucketTest : IDisposable {
 
         // common prefix
         paginators = client.ListObjectsV2Paginator(
-            new ListObjectsV2Request() {
+            new ListObjectsV2Request()
+            {
                 Bucket = bucketName,
                 Delimiter = "/"
             },
-            new Paginator.PaginatorOptions() {
+            new Paginator.PaginatorOptions()
+            {
                 Limit = 100
             });
         count = 0;
-        foreach (var page in paginators.IterPage()) {
+        foreach (var page in paginators.IterPage())
+        {
             Assert.NotNull(page.Contents);
             Assert.Empty(page.Contents);
             Assert.Equal("url", page.EncodingType);
@@ -616,16 +698,21 @@ public class ClientBucketTest : IDisposable {
 
         // delete all objects
         paginators = client.ListObjectsV2Paginator(new ListObjectsV2Request() { Bucket = bucketName });
-        await foreach (var page in paginators.IterPageAsync()) {
+        await foreach (var page in paginators.IterPageAsync())
+        {
             var obj = new List<Models.DeleteObject>();
-            foreach (var version in page.Contents ?? []) {
-                obj.Add(new DeleteObject() {
+            foreach (var version in page.Contents ?? [])
+            {
+                obj.Add(new DeleteObject()
+                {
                     Key = version.Key
                 });
             }
-            if (obj.Count > 0) {
+            if (obj.Count > 0)
+            {
                 await client.DeleteMultipleObjectsAsync(
-                    new Models.DeleteMultipleObjectsRequest() {
+                    new Models.DeleteMultipleObjectsRequest()
+                    {
                         Bucket = bucketName,
                         Objects = obj
                     }
@@ -633,7 +720,8 @@ public class ClientBucketTest : IDisposable {
             }
         }
 
-        var delResult = await client.DeleteBucketAsync(new() {
+        var delResult = await client.DeleteBucketAsync(new()
+        {
             Bucket = bucketName,
         });
 

@@ -1,8 +1,10 @@
 using System;
 using System.Collections.Generic;
 
-namespace AlibabaCloud.OSS.V2 {
-    public class ServiceException : Exception {
+namespace AlibabaCloud.OSS.V2
+{
+    public class ServiceException : Exception
+    {
         private readonly IDictionary<string, string> _details;
 
         public ServiceException(
@@ -10,7 +12,8 @@ namespace AlibabaCloud.OSS.V2 {
             IDictionary<string, string>? details,
             IDictionary<string, string>? errorFields = null,
             IDictionary<string, string>? headers = null
-        ) : base(ToMessage(statusCode, details)) {
+        ) : base(ToMessage(statusCode, details))
+        {
             StatusCode = statusCode;
             _details = details ?? new Dictionary<string, string>();
             ErrorFields = errorFields ?? new Dictionary<string, string>();
@@ -40,7 +43,8 @@ namespace AlibabaCloud.OSS.V2 {
         private static string ToMessage(
             int statusCode,
             IDictionary<string, string>? details
-        ) {
+        )
+        {
             return
                 "Error returned by Service.\n" +
                 $"Http Status Code: {statusCode}\n" +
@@ -52,49 +56,59 @@ namespace AlibabaCloud.OSS.V2 {
                 $"Request Endpoint: {GetValueDefault(details, "RequestTarget")}";
         }
 
-        private static string GetValueDefault(IDictionary<string, string>? map, string name) {
+        private static string GetValueDefault(IDictionary<string, string>? map, string name)
+        {
             if (map == null) return "";
             return map.TryGetValue(name, out var value) ? value : "";
         }
     }
 
-    public class InconsistentException : Exception {
+    public class InconsistentException : Exception
+    {
         public InconsistentException(
                 string ccrc,
                 string scrc,
                 string requestId,
                 Exception? innerException = null) : base(
                 $"crc is inconsistent, client {ccrc} server {scrc}, RequestId {requestId}",
-                innerException) { }
+                innerException)
+        { }
     }
 
-    public class NoRetryableInconsistentException : Exception {
+    public class NoRetryableInconsistentException : Exception
+    {
         public NoRetryableInconsistentException(
                 string ccrc,
                 string scrc,
                 string requestId,
                 Exception? innerException = null) : base(
                 $"crc is inconsistent, client {ccrc} server {scrc}, RequestId {requestId}",
-                innerException) { }
+                innerException)
+        { }
     }
 
-    public class RequestFailedException : Exception {
+    public class RequestFailedException : Exception
+    {
         public RequestFailedException(string message) : base(message) { }
 
         public RequestFailedException(string message, Exception innerException) : base(message, innerException) { }
     }
 
-    public class RequestTimeoutException : Exception {
+    public class RequestTimeoutException : Exception
+    {
         public RequestTimeoutException(string message, Exception? innerException = null) : base(message, innerException) { }
     }
 
-    public class OperationException : Exception {
+    public class OperationException : Exception
+    {
         public OperationException(string name, Exception? innerException = null)
-          : base($"operation error {name}: {innerException}", innerException) {
+          : base($"operation error {name}: {innerException}", innerException)
+        {
         }
     };
 
-    public class PresignExpirationException : Exception {
+    public class PresignExpirationException : Exception
+    {
         public PresignExpirationException() : base("Expires should be not greater than 604800 s (seven days)") { }
     }
 }

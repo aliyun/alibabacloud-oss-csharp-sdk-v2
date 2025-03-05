@@ -5,8 +5,10 @@ using System.Security.Cryptography;
 using System.Text;
 using AlibabaCloud.OSS.V2.Extensions;
 
-namespace AlibabaCloud.OSS.V2.Signer {
-    public class SignerV1 : ISigner {
+namespace AlibabaCloud.OSS.V2.Signer
+{
+    public class SignerV1 : ISigner
+    {
         private const string Rfc822DateFormat = "ddd, dd MMM yyyy HH:mm:ss \\G\\M\\T";
 
         private static readonly IList<string> ParametersToSign = new List<string> {
@@ -42,7 +44,8 @@ namespace AlibabaCloud.OSS.V2.Signer {
             "symlink"
         };
 
-        public void Sign(SigningContext signingContext) {
+        public void Sign(SigningContext signingContext)
+        {
             if (signingContext.Request == null) throw new ArgumentException("signingContext.Request is null");
 
             if (signingContext.Credentials == null) throw new ArgumentException("signingContext.Credentials is null");
@@ -53,7 +56,8 @@ namespace AlibabaCloud.OSS.V2.Signer {
                 AuthHeader(signingContext);
         }
 
-        private static void AuthQuery(SigningContext signingContext) {
+        private static void AuthQuery(SigningContext signingContext)
+        {
             var request = signingContext.Request;
             var credentials = signingContext.Credentials;
             var subResource = signingContext.SubResource;
@@ -97,7 +101,8 @@ namespace AlibabaCloud.OSS.V2.Signer {
             signingContext.StringToSign = stringToSign;
         }
 
-        private static void AuthHeader(SigningContext signingContext) {
+        private static void AuthHeader(SigningContext signingContext)
+        {
             var request = signingContext.Request;
             var credentials = signingContext.Credentials;
             var subResource = signingContext.SubResource;
@@ -138,16 +143,19 @@ namespace AlibabaCloud.OSS.V2.Signer {
             signingContext.StringToSign = stringToSign;
         }
 
-        public static string FormatRfc822Date(DateTime time) {
+        public static string FormatRfc822Date(DateTime time)
+        {
             return time.ToUniversalTime().ToString(Rfc822DateFormat, CultureInfo.InvariantCulture);
         }
 
-        public static string FormatUnixTime(DateTime time) {
+        public static string FormatUnixTime(DateTime time)
+        {
             const long ticksOf1970 = 621355968000000000;
             return ((time.ToUniversalTime().Ticks - ticksOf1970) / 10000000L).ToString(CultureInfo.InvariantCulture);
         }
 
-        private static string ResourcePath(string? bucket, string? key) {
+        private static string ResourcePath(string? bucket, string? key)
+        {
             var resourcePath = "/" + (bucket ?? string.Empty) + (key != null ? "/" + key : "");
             if (bucket != null && key == null) resourcePath = resourcePath + "/";
             return resourcePath;
@@ -159,7 +167,8 @@ namespace AlibabaCloud.OSS.V2.Signer {
             IDictionary<string, string> headers,
             string date,
             IList<string>? subResource
-        ) {
+        )
+        {
             /*
             SignToString =
             VERB + "\n"
@@ -195,10 +204,12 @@ namespace AlibabaCloud.OSS.V2.Signer {
             return sb.ToString();
         }
 
-        private static string CanonicalizedOssHeaders(IDictionary<string, string> headers) {
+        private static string CanonicalizedOssHeaders(IDictionary<string, string> headers)
+        {
             var sortedHeaders = new SortedDictionary<string, string>(StringComparer.Ordinal);
 
-            foreach (var header in headers) {
+            foreach (var header in headers)
+            {
                 var lowerKey = header.Key.ToLowerInvariant();
                 if (lowerKey.StartsWith("x-oss-")) sortedHeaders[lowerKey] = header.Value;
             }
@@ -212,7 +223,8 @@ namespace AlibabaCloud.OSS.V2.Signer {
             string resourcePath,
             IDictionary<string, string> parameters,
             IList<string>? subResource
-        ) {
+        )
+        {
             var canonicalizedResource = new StringBuilder();
             canonicalizedResource.Append(resourcePath);
             var parameterNames = new List<string>(parameters.Keys);
@@ -220,7 +232,8 @@ namespace AlibabaCloud.OSS.V2.Signer {
 
             var separator = '?';
 
-            foreach (var paramName in parameterNames) {
+            foreach (var paramName in parameterNames)
+            {
                 if (!(ParametersToSign.Contains(paramName) ||
                         paramName.StartsWith("x-oss-") ||
                         (subResource != null && subResource.Contains(paramName))))
@@ -239,7 +252,8 @@ namespace AlibabaCloud.OSS.V2.Signer {
             return canonicalizedResource.ToString();
         }
 
-        private static string CalcSignature(string accessKeySecret, string stringToSign) {
+        private static string CalcSignature(string accessKeySecret, string stringToSign)
+        {
             using var algorithm = new HMACSHA1();
             algorithm.Key = Encoding.UTF8.GetBytes(accessKeySecret);
             return Convert.ToBase64String(algorithm.ComputeHash(Encoding.UTF8.GetBytes(stringToSign)));

@@ -1,24 +1,29 @@
 ﻿
-using AlibabaCloud.OSS.V2.Models;
 using System.Text;
 using System.Xml.Serialization;
+using AlibabaCloud.OSS.V2.Models;
 
 namespace AlibabaCloud.OSS.V2.UnitTests.Models;
 
-public class ModelSharedTest {
+public class ModelSharedTest
+{
     [Fact]
-    public void TestSerializerAccessControlPolicy() {
+    public void TestSerializerAccessControlPolicy()
+    {
         var ns = new XmlSerializerNamespaces();
         ns.Add(string.Empty, string.Empty);
         var serializer = new XmlSerializer(typeof(AccessControlPolicy));
 
         // All
-        var obj = new AccessControlPolicy() {
-            Owner = new Owner() {
+        var obj = new AccessControlPolicy()
+        {
+            Owner = new Owner()
+            {
                 Id = "my-id",
                 DisplayName = "Name",
             },
-            AccessControlList = new AccessControlList() {
+            AccessControlList = new AccessControlList()
+            {
                 Grant = "private",
             },
         };
@@ -42,8 +47,10 @@ public class ModelSharedTest {
         Assert.Equal(xmlPat, xmlStr);
 
         // No Owner
-        obj = new AccessControlPolicy() {
-            AccessControlList = new AccessControlList() {
+        obj = new AccessControlPolicy()
+        {
+            AccessControlList = new AccessControlList()
+            {
                 Grant = "private",
             },
         };
@@ -65,7 +72,8 @@ public class ModelSharedTest {
     }
 
     [Fact]
-    public void TestDeserializeAccessControlPolicy() {
+    public void TestDeserializeAccessControlPolicy()
+    {
         var serializer = new XmlSerializer(typeof(AccessControlPolicy));
         string xmlStr;
         AccessControlPolicy obj;
@@ -145,7 +153,8 @@ public class ModelSharedTest {
     }
 
     [Fact]
-    public void TestDeserializeAccessControlPolicyRootName() {
+    public void TestDeserializeAccessControlPolicyRootName()
+    {
         var serializer = new XmlSerializer(typeof(AccessControlPolicy));
         AccessControlPolicy obj;
         StringReader reader;
@@ -164,12 +173,14 @@ public class ModelSharedTest {
 </AccessControlPolicyInvalid>
 """;
         // use root name defined in AccessControlPolicy
-        try {
+        try
+        {
             reader = new StringReader(xmlStr);
             serializer.Deserialize(reader);
             Assert.Fail("should not here");
         }
-        catch (Exception ex) {
+        catch (Exception ex)
+        {
             Assert.Contains("XML", ex.Message);
             Assert.Contains("(2, 2)", ex.Message);
         }

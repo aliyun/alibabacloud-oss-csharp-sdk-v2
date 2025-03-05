@@ -1,15 +1,18 @@
-﻿using AlibabaCloud.OSS.V2.Credentials;
-using AlibabaCloud.OSS.V2.Transport;
-using System.Net;
+﻿using System.Net;
 using System.Text;
+using AlibabaCloud.OSS.V2.Credentials;
+using AlibabaCloud.OSS.V2.Transport;
 
 namespace AlibabaCloud.OSS.V2.UnitTests;
-public class ClientMiscTest {
+public class ClientMiscTest
+{
 
     [Fact]
-    public async Task TestAutoDetectMimeTypeEnable() {
+    public async Task TestAutoDetectMimeTypeEnable()
+    {
         var mockHandler = new MockHttpMessageHandler();
-        var config = new Configuration() {
+        var config = new Configuration()
+        {
             Region = "cn-hangzhou",
             CredentialsProvider = new AnonymousCredentialsProvider(),
             HttpTransport = new HttpTransport(mockHandler),
@@ -28,7 +31,8 @@ public class ClientMiscTest {
             }
         ];
         var putResult = await client.PutObjectAsync(
-            new() {
+            new()
+            {
                 Bucket = bucketName,
                 Key = "test.txt",
                 Body = new MemoryStream(Encoding.UTF8.GetBytes(content))
@@ -39,14 +43,16 @@ public class ClientMiscTest {
 
         // append object
         mockHandler.Clear();
-        var response = new HttpResponseMessage() {
+        var response = new HttpResponseMessage()
+        {
             StatusCode = HttpStatusCode.OK,
             Content = new StringContent(""),
         };
         response.Headers.Add("x-oss-next-append-position", "11");
         mockHandler.Responses = [response];
         var appendResult = await client.AppendObjectAsync(
-            new() {
+            new()
+            {
                 Bucket = bucketName,
                 Key = "test.json",
                 Position = 0,
@@ -58,13 +64,15 @@ public class ClientMiscTest {
 
         // init object
         mockHandler.Clear();
-        response = new HttpResponseMessage() {
+        response = new HttpResponseMessage()
+        {
             StatusCode = HttpStatusCode.OK,
             Content = new StringContent("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n<InitiateMultipartUploadResult/>"),
         };
         mockHandler.Responses = [response];
         var initResult = await client.InitiateMultipartUploadAsync(
-            new() {
+            new()
+            {
                 Bucket = bucketName,
                 Key = "test.jpg",
             }
@@ -74,13 +82,15 @@ public class ClientMiscTest {
 
         // init object
         mockHandler.Clear();
-        response = new HttpResponseMessage() {
+        response = new HttpResponseMessage()
+        {
             StatusCode = HttpStatusCode.OK,
             Content = new StringContent("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n<InitiateMultipartUploadResult/>"),
         };
         mockHandler.Responses = [response];
         initResult = await client.InitiateMultipartUploadAsync(
-            new() {
+            new()
+            {
                 Bucket = bucketName,
                 Key = "test.jpg",
                 DisableAutoDetectMimeType = true
@@ -91,9 +101,11 @@ public class ClientMiscTest {
     }
 
     [Fact]
-    public async Task TestAutoDetectMimeTypeDisable() {
+    public async Task TestAutoDetectMimeTypeDisable()
+    {
         var mockHandler = new MockHttpMessageHandler();
-        var config = new Configuration() {
+        var config = new Configuration()
+        {
             Region = "cn-hangzhou",
             CredentialsProvider = new AnonymousCredentialsProvider(),
             HttpTransport = new HttpTransport(mockHandler),
@@ -112,7 +124,8 @@ public class ClientMiscTest {
             }
         ];
         var putResult = await client.PutObjectAsync(
-            new() {
+            new()
+            {
                 Bucket = bucketName,
                 Key = "test.txt",
                 Body = new MemoryStream(Encoding.UTF8.GetBytes(content))
@@ -123,14 +136,16 @@ public class ClientMiscTest {
 
         // append object
         mockHandler.Clear();
-        var response = new HttpResponseMessage() {
+        var response = new HttpResponseMessage()
+        {
             StatusCode = HttpStatusCode.OK,
             Content = new StringContent(""),
         };
         response.Headers.Add("x-oss-next-append-position", "11");
         mockHandler.Responses = [response];
         var appendResult = await client.AppendObjectAsync(
-            new() {
+            new()
+            {
                 Bucket = bucketName,
                 Key = "test.json",
                 Position = 0,
@@ -142,13 +157,15 @@ public class ClientMiscTest {
 
         // init object
         mockHandler.Clear();
-        response = new HttpResponseMessage() {
+        response = new HttpResponseMessage()
+        {
             StatusCode = HttpStatusCode.OK,
             Content = new StringContent("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n<InitiateMultipartUploadResult/>"),
         };
         mockHandler.Responses = [response];
         var initResult = await client.InitiateMultipartUploadAsync(
-            new() {
+            new()
+            {
                 Bucket = bucketName,
                 Key = "test.jpg",
             }
@@ -158,9 +175,11 @@ public class ClientMiscTest {
     }
 
     [Fact]
-    public async Task TestAutoDetectMimeTypeEnableWithContentTypeHeader() {
+    public async Task TestAutoDetectMimeTypeEnableWithContentTypeHeader()
+    {
         var mockHandler = new MockHttpMessageHandler();
-        var config = new Configuration() {
+        var config = new Configuration()
+        {
             Region = "cn-hangzhou",
             CredentialsProvider = new AnonymousCredentialsProvider(),
             HttpTransport = new HttpTransport(mockHandler),
@@ -179,7 +198,8 @@ public class ClientMiscTest {
             }
         ];
         var putResult = await client.PutObjectAsync(
-            new() {
+            new()
+            {
                 Bucket = bucketName,
                 Key = "test.txt",
                 ContentType = "text/test-1",
@@ -191,14 +211,16 @@ public class ClientMiscTest {
 
         // append object
         mockHandler.Clear();
-        var response = new HttpResponseMessage() {
+        var response = new HttpResponseMessage()
+        {
             StatusCode = HttpStatusCode.OK,
             Content = new StringContent(""),
         };
         response.Headers.Add("x-oss-next-append-position", "11");
         mockHandler.Responses = [response];
         var appendResult = await client.AppendObjectAsync(
-            new() {
+            new()
+            {
                 Bucket = bucketName,
                 Key = "test.json",
                 Position = 0,
@@ -211,13 +233,15 @@ public class ClientMiscTest {
 
         // init object
         mockHandler.Clear();
-        response = new HttpResponseMessage() {
+        response = new HttpResponseMessage()
+        {
             StatusCode = HttpStatusCode.OK,
             Content = new StringContent("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n<InitiateMultipartUploadResult/>"),
         };
         mockHandler.Responses = [response];
         var initResult = await client.InitiateMultipartUploadAsync(
-            new() {
+            new()
+            {
                 Bucket = bucketName,
                 Key = "test.jpg",
                 ContentType = "text/test-3",
@@ -228,9 +252,11 @@ public class ClientMiscTest {
     }
 
     [Fact]
-    public async Task TestGetObjectToFileAsyncCrc64() {
+    public async Task TestGetObjectToFileAsyncCrc64()
+    {
         var mockHandler = new MockHttpMessageHandler();
-        var config = new Configuration() {
+        var config = new Configuration()
+        {
             Region = "cn-hangzhou",
             CredentialsProvider = new AnonymousCredentialsProvider(),
             HttpTransport = new HttpTransport(mockHandler),
@@ -245,14 +271,16 @@ public class ClientMiscTest {
 
         // get object to file, has response crc
         mockHandler.Clear();
-        var response = new HttpResponseMessage() {
+        var response = new HttpResponseMessage()
+        {
             StatusCode = HttpStatusCode.OK,
             Content = new StringContent(content),
         };
         response.Headers.Add("x-oss-hash-crc64ecma", contentCrc);
         mockHandler.Responses = [response];
         var getResult = await client.GetObjectToFileAsync(
-            new() {
+            new()
+            {
                 Bucket = bucketName,
                 Key = "test.txt",
             },
@@ -267,13 +295,15 @@ public class ClientMiscTest {
 
         // get object to file, without response crc
         mockHandler.Clear();
-        response = new HttpResponseMessage() {
+        response = new HttpResponseMessage()
+        {
             StatusCode = HttpStatusCode.OK,
             Content = new StringContent(content),
         };
         mockHandler.Responses = [response];
         getResult = await client.GetObjectToFileAsync(
-            new() {
+            new()
+            {
                 Bucket = bucketName,
                 Key = "test.txt",
             },
@@ -287,20 +317,23 @@ public class ClientMiscTest {
 
         // get object with 1 error crc
         mockHandler.Clear();
-        var responseFail = new HttpResponseMessage() {
+        var responseFail = new HttpResponseMessage()
+        {
             StatusCode = HttpStatusCode.OK,
             Content = new StringContent(content),
         };
         responseFail.Headers.Add("x-oss-hash-crc64ecma", "1234");
 
-        response = new HttpResponseMessage() {
+        response = new HttpResponseMessage()
+        {
             StatusCode = HttpStatusCode.OK,
             Content = new StringContent(content),
         };
         response.Headers.Add("x-oss-hash-crc64ecma", contentCrc);
         mockHandler.Responses = [responseFail, response];
         getResult = await client.GetObjectToFileAsync(
-            new() {
+            new()
+            {
                 Bucket = bucketName,
                 Key = "test.txt",
             },
@@ -315,28 +348,33 @@ public class ClientMiscTest {
 
         // get object with 3 error crc
         mockHandler.Clear();
-        var responseFail1 = new HttpResponseMessage() {
+        var responseFail1 = new HttpResponseMessage()
+        {
             StatusCode = HttpStatusCode.OK,
             Content = new StringContent(content),
         };
         responseFail1.Headers.Add("x-oss-hash-crc64ecma", "1234");
 
-        var responseFail2 = new HttpResponseMessage() {
+        var responseFail2 = new HttpResponseMessage()
+        {
             StatusCode = HttpStatusCode.OK,
             Content = new StringContent(content),
         };
         responseFail2.Headers.Add("x-oss-hash-crc64ecma", "1234");
 
-        var responseFail3 = new HttpResponseMessage() {
+        var responseFail3 = new HttpResponseMessage()
+        {
             StatusCode = HttpStatusCode.OK,
             Content = new StringContent(content),
         };
         responseFail3.Headers.Add("x-oss-hash-crc64ecma", "1234");
 
-        try {
+        try
+        {
             mockHandler.Responses = [responseFail1, responseFail2, responseFail3];
             getResult = await client.GetObjectToFileAsync(
-                new() {
+                new()
+                {
                     Bucket = bucketName,
                     Key = "test.txt",
                 },
@@ -344,13 +382,15 @@ public class ClientMiscTest {
             );
             Assert.Fail("should not here");
         }
-        catch (InconsistentException) {
+        catch (InconsistentException)
+        {
             Assert.True(true);
         }
         File.Delete(savePath);
 
         // disable crc
-        var config1 = new Configuration() {
+        var config1 = new Configuration()
+        {
             Region = "cn-hangzhou",
             CredentialsProvider = new AnonymousCredentialsProvider(),
             HttpTransport = new HttpTransport(mockHandler),
@@ -358,14 +398,16 @@ public class ClientMiscTest {
         };
         using var client1 = new Client(config1);
         mockHandler.Clear();
-        responseFail1 = new HttpResponseMessage() {
+        responseFail1 = new HttpResponseMessage()
+        {
             StatusCode = HttpStatusCode.OK,
             Content = new StringContent(content),
         };
         responseFail1.Headers.Add("x-oss-hash-crc64ecma", "1234");
         mockHandler.Responses = [responseFail1];
         getResult = await client1.GetObjectToFileAsync(
-            new() {
+            new()
+            {
                 Bucket = bucketName,
                 Key = "test.txt",
             },
@@ -379,9 +421,11 @@ public class ClientMiscTest {
     }
 
     [Fact]
-    public async Task TestGetObjectToFileAsyncCancellationToken() {
+    public async Task TestGetObjectToFileAsyncCancellationToken()
+    {
         var mockHandler = new MockHttpMessageHandler();
-        var config = new Configuration() {
+        var config = new Configuration()
+        {
             Region = "cn-hangzhou",
             CredentialsProvider = new AnonymousCredentialsProvider(),
             HttpTransport = new HttpTransport(mockHandler),
@@ -398,16 +442,19 @@ public class ClientMiscTest {
         mockHandler.Clear();
         using var cts = new CancellationTokenSource();
         cts.Cancel();
-        var response = new HttpResponseMessage() {
+        var response = new HttpResponseMessage()
+        {
             StatusCode = HttpStatusCode.OK,
             Content = new StringContent(content),
         };
         response.Headers.Add("x-oss-hash-crc64ecma", contentCrc);
         mockHandler.Responses = [response];
 
-        try {
+        try
+        {
             var getResult = await client.GetObjectToFileAsync(
-                new() {
+                new()
+                {
                     Bucket = bucketName,
                     Key = "test.txt",
                 },
@@ -417,7 +464,8 @@ public class ClientMiscTest {
             );
             Assert.Fail("should not here");
         }
-        catch (OperationCanceledException) {
+        catch (OperationCanceledException)
+        {
             Assert.True(true);
         }
         File.Delete(savePath);
@@ -426,21 +474,24 @@ public class ClientMiscTest {
 
         // get object to file, with readtimeout CancellationToken
         mockHandler.Clear();
-        var responseTimeout1 = new HttpResponseMessage() {
+        var responseTimeout1 = new HttpResponseMessage()
+        {
             StatusCode = HttpStatusCode.OK,
             Content = new StreamContent(
                 new TimeoutReadStream(
                     new MemoryStream(Encoding.UTF8.GetBytes(content)), TimeSpan.FromSeconds(4))),
         };
 
-        var responseTimeout2 = new HttpResponseMessage() {
+        var responseTimeout2 = new HttpResponseMessage()
+        {
             StatusCode = HttpStatusCode.OK,
             Content = new StreamContent(
                 new TimeoutReadStream(
                     new MemoryStream(Encoding.UTF8.GetBytes(content)), TimeSpan.FromSeconds(4))),
         };
 
-        var responseTimeout3 = new HttpResponseMessage() {
+        var responseTimeout3 = new HttpResponseMessage()
+        {
             StatusCode = HttpStatusCode.OK,
             Content = new StreamContent(
                 new TimeoutReadStream(
@@ -449,9 +500,11 @@ public class ClientMiscTest {
 
         mockHandler.Responses = [responseTimeout1, responseTimeout2, responseTimeout3];
 
-        try {
+        try
+        {
             var getResult = await client.GetObjectToFileAsync(
-                new() {
+                new()
+                {
                     Bucket = bucketName,
                     Key = "test.txt",
                 },
@@ -460,7 +513,8 @@ public class ClientMiscTest {
             );
             Assert.Fail("should not here");
         }
-        catch (RequestTimeoutException) {
+        catch (RequestTimeoutException)
+        {
             Assert.True(true);
         }
         File.Delete(savePath);
@@ -469,9 +523,11 @@ public class ClientMiscTest {
 
         // error hanppens when call GetObjectAsync
         mockHandler.Clear();
-        try {
+        try
+        {
             var getResult = await client.GetObjectToFileAsync(
-                new() {
+                new()
+                {
                     Bucket = bucketName,
                     Key = "",
                 },
@@ -480,7 +536,8 @@ public class ClientMiscTest {
             );
             Assert.Fail("should not here");
         }
-        catch (ArgumentException) {
+        catch (ArgumentException)
+        {
             Assert.True(true);
         }
         File.Delete(savePath);

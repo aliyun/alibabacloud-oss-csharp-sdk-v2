@@ -4,8 +4,10 @@ using System.Threading;
 using System.Threading.Tasks;
 using AlibabaCloud.OSS.V2.Transform;
 
-namespace AlibabaCloud.OSS.V2 {
-    public partial class Client {
+namespace AlibabaCloud.OSS.V2
+{
+    public partial class Client
+    {
         /// <summary>
         /// Initiates a multipart upload task.
         /// </summary>
@@ -17,11 +19,13 @@ namespace AlibabaCloud.OSS.V2 {
             Models.InitiateMultipartUploadRequest request,
             OperationOptions? options = null,
             CancellationToken cancellationToken = default
-        ) {
+        )
+        {
             Ensure.NotNull(request.Bucket, "request.Bucket");
             Ensure.NotNull(request.Key, "request.Key");
 
-            var input = new OperationInput {
+            var input = new OperationInput
+            {
                 OperationName = "InitiateMultipartUpload",
                 Method = "POST",
                 Parameters = new Dictionary<string, string> {
@@ -54,13 +58,15 @@ namespace AlibabaCloud.OSS.V2 {
             Models.UploadPartRequest request,
             OperationOptions? options = null,
             CancellationToken cancellationToken = default
-        ) {
+        )
+        {
             Ensure.NotNull(request.Bucket, "request.Bucket");
             Ensure.NotNull(request.Key, "request.Key");
             Ensure.NotNull(request.PartNumber, "request.PartNumber");
             Ensure.NotNull(request.UploadId, "request.UploadId");
 
-            var input = new OperationInput {
+            var input = new OperationInput
+            {
                 OperationName = "UploadPart",
                 Method = "PUT",
                 Bucket = request.Bucket,
@@ -89,12 +95,14 @@ namespace AlibabaCloud.OSS.V2 {
             Models.CompleteMultipartUploadRequest request,
             OperationOptions? options = null,
             CancellationToken cancellationToken = default
-        ) {
+        )
+        {
             Ensure.NotNull(request.Bucket, "request.Bucket");
             Ensure.NotNull(request.Key, "request.Key");
             Ensure.NotNull(request.UploadId, "request.UploadId");
 
-            var input = new OperationInput {
+            var input = new OperationInput
+            {
                 OperationName = "CompleteMultipartUpload",
                 Method = "POST",
                 Headers = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase) {
@@ -129,14 +137,16 @@ namespace AlibabaCloud.OSS.V2 {
             Models.UploadPartCopyRequest request,
             OperationOptions? options = null,
             CancellationToken cancellationToken = default
-        ) {
+        )
+        {
             Ensure.NotNull(request.Bucket, "request.Bucket");
             Ensure.NotNull(request.Key, "request.Key");
             Ensure.NotNull(request.SourceKey, "request.SourceKey");
             Ensure.NotNull(request.PartNumber, "request.PartNumber");
             Ensure.NotNull(request.UploadId, "request.UploadId");
 
-            var input = new OperationInput {
+            var input = new OperationInput
+            {
                 OperationName = "UploadPartCopy",
                 Method = "PUT",
                 Bucket = request.Bucket,
@@ -165,12 +175,14 @@ namespace AlibabaCloud.OSS.V2 {
             Models.AbortMultipartUploadRequest request,
             OperationOptions? options = null,
             CancellationToken cancellationToken = default
-        ) {
+        )
+        {
             Ensure.NotNull(request.Bucket, "request.Bucket");
             Ensure.NotNull(request.Key, "request.Key");
             Ensure.NotNull(request.UploadId, "request.UploadId");
 
-            var input = new OperationInput {
+            var input = new OperationInput
+            {
                 OperationName = "AbortMultipartUpload",
                 Method = "DELETE",
                 Headers = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase) {
@@ -202,10 +214,12 @@ namespace AlibabaCloud.OSS.V2 {
             Models.ListMultipartUploadsRequest request,
             OperationOptions? options = null,
             CancellationToken cancellationToken = default
-        ) {
+        )
+        {
             Ensure.NotNull(request.Bucket, "request.Bucket");
 
-            var input = new OperationInput {
+            var input = new OperationInput
+            {
                 OperationName = "ListMultipartUploads",
                 Method = "GET",
                 Parameters = new Dictionary<string, string> {
@@ -237,12 +251,14 @@ namespace AlibabaCloud.OSS.V2 {
             Models.ListPartsRequest request,
             OperationOptions? options = null,
             CancellationToken cancellationToken = default
-        ) {
+        )
+        {
             Ensure.NotNull(request.Bucket, "request.Bucket");
             Ensure.NotNull(request.Key, "request.Key");
             Ensure.NotNull(request.UploadId, "request.UploadId");
 
-            var input = new OperationInput {
+            var input = new OperationInput
+            {
                 OperationName = "ListParts",
                 Method = "GET",
                 Parameters = new Dictionary<string, string> {
@@ -263,9 +279,12 @@ namespace AlibabaCloud.OSS.V2 {
             return (Models.ListPartsResult)result;
         }
 
-        private void AddContentTypeEx(ref Models.RequestModel request, ref OperationInput input) {
-            if (request is Models.InitiateMultipartUploadRequest req) {
-                if (req.DisableAutoDetectMimeType) {
+        private void AddContentTypeEx(ref Models.RequestModel request, ref OperationInput input)
+        {
+            if (request is Models.InitiateMultipartUploadRequest req)
+            {
+                if (req.DisableAutoDetectMimeType)
+                {
                     return;
                 }
             }

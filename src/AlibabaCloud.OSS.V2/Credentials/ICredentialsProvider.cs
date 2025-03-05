@@ -1,9 +1,11 @@
 ﻿
-namespace AlibabaCloud.OSS.V2.Credentials {
+namespace AlibabaCloud.OSS.V2.Credentials
+{
     /// <summary>
     /// ICredentialsProvider Interface
     /// </summary>
-    public interface ICredentialsProvider {
+    public interface ICredentialsProvider
+    {
         /// <summary>
         /// Gets an instance of <see cref="Credentials"/>
         /// </summary>

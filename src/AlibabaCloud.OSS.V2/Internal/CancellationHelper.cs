@@ -7,9 +7,11 @@ using System;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace AlibabaCloud.OSS.V2.Internal {
+namespace AlibabaCloud.OSS.V2.Internal
+{
     // Copy of https://github.com/dotnet/runtime/blob/b6dda7b719eab464d417904a4f4501b42cc10cdb/src/libraries/System.Net.Http/src/System/Net/Http/CancellationHelper.cs#L10
-    internal static class CancellationHelper {
+    internal static class CancellationHelper
+    {
         /// <summary>The default message used by <see cref="OperationCanceledException"/>.</summary>
         private static readonly string s_cancellationMessage = new OperationCanceledException().Message; // use same message as the default ctor
 
@@ -42,8 +44,10 @@ namespace AlibabaCloud.OSS.V2.Internal {
 
         /// <summary>Throws a cancellation exception if cancellation has been requested via <paramref name="cancellationToken"/>.</summary>
         /// <param name="cancellationToken">The token to check for a cancellation request.</param>
-        internal static void ThrowIfCancellationRequested(CancellationToken cancellationToken) {
-            if (cancellationToken.IsCancellationRequested) {
+        internal static void ThrowIfCancellationRequested(CancellationToken cancellationToken)
+        {
+            if (cancellationToken.IsCancellationRequested)
+            {
                 ThrowOperationCanceledException(innerException: null, cancellationToken);
             }
         }
@@ -51,8 +55,10 @@ namespace AlibabaCloud.OSS.V2.Internal {
         /// <summary>Throws a cancellation exception if cancellation has been requested via <paramref name="cancellationToken"/>.</summary>
         /// <param name="cancellationToken">The token to check for a cancellation request.</param>
         /// <param name="innerException">The inner exception to wrap. May be null.</param>
-        internal static void ThrowIfCancellationRequested(CancellationToken cancellationToken, Exception? innerException = default) {
-            if (cancellationToken.IsCancellationRequested) {
+        internal static void ThrowIfCancellationRequested(CancellationToken cancellationToken, Exception? innerException = default)
+        {
+            if (cancellationToken.IsCancellationRequested)
+            {
                 ThrowOperationCanceledException(innerException, cancellationToken);
             }
         }
@@ -68,7 +74,8 @@ namespace AlibabaCloud.OSS.V2.Internal {
         {
             ThrowIfCancellationRequested(messageToken, innerException);
 
-            if (timeoutToken.IsCancellationRequested) {
+            if (timeoutToken.IsCancellationRequested)
+            {
                 throw CreateOperationCanceledException(
                     innerException,
                     timeoutToken,
@@ -80,7 +87,8 @@ namespace AlibabaCloud.OSS.V2.Internal {
         /// <param name="innerException">The inner exception to wrap. May be null.</param>
         /// <param name="timeout">The timeout used for the operation.</param>
         /// <returns>The request timeout exception.</returns>
-        internal static Exception CreateRequestTimeoutException(Exception? innerException, TimeSpan timeout) {
+        internal static Exception CreateRequestTimeoutException(Exception? innerException, TimeSpan timeout)
+        {
             throw new RequestTimeoutException(
                 $"The operation was cancelled because it exceeded the configured timeout of {timeout:g}. ", innerException);
         }

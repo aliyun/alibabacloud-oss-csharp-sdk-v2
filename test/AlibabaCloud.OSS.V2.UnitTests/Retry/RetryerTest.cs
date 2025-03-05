@@ -2,24 +2,29 @@
 
 namespace AlibabaCloud.OSS.V2.UnitTests.Retry;
 
-public class RetryerTest {
+public class RetryerTest
+{
     [Fact]
-    public void TestNopRetryer() {
+    public void TestNopRetryer()
+    {
         var retryer = new NopRetryer();
         Assert.Equal(1, retryer.MaxAttempts());
         Assert.False(retryer.IsErrorRetryable(new("")));
 
-        try {
+        try
+        {
             retryer.RetryDelay(1, new());
             Assert.Fail("should not here");
         }
-        catch (NotImplementedException e) {
+        catch (NotImplementedException e)
+        {
             Assert.Contains("not retrying any attempt errors", e.ToString());
         }
     }
 
     [Fact]
-    public void TestStandardRetryerDefault() {
+    public void TestStandardRetryerDefault()
+    {
         var retryer = new StandardRetryer();
         Assert.Equal(Defaults.MaxAttpempts, retryer.MaxAttempts());
 

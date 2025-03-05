@@ -1,11 +1,14 @@
 ﻿using System.IO;
 
-namespace AlibabaCloud.OSS.V2.Internal {
-    internal class WriteOnlyHashStream : Stream {
+namespace AlibabaCloud.OSS.V2.Internal
+{
+    internal class WriteOnlyHashStream : Stream
+    {
         private IHash _hash;
         private long _offset;
 
-        public WriteOnlyHashStream(IHash hash) {
+        public WriteOnlyHashStream(IHash hash)
+        {
             _hash = hash;
         }
 
@@ -17,31 +20,38 @@ namespace AlibabaCloud.OSS.V2.Internal {
 
         public override long Length => _offset;
 
-        public override long Position {
+        public override long Position
+        {
             get => _offset;
             set => throw new System.NotImplementedException();
         }
 
-        public override void Flush() {
+        public override void Flush()
+        {
         }
 
-        public override int Read(byte[] buffer, int offset, int count) {
+        public override int Read(byte[] buffer, int offset, int count)
+        {
             throw new System.NotImplementedException();
         }
 
-        public override long Seek(long offset, SeekOrigin origin) {
-            if (origin == SeekOrigin.Begin && offset == 0) {
+        public override long Seek(long offset, SeekOrigin origin)
+        {
+            if (origin == SeekOrigin.Begin && offset == 0)
+            {
                 _hash.Reset();
                 return 0;
             }
             throw new System.NotImplementedException($"seek to beginning only, offset:{offset}, origin:{origin}.");
         }
 
-        public override void SetLength(long value) {
+        public override void SetLength(long value)
+        {
             throw new System.NotImplementedException();
         }
 
-        public override void Write(byte[] buffer, int offset, int count) {
+        public override void Write(byte[] buffer, int offset, int count)
+        {
             _hash.Update(buffer, offset, count);
             _offset += count;
         }

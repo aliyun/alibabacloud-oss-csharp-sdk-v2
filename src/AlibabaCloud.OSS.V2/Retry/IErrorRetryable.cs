@@ -1,8 +1,10 @@
 ﻿
 using System;
 
-namespace AlibabaCloud.OSS.V2.Retry {
-    public interface IErrorRetryable {
+namespace AlibabaCloud.OSS.V2.Retry
+{
+    public interface IErrorRetryable
+    {
         /// <summary>
         /// Check whether the error is retryable.
         /// </summary>

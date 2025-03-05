@@ -3,12 +3,14 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Xml.Serialization;
 
-namespace AlibabaCloud.OSS.V2.Models {
+namespace AlibabaCloud.OSS.V2.Models
+{
     /// <summary>
     /// The container that stores the versioning state of the bucket.
     /// </summary>
     [XmlRoot("VersioningConfiguration")]
-    public sealed class VersioningConfiguration {
+    public sealed class VersioningConfiguration
+    {
         /// <summary>
         /// The versioning state of the bucket.
         /// Sees <see cref="BucketVersioningStatusType"/> for supported values.
@@ -21,7 +23,8 @@ namespace AlibabaCloud.OSS.V2.Models {
     /// The container that stores the versions of objects, excluding delete markers.
     /// </summary>
     [XmlRoot("ObjectVersion")]
-    public sealed class ObjectVersion {
+    public sealed class ObjectVersion
+    {
         /// <summary>
         /// The container that stores the information about the bucket owner.
         /// </summary>
@@ -93,7 +96,8 @@ namespace AlibabaCloud.OSS.V2.Models {
     /// The container that stores delete markers.
     /// </summary>
     [XmlRoot("DeleteMarkerEntry")]
-    public sealed class DeleteMarkerEntry {
+    public sealed class DeleteMarkerEntry
+    {
         /// <summary>
         /// Indicates whether the version is the current version. Valid values:*   true: The version is the current version.*   false: The version is a previous version.
         /// </summary>
@@ -128,8 +132,10 @@ namespace AlibabaCloud.OSS.V2.Models {
     /// <summary>
     /// The request for the PutBucketVersioning operation.
     /// </summary>
-    public sealed class PutBucketVersioningRequest : RequestModel {
-        public PutBucketVersioningRequest() {
+    public sealed class PutBucketVersioningRequest : RequestModel
+    {
+        public PutBucketVersioningRequest()
+        {
             BodyFormat = "xml";
         }
 
@@ -141,7 +147,8 @@ namespace AlibabaCloud.OSS.V2.Models {
         /// <summary>
         /// The container of the request body.
         /// </summary>
-        public Models.VersioningConfiguration? VersioningConfiguration {
+        public Models.VersioningConfiguration? VersioningConfiguration
+        {
             get => InnerBody as Models.VersioningConfiguration;
             set => InnerBody = value;
         }
@@ -155,7 +162,8 @@ namespace AlibabaCloud.OSS.V2.Models {
     /// <summary>
     /// The request for the GetBucketVersioning operation.
     /// </summary>
-    public sealed class GetBucketVersioningRequest : RequestModel {
+    public sealed class GetBucketVersioningRequest : RequestModel
+    {
         /// <summary>
         /// The name of the bucket.
         /// </summary>
@@ -165,13 +173,15 @@ namespace AlibabaCloud.OSS.V2.Models {
     /// <summary>
     /// The result for the GetBucketVersioning operation.
     /// </summary>
-    public sealed class GetBucketVersioningResult : ResultModel {
+    public sealed class GetBucketVersioningResult : ResultModel
+    {
         /// <summary>
         /// The container that stores the versioning state of the bucket.
         /// </summary>
         public Models.VersioningConfiguration? VersioningConfiguration => InnerBody as Models.VersioningConfiguration;
 
-        public GetBucketVersioningResult() {
+        public GetBucketVersioningResult()
+        {
             BodyFormat = "xml";
             BodyType = typeof(Models.VersioningConfiguration);
         }
@@ -180,7 +190,8 @@ namespace AlibabaCloud.OSS.V2.Models {
     /// <summary>
     /// The request for the ListObjectVersions operation.
     /// </summary>
-    public sealed class ListObjectVersionsRequest : RequestModel {
+    public sealed class ListObjectVersionsRequest : RequestModel
+    {
         /// <summary>
         /// The name of the bucket.
         /// </summary>
@@ -189,9 +200,11 @@ namespace AlibabaCloud.OSS.V2.Models {
         /// <summary>
         /// The character that is used to group objects by name. If you specify prefix and delimiter in the request, the response contains CommonPrefixes. The objects whose name contains the same string from the prefix to the next occurrence of the delimiter are grouped as a single result element in CommonPrefixes. If you specify prefix and set delimiter to a forward slash (/), only the objects in the directory are listed. The subdirectories in the directory are returned in CommonPrefixes. Objects and subdirectories in the subdirectories are not listed.By default, this parameter is left empty.
         /// </summary>
-        public string? Delimiter {
+        public string? Delimiter
+        {
             get => Parameters.TryGetValue("delimiter", out var value) ? value : null;
-            set {
+            set
+            {
                 if (value != null) Parameters["delimiter"] = value;
             }
         }
@@ -199,9 +212,11 @@ namespace AlibabaCloud.OSS.V2.Models {
         /// <summary>
         /// The name of the object after which the GetBucketVersions (ListObjectVersions) operation begins. If this parameter is specified, objects whose name is alphabetically after the value of key-marker are returned. Use key-marker and version-id-marker in combination. The value of key-marker must be less than 1,024 bytes in length.By default, this parameter is left empty.  You must also specify key-marker if you specify version-id-marker.
         /// </summary>
-        public string? KeyMarker {
+        public string? KeyMarker
+        {
             get => Parameters.TryGetValue("key-marker", out var value) ? value : null;
-            set {
+            set
+            {
                 if (value != null) Parameters["key-marker"] = value;
             }
         }
@@ -209,9 +224,11 @@ namespace AlibabaCloud.OSS.V2.Models {
         /// <summary>
         /// The version ID of the object specified in key-marker after which the GetBucketVersions (ListObjectVersions) operation begins. The versions are returned from the latest version to the earliest version. If version-id-marker is not specified, the GetBucketVersions (ListObjectVersions) operation starts from the latest version of the object whose name is alphabetically after the value of key-marker by default.By default, this parameter is left empty.Valid values: version IDs.
         /// </summary>
-        public string? VersionIdMarker {
+        public string? VersionIdMarker
+        {
             get => Parameters.TryGetValue("version-id-marker", out var value) ? value : null;
-            set {
+            set
+            {
                 if (value != null) Parameters["version-id-marker"] = value;
             }
         }
@@ -219,11 +236,13 @@ namespace AlibabaCloud.OSS.V2.Models {
         /// <summary>
         /// The maximum number of objects to be returned. If the number of returned objects exceeds the value of max-keys, the response contains `NextKeyMarker` and `NextVersionIdMarker`. Specify the values of `NextKeyMarker` and `NextVersionIdMarker` as the markers for the next request. Valid values: 1 to 999. Default value: 100.
         /// </summary>
-        public long? MaxKeys {
+        public long? MaxKeys
+        {
             get => Parameters.TryGetValue("max-keys", out var value)
                 ? Convert.ToInt64(value, CultureInfo.InvariantCulture)
                 : null;
-            set {
+            set
+            {
                 if (value != null) Parameters["max-keys"] = Convert.ToString((long)value, CultureInfo.InvariantCulture);
             }
         }
@@ -231,9 +250,11 @@ namespace AlibabaCloud.OSS.V2.Models {
         /// <summary>
         /// The prefix that the names of returned objects must contain.*   The value of prefix must be less than 1,024 bytes in length.*   If you specify prefix, the names of the returned objects contain the prefix.If you set prefix to a directory name, the objects whose name starts with the prefix are listed. The returned objects consist of all objects and subdirectories in the directory.By default, this parameter is left empty.
         /// </summary>
-        public string? Prefix {
+        public string? Prefix
+        {
             get => Parameters.TryGetValue("prefix", out var value) ? value : null;
-            set {
+            set
+            {
                 if (value != null) Parameters["prefix"] = value;
             }
         }
@@ -241,9 +262,11 @@ namespace AlibabaCloud.OSS.V2.Models {
         /// <summary>
         /// The encoding type of the content in the response. By default, this parameter is left empty. Set the value to URL.  The values of Delimiter, Marker, Prefix, NextMarker, and Key are UTF-8 encoded. If the value of Delimiter, Marker, Prefix, NextMarker, or Key contains a control character that is not supported by Extensible Markup Language (XML) 1.0, you can specify encoding-type to encode the value in the response.
         /// </summary>
-        public string? EncodingType {
+        public string? EncodingType
+        {
             get => Parameters.TryGetValue("encoding-type", out var value) ? value : null;
-            set {
+            set
+            {
                 if (value != null) Parameters["encoding-type"] = value;
             }
         }
@@ -252,7 +275,8 @@ namespace AlibabaCloud.OSS.V2.Models {
     /// <summary>
     /// The result for the ListObjectVersions operation.
     /// </summary>
-    public sealed class ListObjectVersionsResult : ResultModel {
+    public sealed class ListObjectVersionsResult : ResultModel
+    {
         /// <summary>
         /// Indicates whether the returned results are truncated.- true: indicates that not all results are returned for the request.- false: indicates that all results are returned for the request.
         /// </summary>

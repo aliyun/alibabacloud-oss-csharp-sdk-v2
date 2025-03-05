@@ -7,8 +7,10 @@ using System.Text;
 using System.Xml.Serialization;
 using AlibabaCloud.OSS.V2.Extensions;
 
-namespace AlibabaCloud.OSS.V2.Transform {
-    internal static partial class Serde {
+namespace AlibabaCloud.OSS.V2.Transform
+{
+    internal static partial class Serde
+    {
         public delegate void CustomSerializer(ref Models.RequestModel request, ref OperationInput input);
 
         public delegate void CustomDeserializer(ref Models.ResultModel result, ref OperationOutput output);
@@ -17,7 +19,8 @@ namespace AlibabaCloud.OSS.V2.Transform {
             Models.RequestModel request,
             ref OperationInput input,
             params CustomSerializer[] customSerializer
-        ) {
+        )
+        {
             // Headers
             if (input.Headers == null && request.Headers.Any())
                 input.Headers = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
@@ -31,7 +34,8 @@ namespace AlibabaCloud.OSS.V2.Transform {
 
             // body
             if (request.InnerBody != null)
-                input.Body = request.BodyFormat switch {
+                input.Body = request.BodyFormat switch
+                {
                     "xml" => new MemoryStream(Encoding.UTF8.GetBytes(SerializeXml(request.InnerBody))),
                     _ => request.InnerBody as Stream ??
                         throw new NotImplementedException($"not support body type '{request.BodyFormat}'")
@@ -41,7 +45,8 @@ namespace AlibabaCloud.OSS.V2.Transform {
             foreach (var serializer in customSerializer) serializer(ref request, ref input);
         }
 
-        static string SerializeXml(object? obj) {
+        static string SerializeXml(object? obj)
+        {
             if (obj == null) return "";
 
             var ns = new XmlSerializerNamespaces();
@@ -53,17 +58,20 @@ namespace AlibabaCloud.OSS.V2.Transform {
             return writer.ToString();
         }
 
-        public static void AddContentMd5(ref Models.RequestModel _, ref OperationInput input) {
+        public static void AddContentMd5(ref Models.RequestModel _, ref OperationInput input)
+        {
             if (input.Headers != null &&
                 input.Headers.ContainsKey("Content-MD5"))
                 return;
 
             var md5V = "1B2M2Y8AsgTpgAmY7PhCfg==";
 
-            if (input.Body != null && input.Body.Length > 0) {
+            if (input.Body != null && input.Body.Length > 0)
+            {
                 var off = input.Body.Position;
 
-                using (var md5 = MD5.Create()) {
+                using (var md5 = MD5.Create())
+                {
                     md5V = Convert.ToBase64String(md5.ComputeHash(input.Body));
                 }
 
@@ -74,7 +82,8 @@ namespace AlibabaCloud.OSS.V2.Transform {
             input.Headers["Content-MD5"] = md5V;
         }
 
-        public static void AddContentType(ref Models.RequestModel _, ref OperationInput input) {
+        public static void AddContentType(ref Models.RequestModel _, ref OperationInput input)
+        {
             if (input.Headers != null &&
                 input.Headers.ContainsKey("Content-Type"))
                 return;
@@ -85,106 +94,134 @@ namespace AlibabaCloud.OSS.V2.Transform {
             input.Headers["Content-Type"] = contentType;
         }
 
-        public static void AddMetadata(ref Models.RequestModel request, ref OperationInput input) {
-            switch (request) {
-                case Models.InitiateMultipartUploadRequest req: {
-                        if (req.Metadata != null) {
-                            foreach (var h in req.Metadata) {
-                                input.Headers!["x-oss-meta-" + h.Key] = h.Value;
-                            }
+        public static void AddMetadata(ref Models.RequestModel request, ref OperationInput input)
+        {
+            switch (request)
+            {
+                case Models.InitiateMultipartUploadRequest req:
+                {
+                    if (req.Metadata != null)
+                    {
+                        foreach (var h in req.Metadata)
+                        {
+                            input.Headers!["x-oss-meta-" + h.Key] = h.Value;
                         }
-
-                        break;
                     }
-                case Models.PutObjectRequest req: {
-                        if (req.Metadata != null) {
-                            foreach (var h in req.Metadata) {
-                                input.Headers!["x-oss-meta-" + h.Key] = h.Value;
-                            }
+
+                    break;
+                }
+                case Models.PutObjectRequest req:
+                {
+                    if (req.Metadata != null)
+                    {
+                        foreach (var h in req.Metadata)
+                        {
+                            input.Headers!["x-oss-meta-" + h.Key] = h.Value;
                         }
-
-                        break;
                     }
-                case Models.CopyObjectRequest req: {
-                        if (req.Metadata != null) {
-                            foreach (var h in req.Metadata) {
-                                input.Headers!["x-oss-meta-" + h.Key] = h.Value;
-                            }
+
+                    break;
+                }
+                case Models.CopyObjectRequest req:
+                {
+                    if (req.Metadata != null)
+                    {
+                        foreach (var h in req.Metadata)
+                        {
+                            input.Headers!["x-oss-meta-" + h.Key] = h.Value;
                         }
-
-                        break;
                     }
-                case Models.AppendObjectRequest req: {
-                        if (req.Metadata != null) {
-                            foreach (var h in req.Metadata) {
-                                input.Headers!["x-oss-meta-" + h.Key] = h.Value;
-                            }
+
+                    break;
+                }
+                case Models.AppendObjectRequest req:
+                {
+                    if (req.Metadata != null)
+                    {
+                        foreach (var h in req.Metadata)
+                        {
+                            input.Headers!["x-oss-meta-" + h.Key] = h.Value;
                         }
-
-                        break;
                     }
+
+                    break;
+                }
             }
         }
 
-        public static void AddCopySource(ref Models.RequestModel request, ref OperationInput input) {
-            switch (request) {
-                case Models.UploadPartCopyRequest req: {
-                        var bucket = req.SourceBucket ?? req.Bucket;
+        public static void AddCopySource(ref Models.RequestModel request, ref OperationInput input)
+        {
+            switch (request)
+            {
+                case Models.UploadPartCopyRequest req:
+                {
+                    var bucket = req.SourceBucket ?? req.Bucket;
 
-                        if (bucket != null) {
-                            var key = req.SourceKey ?? "";
-                            var source = $"/{bucket}/{key.UrlEncodePath()}";
+                    if (bucket != null)
+                    {
+                        var key = req.SourceKey ?? "";
+                        var source = $"/{bucket}/{key.UrlEncodePath()}";
 
-                            if (req.SourceVersionId != null) {
-                                source += $"?versionId={req.SourceVersionId}";
-                            }
-
-                            if (input.Headers == null) {
-                                input.Headers = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
-                            }
-
-                            input.Headers!["x-oss-copy-source"] = source;
+                        if (req.SourceVersionId != null)
+                        {
+                            source += $"?versionId={req.SourceVersionId}";
                         }
 
-                        break;
-                    }
-                case Models.CopyObjectRequest req: {
-                        var bucket = req.SourceBucket ?? req.Bucket;
-
-                        if (bucket != null) {
-                            var key = req.SourceKey ?? "";
-                            var source = $"/{bucket}/{key.UrlEncodePath()}";
-
-                            if (req.SourceVersionId != null) {
-                                source += $"?versionId={req.SourceVersionId}";
-                            }
-
-                            if (input.Headers == null) {
-                                input.Headers = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
-                            }
-
-                            input.Headers!["x-oss-copy-source"] = source;
+                        if (input.Headers == null)
+                        {
+                            input.Headers = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
                         }
 
-                        break;
+                        input.Headers!["x-oss-copy-source"] = source;
                     }
+
+                    break;
+                }
+                case Models.CopyObjectRequest req:
+                {
+                    var bucket = req.SourceBucket ?? req.Bucket;
+
+                    if (bucket != null)
+                    {
+                        var key = req.SourceKey ?? "";
+                        var source = $"/{bucket}/{key.UrlEncodePath()}";
+
+                        if (req.SourceVersionId != null)
+                        {
+                            source += $"?versionId={req.SourceVersionId}";
+                        }
+
+                        if (input.Headers == null)
+                        {
+                            input.Headers = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
+                        }
+
+                        input.Headers!["x-oss-copy-source"] = source;
+                    }
+
+                    break;
+                }
             }
         }
 
-        public static void AddProcessAction(ref Models.RequestModel request, ref OperationInput input) {
-            switch (request) {
-                case Models.ProcessObjectRequest req: {
-                        if (req.Process != null)
-                            input.Body = new MemoryStream(Encoding.UTF8.GetBytes($"x-oss-process={req.Process}"));
+        public static void AddProcessAction(ref Models.RequestModel request, ref OperationInput input)
+        {
+            switch (request)
+            {
+                case Models.ProcessObjectRequest req:
+                {
+                    if (req.Process != null)
+                        input.Body = new MemoryStream(Encoding.UTF8.GetBytes($"x-oss-process={req.Process}"));
 
-                        break;
-                    }
-                case Models.AsyncProcessObjectRequest req: {
-                        if (req.Process != null)
-                            input.Body = new MemoryStream(Encoding.UTF8.GetBytes($"x-oss-async-process={req.Process}"));
+                    break;
+                }
+                case Models.AsyncProcessObjectRequest req:
+                {
+                    if (req.Process != null)
+                        input.Body = new MemoryStream(Encoding.UTF8.GetBytes($"x-oss-async-process={req.Process}"));
 
-                        break;
-                    }
+                    break;
+                }
             }
         }
 
@@ -192,7 +229,8 @@ namespace AlibabaCloud.OSS.V2.Transform {
             ref Models.ResultModel result,
             ref OperationOutput output,
             params CustomDeserializer[] customDeserializer
-        ) {
+        )
+        {
             result.Status = output.Status;
             result.StatusCode = output.StatusCode;
             result.Headers = output.Headers ?? new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
@@ -201,63 +239,77 @@ namespace AlibabaCloud.OSS.V2.Transform {
             foreach (var deserializer in customDeserializer) deserializer(ref result, ref output);
         }
 
-        public static void DeserializerAnyBody(ref Models.ResultModel result, ref OperationOutput output) {
+        public static void DeserializerAnyBody(ref Models.ResultModel result, ref OperationOutput output)
+        {
             if (output.Body == null) return;
 
-            switch (result.BodyFormat) {
-                case "xml": {
-                        using var body = output.Body;
+            switch (result.BodyFormat)
+            {
+                case "xml":
+                {
+                    using var body = output.Body;
 
-                        if (result.BodyType == null) {
-                            throw new Exception("body type is null");
-                        }
+                    if (result.BodyType == null)
+                    {
+                        throw new Exception("body type is null");
+                    }
 
-                        var serializer = new XmlSerializer(result.BodyType);
-                        result.InnerBody = serializer.Deserialize(body);
-                    }
-                    break;
-                case "string": {
-                        using var body = output.Body;
-                        var reader = new StreamReader(body);
-                        result.InnerBody = reader.ReadToEnd();
-                    }
-                    break;
-                case "stream": {
-                        result.InnerBody = output.Body;
-                    }
-                    break;
+                    var serializer = new XmlSerializer(result.BodyType);
+                    result.InnerBody = serializer.Deserialize(body);
+                }
+                break;
+                case "string":
+                {
+                    using var body = output.Body;
+                    var reader = new StreamReader(body);
+                    result.InnerBody = reader.ReadToEnd();
+                }
+                break;
+                case "stream":
+                {
+                    result.InnerBody = output.Body;
+                }
+                break;
             }
         }
 
-        public static void DeserializerXmlBody(ref Models.ResultModel result, ref OperationOutput output) {
+        public static void DeserializerXmlBody(ref Models.ResultModel result, ref OperationOutput output)
+        {
             if (output.Body == null) return;
 
-            switch (result.BodyFormat) {
-                case "xml": {
-                        if (result.BodyType == null) {
-                            throw new Exception("body type is null");
-                        }
-
-                        using var body = output.Body;
-                        var serializer = new XmlSerializer(result.BodyType);
-                        result.InnerBody = serializer.Deserialize(body);
+            switch (result.BodyFormat)
+            {
+                case "xml":
+                {
+                    if (result.BodyType == null)
+                    {
+                        throw new Exception("body type is null");
                     }
-                    break;
+
+                    using var body = output.Body;
+                    var serializer = new XmlSerializer(result.BodyType);
+                    result.InnerBody = serializer.Deserialize(body);
+                }
+                break;
             }
         }
 
-        public static bool ToBool(string? value) {
+        public static bool ToBool(string? value)
+        {
             return value != null && "true".Equals(value, StringComparison.OrdinalIgnoreCase);
         }
 
-        public static IDictionary<string, string>? ToUserMetadata(IDictionary<string, string>? headers) {
+        public static IDictionary<string, string>? ToUserMetadata(IDictionary<string, string>? headers)
+        {
             if (headers == null) return null;
             var metadata = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
 
-            foreach (var item in headers) {
+            foreach (var item in headers)
+            {
                 var key = item.Key.ToLowerInvariant();
 
-                if (key.StartsWith("x-oss-meta-")) {
+                if (key.StartsWith("x-oss-meta-"))
+                {
                     metadata[key.Substring(11)] = item.Value;
                 }
             }
@@ -268,7 +320,8 @@ namespace AlibabaCloud.OSS.V2.Transform {
         /// <summary>
         /// Replaces invalid XML characters in a string with their valid XML equivalent.
         /// </summary>
-        public static string? EscapeXml(string? str) {
+        public static string? EscapeXml(string? str)
+        {
             if (str == null)
                 return null;
 
@@ -277,14 +330,17 @@ namespace AlibabaCloud.OSS.V2.Transform {
             var strLen = str.Length;
             var newIndex = 0;
 
-            while (true) {
+            while (true)
+            {
                 var index = -1;
                 var s = "";
 
-                for (var idx = newIndex; idx < strLen; idx++) {
+                for (var idx = newIndex; idx < strLen; idx++)
+                {
                     var ch = str[idx];
 
-                    switch (ch) {
+                    switch (ch)
+                    {
                         case '<':
                             s = "&lt;";
                             index = idx;
@@ -306,7 +362,8 @@ namespace AlibabaCloud.OSS.V2.Transform {
                             index = idx;
                             break;
                         default:
-                            if (ch < 0x20) {
+                            if (ch < 0x20)
+                            {
                                 s = $"&#{(int)ch:D2};";
                                 index = idx;
                             }
@@ -317,16 +374,20 @@ namespace AlibabaCloud.OSS.V2.Transform {
                     if (index != -1) break;
                 }
 
-                if (index == -1) {
-                    if (sb == null) {
+                if (index == -1)
+                {
+                    if (sb == null)
+                    {
                         return str;
                     }
-                    else {
+                    else
+                    {
                         sb.Append(str, newIndex, strLen - newIndex);
                         return sb.ToString();
                     }
                 }
-                else {
+                else
+                {
                     sb ??= new();
                     sb.Append(str, newIndex, index - newIndex);
                     sb.Append(s);

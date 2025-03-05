@@ -2,8 +2,10 @@
 using System.Collections.Generic;
 using System.IO;
 
-namespace AlibabaCloud.OSS.V2 {
-    public static class MimeUtils {
+namespace AlibabaCloud.OSS.V2
+{
+    public static class MimeUtils
+    {
         private static readonly Dictionary<string, string> _mappings = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase) {
         {".xlsx",          "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"},
         {".xltx",          "application/vnd.openxmlformats-officedocument.spreadsheetml.template"},
@@ -559,23 +561,29 @@ namespace AlibabaCloud.OSS.V2 {
         {".json",          "application/json"},
         };
 
-        private static Dictionary<string, string> _userMappings = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase) {
+        private static Dictionary<string, string> _userMappings = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase)
+        {
         };
 
-        private static string GetExtension(string path) {
+        private static string GetExtension(string path)
+        {
             var length = path.Length;
             var num = length;
-            while (--num >= 0) {
+            while (--num >= 0)
+            {
                 char c = path[num];
-                if (c == '.') {
-                    if (num != length - 1) {
+                if (c == '.')
+                {
+                    if (num != length - 1)
+                    {
                         return path.Substring(num, length - num);
                     }
 
                     return string.Empty;
                 }
 
-                if (c == Path.DirectorySeparatorChar || c == Path.AltDirectorySeparatorChar || c == Path.VolumeSeparatorChar) {
+                if (c == Path.DirectorySeparatorChar || c == Path.AltDirectorySeparatorChar || c == Path.VolumeSeparatorChar)
+                {
                     break;
                 }
             }
@@ -583,23 +591,28 @@ namespace AlibabaCloud.OSS.V2 {
             return string.Empty;
         }
 
-        internal static void ClearMimeType() {
+        internal static void ClearMimeType()
+        {
             _userMappings.Clear();
         }
 
-        public static void AddMimeType(string fileExtension, string mimeType) {
+        public static void AddMimeType(string fileExtension, string mimeType)
+        {
             _userMappings.Add(fileExtension, mimeType);
         }
 
 
-        public static string GetMimeType(string fileName, string @default = "") {
+        public static string GetMimeType(string fileName, string @default = "")
+        {
             var ext = GetExtension(fileName);
 
-            if (_userMappings.Count > 0 && _userMappings.TryGetValue(ext, out var value)) {
+            if (_userMappings.Count > 0 && _userMappings.TryGetValue(ext, out var value))
+            {
                 return value;
             }
 
-            if (_mappings.TryGetValue(ext, out value)) {
+            if (_mappings.TryGetValue(ext, out value))
+            {
                 return value;
             }
             return @default;

@@ -3,8 +3,10 @@ using System.Collections.Generic;
 using System.Net.Http;
 using System.Threading;
 
-namespace AlibabaCloud.OSS.V2.Internal {
-    internal class ExecuteContext {
+namespace AlibabaCloud.OSS.V2.Internal
+{
+    internal class ExecuteContext
+    {
         public int? RetryMaxAttempts { get; set; }
         public TimeSpan RequestOnceTimeout { get; set; }
         public HttpCompletionOption? HttpCompletionOption { get; set; }

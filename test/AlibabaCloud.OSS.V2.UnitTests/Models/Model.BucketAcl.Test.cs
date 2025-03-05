@@ -4,9 +4,11 @@ using AlibabaCloud.OSS.V2.Transform;
 
 namespace AlibabaCloud.OSS.V2.UnitTests.Models;
 
-public class ModelBucketAclTest {
+public class ModelBucketAclTest
+{
     [Fact]
-    public void TestPutBucketAclRequest() {
+    public void TestPutBucketAclRequest()
+    {
         var request = new PutBucketAclRequest();
         Assert.Empty(request.Headers);
         Assert.Empty(request.Parameters);
@@ -21,7 +23,8 @@ public class ModelBucketAclTest {
         Assert.Null(input.Parameters);
         Assert.Null(input.Body);
 
-        request = new PutBucketAclRequest {
+        request = new PutBucketAclRequest
+        {
             Bucket = "bucket",
             Acl = "private"
         };
@@ -40,14 +43,16 @@ public class ModelBucketAclTest {
     }
 
     [Fact]
-    public void TestPutBucketAclResult() {
+    public void TestPutBucketAclResult()
+    {
         var result = new PutBucketAclResult();
         Assert.Equal(0, result.StatusCode);
         Assert.Equal("", result.Status);
         Assert.Equal("", result.RequestId);
         Assert.Empty(result.Headers);
 
-        var output = new OperationOutput {
+        var output = new OperationOutput
+        {
             StatusCode = 200,
             Status = "OK",
             Headers = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase) {
@@ -66,7 +71,8 @@ public class ModelBucketAclTest {
     }
 
     [Fact]
-    public void TestGetBucketAclRequest() {
+    public void TestGetBucketAclRequest()
+    {
         var request = new GetBucketAclRequest();
         Assert.Empty(request.Headers);
         Assert.Empty(request.Parameters);
@@ -81,7 +87,8 @@ public class ModelBucketAclTest {
         Assert.Null(input.Parameters);
         Assert.Null(input.Body);
 
-        request = new GetBucketAclRequest {
+        request = new GetBucketAclRequest
+        {
             Bucket = "bucket",
         };
         Assert.Empty(request.Headers);
@@ -94,7 +101,8 @@ public class ModelBucketAclTest {
     }
 
     [Fact]
-    public void TestGetBucketAclResult() {
+    public void TestGetBucketAclResult()
+    {
         var result = new GetBucketAclResult();
         Assert.Equal(0, result.StatusCode);
         Assert.Equal("", result.Status);
@@ -114,7 +122,8 @@ public class ModelBucketAclTest {
 </AccessControlPolicy>
 """;
 
-        var output = new OperationOutput {
+        var output = new OperationOutput
+        {
             StatusCode = 200,
             Status = "OK",
             Headers = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase) {

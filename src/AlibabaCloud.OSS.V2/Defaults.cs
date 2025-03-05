@@ -1,7 +1,9 @@
 using System;
 
-namespace AlibabaCloud.OSS.V2 {
-    public readonly struct Defaults {
+namespace AlibabaCloud.OSS.V2
+{
+    public readonly struct Defaults
+    {
         // defaults for signing
         public const string Product = "oss";
 

@@ -1,12 +1,14 @@
-﻿using AlibabaCloud.OSS.V2.Models;
+﻿using System.Text;
+using AlibabaCloud.OSS.V2.Models;
 using AlibabaCloud.OSS.V2.Transform;
-using System.Text;
 
 namespace AlibabaCloud.OSS.V2.UnitTests.Models;
 
-public class ModelObjectMultipartTest {
+public class ModelObjectMultipartTest
+{
     [Fact]
-    public void TestInitiateMultipartUploadRequest() {
+    public void TestInitiateMultipartUploadRequest()
+    {
         var request = new InitiateMultipartUploadRequest();
         Assert.Empty(request.Headers);
         Assert.Empty(request.Parameters);
@@ -37,7 +39,8 @@ public class ModelObjectMultipartTest {
         Assert.Null(input.Parameters);
         Assert.Null(input.Body);
 
-        request = new InitiateMultipartUploadRequest {
+        request = new InitiateMultipartUploadRequest
+        {
             Bucket = "bucket",
             Key = "key",
             ForbidOverwrite = true,
@@ -123,7 +126,8 @@ public class ModelObjectMultipartTest {
     }
 
     [Fact]
-    public void TestInitiateMultipartUploadResult() {
+    public void TestInitiateMultipartUploadResult()
+    {
         var result = new InitiateMultipartUploadResult();
         Assert.Equal(0, result.StatusCode);
         Assert.Equal("", result.Status);
@@ -140,7 +144,8 @@ public class ModelObjectMultipartTest {
 </InitiateMultipartUploadResult>
 """;
 
-        var output = new OperationOutput {
+        var output = new OperationOutput
+        {
             StatusCode = 200,
             Status = "OK",
             Headers = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase) {
@@ -172,7 +177,8 @@ public class ModelObjectMultipartTest {
 </InitiateMultipartUploadResult>
 """;
 
-        output = new OperationOutput {
+        output = new OperationOutput
+        {
             StatusCode = 200,
             Status = "OK",
             Headers = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase) {
@@ -205,7 +211,8 @@ public class ModelObjectMultipartTest {
 </InitiateMultipartUploadResult>
 """;
 
-        output = new OperationOutput {
+        output = new OperationOutput
+        {
             StatusCode = 200,
             Status = "OK",
             Headers = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase) {
@@ -230,7 +237,8 @@ public class ModelObjectMultipartTest {
     }
 
     [Fact]
-    public void TestUploadPartRequest() {
+    public void TestUploadPartRequest()
+    {
         var request = new UploadPartRequest();
         Assert.Empty(request.Headers);
         Assert.Empty(request.Parameters);
@@ -253,7 +261,8 @@ public class ModelObjectMultipartTest {
         Assert.Null(input.Body);
 
         var body = new MemoryStream(Encoding.UTF8.GetBytes("hello world"));
-        request = new UploadPartRequest {
+        request = new UploadPartRequest
+        {
             Bucket = "bucket",
             Key = "key",
             PartNumber = 1,
@@ -294,7 +303,8 @@ public class ModelObjectMultipartTest {
     }
 
     [Fact]
-    public void TestUploadPartResult() {
+    public void TestUploadPartResult()
+    {
         var result = new UploadPartResult();
         Assert.Equal(0, result.StatusCode);
         Assert.Equal("", result.Status);
@@ -304,7 +314,8 @@ public class ModelObjectMultipartTest {
         Assert.Null(result.ETag);
         Assert.Null(result.HashCrc64);
 
-        var output = new OperationOutput {
+        var output = new OperationOutput
+        {
             StatusCode = 200,
             Status = "OK",
             Headers = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase) {
@@ -330,7 +341,8 @@ public class ModelObjectMultipartTest {
     }
 
     [Fact]
-    public void TestUploadPartCopyRequest() {
+    public void TestUploadPartCopyRequest()
+    {
         var request = new UploadPartCopyRequest();
         Assert.Empty(request.Headers);
         Assert.Empty(request.Parameters);
@@ -357,7 +369,8 @@ public class ModelObjectMultipartTest {
         Assert.Null(input.Parameters);
         Assert.Null(input.Body);
 
-        request = new UploadPartCopyRequest {
+        request = new UploadPartCopyRequest
+        {
             Bucket = "bucket",
             Key = "key",
             PartNumber = 1,
@@ -417,7 +430,8 @@ public class ModelObjectMultipartTest {
     }
 
     [Fact]
-    public void TestUploadPartCopyResult() {
+    public void TestUploadPartCopyResult()
+    {
         var result = new UploadPartCopyResult();
         Assert.Equal(0, result.StatusCode);
         Assert.Equal("", result.Status);
@@ -433,7 +447,8 @@ public class ModelObjectMultipartTest {
 </CopyPartResult>
 """;
 
-        var output = new OperationOutput {
+        var output = new OperationOutput
+        {
             StatusCode = 200,
             Status = "OK",
             Headers = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase) {
@@ -463,7 +478,8 @@ public class ModelObjectMultipartTest {
 </CopyPartResult>
 """;
 
-        output = new OperationOutput {
+        output = new OperationOutput
+        {
             StatusCode = 200,
             Status = "OK",
             Headers = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase) {
@@ -487,7 +503,8 @@ public class ModelObjectMultipartTest {
     }
 
     [Fact]
-    public void TestCompleteMultipartUploadRequest() {
+    public void TestCompleteMultipartUploadRequest()
+    {
         var request = new CompleteMultipartUploadRequest();
         Assert.Empty(request.Headers);
         Assert.Empty(request.Parameters);
@@ -511,12 +528,14 @@ public class ModelObjectMultipartTest {
         Assert.Null(input.Parameters);
         Assert.Null(input.Body);
 
-        request = new CompleteMultipartUploadRequest {
+        request = new CompleteMultipartUploadRequest
+        {
             Bucket = "bucket",
             Key = "key",
             UploadId = "upload-id",
             Acl = "private",
-            CompleteMultipartUpload = new CompleteMultipartUpload() {
+            CompleteMultipartUpload = new CompleteMultipartUpload()
+            {
                 Parts = [
                     new UploadPart(){PartNumber = 1, ETag = "etag-1"},
                     new UploadPart(){PartNumber = 2, ETag = "etag-2"},
@@ -581,7 +600,8 @@ public class ModelObjectMultipartTest {
     }
 
     [Fact]
-    public void TestCompleteMultipartUploadResult() {
+    public void TestCompleteMultipartUploadResult()
+    {
         var result = new CompleteMultipartUploadResult();
         Assert.Equal(0, result.StatusCode);
         Assert.Equal("", result.Status);
@@ -601,7 +621,8 @@ public class ModelObjectMultipartTest {
 </CompleteMultipartUploadResult>
 """;
 
-        var output = new OperationOutput {
+        var output = new OperationOutput
+        {
             StatusCode = 200,
             Status = "OK",
             Headers = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase) {
@@ -639,7 +660,8 @@ public class ModelObjectMultipartTest {
 </CompleteMultipartUploadResult>
 """;
 
-        output = new OperationOutput {
+        output = new OperationOutput
+        {
             StatusCode = 200,
             Status = "OK",
             Headers = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase) {
@@ -676,7 +698,8 @@ public class ModelObjectMultipartTest {
               </CompleteMultipartUploadResult>
               """;
 
-        output = new OperationOutput {
+        output = new OperationOutput
+        {
             StatusCode = 200,
             Status = "OK",
             Headers = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase) {
@@ -706,7 +729,8 @@ public class ModelObjectMultipartTest {
         // json format
         xml = "json value";
 
-        output = new OperationOutput {
+        output = new OperationOutput
+        {
             StatusCode = 200,
             Status = "OK",
             Headers = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase) {
@@ -736,7 +760,8 @@ public class ModelObjectMultipartTest {
 
 
     [Fact]
-    public void TestAbortMultipartUploadRequest() {
+    public void TestAbortMultipartUploadRequest()
+    {
         var request = new AbortMultipartUploadRequest();
         Assert.Empty(request.Headers);
         Assert.Empty(request.Parameters);
@@ -753,7 +778,8 @@ public class ModelObjectMultipartTest {
         Assert.Null(input.Parameters);
         Assert.Null(input.Body);
 
-        request = new AbortMultipartUploadRequest {
+        request = new AbortMultipartUploadRequest
+        {
             Bucket = "bucket",
             Key = "key",
             UploadId = "upload-id",
@@ -774,14 +800,16 @@ public class ModelObjectMultipartTest {
     }
 
     [Fact]
-    public void TestAbortMultipartUploadResult() {
+    public void TestAbortMultipartUploadResult()
+    {
         var result = new AbortMultipartUploadResult();
         Assert.Equal(0, result.StatusCode);
         Assert.Equal("", result.Status);
         Assert.Equal("", result.RequestId);
         Assert.Empty(result.Headers);
 
-        var output = new OperationOutput {
+        var output = new OperationOutput
+        {
             StatusCode = 200,
             Status = "OK",
             Headers = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase) {
@@ -800,7 +828,8 @@ public class ModelObjectMultipartTest {
     }
 
     [Fact]
-    public void TestListMultipartUploadsRequest() {
+    public void TestListMultipartUploadsRequest()
+    {
         var request = new ListMultipartUploadsRequest();
         Assert.Empty(request.Headers);
         Assert.Empty(request.Parameters);
@@ -821,7 +850,8 @@ public class ModelObjectMultipartTest {
         Assert.Null(input.Parameters);
         Assert.Null(input.Body);
 
-        request = new ListMultipartUploadsRequest {
+        request = new ListMultipartUploadsRequest
+        {
             Bucket = "bucket",
             Delimiter = "/",
             EncodingType = "url",
@@ -855,7 +885,8 @@ public class ModelObjectMultipartTest {
     }
 
     [Fact]
-    public void TestListMultipartUploadsResult() {
+    public void TestListMultipartUploadsResult()
+    {
         var result = new ListMultipartUploadsResult();
         Assert.Equal(0, result.StatusCode);
         Assert.Equal("", result.Status);
@@ -881,7 +912,8 @@ public class ModelObjectMultipartTest {
 </ListMultipartUploadsResult>
 """;
 
-        var output = new OperationOutput {
+        var output = new OperationOutput
+        {
             StatusCode = 200,
             Status = "OK",
             Headers = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase) {
@@ -938,7 +970,8 @@ public class ModelObjectMultipartTest {
     </Upload>
 </ListMultipartUploadsResult>
 """;
-        output = new OperationOutput {
+        output = new OperationOutput
+        {
             StatusCode = 200,
             Status = "OK",
             Headers = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase) {
@@ -1010,7 +1043,8 @@ public class ModelObjectMultipartTest {
     </Upload>
 </ListMultipartUploadsResult>
 """;
-        output = new OperationOutput {
+        output = new OperationOutput
+        {
             StatusCode = 200,
             Status = "OK",
             Headers = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase) {
@@ -1053,7 +1087,8 @@ public class ModelObjectMultipartTest {
     }
 
     [Fact]
-    public void TestListPartsRequest() {
+    public void TestListPartsRequest()
+    {
         var request = new ListPartsRequest();
         Assert.Empty(request.Headers);
         Assert.Empty(request.Parameters);
@@ -1073,7 +1108,8 @@ public class ModelObjectMultipartTest {
         Assert.Null(input.Parameters);
         Assert.Null(input.Body);
 
-        request = new ListPartsRequest {
+        request = new ListPartsRequest
+        {
             Bucket = "bucket",
             Key = "key-123",
             EncodingType = "url",
@@ -1103,7 +1139,8 @@ public class ModelObjectMultipartTest {
     }
 
     [Fact]
-    public void TestListPartsResult() {
+    public void TestListPartsResult()
+    {
         var result = new ListPartsResult();
         Assert.Equal(0, result.StatusCode);
         Assert.Equal("", result.Status);
@@ -1129,7 +1166,8 @@ public class ModelObjectMultipartTest {
 </ListPartsResult>
 """;
 
-        var output = new OperationOutput {
+        var output = new OperationOutput
+        {
             StatusCode = 200,
             Status = "OK",
             Headers = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase) {
@@ -1189,7 +1227,8 @@ public class ModelObjectMultipartTest {
     </Part>
 </ListPartsResult>
 """;
-        output = new OperationOutput {
+        output = new OperationOutput
+        {
             StatusCode = 200,
             Status = "OK",
             Headers = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase) {
@@ -1268,7 +1307,8 @@ public class ModelObjectMultipartTest {
     </Part>
 </ListPartsResult>
 """;
-        output = new OperationOutput {
+        output = new OperationOutput
+        {
             StatusCode = 200,
             Status = "OK",
             Headers = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase) {
@@ -1315,7 +1355,8 @@ public class ModelObjectMultipartTest {
     }
 
     [Fact]
-    public void TestListPartsResultEmptyXml() {
+    public void TestListPartsResultEmptyXml()
+    {
         var result = new ListPartsResult();
         Assert.Equal(0, result.StatusCode);
         Assert.Equal("", result.Status);
@@ -1350,7 +1391,8 @@ public class ModelObjectMultipartTest {
 </ListPartsResult>
 """;
 
-        var output = new OperationOutput {
+        var output = new OperationOutput
+        {
             StatusCode = 200,
             Status = "OK",
             Headers = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase) {

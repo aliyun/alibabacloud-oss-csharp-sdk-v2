@@ -2,8 +2,10 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 
-namespace AlibabaCloud.OSS.V2 {
-    public sealed class OperationInput {
+namespace AlibabaCloud.OSS.V2
+{
+    public sealed class OperationInput
+    {
         private IDictionary<string, object>? _metadata;
 
         public string OperationName { get; set; } = string.Empty;
@@ -17,8 +19,10 @@ namespace AlibabaCloud.OSS.V2 {
         public string? Bucket { get; set; }
         public string? Key { get; set; }
 
-        public IDictionary<string, object> OperationMetadata {
-            get {
+        public IDictionary<string, object> OperationMetadata
+        {
+            get
+            {
                 _metadata ??= new Dictionary<string, object>();
                 return _metadata;
             }
@@ -26,7 +30,8 @@ namespace AlibabaCloud.OSS.V2 {
         }
     }
 
-    public sealed class OperationOutput {
+    public sealed class OperationOutput
+    {
         public string Status { get; set; } = string.Empty;
         public int StatusCode { get; set; }
         public IDictionary<string, string>? Headers { get; set; }
@@ -35,7 +40,8 @@ namespace AlibabaCloud.OSS.V2 {
         public OperationInput? Input { get; set; }
     }
 
-    public sealed class OperationOptions {
+    public sealed class OperationOptions
+    {
         /// <summary>
         /// The maximum number attempts.
         /// </summary>
@@ -52,7 +58,8 @@ namespace AlibabaCloud.OSS.V2 {
         public AuthMethodType? AuthMethod { get; set; }
     }
 
-    public class RequestMessage {
+    public class RequestMessage
+    {
         public Stream? Content { get; set; }
 
         public string Method { get; set; }
@@ -62,13 +69,15 @@ namespace AlibabaCloud.OSS.V2 {
         public IDictionary<string, string> Headers { get; set; } =
             new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
 
-        public RequestMessage(string method, Uri requestUri) {
+        public RequestMessage(string method, Uri requestUri)
+        {
             Method = method;
             RequestUri = requestUri;
         }
     }
 
-    public class ResponseMessage {
+    public class ResponseMessage
+    {
         public Stream? Content { get; set; }
 
         public string Status { get; set; }
@@ -80,14 +89,16 @@ namespace AlibabaCloud.OSS.V2 {
 
         public RequestMessage? Request { get; set; }
 
-        public ResponseMessage(int statusCode, string status) {
+        public ResponseMessage(int statusCode, string status)
+        {
             Status = status;
             StatusCode = statusCode;
         }
     }
 
     [Flags]
-    public enum FeatureFlagsType {
+    public enum FeatureFlagsType
+    {
         None = 0,
 
         /// <summary>
@@ -118,7 +129,8 @@ namespace AlibabaCloud.OSS.V2 {
         EnableCrc64CheckDownload = 0x10,
     }
 
-    public enum AddressStyleType {
+    public enum AddressStyleType
+    {
         VirtualHosted = 0,
 
         Path = 1,
@@ -126,7 +138,8 @@ namespace AlibabaCloud.OSS.V2 {
         CName = 2,
     }
 
-    public enum AuthMethodType {
+    public enum AuthMethodType
+    {
         Header = 0,
 
         Query = 1,

@@ -1,10 +1,12 @@
-using AlibabaCloud.OSS.V2.Transform;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
+using AlibabaCloud.OSS.V2.Transform;
 
-namespace AlibabaCloud.OSS.V2 {
-    public partial class Client {
+namespace AlibabaCloud.OSS.V2
+{
+    public partial class Client
+    {
         /// <summary>
         /// Queries the endpoints of all supported regions or the endpoints of a specific region.
         /// </summary>
@@ -16,8 +18,10 @@ namespace AlibabaCloud.OSS.V2 {
             Models.DescribeRegionsRequest request,
             OperationOptions? options = null,
             CancellationToken cancellationToken = default
-        ) {
-            var input = new OperationInput {
+        )
+        {
+            var input = new OperationInput
+            {
                 OperationName = "DescribeRegions",
                 Method = "GET",
                 Parameters = new Dictionary<string, string> {

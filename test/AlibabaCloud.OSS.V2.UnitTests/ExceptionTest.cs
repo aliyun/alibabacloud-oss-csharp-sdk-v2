@@ -1,8 +1,10 @@
 namespace AlibabaCloud.OSS.V2.UnitTests;
 
-public class ExceptionTest {
+public class ExceptionTest
+{
     [Fact]
-    public void TestServiceException() {
+    public void TestServiceException()
+    {
         var exception = new ServiceException(0, null);
         Assert.Equal(0, exception.StatusCode);
         Assert.Equal("", exception.ErrorCode);
@@ -82,7 +84,8 @@ public class ExceptionTest {
     }
 
     [Fact]
-    public void TestOperationException() {
+    public void TestOperationException()
+    {
         var exception = new OperationException("nop");
         Assert.NotNull(exception);
         Assert.Equal("operation error nop: ", exception.Message);

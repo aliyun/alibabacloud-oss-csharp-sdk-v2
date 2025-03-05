@@ -4,8 +4,10 @@ using System.Threading;
 using System.Threading.Tasks;
 using AlibabaCloud.OSS.V2.Transform;
 
-namespace AlibabaCloud.OSS.V2 {
-    public partial class Client {
+namespace AlibabaCloud.OSS.V2
+{
+    public partial class Client
+    {
         /// <summary>
         /// Configures the versioning state for a bucket.
         /// </summary>
@@ -17,11 +19,13 @@ namespace AlibabaCloud.OSS.V2 {
             Models.PutBucketVersioningRequest request,
             OperationOptions? options = null,
             CancellationToken cancellationToken = default
-        ) {
+        )
+        {
             Ensure.NotNull(request.Bucket, "request.Bucket");
             Ensure.NotNull(request.VersioningConfiguration, "request.VersioningConfiguration");
 
-            var input = new OperationInput {
+            var input = new OperationInput
+            {
                 OperationName = "PutBucketVersioning",
                 Method = "PUT",
                 Headers = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase) {
@@ -55,10 +59,12 @@ namespace AlibabaCloud.OSS.V2 {
             Models.GetBucketVersioningRequest request,
             OperationOptions? options = null,
             CancellationToken cancellationToken = default
-        ) {
+        )
+        {
             Ensure.NotNull(request.Bucket, "request.Bucket");
 
-            var input = new OperationInput {
+            var input = new OperationInput
+            {
                 OperationName = "GetBucketVersioning",
                 Method = "GET",
                 Parameters = new Dictionary<string, string> {
@@ -89,10 +95,12 @@ namespace AlibabaCloud.OSS.V2 {
             Models.ListObjectVersionsRequest request,
             OperationOptions? options = null,
             CancellationToken cancellationToken = default
-        ) {
+        )
+        {
             Ensure.NotNull(request.Bucket, "request.Bucket");
 
-            var input = new OperationInput {
+            var input = new OperationInput
+            {
                 OperationName = "ListObjectVersions",
                 Method = "GET",
                 Parameters = new Dictionary<string, string> {

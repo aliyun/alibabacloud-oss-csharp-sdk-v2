@@ -4,25 +4,30 @@ using AlibabaCloud.OSS.V2.Models;
 namespace AlibabaCloud.OSS.V2.IntegrationTests;
 
 
-public class ClientBucketVersioningTest : IDisposable {
+public class ClientBucketVersioningTest : IDisposable
+{
     private readonly string BucketNamePrefix;
 
-    public void Dispose() {
+    public void Dispose()
+    {
         Utils.CleanBuckets(BucketNamePrefix);
     }
 
-    public ClientBucketVersioningTest() {
+    public ClientBucketVersioningTest()
+    {
         BucketNamePrefix = Utils.RandomBucketNamePrefix();
     }
 
     [Fact]
-    public async Task TestPutAndGetBucketVersioning() {
+    public async Task TestPutAndGetBucketVersioning()
+    {
         var client = Utils.GetDefaultClient();
 
         //default
         var bucketName = Utils.RandomBucketName(BucketNamePrefix);
 
-        var result = await client.PutBucketAsync(new() {
+        var result = await client.PutBucketAsync(new()
+        {
             Bucket = bucketName
         });
         Assert.NotNull(result);
@@ -30,7 +35,8 @@ public class ClientBucketVersioningTest : IDisposable {
         Assert.NotNull(result.RequestId);
 
         // get bucket versioning status
-        var getResult = await client.GetBucketVersioningAsync(new() {
+        var getResult = await client.GetBucketVersioningAsync(new()
+        {
             Bucket = bucketName
         });
         Assert.NotNull(getResult);
@@ -40,9 +46,11 @@ public class ClientBucketVersioningTest : IDisposable {
         Assert.Null(getResult.VersioningConfiguration.Status);
 
         // put bucket versioning status
-        var putResult = await client.PutBucketVersioningAsync(new() {
+        var putResult = await client.PutBucketVersioningAsync(new()
+        {
             Bucket = bucketName,
-            VersioningConfiguration = new VersioningConfiguration {
+            VersioningConfiguration = new VersioningConfiguration
+            {
                 Status = BucketVersioningStatusType.Enabled.GetString()
             }
         });
@@ -51,7 +59,8 @@ public class ClientBucketVersioningTest : IDisposable {
         Assert.NotNull(putResult.RequestId);
 
         // get bucket versioning status
-        getResult = await client.GetBucketVersioningAsync(new() {
+        getResult = await client.GetBucketVersioningAsync(new()
+        {
             Bucket = bucketName
         });
         Assert.NotNull(getResult);
@@ -62,13 +71,15 @@ public class ClientBucketVersioningTest : IDisposable {
     }
 
     [Fact]
-    public async Task TestPutAndGetBucketVersioningFail() {
+    public async Task TestPutAndGetBucketVersioningFail()
+    {
         var client = Utils.GetDefaultClient();
 
         //default
         var bucketName = Utils.RandomBucketName(BucketNamePrefix);
 
-        var result = await client.PutBucketAsync(new() {
+        var result = await client.PutBucketAsync(new()
+        {
             Bucket = bucketName,
         });
 
@@ -78,15 +89,19 @@ public class ClientBucketVersioningTest : IDisposable {
 
         var invClient = Utils.GetInvalidAkClient();
 
-        try {
-            await invClient.PutBucketVersioningAsync(new() {
+        try
+        {
+            await invClient.PutBucketVersioningAsync(new()
+            {
                 Bucket = bucketName,
-                VersioningConfiguration = new VersioningConfiguration {
+                VersioningConfiguration = new VersioningConfiguration
+                {
                     Status = BucketVersioningStatusType.Enabled.GetString()
                 }
             });
         }
-        catch (Exception e) {
+        catch (Exception e)
+        {
             Assert.IsAssignableFrom<OperationException>(e);
             Assert.StartsWith("operation error PutBucketVersioning", e.Message);
             Assert.IsAssignableFrom<ServiceException>(e.InnerException);
@@ -101,12 +116,15 @@ public class ClientBucketVersioningTest : IDisposable {
             Assert.Contains("GMT", se.TimeStamp);
         }
 
-        try {
-            await invClient.GetBucketVersioningAsync(new() {
+        try
+        {
+            await invClient.GetBucketVersioningAsync(new()
+            {
                 Bucket = bucketName
             });
         }
-        catch (Exception e) {
+        catch (Exception e)
+        {
             Assert.IsAssignableFrom<OperationException>(e);
             Assert.StartsWith("operation error GetBucketVersioning", e.Message);
             Assert.IsAssignableFrom<ServiceException>(e.InnerException);
@@ -121,12 +139,15 @@ public class ClientBucketVersioningTest : IDisposable {
             Assert.Contains("GMT", se.TimeStamp);
         }
 
-        try {
-            await invClient.ListObjectVersionsAsync(new() {
+        try
+        {
+            await invClient.ListObjectVersionsAsync(new()
+            {
                 Bucket = bucketName
             });
         }
-        catch (Exception e) {
+        catch (Exception e)
+        {
             Assert.IsAssignableFrom<OperationException>(e);
             Assert.StartsWith("operation error ListObjectVersions", e.Message);
             Assert.IsAssignableFrom<ServiceException>(e.InnerException);
@@ -143,13 +164,15 @@ public class ClientBucketVersioningTest : IDisposable {
     }
 
     [Fact]
-    public async Task TestListObjectVersionsByPaginators() {
+    public async Task TestListObjectVersionsByPaginators()
+    {
         var client = Utils.GetDefaultClient();
 
         //default
         var bucketName = Utils.RandomBucketName(BucketNamePrefix);
 
-        var result = await client.PutBucketAsync(new() {
+        var result = await client.PutBucketAsync(new()
+        {
             Bucket = bucketName
         });
         Assert.NotNull(result);
@@ -157,25 +180,30 @@ public class ClientBucketVersioningTest : IDisposable {
         Assert.NotNull(result.RequestId);
 
         // put bucket versioning status
-        var putResult = await client.PutBucketVersioningAsync(new() {
+        var putResult = await client.PutBucketVersioningAsync(new()
+        {
             Bucket = bucketName,
-            VersioningConfiguration = new VersioningConfiguration {
+            VersioningConfiguration = new VersioningConfiguration
+            {
                 Status = BucketVersioningStatusType.Enabled.GetString()
             }
         });
 
         // paginator
-        var paginators = client.ListObjectVersionsPaginator(new ListObjectVersionsRequest() {
+        var paginators = client.ListObjectVersionsPaginator(new ListObjectVersionsRequest()
+        {
             Bucket = bucketName
         });
-        await foreach (var page in paginators.IterPageAsync()) {
+        await foreach (var page in paginators.IterPageAsync())
+        {
             Assert.NotNull(page.Versions);
             Assert.Empty(page.Versions);
         }
 
         // put object
         var normalKeyPrefix = "normal/key-";
-        for (var i = 0; i < 10; i++) {
+        for (var i = 0; i < 10; i++)
+        {
             await client.PutObjectAsync(new() { Bucket = bucketName, Key = $"{normalKeyPrefix}{i}" });
         }
         var specialKeyPrefix = "special/key-";
@@ -185,11 +213,13 @@ public class ClientBucketVersioningTest : IDisposable {
         await client.PutObjectAsync(new() { Bucket = bucketName, Key = $"{specialKeyPrefix}{charStr}123" });
 
         // list default
-        paginators = client.ListObjectVersionsPaginator(new ListObjectVersionsRequest() {
+        paginators = client.ListObjectVersionsPaginator(new ListObjectVersionsRequest()
+        {
             Bucket = bucketName
         });
         var count = 0;
-        await foreach (var page in paginators.IterPageAsync()) {
+        await foreach (var page in paginators.IterPageAsync())
+        {
             Assert.NotNull(page.Versions);
             Assert.NotEmpty(page.Versions);
             count += page.Versions.Count;
@@ -198,15 +228,18 @@ public class ClientBucketVersioningTest : IDisposable {
 
         // list with prefix and Limit
         paginators = client.ListObjectVersionsPaginator(
-            new ListObjectVersionsRequest() {
+            new ListObjectVersionsRequest()
+            {
                 Bucket = bucketName,
                 Prefix = specialKeyPrefix,
             },
-            new Paginator.PaginatorOptions() {
+            new Paginator.PaginatorOptions()
+            {
                 Limit = 1
             });
         count = 0;
-        await foreach (var page in paginators.IterPageAsync()) {
+        await foreach (var page in paginators.IterPageAsync())
+        {
             Assert.NotNull(page.Versions);
             Assert.Single(page.Versions);
             Assert.StartsWith(specialKeyPrefix, page.Versions[0].Key);
@@ -217,15 +250,18 @@ public class ClientBucketVersioningTest : IDisposable {
 
         // list sync
         paginators = client.ListObjectVersionsPaginator(
-            new ListObjectVersionsRequest() {
+            new ListObjectVersionsRequest()
+            {
                 Bucket = bucketName,
                 Prefix = normalKeyPrefix,
             },
-            new Paginator.PaginatorOptions() {
+            new Paginator.PaginatorOptions()
+            {
                 Limit = 100
             });
         count = 0;
-        foreach (var page in paginators.IterPage()) {
+        foreach (var page in paginators.IterPage())
+        {
             Assert.NotNull(page.Versions);
             Assert.Equal(10, page.Versions.Count);
             Assert.StartsWith(normalKeyPrefix, page.Versions[0].Key);

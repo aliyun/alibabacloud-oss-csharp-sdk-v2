@@ -5,11 +5,13 @@ using System.IO;
 using System.Xml.Serialization;
 using AlibabaCloud.OSS.V2.Transform;
 
-namespace AlibabaCloud.OSS.V2.Models {
+namespace AlibabaCloud.OSS.V2.Models
+{
     /// <summary>
     /// The request for the PutObject operation.
     /// </summary>
-    public sealed class PutObjectRequest : RequestModel {
+    public sealed class PutObjectRequest : RequestModel
+    {
         /// <summary>
         /// The name of the bucket.
         /// </summary>
@@ -24,9 +26,11 @@ namespace AlibabaCloud.OSS.V2.Models {
         /// The access control list (ACL) of the object.
         /// Sees <see cref="ObjectAclType"/> for supported values.
         /// </summary>
-        public string? Acl {
+        public string? Acl
+        {
             get => Headers.TryGetValue("x-oss-object-acl", out var value) ? value : null;
-            set {
+            set
+            {
                 if (value != null) Headers["x-oss-object-acl"] = value;
             }
         }
@@ -35,9 +39,11 @@ namespace AlibabaCloud.OSS.V2.Models {
         /// The storage class of the bucket. Default value: Standard.  Valid values:- Standard- IA- Archive- ColdArchive
         /// Sees <see cref="StorageClassType"/> for supported values.
         /// </summary>
-        public string? StorageClass {
+        public string? StorageClass
+        {
             get => Headers.TryGetValue("x-oss-storage-class", out var value) ? value : null;
-            set {
+            set
+            {
                 if (value != null) Headers["x-oss-storage-class"] = value;
             }
         }
@@ -45,9 +51,11 @@ namespace AlibabaCloud.OSS.V2.Models {
         /// <summary>
         /// The caching behavior of the web page when the object is downloaded.
         /// </summary>
-        public string? CacheControl {
+        public string? CacheControl
+        {
             get => Headers.TryGetValue("Cache-Control", out var value) ? value : null;
-            set {
+            set
+            {
                 if (value != null) Headers["Cache-Control"] = value;
             }
         }
@@ -55,9 +63,11 @@ namespace AlibabaCloud.OSS.V2.Models {
         /// <summary>
         /// The name of the object when the object is downloaded.
         /// </summary>
-        public string? ContentDisposition {
+        public string? ContentDisposition
+        {
             get => Headers.TryGetValue("Content-Disposition", out var value) ? value : null;
-            set {
+            set
+            {
                 if (value != null) Headers["Content-Disposition"] = value;
             }
         }
@@ -65,9 +75,11 @@ namespace AlibabaCloud.OSS.V2.Models {
         /// <summary>
         /// The content encoding format of the object when the object is downloaded.
         /// </summary>
-        public string? ContentEncoding {
+        public string? ContentEncoding
+        {
             get => Headers.TryGetValue("Content-Encoding", out var value) ? value : null;
-            set {
+            set
+            {
                 if (value != null) Headers["Content-Encoding"] = value;
             }
         }
@@ -75,9 +87,11 @@ namespace AlibabaCloud.OSS.V2.Models {
         /// <summary>
         /// The expiration time of the request.
         /// </summary>
-        public string? Expires {
+        public string? Expires
+        {
             get => Headers.TryGetValue("Expires", out var value) ? value : null;
-            set {
+            set
+            {
                 if (value != null) Headers["Expires"] = value;
             }
         }
@@ -85,9 +99,11 @@ namespace AlibabaCloud.OSS.V2.Models {
         /// <summary>
         /// The MD5 hash of the object that you want to upload.
         /// </summary>
-        public string? ContentMd5 {
+        public string? ContentMd5
+        {
             get => Headers.TryGetValue("Content-MD5", out var value) ? value : null;
-            set {
+            set
+            {
                 if (value != null) Headers["Content-MD5"] = value;
             }
         }
@@ -95,9 +111,11 @@ namespace AlibabaCloud.OSS.V2.Models {
         /// <summary>
         /// A standard MIME type describing the format of the contents.
         /// </summary>
-        public string? ContentType {
+        public string? ContentType
+        {
             get => Headers.TryGetValue("Content-Type", out var value) ? value : null;
-            set {
+            set
+            {
                 if (value != null) Headers["Content-Type"] = value;
             }
         }
@@ -105,11 +123,13 @@ namespace AlibabaCloud.OSS.V2.Models {
         /// <summary>
         /// The size of the data in the HTTP message body. Unit: bytes.
         /// </summary>
-        public long? ContentLength {
+        public long? ContentLength
+        {
             get => Headers.TryGetValue("Content-Length", out var value)
                 ? Convert.ToInt64(value, CultureInfo.InvariantCulture)
                 : null;
-            set {
+            set
+            {
                 if (value != null) Headers["Content-Length"] = Convert.ToString(value, CultureInfo.InvariantCulture)!;
             }
         }
@@ -123,9 +143,11 @@ namespace AlibabaCloud.OSS.V2.Models {
         /// The tag of the object. You can configure multiple tags for the object.
         /// Example: TagA=A&amp;TagB=B.  The key and value of a tag must be URL-encoded. If a tag does not contain an equal sign (=), the value of the tag is considered an empty string.
         /// </summary>
-        public string? Tagging {
+        public string? Tagging
+        {
             get => Headers.TryGetValue("x-oss-tagging", out var value) ? value : null;
-            set {
+            set
+            {
                 if (value != null) Headers["x-oss-tagging"] = value;
             }
         }
@@ -133,11 +155,13 @@ namespace AlibabaCloud.OSS.V2.Models {
         /// <summary>
         /// Specifies whether the object that is uploaded by calling the PutObject operation overwrites an existing object that has the same name.
         /// </summary>
-        public bool? ForbidOverwrite {
+        public bool? ForbidOverwrite
+        {
             get => Headers.TryGetValue("x-oss-forbid-overwrite", out var value)
                 ? Convert.ToBoolean(value, CultureInfo.InvariantCulture)
                 : null;
-            set {
+            set
+            {
                 if (value != null)
                     Headers["x-oss-forbid-overwrite"] =
                         Convert.ToString(value, CultureInfo.InvariantCulture)!.ToLowerInvariant();
@@ -147,9 +171,11 @@ namespace AlibabaCloud.OSS.V2.Models {
         /// <summary>
         /// The method that is used to encrypt the object on the OSS server when the object is created. Valid values: **AES256**, **KMS**, and **SM4****.If you specify the header, the header is returned in the response. OSS uses the method that is specified by this header to encrypt the uploaded object. When you download the encrypted object, the **x-oss-server-side-encryption** header is included in the response and the header value is set to the algorithm that is used to encrypt the object.
         /// </summary>
-        public string? ServerSideEncryption {
+        public string? ServerSideEncryption
+        {
             get => Headers.TryGetValue("x-oss-server-side-encryption", out var value) ? value : null;
-            set {
+            set
+            {
                 if (value != null) Headers["x-oss-server-side-encryption"] = value;
             }
         }
@@ -157,9 +183,11 @@ namespace AlibabaCloud.OSS.V2.Models {
         /// <summary>
         /// The encryption method on the server side when an object is created. Valid values: **AES256**, **KMS**, and **SM4**.If you specify the header, the header is returned in the response. OSS uses the method that is specified by this header to encrypt the uploaded object. When you download the encrypted object, the **x-oss-server-side-encryption** header is included in the response and the header value is set to the algorithm that is used to encrypt the object.
         /// </summary>
-        public string? ServerSideDataEncryption {
+        public string? ServerSideDataEncryption
+        {
             get => Headers.TryGetValue("x-oss-server-side-data-encryption", out var value) ? value : null;
-            set {
+            set
+            {
                 if (value != null) Headers["x-oss-server-side-data-encryption"] = value;
             }
         }
@@ -167,9 +195,11 @@ namespace AlibabaCloud.OSS.V2.Models {
         /// <summary>
         /// The ID of the customer master key (CMK) managed by Key Management Service (KMS). This header is valid only when the **x-oss-server-side-encryption** header is set to KMS.
         /// </summary>
-        public string? ServerSideEncryptionKeyId {
+        public string? ServerSideEncryptionKeyId
+        {
             get => Headers.TryGetValue("x-oss-server-side-encryption-key-id", out var value) ? value : null;
-            set {
+            set
+            {
                 if (value != null) Headers["x-oss-server-side-encryption-key-id"] = value;
             }
         }
@@ -177,9 +207,11 @@ namespace AlibabaCloud.OSS.V2.Models {
         /// <summary>
         /// A callback parameter is a Base64-encoded string that contains multiple fields in the JSON format.
         /// </summary>
-        public string? Callback {
+        public string? Callback
+        {
             get => Headers.TryGetValue("x-oss-callback", out var value) ? value : null;
-            set {
+            set
+            {
                 if (value != null) Headers["x-oss-callback"] = value;
             }
         }
@@ -187,9 +219,11 @@ namespace AlibabaCloud.OSS.V2.Models {
         /// <summary>
         /// Configure custom parameters by using the callback-var parameter.
         /// </summary>
-        public string? CallbackVar {
+        public string? CallbackVar
+        {
             get => Headers.TryGetValue("x-oss-callback-var", out var value) ? value : null;
-            set {
+            set
+            {
                 if (value != null) Headers["x-oss-callback-var"] = value;
             }
         }
@@ -197,11 +231,13 @@ namespace AlibabaCloud.OSS.V2.Models {
         /// <summary>
         /// Specify the speed limit value. The speed limit value ranges from  245760 to 838860800, with a unit of bit/s.
         /// </summary>
-        public long? TrafficLimit {
+        public long? TrafficLimit
+        {
             get => Headers.TryGetValue("x-oss-traffic-limit", out var value)
                 ? Convert.ToInt64(value, CultureInfo.InvariantCulture)
                 : null;
-            set {
+            set
+            {
                 if (value != null) Headers["x-oss-traffic-limit"] = Convert.ToString(value, CultureInfo.InvariantCulture)!;
             }
         }
@@ -214,7 +250,8 @@ namespace AlibabaCloud.OSS.V2.Models {
         /// <summary>
         /// The body of the request.
         /// </summary>
-        public Stream? Body {
+        public Stream? Body
+        {
             get => InnerBody as Stream;
             set => InnerBody = value;
         }
@@ -223,7 +260,8 @@ namespace AlibabaCloud.OSS.V2.Models {
     /// <summary>
     /// The result for the PutObject operation.
     /// </summary>
-    public sealed class PutObjectResult : ResultModel {
+    public sealed class PutObjectResult : ResultModel
+    {
         /// <summary>
         /// The 64-bit CRC value of the object. This value is calculated based on the ECMA-182 standard.
         /// </summary>
@@ -254,7 +292,8 @@ namespace AlibabaCloud.OSS.V2.Models {
     /// <summary>
     /// The request for the CopyObject operation.
     /// </summary>
-    public sealed class CopyObjectRequest : RequestModel {
+    public sealed class CopyObjectRequest : RequestModel
+    {
         /// <summary>
         /// The name of the bucket.
         /// </summary>
@@ -283,9 +322,11 @@ namespace AlibabaCloud.OSS.V2.Models {
         /// <summary>
         /// The object copy condition. If the ETag value of the source object is the same as the ETag value that you specify in the request, OSS copies the object and returns 200 OK. By default, this header is left empty.
         /// </summary>
-        public string? IfMatch {
+        public string? IfMatch
+        {
             get => Headers.TryGetValue("x-oss-copy-source-if-match", out var value) ? value : null;
-            set {
+            set
+            {
                 if (value != null) Headers["x-oss-copy-source-if-match"] = value;
             }
         }
@@ -293,9 +334,11 @@ namespace AlibabaCloud.OSS.V2.Models {
         /// <summary>
         /// The object copy condition. If the ETag value of the source object is different from the ETag value that you specify in the request, OSS copies the object and returns 200 OK. By default, this header is left empty.
         /// </summary>
-        public string? IfNoneMatch {
+        public string? IfNoneMatch
+        {
             get => Headers.TryGetValue("x-oss-copy-source-if-none-match", out var value) ? value : null;
-            set {
+            set
+            {
                 if (value != null) Headers["x-oss-copy-source-if-none-match"] = value;
             }
         }
@@ -303,9 +346,11 @@ namespace AlibabaCloud.OSS.V2.Models {
         /// <summary>
         /// The object copy condition. If the time that you specify in the request is the same as or later than the modification time of the object, OSS copies the object and returns 200 OK. By default, this header is left empty.
         /// </summary>
-        public string? IfUnmodifiedSince {
+        public string? IfUnmodifiedSince
+        {
             get => Headers.TryGetValue("x-oss-copy-source-if-unmodified-since", out var value) ? value : null;
-            set {
+            set
+            {
                 if (value != null) Headers["x-oss-copy-source-if-unmodified-since"] = value;
             }
         }
@@ -313,9 +358,11 @@ namespace AlibabaCloud.OSS.V2.Models {
         /// <summary>
         /// If the source object is modified after the time that you specify in the request, OSS copies the object. By default, this header is left empty.
         /// </summary>
-        public string? IfModifiedSince {
+        public string? IfModifiedSince
+        {
             get => Headers.TryGetValue("x-oss-copy-source-if-modified-since", out var value) ? value : null;
-            set {
+            set
+            {
                 if (value != null) Headers["x-oss-copy-source-if-modified-since"] = value;
             }
         }
@@ -324,9 +371,11 @@ namespace AlibabaCloud.OSS.V2.Models {
         /// The access control list (ACL) of the object.
         /// Sees <see cref="ObjectAclType"/> for supported values.
         /// </summary>
-        public string? Acl {
+        public string? Acl
+        {
             get => Headers.TryGetValue("x-oss-object-acl", out var value) ? value : null;
-            set {
+            set
+            {
                 if (value != null) Headers["x-oss-object-acl"] = value;
             }
         }
@@ -335,9 +384,11 @@ namespace AlibabaCloud.OSS.V2.Models {
         /// The storage class of the object that you want to upload. Default value: Standard. If you specify a storage class when you upload the object, the storage class applies regardless of the storage class of the bucket to which you upload the object. For example, if you set **x-oss-storage-class** to Standard when you upload an object to an IA bucket, the storage class of the uploaded object is Standard.Valid values:*   Standard*   IA*   Archive*   ColdArchiveFor more information about storage classes, see [Overview](~~51374~~).
         /// Sees <see cref="StorageClassType"/> for supported values. 
         /// </summary>
-        public string? StorageClass {
+        public string? StorageClass
+        {
             get => Headers.TryGetValue("x-oss-storage-class", out var value) ? value : null;
-            set {
+            set
+            {
                 if (value != null) Headers["x-oss-storage-class"] = value;
             }
         }
@@ -345,9 +396,11 @@ namespace AlibabaCloud.OSS.V2.Models {
         /// <summary>
         /// The caching behavior of the web page when the object is downloaded.
         /// </summary>
-        public string? CacheControl {
+        public string? CacheControl
+        {
             get => Headers.TryGetValue("Cache-Control", out var value) ? value : null;
-            set {
+            set
+            {
                 if (value != null) Headers["Cache-Control"] = value;
             }
         }
@@ -355,9 +408,11 @@ namespace AlibabaCloud.OSS.V2.Models {
         /// <summary>
         /// The name of the object when the object is downloaded.
         /// </summary>
-        public string? ContentDisposition {
+        public string? ContentDisposition
+        {
             get => Headers.TryGetValue("Content-Disposition", out var value) ? value : null;
-            set {
+            set
+            {
                 if (value != null) Headers["Content-Disposition"] = value;
             }
         }
@@ -365,9 +420,11 @@ namespace AlibabaCloud.OSS.V2.Models {
         /// <summary>
         /// The content encoding format of the object when the object is downloaded.
         /// </summary>
-        public string? ContentEncoding {
+        public string? ContentEncoding
+        {
             get => Headers.TryGetValue("Content-Encoding", out var value) ? value : null;
-            set {
+            set
+            {
                 if (value != null) Headers["Content-Encoding"] = value;
             }
         }
@@ -375,9 +432,11 @@ namespace AlibabaCloud.OSS.V2.Models {
         /// <summary>
         /// The expiration time of the request.
         /// </summary>
-        public string? Expires {
+        public string? Expires
+        {
             get => Headers.TryGetValue("Expires", out var value) ? value : null;
-            set {
+            set
+            {
                 if (value != null) Headers["Expires"] = value;
             }
         }
@@ -385,9 +444,11 @@ namespace AlibabaCloud.OSS.V2.Models {
         /// <summary>
         /// The MD5 hash of the object that you want to upload.
         /// </summary>
-        public string? ContentMd5 {
+        public string? ContentMd5
+        {
             get => Headers.TryGetValue("Content-MD5", out var value) ? value : null;
-            set {
+            set
+            {
                 if (value != null) Headers["Content-MD5"] = value;
             }
         }
@@ -395,9 +456,11 @@ namespace AlibabaCloud.OSS.V2.Models {
         /// <summary>
         /// A standard MIME type describing the format of the contents.
         /// </summary>
-        public string? ContentType {
+        public string? ContentType
+        {
             get => Headers.TryGetValue("Content-Type", out var value) ? value : null;
-            set {
+            set
+            {
                 if (value != null) Headers["Content-Type"] = value;
             }
         }
@@ -405,11 +468,13 @@ namespace AlibabaCloud.OSS.V2.Models {
         /// <summary>
         /// The size of the data in the HTTP message body. Unit: bytes.
         /// </summary>
-        public long? ContentLength {
+        public long? ContentLength
+        {
             get => Headers.TryGetValue("Content-Length", out var value)
                 ? Convert.ToInt64(value, CultureInfo.InvariantCulture)
                 : null;
-            set {
+            set
+            {
                 if (value != null) Headers["Content-Length"] = Convert.ToString(value, CultureInfo.InvariantCulture)!;
             }
         }
@@ -422,9 +487,11 @@ namespace AlibabaCloud.OSS.V2.Models {
         /// <summary>
         /// The method that is used to configure the metadata of the destination object. Default value: COPY.*   **COPY**: The metadata of the source object is copied to the destination object. The **x-oss-server-side-encryption** attribute of the source object is not copied to the destination object. The **x-oss-server-side-encryption** header in the CopyObject request specifies the method that is used to encrypt the destination object.*   **REPLACE**: The metadata that you specify in the request is used as the metadata of the destination object.  If the path of the source object is the same as the path of the destination object and versioning is disabled for the bucket in which the source and destination objects are stored, the metadata that you specify in the CopyObject request is used as the metadata of the destination object regardless of the value of the x-oss-metadata-directive header.
         /// </summary>
-        public string? MetadataDirective {
+        public string? MetadataDirective
+        {
             get => Headers.TryGetValue("x-oss-metadata-directive", out var value) ? value : null;
-            set {
+            set
+            {
                 if (value != null) Headers["x-oss-metadata-directive"] = value;
             }
         }
@@ -432,9 +499,11 @@ namespace AlibabaCloud.OSS.V2.Models {
         /// <summary>
         /// The entropy coding-based encryption algorithm that OSS uses to encrypt an object when you create the object. The valid values of the header are **AES256** and **KMS**. You must activate Key Management Service (KMS) in the OSS console before you can use the KMS encryption algorithm. Otherwise, the KmsServiceNotEnabled error is returned.*   If you do not specify the **x-oss-server-side-encryption** header in the CopyObject request, the destination object is not encrypted on the server regardless of whether the source object is encrypted on the server.*   If you specify the **x-oss-server-side-encryption** header in the CopyObject request, the destination object is encrypted on the server after the CopyObject operation is performed regardless of whether the source object is encrypted on the server. In addition, the response to a CopyObject request contains the **x-oss-server-side-encryption** header whose value is the encryption algorithm of the destination object. When the destination object is downloaded, the **x-oss-server-side-encryption** header is included in the response. The value of this header is the encryption algorithm of the destination object.
         /// </summary>
-        public string? ServerSideEncryption {
+        public string? ServerSideEncryption
+        {
             get => Headers.TryGetValue("x-oss-server-side-encryption", out var value) ? value : null;
-            set {
+            set
+            {
                 if (value != null) Headers["x-oss-server-side-encryption"] = value;
             }
         }
@@ -442,9 +511,11 @@ namespace AlibabaCloud.OSS.V2.Models {
         /// <summary>
         /// The server side data encryption algorithm. Invalid value: SM4
         /// </summary>
-        public string? ServerSideDataEncryption {
+        public string? ServerSideDataEncryption
+        {
             get => Headers.TryGetValue("x-oss-server-side-data-encryption", out var value) ? value : null;
-            set {
+            set
+            {
                 if (value != null) Headers["x-oss-server-side-data-encryption"] = value;
             }
         }
@@ -452,9 +523,11 @@ namespace AlibabaCloud.OSS.V2.Models {
         /// <summary>
         /// The ID of the customer master key (CMK) that is managed by KMS. This parameter is available only if you set **x-oss-server-side-encryption** to KMS.
         /// </summary>
-        public string? ServerSideEncryptionKeyId {
+        public string? ServerSideEncryptionKeyId
+        {
             get => Headers.TryGetValue("x-oss-server-side-encryption-key-id", out var value) ? value : null;
-            set {
+            set
+            {
                 if (value != null) Headers["x-oss-server-side-encryption-key-id"] = value;
             }
         }
@@ -462,9 +535,11 @@ namespace AlibabaCloud.OSS.V2.Models {
         /// <summary>
         /// The tag of the destination object. You can add multiple tags to the destination object. Example: TagA=A&amp;TagB=B.  The tag key and tag value must be URL-encoded. If a key-value pair does not contain an equal sign (=), the tag value is considered an empty string.
         /// </summary>
-        public string? Tagging {
+        public string? Tagging
+        {
             get => Headers.TryGetValue("x-oss-tagging", out var value) ? value : null;
-            set {
+            set
+            {
                 if (value != null) Headers["x-oss-tagging"] = value;
             }
         }
@@ -472,9 +547,11 @@ namespace AlibabaCloud.OSS.V2.Models {
         /// <summary>
         /// The method that is used to add tags to the destination object. Default value: Copy. Valid values:*   **Copy**: The tags of the source object are copied to the destination object.*   **Replace**: The tags that you specify in the request are added to the destination object.
         /// </summary>
-        public string? TaggingDirective {
+        public string? TaggingDirective
+        {
             get => Headers.TryGetValue("x-oss-tagging-directive", out var value) ? value : null;
-            set {
+            set
+            {
                 if (value != null) Headers["x-oss-tagging-directive"] = value;
             }
         }
@@ -482,11 +559,13 @@ namespace AlibabaCloud.OSS.V2.Models {
         /// <summary>
         /// Specifies whether the object that is uploaded by calling the PutObject operation overwrites an existing object that has the same name.
         /// </summary>
-        public bool? ForbidOverwrite {
+        public bool? ForbidOverwrite
+        {
             get => Headers.TryGetValue("x-oss-forbid-overwrite", out var value)
                 ? Convert.ToBoolean(value, CultureInfo.InvariantCulture)
                 : null;
-            set {
+            set
+            {
                 if (value != null)
                     Headers["x-oss-forbid-overwrite"] =
                         Convert.ToString(value, CultureInfo.InvariantCulture)!.ToLowerInvariant();
@@ -496,11 +575,13 @@ namespace AlibabaCloud.OSS.V2.Models {
         /// <summary>
         /// Specify the speed limit value. The speed limit value ranges from  245760 to 838860800, with a unit of bit/s.
         /// </summary>
-        public long? TrafficLimit {
+        public long? TrafficLimit
+        {
             get => Headers.TryGetValue("x-oss-traffic-limit", out var value)
                 ? Convert.ToInt64(value, CultureInfo.InvariantCulture)
                 : null;
-            set {
+            set
+            {
                 if (value != null) Headers["x-oss-traffic-limit"] = Convert.ToString(value, CultureInfo.InvariantCulture)!;
             }
         }
@@ -509,7 +590,8 @@ namespace AlibabaCloud.OSS.V2.Models {
     /// <summary>
     /// The result for the CopyObject operation.
     /// </summary>
-    public sealed class CopyObjectResult : ResultModel {
+    public sealed class CopyObjectResult : ResultModel
+    {
         /// <summary>
         /// The version ID of the source object.
         /// </summary>
@@ -558,7 +640,8 @@ namespace AlibabaCloud.OSS.V2.Models {
     /// <summary>
     /// The request for the GetObject operation.
     /// </summary>
-    public sealed class GetObjectRequest : RequestModel {
+    public sealed class GetObjectRequest : RequestModel
+    {
         /// <summary>
         /// The name of the bucket.
         /// </summary>
@@ -572,9 +655,11 @@ namespace AlibabaCloud.OSS.V2.Models {
         /// <summary>
         /// The range of data of the object to be returned.   - If the value of Range is valid, OSS returns the response that includes the total size of the object and the range of data returned. For example, Content-Range: bytes 0~9/44 indicates that the total size of the object is 44 bytes, and the range of data returned is the first 10 bytes.   - However, if the value of Range is invalid, the entire object is returned, and the response returned by OSS excludes Content-Range. Default value: null
         /// </summary>
-        public string? Range {
+        public string? Range
+        {
             get => Headers.TryGetValue("Range", out var value) ? value : null;
-            set {
+            set
+            {
                 if (value != null) Headers["Range"] = value;
             }
         }
@@ -586,9 +671,11 @@ namespace AlibabaCloud.OSS.V2.Models {
         /// 1) If you set Range: bytes to 500-2000, the value at the end of the range is invalid. In this case, OSS returns HTTP status code 206 and the data that is within the range of byte 500 to byte 999.
         /// 2) If you set Range: bytes to 1000-2000, the value at the start of the range is invalid. In this case, OSS returns HTTP status code 416 and the InvalidRange error code.
         /// </summary>
-        public string? RangeBehavior {
+        public string? RangeBehavior
+        {
             get => Headers.TryGetValue("x-oss-range-behavior", out var value) ? value : null;
-            set {
+            set
+            {
                 if (value != null) Headers["x-oss-range-behavior"] = value;
             }
         }
@@ -596,9 +683,11 @@ namespace AlibabaCloud.OSS.V2.Models {
         /// <summary>
         /// If the time specified in this header is earlier than the object modified time or is invalid, OSS returns the object and 200 OK. If the time specified in this header is later than or the same as the object modified time, OSS returns 304 Not Modified. The time must be in GMT. Example: `Fri, 13 Nov 2015 14:47:53 GMT`.Default value: null
         /// </summary>
-        public string? IfModifiedSince {
+        public string? IfModifiedSince
+        {
             get => Headers.TryGetValue("If-Modified-Since", out var value) ? value : null;
-            set {
+            set
+            {
                 if (value != null) Headers["If-Modified-Since"] = value;
             }
         }
@@ -606,9 +695,11 @@ namespace AlibabaCloud.OSS.V2.Models {
         /// <summary>
         /// If the time specified in this header is the same as or later than the object modified time, OSS returns the object and 200 OK. If the time specified in this header is earlier than the object modified time, OSS returns 412 Precondition Failed.                               The time must be in GMT. Example: `Fri, 13 Nov 2015 14:47:53 GMT`.You can specify both the **If-Modified-Since** and **If-Unmodified-Since** headers in a request. Default value: null
         /// </summary>
-        public string? IfUnmodifiedSince {
+        public string? IfUnmodifiedSince
+        {
             get => Headers.TryGetValue("If-Unmodified-Since", out var value) ? value : null;
-            set {
+            set
+            {
                 if (value != null) Headers["If-Unmodified-Since"] = value;
             }
         }
@@ -616,9 +707,11 @@ namespace AlibabaCloud.OSS.V2.Models {
         /// <summary>
         /// If the ETag specified in the request matches the ETag value of the object, OSS transmits the object and returns 200 OK. If the ETag specified in the request does not match the ETag value of the object, OSS returns 412 Precondition Failed. The ETag value of an object is used to check whether the content of the object has changed. You can check data integrity by using the ETag value. Default value: null
         /// </summary>
-        public string? IfMatch {
+        public string? IfMatch
+        {
             get => Headers.TryGetValue("If-Match", out var value) ? value : null;
-            set {
+            set
+            {
                 if (value != null) Headers["If-Match"] = value;
             }
         }
@@ -626,9 +719,11 @@ namespace AlibabaCloud.OSS.V2.Models {
         /// <summary>
         /// If the ETag specified in the request does not match the ETag value of the object, OSS transmits the object and returns 200 OK. If the ETag specified in the request matches the ETag value of the object, OSS returns 304 Not Modified. You can specify both the **If-Match** and **If-None-Match** headers in a request. Default value: null
         /// </summary>
-        public string? IfNoneMatch {
+        public string? IfNoneMatch
+        {
             get => Headers.TryGetValue("If-None-Match", out var value) ? value : null;
-            set {
+            set
+            {
                 if (value != null) Headers["If-None-Match"] = value;
             }
         }
@@ -636,9 +731,11 @@ namespace AlibabaCloud.OSS.V2.Models {
         /// <summary>
         /// The content-type header in the response that OSS returns.
         /// </summary>
-        public string? ResponseContentType {
+        public string? ResponseContentType
+        {
             get => Parameters.TryGetValue("response-content-type", out var value) ? value : null;
-            set {
+            set
+            {
                 if (value != null) Parameters["response-content-type"] = value;
             }
         }
@@ -646,9 +743,11 @@ namespace AlibabaCloud.OSS.V2.Models {
         /// <summary>
         /// The content-language header in the response that OSS returns.
         /// </summary>
-        public string? ResponseContentLanguage {
+        public string? ResponseContentLanguage
+        {
             get => Parameters.TryGetValue("response-content-language", out var value) ? value : null;
-            set {
+            set
+            {
                 if (value != null) Parameters["response-content-language"] = value;
             }
         }
@@ -656,9 +755,11 @@ namespace AlibabaCloud.OSS.V2.Models {
         /// <summary>
         /// The expires header in the response that OSS returns.
         /// </summary>
-        public string? ResponseExpires {
+        public string? ResponseExpires
+        {
             get => Parameters.TryGetValue("response-expires", out var value) ? value : null;
-            set {
+            set
+            {
                 if (value != null) Parameters["response-expires"] = value;
             }
         }
@@ -666,9 +767,11 @@ namespace AlibabaCloud.OSS.V2.Models {
         /// <summary>
         /// The cache-control header in the response that OSS returns.
         /// </summary>
-        public string? ResponseCacheControl {
+        public string? ResponseCacheControl
+        {
             get => Parameters.TryGetValue("response-cache-control", out var value) ? value : null;
-            set {
+            set
+            {
                 if (value != null) Parameters["response-cache-control"] = value;
             }
         }
@@ -676,9 +779,11 @@ namespace AlibabaCloud.OSS.V2.Models {
         /// <summary>
         /// The content-disposition header in the response that OSS returns.
         /// </summary>
-        public string? ResponseContentDisposition {
+        public string? ResponseContentDisposition
+        {
             get => Parameters.TryGetValue("response-content-disposition", out var value) ? value : null;
-            set {
+            set
+            {
                 if (value != null) Parameters["response-content-disposition"] = value;
             }
         }
@@ -686,9 +791,11 @@ namespace AlibabaCloud.OSS.V2.Models {
         /// <summary>
         /// The content-encoding header in the response that OSS returns.
         /// </summary>
-        public string? ResponseContentEncoding {
+        public string? ResponseContentEncoding
+        {
             get => Parameters.TryGetValue("response-content-encoding", out var value) ? value : null;
-            set {
+            set
+            {
                 if (value != null) Parameters["response-content-encoding"] = value;
             }
         }
@@ -696,9 +803,11 @@ namespace AlibabaCloud.OSS.V2.Models {
         /// <summary>
         /// The version ID of the object that you want to query.
         /// </summary>
-        public string? VersionId {
+        public string? VersionId
+        {
             get => Parameters.TryGetValue("versionId", out var value) ? value : null;
-            set {
+            set
+            {
                 if (value != null) Parameters["versionId"] = value;
             }
         }
@@ -706,11 +815,13 @@ namespace AlibabaCloud.OSS.V2.Models {
         /// <summary>
         /// Specify the speed limit value. The speed limit value ranges from  245760 to 838860800, with a unit of bit/s.
         /// </summary>
-        public long? TrafficLimit {
+        public long? TrafficLimit
+        {
             get => Headers.TryGetValue("x-oss-traffic-limit", out var value)
                 ? Convert.ToInt64(value, CultureInfo.InvariantCulture)
                 : null;
-            set {
+            set
+            {
                 if (value != null) Headers["x-oss-traffic-limit"] = Convert.ToString(value, CultureInfo.InvariantCulture)!;
             }
         }
@@ -718,9 +829,11 @@ namespace AlibabaCloud.OSS.V2.Models {
         /// <summary>
         /// Image processing parameters.
         /// </summary>
-        public string? Process {
+        public string? Process
+        {
             get => Parameters.TryGetValue("x-oss-process", out var value) ? value : null;
-            set {
+            set
+            {
                 if (value != null) Parameters["x-oss-process"] = value;
             }
         }
@@ -734,7 +847,8 @@ namespace AlibabaCloud.OSS.V2.Models {
     /// <summary>
     /// The result for the GetObject operation.
     /// </summary>
-    public sealed class GetObjectResult : ResultModel {
+    public sealed class GetObjectResult : ResultModel
+    {
         /// <summary>
         /// Size of the body in bytes.
         /// </summary>
@@ -881,7 +995,8 @@ namespace AlibabaCloud.OSS.V2.Models {
         /// </summary>
         public Stream? Body => InnerBody as Stream;
 
-        public GetObjectResult() {
+        public GetObjectResult()
+        {
             BodyFormat = "stream";
         }
     }
@@ -889,7 +1004,8 @@ namespace AlibabaCloud.OSS.V2.Models {
     /// <summary>
     /// The request for the AppendObject operation.
     /// </summary>
-    public sealed class AppendObjectRequest : RequestModel {
+    public sealed class AppendObjectRequest : RequestModel
+    {
         /// <summary>
         /// The name of the bucket.
         /// </summary>
@@ -903,11 +1019,13 @@ namespace AlibabaCloud.OSS.V2.Models {
         /// <summary>
         /// The position from which the AppendObject operation starts.  Each time an AppendObject operation succeeds, the x-oss-next-append-position header is included in the response to specify the position from which the next AppendObject operation starts. The value of position in the first AppendObject operation performed on an object must be 0. The value of position in subsequent AppendObject operations performed on the object is the current length of the object. For example, if the value of position specified in the first AppendObject request is 0 and the value of content-length is 65536, the value of position in the second AppendObject request must be 65536. - If the value of position in the AppendObject request is 0 and the name of the object that you want to append is unique, you can set headers such as x-oss-server-side-encryption in an AppendObject request in the same way as you set in a PutObject request. If you add the x-oss-server-side-encryption header to an AppendObject request, the x-oss-server-side-encryption header is included in the response to the request. If you want to modify metadata, you can call the CopyObject operation. - If you call an AppendObject operation to append a 0 KB object whose position value is valid to an Appendable object, the status of the Appendable object is not changed.
         /// </summary>
-        public long? Position {
+        public long? Position
+        {
             get => Parameters.TryGetValue("position", out var value)
                 ? Convert.ToInt64(value, CultureInfo.InvariantCulture)
                 : null;
-            set {
+            set
+            {
                 if (value != null) Parameters["position"] = Convert.ToString((long)value, CultureInfo.InvariantCulture);
             }
         }
@@ -915,11 +1033,13 @@ namespace AlibabaCloud.OSS.V2.Models {
         /// <summary>
         /// Specifies whether the object that is uploaded by calling the PutObject operation overwrites an existing object that has the same name.
         /// </summary>
-        public bool? ForbidOverwrite {
+        public bool? ForbidOverwrite
+        {
             get => Headers.TryGetValue("x-oss-forbid-overwrite", out var value)
                 ? Convert.ToBoolean(value, CultureInfo.InvariantCulture)
                 : null;
-            set {
+            set
+            {
                 if (value != null)
                     Headers["x-oss-forbid-overwrite"] =
                         Convert.ToString(value, CultureInfo.InvariantCulture)!.ToLowerInvariant();
@@ -929,9 +1049,11 @@ namespace AlibabaCloud.OSS.V2.Models {
         /// <summary>
         /// The method that is used to encrypt the object on the OSS server when the object is created. Valid values: **AES256**, **KMS**, and **SM4****.If you specify the header, the header is returned in the response. OSS uses the method that is specified by this header to encrypt the uploaded object. When you download the encrypted object, the **x-oss-server-side-encryption** header is included in the response and the header value is set to the algorithm that is used to encrypt the object.
         /// </summary>
-        public string? ServerSideEncryption {
+        public string? ServerSideEncryption
+        {
             get => Headers.TryGetValue("x-oss-server-side-encryption", out var value) ? value : null;
-            set {
+            set
+            {
                 if (value != null) Headers["x-oss-server-side-encryption"] = value;
             }
         }
@@ -939,9 +1061,11 @@ namespace AlibabaCloud.OSS.V2.Models {
         /// <summary>
         /// The encryption method on the server side when an object is created. Valid values: **AES256**, **KMS**, and **SM4**.If you specify the header, the header is returned in the response. OSS uses the method that is specified by this header to encrypt the uploaded object. When you download the encrypted object, the **x-oss-server-side-encryption** header is included in the response and the header value is set to the algorithm that is used to encrypt the object.
         /// </summary>
-        public string? ServerSideDataEncryption {
+        public string? ServerSideDataEncryption
+        {
             get => Headers.TryGetValue("x-oss-server-side-data-encryption", out var value) ? value : null;
-            set {
+            set
+            {
                 if (value != null) Headers["x-oss-server-side-data-encryption"] = value;
             }
         }
@@ -949,9 +1073,11 @@ namespace AlibabaCloud.OSS.V2.Models {
         /// <summary>
         /// The ID of the customer master key (CMK) managed by Key Management Service (KMS). This header is valid only when the **x-oss-server-side-encryption** header is set to KMS.
         /// </summary>
-        public string? ServerSideEncryptionKeyId {
+        public string? ServerSideEncryptionKeyId
+        {
             get => Headers.TryGetValue("x-oss-server-side-encryption-key-id", out var value) ? value : null;
-            set {
+            set
+            {
                 if (value != null) Headers["x-oss-server-side-encryption-key-id"] = value;
             }
         }
@@ -960,9 +1086,11 @@ namespace AlibabaCloud.OSS.V2.Models {
         /// The access control list (ACL) of the object.
         /// Sees <see cref="ObjectAclType"/> for supported values.
         /// </summary>
-        public string? Acl {
+        public string? Acl
+        {
             get => Headers.TryGetValue("x-oss-object-acl", out var value) ? value : null;
-            set {
+            set
+            {
                 if (value != null) Headers["x-oss-object-acl"] = value;
             }
         }
@@ -971,9 +1099,11 @@ namespace AlibabaCloud.OSS.V2.Models {
         /// The storage class of the bucket. Default value: Standard.  Valid values:- Standard- IA- Archive- ColdArchive
         /// Sees <see cref="StorageClassType"/> for supported values.
         /// </summary>
-        public string? StorageClass {
+        public string? StorageClass
+        {
             get => Headers.TryGetValue("x-oss-storage-class", out var value) ? value : null;
-            set {
+            set
+            {
                 if (value != null) Headers["x-oss-storage-class"] = value;
             }
         }
@@ -981,9 +1111,11 @@ namespace AlibabaCloud.OSS.V2.Models {
         /// <summary>
         /// The caching behavior of the web page when the object is downloaded.
         /// </summary>
-        public string? CacheControl {
+        public string? CacheControl
+        {
             get => Headers.TryGetValue("Cache-Control", out var value) ? value : null;
-            set {
+            set
+            {
                 if (value != null) Headers["Cache-Control"] = value;
             }
         }
@@ -991,9 +1123,11 @@ namespace AlibabaCloud.OSS.V2.Models {
         /// <summary>
         /// The name of the object when the object is downloaded.
         /// </summary>
-        public string? ContentDisposition {
+        public string? ContentDisposition
+        {
             get => Headers.TryGetValue("Content-Disposition", out var value) ? value : null;
-            set {
+            set
+            {
                 if (value != null) Headers["Content-Disposition"] = value;
             }
         }
@@ -1001,9 +1135,11 @@ namespace AlibabaCloud.OSS.V2.Models {
         /// <summary>
         /// The content encoding format of the object when the object is downloaded.
         /// </summary>
-        public string? ContentEncoding {
+        public string? ContentEncoding
+        {
             get => Headers.TryGetValue("Content-Encoding", out var value) ? value : null;
-            set {
+            set
+            {
                 if (value != null) Headers["Content-Encoding"] = value;
             }
         }
@@ -1011,9 +1147,11 @@ namespace AlibabaCloud.OSS.V2.Models {
         /// <summary>
         /// The expiration time of the request.
         /// </summary>
-        public string? Expires {
+        public string? Expires
+        {
             get => Headers.TryGetValue("Expires", out var value) ? value : null;
-            set {
+            set
+            {
                 if (value != null) Headers["Expires"] = value;
             }
         }
@@ -1021,9 +1159,11 @@ namespace AlibabaCloud.OSS.V2.Models {
         /// <summary>
         /// The MD5 hash of the object that you want to upload.
         /// </summary>
-        public string? ContentMd5 {
+        public string? ContentMd5
+        {
             get => Headers.TryGetValue("Content-MD5", out var value) ? value : null;
-            set {
+            set
+            {
                 if (value != null) Headers["Content-MD5"] = value;
             }
         }
@@ -1031,9 +1171,11 @@ namespace AlibabaCloud.OSS.V2.Models {
         /// <summary>
         /// A standard MIME type describing the format of the contents.
         /// </summary>
-        public string? ContentType {
+        public string? ContentType
+        {
             get => Headers.TryGetValue("Content-Type", out var value) ? value : null;
-            set {
+            set
+            {
                 if (value != null) Headers["Content-Type"] = value;
             }
         }
@@ -1041,11 +1183,13 @@ namespace AlibabaCloud.OSS.V2.Models {
         /// <summary>
         /// The size of the data in the HTTP message body. Unit: bytes.
         /// </summary>
-        public long? ContentLength {
+        public long? ContentLength
+        {
             get => Headers.TryGetValue("Content-Length", out var value)
                 ? Convert.ToInt64(value, CultureInfo.InvariantCulture)
                 : null;
-            set {
+            set
+            {
                 if (value != null) Headers["Content-Length"] = Convert.ToString(value, CultureInfo.InvariantCulture)!;
             }
         }
@@ -1059,9 +1203,11 @@ namespace AlibabaCloud.OSS.V2.Models {
         /// The tag of the object. You can configure multiple tags for the object.
         /// Example: TagA=A&amp;TagB=B.  The key and value of a tag must be URL-encoded. If a tag does not contain an equal sign (=), the value of the tag is considered an empty string.
         /// </summary>
-        public string? Tagging {
+        public string? Tagging
+        {
             get => Headers.TryGetValue("x-oss-tagging", out var value) ? value : null;
-            set {
+            set
+            {
                 if (value != null) Headers["x-oss-tagging"] = value;
             }
         }
@@ -1069,11 +1215,13 @@ namespace AlibabaCloud.OSS.V2.Models {
         /// <summary>
         /// Specify the speed limit value. The speed limit value ranges from  245760 to 838860800, with a unit of bit/s.
         /// </summary>
-        public long? TrafficLimit {
+        public long? TrafficLimit
+        {
             get => Headers.TryGetValue("x-oss-traffic-limit", out var value)
                 ? Convert.ToInt64(value, CultureInfo.InvariantCulture)
                 : null;
-            set {
+            set
+            {
                 if (value != null) Headers["x-oss-traffic-limit"] = Convert.ToString(value, CultureInfo.InvariantCulture)!;
             }
         }
@@ -1091,7 +1239,8 @@ namespace AlibabaCloud.OSS.V2.Models {
         /// <summary>
         /// Object data.
         /// </summary>
-        public Stream? Body {
+        public Stream? Body
+        {
             get => InnerBody as Stream;
             set => InnerBody = value;
         }
@@ -1100,7 +1249,8 @@ namespace AlibabaCloud.OSS.V2.Models {
     /// <summary>
     /// The result for the AppendObject operation.
     /// </summary>
-    public sealed class AppendObjectResult : ResultModel {
+    public sealed class AppendObjectResult : ResultModel
+    {
         /// <summary>
         /// The position that must be provided in the next request, which is the current length of the object.
         /// </summary>
@@ -1140,7 +1290,8 @@ namespace AlibabaCloud.OSS.V2.Models {
     /// <summary>
     /// The request for the DeleteObject operation.
     /// </summary>
-    public sealed class DeleteObjectRequest : RequestModel {
+    public sealed class DeleteObjectRequest : RequestModel
+    {
         /// <summary>
         /// The information about the bucket.
         /// </summary>
@@ -1154,9 +1305,11 @@ namespace AlibabaCloud.OSS.V2.Models {
         /// <summary>
         /// The version ID of the object.
         /// </summary>
-        public string? VersionId {
+        public string? VersionId
+        {
             get => Parameters.TryGetValue("versionId", out var value) ? value : null;
-            set {
+            set
+            {
                 if (value != null) Parameters["versionId"] = value;
             }
         }
@@ -1165,7 +1318,8 @@ namespace AlibabaCloud.OSS.V2.Models {
     /// <summary>
     /// The result for the DeleteObject operation.
     /// </summary>
-    public sealed class DeleteObjectResult : ResultModel {
+    public sealed class DeleteObjectResult : ResultModel
+    {
         /// <summary>
         /// Indicates whether the deleted version is a delete marker.
         /// </summary>
@@ -1181,7 +1335,8 @@ namespace AlibabaCloud.OSS.V2.Models {
     /// <summary>
     /// The request for the HeadObject operation.
     /// </summary>
-    public sealed class HeadObjectRequest : RequestModel {
+    public sealed class HeadObjectRequest : RequestModel
+    {
         /// <summary>
         /// The name of the bucket.
         /// </summary>
@@ -1195,9 +1350,11 @@ namespace AlibabaCloud.OSS.V2.Models {
         /// <summary>
         /// If the time that is specified in the request is earlier than the time when the object is modified, OSS returns 200 OK and the metadata of the object. Otherwise, OSS returns 304 not modified. Default value: null.
         /// </summary>
-        public string? IfModifiedSince {
+        public string? IfModifiedSince
+        {
             get => Headers.TryGetValue("If-Modified-Since", out var value) ? value : null;
-            set {
+            set
+            {
                 if (value != null) Headers["If-Modified-Since"] = value;
             }
         }
@@ -1205,9 +1362,11 @@ namespace AlibabaCloud.OSS.V2.Models {
         /// <summary>
         /// If the time that is specified in the request is later than or the same as the time when the object is modified, OSS returns 200 OK and the metadata of the object. Otherwise, OSS returns 412 precondition failed. Default value: null.
         /// </summary>
-        public string? IfUnmodifiedSince {
+        public string? IfUnmodifiedSince
+        {
             get => Headers.TryGetValue("If-Unmodified-Since", out var value) ? value : null;
-            set {
+            set
+            {
                 if (value != null) Headers["If-Unmodified-Since"] = value;
             }
         }
@@ -1215,9 +1374,11 @@ namespace AlibabaCloud.OSS.V2.Models {
         /// <summary>
         /// If the ETag value that is specified in the request matches the ETag value of the object, OSS returns 200 OK and the metadata of the object. Otherwise, OSS returns 412 precondition failed. Default value: null.
         /// </summary>
-        public string? IfMatch {
+        public string? IfMatch
+        {
             get => Headers.TryGetValue("If-Match", out var value) ? value : null;
-            set {
+            set
+            {
                 if (value != null) Headers["If-Match"] = value;
             }
         }
@@ -1225,9 +1386,11 @@ namespace AlibabaCloud.OSS.V2.Models {
         /// <summary>
         /// If the ETag value that is specified in the request does not match the ETag value of the object, OSS returns 200 OK and the metadata of the object. Otherwise, OSS returns 304 Not Modified. Default value: null.
         /// </summary>
-        public string? IfNoneMatch {
+        public string? IfNoneMatch
+        {
             get => Headers.TryGetValue("If-None-Match", out var value) ? value : null;
-            set {
+            set
+            {
                 if (value != null) Headers["If-None-Match"] = value;
             }
         }
@@ -1235,9 +1398,11 @@ namespace AlibabaCloud.OSS.V2.Models {
         /// <summary>
         /// The version ID of the object.
         /// </summary>
-        public string? VersionId {
+        public string? VersionId
+        {
             get => Parameters.TryGetValue("versionId", out var value) ? value : null;
-            set {
+            set
+            {
                 if (value != null) Parameters["versionId"] = value;
             }
         }
@@ -1246,7 +1411,8 @@ namespace AlibabaCloud.OSS.V2.Models {
     /// <summary>
     /// The result for the HeadObject operation.
     /// </summary>
-    public sealed class HeadObjectResult : ResultModel {
+    public sealed class HeadObjectResult : ResultModel
+    {
         /// <summary>
         /// Size of the body in bytes.
         /// </summary>
@@ -1400,7 +1566,8 @@ namespace AlibabaCloud.OSS.V2.Models {
     /// <summary>
     /// The request for the GetObjectMeta operation.
     /// </summary>
-    public sealed class GetObjectMetaRequest : RequestModel {
+    public sealed class GetObjectMetaRequest : RequestModel
+    {
         /// <summary>
         /// The name of the bucket.
         /// </summary>
@@ -1414,9 +1581,11 @@ namespace AlibabaCloud.OSS.V2.Models {
         /// <summary>
         /// The versionID of the object.
         /// </summary>
-        public string? VersionId {
+        public string? VersionId
+        {
             get => Parameters.TryGetValue("versionId", out var value) ? value : null;
-            set {
+            set
+            {
                 if (value != null) Parameters["versionId"] = value;
             }
         }
@@ -1425,7 +1594,8 @@ namespace AlibabaCloud.OSS.V2.Models {
     /// <summary>
     /// The result for the GetObjectMeta operation.
     /// </summary>
-    public sealed class GetObjectMetaResult : ResultModel {
+    public sealed class GetObjectMetaResult : ResultModel
+    {
         /// <summary>
         /// Version of the object.
         /// </summary>
@@ -1470,7 +1640,8 @@ namespace AlibabaCloud.OSS.V2.Models {
     /// The container that stores the restoration priority configuration. This configuration takes effect only when the request is sent to restore Cold Archive objects. If you do not specify the JobParameters parameter, the default restoration priority Standard is used.
     /// </summary>
     [XmlRoot("JobParameters")]
-    public sealed class JobParameters {
+    public sealed class JobParameters
+    {
         /// <summary>
         /// The restoration priority. Valid values:*   Expedited: The object is restored within 1 hour.*   Standard: The object is restored within 2 to 5 hours.*   Bulk: The object is restored within 5 to 12 hours.
         /// </summary>
@@ -1482,7 +1653,8 @@ namespace AlibabaCloud.OSS.V2.Models {
     /// The container that stores information about the RestoreObject request.
     /// </summary>
     [XmlRoot("RestoreRequest")]
-    public sealed class RestoreRequest {
+    public sealed class RestoreRequest
+    {
         /// <summary>
         /// The duration in which the object can remain in the restored state. Unit: days. Valid values: 1 to 7.
         /// </summary>
@@ -1499,8 +1671,10 @@ namespace AlibabaCloud.OSS.V2.Models {
     /// <summary>
     /// The request for the RestoreObject operation.
     /// </summary>
-    public sealed class RestoreObjectRequest : RequestModel {
-        public RestoreObjectRequest() {
+    public sealed class RestoreObjectRequest : RequestModel
+    {
+        public RestoreObjectRequest()
+        {
             BodyFormat = "xml";
         }
 
@@ -1517,9 +1691,11 @@ namespace AlibabaCloud.OSS.V2.Models {
         /// <summary>
         /// The version number of the object that you want to restore.
         /// </summary>
-        public string? VersionId {
+        public string? VersionId
+        {
             get => Parameters.TryGetValue("versionId", out var value) ? value : null;
-            set {
+            set
+            {
                 if (value != null) Parameters["versionId"] = value;
             }
         }
@@ -1527,7 +1703,8 @@ namespace AlibabaCloud.OSS.V2.Models {
         /// <summary>
         /// The container that stores information about the RestoreObject request.
         /// </summary>
-        public RestoreRequest? RestoreRequest {
+        public RestoreRequest? RestoreRequest
+        {
             get => InnerBody as RestoreRequest;
             set => InnerBody = value;
         }
@@ -1536,7 +1713,8 @@ namespace AlibabaCloud.OSS.V2.Models {
     /// <summary>
     /// The result for the RestoreObject operation.
     /// </summary>
-    public sealed class RestoreObjectResult : ResultModel {
+    public sealed class RestoreObjectResult : ResultModel
+    {
         /// <summary>
         /// The restoration priority.
         /// This header is displayed only for the Cold Archive or Deep Cold Archive object in the restored state.
@@ -1553,7 +1731,8 @@ namespace AlibabaCloud.OSS.V2.Models {
     /// <summary>
     /// The request for the CleanRestoredObject operation.
     /// </summary>
-    public sealed class CleanRestoredObjectRequest : RequestModel {
+    public sealed class CleanRestoredObjectRequest : RequestModel
+    {
         /// <summary>
         /// The name of the bucket
         /// </summary>
@@ -1573,7 +1752,8 @@ namespace AlibabaCloud.OSS.V2.Models {
     /// <summary>
     /// The request for the ProcessObject operation.
     /// </summary>
-    public sealed class ProcessObjectRequest : RequestModel {
+    public sealed class ProcessObjectRequest : RequestModel
+    {
         /// <summary>
         /// The name of the bucket
         /// </summary>
@@ -1593,14 +1773,16 @@ namespace AlibabaCloud.OSS.V2.Models {
     /// <summary>
     /// The result for the ProcessObject operation.
     /// </summary>
-    public sealed class ProcessObjectResult : ResultModel {
+    public sealed class ProcessObjectResult : ResultModel
+    {
         /// <summary>
         /// Process result in json format.
         /// contains bucket, file_size, object and status
         /// </summary>
         public string? ProcessResult => InnerBody as string;
 
-        public ProcessObjectResult() {
+        public ProcessObjectResult()
+        {
             BodyFormat = "string";
         }
     }
@@ -1608,7 +1790,8 @@ namespace AlibabaCloud.OSS.V2.Models {
     /// <summary>
     /// The request for the AsyncProcessObject operation.
     /// </summary>
-    public sealed class AsyncProcessObjectRequest : RequestModel {
+    public sealed class AsyncProcessObjectRequest : RequestModel
+    {
         /// <summary>
         /// The name of the bucket
         /// </summary>
@@ -1628,14 +1811,16 @@ namespace AlibabaCloud.OSS.V2.Models {
     /// <summary>
     /// The result for the AsyncProcessObject operation.
     /// </summary>
-    public sealed class AsyncProcessObjectResult : ResultModel {
+    public sealed class AsyncProcessObjectResult : ResultModel
+    {
         /// <summary>
         /// Process result in json format.
         /// contains EventId, TaskId and RequestId
         /// </summary>
         public string? ProcessResult => InnerBody as string;
 
-        public AsyncProcessObjectResult() {
+        public AsyncProcessObjectResult()
+        {
             BodyFormat = "string";
         }
     }
@@ -1644,7 +1829,8 @@ namespace AlibabaCloud.OSS.V2.Models {
     /// The information about a delete object.
     /// </summary>
     [XmlRoot("Object")]
-    public sealed class DeleteObject {
+    public sealed class DeleteObject
+    {
         /// <summary>
         /// The name of the object that you want to delete.
         /// </summary>
@@ -1662,7 +1848,8 @@ namespace AlibabaCloud.OSS.V2.Models {
     /// The information about a deleted object.
     /// </summary>
     [XmlRoot("Deleted")]
-    public sealed class DeletedInfo {
+    public sealed class DeletedInfo
+    {
         /// <summary>
         /// The name of the deleted object.
         /// </summary>
@@ -1691,7 +1878,8 @@ namespace AlibabaCloud.OSS.V2.Models {
     /// <summary>
     /// The request for the DeleteMultipleObjects operation.
     /// </summary>
-    public sealed class DeleteMultipleObjectsRequest : RequestModel {
+    public sealed class DeleteMultipleObjectsRequest : RequestModel
+    {
         /// <summary>
         /// The name of the bucket
         /// </summary>
@@ -1701,9 +1889,11 @@ namespace AlibabaCloud.OSS.V2.Models {
         /// The encoding type of the object names in the response. Valid value: url
         /// Sees <see cref="Models.EncodingType"/> for supported values.
         /// </summary>
-        public string? EncodingType {
+        public string? EncodingType
+        {
             get => Parameters.TryGetValue("encoding-type", out var value) ? value : null;
-            set {
+            set
+            {
                 if (value != null) Parameters["encoding-type"] = value;
             }
         }
@@ -1723,7 +1913,8 @@ namespace AlibabaCloud.OSS.V2.Models {
     /// <summary>
     /// The result for the DeleteMultipleObjects operation.
     /// </summary>
-    public sealed class DeleteMultipleObjectsResult : ResultModel {
+    public sealed class DeleteMultipleObjectsResult : ResultModel
+    {
         /// <summary>
         /// The container that stores information about you want to delete objects.
         /// </summary>

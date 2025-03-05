@@ -1,12 +1,14 @@
-﻿using AlibabaCloud.OSS.V2.Models;
+﻿using System.Text;
+using AlibabaCloud.OSS.V2.Models;
 using AlibabaCloud.OSS.V2.Transform;
-using System.Text;
 
 namespace AlibabaCloud.OSS.V2.UnitTests.Models;
 
-public class ModelObjectBasicTest {
+public class ModelObjectBasicTest
+{
     [Fact]
-    public void TestPutObjectRequest() {
+    public void TestPutObjectRequest()
+    {
         var request = new PutObjectRequest();
         Assert.Empty(request.Headers);
         Assert.Empty(request.Parameters);
@@ -43,7 +45,8 @@ public class ModelObjectBasicTest {
 
         var body = new MemoryStream(Encoding.UTF8.GetBytes("hello world"));
 
-        request = new PutObjectRequest {
+        request = new PutObjectRequest
+        {
             Bucket = "bucket",
             Key = "key",
             Acl = "private",
@@ -142,7 +145,8 @@ public class ModelObjectBasicTest {
     }
 
     [Fact]
-    public void TestPutObjectResult() {
+    public void TestPutObjectResult()
+    {
         var result = new PutObjectResult();
         Assert.Equal(0, result.StatusCode);
         Assert.Equal("", result.Status);
@@ -154,7 +158,8 @@ public class ModelObjectBasicTest {
         Assert.Null(result.ETag);
         Assert.Null(result.CallbackResult);
 
-        var output = new OperationOutput {
+        var output = new OperationOutput
+        {
             StatusCode = 200,
             Status = "OK",
             Headers = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase) {
@@ -181,12 +186,14 @@ public class ModelObjectBasicTest {
         Assert.Null(result.CallbackResult);
 
         //callback
-        result = new PutObjectResult {
+        result = new PutObjectResult
+        {
             BodyFormat = "string",
             BodyType = typeof(string)
 
         };
-        output = new OperationOutput {
+        output = new OperationOutput
+        {
             StatusCode = 200,
             Status = "OK",
             Headers = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase) {
@@ -215,7 +222,8 @@ public class ModelObjectBasicTest {
     }
 
     [Fact]
-    public void TestCopyObjectRequest() {
+    public void TestCopyObjectRequest()
+    {
         var request = new CopyObjectRequest();
         Assert.Empty(request.Headers);
         Assert.Empty(request.Parameters);
@@ -256,7 +264,8 @@ public class ModelObjectBasicTest {
         Assert.Null(input.Parameters);
         Assert.Null(input.Body);
 
-        request = new CopyObjectRequest {
+        request = new CopyObjectRequest
+        {
             Bucket = "bucket",
             Key = "key",
             SourceBucket = "src-bucket",
@@ -376,7 +385,8 @@ public class ModelObjectBasicTest {
         Assert.Null(input.Body);
 
         // no source bucket
-        request = new CopyObjectRequest {
+        request = new CopyObjectRequest
+        {
             Bucket = "bucket",
             Key = "key",
             SourceKey = "src-key+?123.txt",
@@ -404,7 +414,8 @@ public class ModelObjectBasicTest {
     }
 
     [Fact]
-    public void TestCopyObjectResult() {
+    public void TestCopyObjectResult()
+    {
         var result = new CopyObjectResult();
         Assert.Equal(0, result.StatusCode);
         Assert.Equal("", result.Status);
@@ -427,7 +438,8 @@ public class ModelObjectBasicTest {
 </CopyObjectResult>
 """;
 
-        var output = new OperationOutput {
+        var output = new OperationOutput
+        {
             StatusCode = 200,
             Status = "OK",
             Headers = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase) {
@@ -461,7 +473,8 @@ public class ModelObjectBasicTest {
     }
 
     [Fact]
-    public void TestGetObjectRequest() {
+    public void TestGetObjectRequest()
+    {
         var request = new GetObjectRequest();
         Assert.Empty(request.Headers);
         Assert.Empty(request.Parameters);
@@ -492,7 +505,8 @@ public class ModelObjectBasicTest {
         Assert.Null(input.Parameters);
         Assert.Null(input.Body);
 
-        request = new GetObjectRequest {
+        request = new GetObjectRequest
+        {
             Bucket = "bucket",
             Key = "key",
             Range = "byte=0-1",
@@ -572,7 +586,8 @@ public class ModelObjectBasicTest {
     }
 
     [Fact]
-    public void TestGetObjectResult() {
+    public void TestGetObjectResult()
+    {
         var result = new GetObjectResult();
         Assert.Equal(0, result.StatusCode);
         Assert.Equal("", result.Status);
@@ -605,7 +620,8 @@ public class ModelObjectBasicTest {
         Assert.Null(result.DeleteMarker);
         Assert.Null(result.Body);
 
-        var output = new OperationOutput {
+        var output = new OperationOutput
+        {
             StatusCode = 200,
             Status = "OK",
             Headers = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase) {
@@ -648,7 +664,8 @@ public class ModelObjectBasicTest {
 
         //all header & body
         var body = new MemoryStream(Encoding.UTF8.GetBytes("hello world"));
-        output = new OperationOutput {
+        output = new OperationOutput
+        {
             StatusCode = 200,
             Status = "OK",
             Headers = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase) {
@@ -721,7 +738,8 @@ public class ModelObjectBasicTest {
     }
 
     [Fact]
-    public void TestAppendObjectRequest() {
+    public void TestAppendObjectRequest()
+    {
         var request = new AppendObjectRequest();
         Assert.Empty(request.Headers);
         Assert.Empty(request.Parameters);
@@ -757,7 +775,8 @@ public class ModelObjectBasicTest {
 
         var body = new MemoryStream(Encoding.UTF8.GetBytes("hello world"));
 
-        request = new AppendObjectRequest {
+        request = new AppendObjectRequest
+        {
             Bucket = "bucket",
             Key = "key",
             Position = 111,
@@ -851,7 +870,8 @@ public class ModelObjectBasicTest {
     }
 
     [Fact]
-    public void TestAppendObjectResult() {
+    public void TestAppendObjectResult()
+    {
         var result = new AppendObjectResult();
         Assert.Equal(0, result.StatusCode);
         Assert.Equal("", result.Status);
@@ -864,7 +884,8 @@ public class ModelObjectBasicTest {
         Assert.Null(result.ServerSideDataEncryption);
         Assert.Null(result.ServerSideEncryptionKeyId);
 
-        var output = new OperationOutput {
+        var output = new OperationOutput
+        {
             StatusCode = 200,
             Status = "OK",
             Headers = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase) {
@@ -897,7 +918,8 @@ public class ModelObjectBasicTest {
     }
 
     [Fact]
-    public void TestDeleteObjectRequest() {
+    public void TestDeleteObjectRequest()
+    {
         var request = new DeleteObjectRequest();
         Assert.Empty(request.Headers);
         Assert.Empty(request.Parameters);
@@ -914,7 +936,8 @@ public class ModelObjectBasicTest {
         Assert.Null(input.Parameters);
         Assert.Null(input.Body);
 
-        request = new DeleteObjectRequest {
+        request = new DeleteObjectRequest
+        {
             Bucket = "bucket",
             Key = "key",
             VersionId = "version-id"
@@ -937,7 +960,8 @@ public class ModelObjectBasicTest {
     }
 
     [Fact]
-    public void TestDeleteObjectResult() {
+    public void TestDeleteObjectResult()
+    {
         var result = new DeleteObjectResult();
         Assert.Equal(0, result.StatusCode);
         Assert.Equal("", result.Status);
@@ -946,7 +970,8 @@ public class ModelObjectBasicTest {
         Assert.Null(result.VersionId);
         Assert.Null(result.DeleteMarker);
 
-        var output = new OperationOutput {
+        var output = new OperationOutput
+        {
             StatusCode = 200,
             Status = "OK",
             Headers = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase) {
@@ -969,7 +994,8 @@ public class ModelObjectBasicTest {
     }
 
     [Fact]
-    public void TestHeadObjectRequest() {
+    public void TestHeadObjectRequest()
+    {
         var request = new HeadObjectRequest();
         Assert.Empty(request.Headers);
         Assert.Empty(request.Parameters);
@@ -990,7 +1016,8 @@ public class ModelObjectBasicTest {
         Assert.Null(input.Parameters);
         Assert.Null(input.Body);
 
-        request = new HeadObjectRequest {
+        request = new HeadObjectRequest
+        {
             Bucket = "bucket",
             Key = "key",
             IfMatch = "if-match",
@@ -1030,7 +1057,8 @@ public class ModelObjectBasicTest {
     }
 
     [Fact]
-    public void TestHeadObjectResult() {
+    public void TestHeadObjectResult()
+    {
         var result = new HeadObjectResult();
         Assert.Equal(0, result.StatusCode);
         Assert.Equal("", result.Status);
@@ -1063,7 +1091,8 @@ public class ModelObjectBasicTest {
         Assert.Null(result.RequestCharged);
         Assert.Null(result.TransitionTime);
 
-        var output = new OperationOutput {
+        var output = new OperationOutput
+        {
             StatusCode = 200,
             Status = "OK",
             Headers = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase) {
@@ -1105,7 +1134,8 @@ public class ModelObjectBasicTest {
         Assert.Null(result.TransitionTime);
 
         //all header & body
-        output = new OperationOutput {
+        output = new OperationOutput
+        {
             StatusCode = 200,
             Status = "OK",
             Headers = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase) {
@@ -1179,7 +1209,8 @@ public class ModelObjectBasicTest {
     }
 
     [Fact]
-    public void TestGetObjectMetaRequest() {
+    public void TestGetObjectMetaRequest()
+    {
         var request = new GetObjectMetaRequest();
         Assert.Empty(request.Headers);
         Assert.Empty(request.Parameters);
@@ -1196,7 +1227,8 @@ public class ModelObjectBasicTest {
         Assert.Null(input.Parameters);
         Assert.Null(input.Body);
 
-        request = new GetObjectMetaRequest {
+        request = new GetObjectMetaRequest
+        {
             Bucket = "bucket",
             Key = "key",
             VersionId = "version-id",
@@ -1220,7 +1252,8 @@ public class ModelObjectBasicTest {
     }
 
     [Fact]
-    public void TestGetObjectMetaResult() {
+    public void TestGetObjectMetaResult()
+    {
         var result = new GetObjectMetaResult();
         Assert.Equal(0, result.StatusCode);
         Assert.Equal("", result.Status);
@@ -1234,7 +1267,8 @@ public class ModelObjectBasicTest {
         Assert.Null(result.LastAccessTime);
         Assert.Null(result.HashCrc64);
 
-        var output = new OperationOutput {
+        var output = new OperationOutput
+        {
             StatusCode = 200,
             Status = "OK",
             Headers = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase) {
@@ -1257,7 +1291,8 @@ public class ModelObjectBasicTest {
         Assert.Null(result.HashCrc64);
 
         //all header
-        output = new OperationOutput {
+        output = new OperationOutput
+        {
             StatusCode = 200,
             Status = "OK",
             Headers = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase) {
@@ -1289,7 +1324,8 @@ public class ModelObjectBasicTest {
     }
 
     [Fact]
-    public void TestRestoreObjectRequest() {
+    public void TestRestoreObjectRequest()
+    {
         var request = new RestoreObjectRequest();
         Assert.Empty(request.Headers);
         Assert.Empty(request.Parameters);
@@ -1307,13 +1343,16 @@ public class ModelObjectBasicTest {
         Assert.Null(input.Parameters);
         Assert.Null(input.Body);
 
-        request = new RestoreObjectRequest {
+        request = new RestoreObjectRequest
+        {
             Bucket = "bucket",
             Key = "key",
             VersionId = "version-id",
-            RestoreRequest = new RestoreRequest() {
+            RestoreRequest = new RestoreRequest()
+            {
                 Days = 2,
-                JobParameters = new JobParameters() {
+                JobParameters = new JobParameters()
+                {
                     Tier = "Standard"
                 }
             }
@@ -1347,11 +1386,13 @@ public class ModelObjectBasicTest {
         Assert.Equal(xml, reader.ReadToEnd());
 
         // only days
-        request = new RestoreObjectRequest {
+        request = new RestoreObjectRequest
+        {
             Bucket = "bucket",
             Key = "key",
             VersionId = "version-id",
-            RestoreRequest = new RestoreRequest() {
+            RestoreRequest = new RestoreRequest()
+            {
                 Days = 2,
             }
         };
@@ -1382,7 +1423,8 @@ public class ModelObjectBasicTest {
         Assert.Equal(xml, reader1.ReadToEnd());
 
         // no RestoreRequest
-        request = new RestoreObjectRequest {
+        request = new RestoreObjectRequest
+        {
             Bucket = "bucket",
             Key = "key",
         };
@@ -1401,7 +1443,8 @@ public class ModelObjectBasicTest {
     }
 
     [Fact]
-    public void TestRestoreObjectResult() {
+    public void TestRestoreObjectResult()
+    {
         var result = new RestoreObjectResult();
         Assert.Equal(0, result.StatusCode);
         Assert.Equal("", result.Status);
@@ -1410,7 +1453,8 @@ public class ModelObjectBasicTest {
         Assert.Null(result.RestorePriority);
         Assert.Null(result.VersionId);
 
-        var output = new OperationOutput {
+        var output = new OperationOutput
+        {
             StatusCode = 200,
             Status = "OK",
             Headers = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase) {
@@ -1434,7 +1478,8 @@ public class ModelObjectBasicTest {
     }
 
     [Fact]
-    public void TestCleanRestoredObjectRequest() {
+    public void TestCleanRestoredObjectRequest()
+    {
         var request = new CleanRestoredObjectRequest();
         Assert.Empty(request.Headers);
         Assert.Empty(request.Parameters);
@@ -1450,7 +1495,8 @@ public class ModelObjectBasicTest {
         Assert.Null(input.Parameters);
         Assert.Null(input.Body);
 
-        request = new CleanRestoredObjectRequest {
+        request = new CleanRestoredObjectRequest
+        {
             Bucket = "bucket",
             Key = "key",
         };
@@ -1468,14 +1514,16 @@ public class ModelObjectBasicTest {
     }
 
     [Fact]
-    public void TestCleanRestoredObjectResult() {
+    public void TestCleanRestoredObjectResult()
+    {
         var result = new CleanRestoredObjectResult();
         Assert.Equal(0, result.StatusCode);
         Assert.Equal("", result.Status);
         Assert.Equal("", result.RequestId);
         Assert.Empty(result.Headers);
 
-        var output = new OperationOutput {
+        var output = new OperationOutput
+        {
             StatusCode = 200,
             Status = "OK",
             Headers = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase) {
@@ -1494,7 +1542,8 @@ public class ModelObjectBasicTest {
     }
 
     [Fact]
-    public void TestProcessObjectRequest() {
+    public void TestProcessObjectRequest()
+    {
         var request = new ProcessObjectRequest();
         Assert.Empty(request.Headers);
         Assert.Empty(request.Parameters);
@@ -1511,7 +1560,8 @@ public class ModelObjectBasicTest {
         Assert.Null(input.Parameters);
         Assert.Null(input.Body);
 
-        request = new ProcessObjectRequest {
+        request = new ProcessObjectRequest
+        {
             Bucket = "bucket",
             Key = "key",
             Process = "process image"
@@ -1532,14 +1582,16 @@ public class ModelObjectBasicTest {
     }
 
     [Fact]
-    public void TestProcessObjectResult() {
+    public void TestProcessObjectResult()
+    {
         var result = new ProcessObjectResult();
         Assert.Equal(0, result.StatusCode);
         Assert.Equal("", result.Status);
         Assert.Equal("", result.RequestId);
         Assert.Empty(result.Headers);
 
-        var output = new OperationOutput {
+        var output = new OperationOutput
+        {
             StatusCode = 200,
             Status = "OK",
             Headers = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase) {
@@ -1557,7 +1609,8 @@ public class ModelObjectBasicTest {
         Assert.Equal("txt", result.Headers["content-type"]);
         Assert.Null(result.ProcessResult);
 
-        output = new OperationOutput {
+        output = new OperationOutput
+        {
             StatusCode = 200,
             Status = "OK",
             Headers = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase) {
@@ -1579,7 +1632,8 @@ public class ModelObjectBasicTest {
     }
 
     [Fact]
-    public void TestAsyncProcessObjectRequest() {
+    public void TestAsyncProcessObjectRequest()
+    {
         var request = new AsyncProcessObjectRequest();
         Assert.Empty(request.Headers);
         Assert.Empty(request.Parameters);
@@ -1596,7 +1650,8 @@ public class ModelObjectBasicTest {
         Assert.Null(input.Parameters);
         Assert.Null(input.Body);
 
-        request = new AsyncProcessObjectRequest {
+        request = new AsyncProcessObjectRequest
+        {
             Bucket = "bucket",
             Key = "key",
             Process = "process image"
@@ -1617,14 +1672,16 @@ public class ModelObjectBasicTest {
     }
 
     [Fact]
-    public void TestAsyncProcessObjectResult() {
+    public void TestAsyncProcessObjectResult()
+    {
         var result = new AsyncProcessObjectResult();
         Assert.Equal(0, result.StatusCode);
         Assert.Equal("", result.Status);
         Assert.Equal("", result.RequestId);
         Assert.Empty(result.Headers);
 
-        var output = new OperationOutput {
+        var output = new OperationOutput
+        {
             StatusCode = 200,
             Status = "OK",
             Headers = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase) {
@@ -1642,7 +1699,8 @@ public class ModelObjectBasicTest {
         Assert.Equal("txt", result.Headers["content-type"]);
         Assert.Null(result.ProcessResult);
 
-        output = new OperationOutput {
+        output = new OperationOutput
+        {
             StatusCode = 200,
             Status = "OK",
             Headers = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase) {
@@ -1664,7 +1722,8 @@ public class ModelObjectBasicTest {
     }
 
     [Fact]
-    public void TestDeleteMultipleObjectsRequest() {
+    public void TestDeleteMultipleObjectsRequest()
+    {
         var request = new DeleteMultipleObjectsRequest();
         Assert.Empty(request.Headers);
         Assert.Empty(request.Parameters);
@@ -1683,7 +1742,8 @@ public class ModelObjectBasicTest {
         Assert.Null(input.Body);
 
         // all
-        request = new DeleteMultipleObjectsRequest {
+        request = new DeleteMultipleObjectsRequest
+        {
             Bucket = "bucket",
             EncodingType = "url",
             Quiet = true,
@@ -1718,7 +1778,8 @@ public class ModelObjectBasicTest {
         Assert.Equal(xml, reader.ReadToEnd());
 
         // mixed version id
-        request = new DeleteMultipleObjectsRequest {
+        request = new DeleteMultipleObjectsRequest
+        {
             Bucket = "bucket",
             EncodingType = "url",
             Quiet = true,
@@ -1753,7 +1814,8 @@ public class ModelObjectBasicTest {
         Assert.Equal(xml, reader1.ReadToEnd());
 
         // key with special char
-        request = new DeleteMultipleObjectsRequest {
+        request = new DeleteMultipleObjectsRequest
+        {
             Bucket = "bucket",
             EncodingType = "url",
             Objects = [
@@ -1789,7 +1851,8 @@ public class ModelObjectBasicTest {
     }
 
     [Fact]
-    public void TestDeleteMultipleObjectsResult() {
+    public void TestDeleteMultipleObjectsResult()
+    {
         var result = new DeleteMultipleObjectsResult();
         Assert.Equal(0, result.StatusCode);
         Assert.Equal("", result.Status);
@@ -1807,7 +1870,8 @@ public class ModelObjectBasicTest {
 </DeleteResult>
 """;
 
-        var output = new OperationOutput {
+        var output = new OperationOutput
+        {
             StatusCode = 200,
             Status = "OK",
             Headers = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase) {
@@ -1845,7 +1909,8 @@ public class ModelObjectBasicTest {
     </Deleted>
 </DeleteResult>
 """;
-        output = new OperationOutput {
+        output = new OperationOutput
+        {
             StatusCode = 200,
             Status = "OK",
             Headers = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase) {
@@ -1891,7 +1956,8 @@ public class ModelObjectBasicTest {
     </Deleted>
 </DeleteResult>
 """;
-        output = new OperationOutput {
+        output = new OperationOutput
+        {
             StatusCode = 200,
             Status = "OK",
             Headers = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase) {

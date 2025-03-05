@@ -8,8 +8,10 @@ using System.Threading.Tasks;
 using AlibabaCloud.OSS.V2.Internal;
 using AlibabaCloud.OSS.V2.Transform;
 
-namespace AlibabaCloud.OSS.V2 {
-    public partial class Client {
+namespace AlibabaCloud.OSS.V2
+{
+    public partial class Client
+    {
         /// <summary>
         /// You can call this operation to upload an object.
         /// </summary>
@@ -21,11 +23,13 @@ namespace AlibabaCloud.OSS.V2 {
             Models.PutObjectRequest request,
             OperationOptions? options = null,
             CancellationToken cancellationToken = default
-        ) {
+        )
+        {
             Ensure.NotNull(request.Bucket, "request.Bucket");
             Ensure.NotNull(request.Key, "request.Key");
 
-            var input = new OperationInput {
+            var input = new OperationInput
+            {
                 OperationName = "PutObject",
                 Method = "PUT",
                 Bucket = request.Bucket,
@@ -54,12 +58,14 @@ namespace AlibabaCloud.OSS.V2 {
             Models.CopyObjectRequest request,
             OperationOptions? options = null,
             CancellationToken cancellationToken = default
-        ) {
+        )
+        {
             Ensure.NotNull(request.Bucket, "request.Bucket");
             Ensure.NotNull(request.Key, "request.Key");
             Ensure.NotNull(request.SourceKey, "request.SourceKey");
 
-            var input = new OperationInput {
+            var input = new OperationInput
+            {
                 OperationName = "CopyObject",
                 Method = "PUT",
                 Bucket = request.Bucket,
@@ -88,7 +94,8 @@ namespace AlibabaCloud.OSS.V2 {
             Models.GetObjectRequest request,
             OperationOptions? options = null,
             CancellationToken cancellationToken = default
-        ) {
+        )
+        {
             return await GetObjectAsync(request, HttpCompletionOption.ResponseHeadersRead, options, cancellationToken).ConfigureAwait(false);
         }
 
@@ -105,11 +112,13 @@ namespace AlibabaCloud.OSS.V2 {
             HttpCompletionOption completionOption,
             OperationOptions? options = null,
             CancellationToken cancellationToken = default
-        ) {
+        )
+        {
             Ensure.NotNull(request.Bucket, "request.Bucket");
             Ensure.NotNull(request.Key, "request.Key");
 
-            var input = new OperationInput {
+            var input = new OperationInput
+            {
                 OperationName = "GetObject",
                 Method = "GET",
                 Bucket = request.Bucket,
@@ -141,12 +150,14 @@ namespace AlibabaCloud.OSS.V2 {
             Models.AppendObjectRequest request,
             OperationOptions? options = null,
             CancellationToken cancellationToken = default
-        ) {
+        )
+        {
             Ensure.NotNull(request.Bucket, "request.Bucket");
             Ensure.NotNull(request.Key, "request.Key");
             Ensure.NotNull(request.Position, "request.Position");
 
-            var input = new OperationInput {
+            var input = new OperationInput
+            {
                 OperationName = "AppendObject",
                 Method = "POST",
                 Parameters = new Dictionary<string, string> {
@@ -183,11 +194,13 @@ namespace AlibabaCloud.OSS.V2 {
             Models.DeleteObjectRequest request,
             OperationOptions? options = null,
             CancellationToken cancellationToken = default
-        ) {
+        )
+        {
             Ensure.NotNull(request.Bucket, "request.Bucket");
             Ensure.NotNull(request.Key, "request.Key");
 
-            var input = new OperationInput {
+            var input = new OperationInput
+            {
                 OperationName = "DeleteObject",
                 Method = "DELETE",
                 Bucket = request.Bucket,
@@ -216,11 +229,13 @@ namespace AlibabaCloud.OSS.V2 {
             Models.HeadObjectRequest request,
             OperationOptions? options = null,
             CancellationToken cancellationToken = default
-        ) {
+        )
+        {
             Ensure.NotNull(request.Bucket, "request.Bucket");
             Ensure.NotNull(request.Key, "request.Key");
 
-            var input = new OperationInput {
+            var input = new OperationInput
+            {
                 OperationName = "HeadObject",
                 Method = "HEAD",
                 Bucket = request.Bucket,
@@ -249,11 +264,13 @@ namespace AlibabaCloud.OSS.V2 {
             Models.GetObjectMetaRequest request,
             OperationOptions? options = null,
             CancellationToken cancellationToken = default
-        ) {
+        )
+        {
             Ensure.NotNull(request.Bucket, "request.Bucket");
             Ensure.NotNull(request.Key, "request.Key");
 
-            var input = new OperationInput {
+            var input = new OperationInput
+            {
                 OperationName = "GetObjectMeta",
                 Method = "HEAD",
                 Parameters = new Dictionary<string, string> {
@@ -285,11 +302,13 @@ namespace AlibabaCloud.OSS.V2 {
             Models.RestoreObjectRequest request,
             OperationOptions? options = null,
             CancellationToken cancellationToken = default
-        ) {
+        )
+        {
             Ensure.NotNull(request.Bucket, "request.Bucket");
             Ensure.NotNull(request.Key, "request.Key");
 
-            var input = new OperationInput {
+            var input = new OperationInput
+            {
                 OperationName = "RestoreObject",
                 Method = "POST",
                 Headers = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase) {
@@ -324,11 +343,13 @@ namespace AlibabaCloud.OSS.V2 {
             Models.CleanRestoredObjectRequest request,
             OperationOptions? options = null,
             CancellationToken cancellationToken = default
-        ) {
+        )
+        {
             Ensure.NotNull(request.Bucket, "request.Bucket");
             Ensure.NotNull(request.Key, "request.Key");
 
-            var input = new OperationInput {
+            var input = new OperationInput
+            {
                 OperationName = "CleanRestoredObject",
                 Method = "POST",
                 Parameters = new Dictionary<string, string> {
@@ -363,12 +384,14 @@ namespace AlibabaCloud.OSS.V2 {
             Models.ProcessObjectRequest request,
             OperationOptions? options = null,
             CancellationToken cancellationToken = default
-        ) {
+        )
+        {
             Ensure.NotNull(request.Bucket, "request.Bucket");
             Ensure.NotNull(request.Key, "request.Key");
             Ensure.NotNull(request.Process, "request.Process");
 
-            var input = new OperationInput {
+            var input = new OperationInput
+            {
                 OperationName = "ProcessObject",
                 Method = "POST",
                 Parameters = new Dictionary<string, string> {
@@ -400,12 +423,14 @@ namespace AlibabaCloud.OSS.V2 {
             Models.AsyncProcessObjectRequest request,
             OperationOptions? options = null,
             CancellationToken cancellationToken = default
-        ) {
+        )
+        {
             Ensure.NotNull(request.Bucket, "request.Bucket");
             Ensure.NotNull(request.Key, "request.Key");
             Ensure.NotNull(request.Process, "request.Process");
 
-            var input = new OperationInput {
+            var input = new OperationInput
+            {
                 OperationName = "AsyncProcessObject",
                 Method = "POST",
                 Parameters = new Dictionary<string, string> {
@@ -437,11 +462,13 @@ namespace AlibabaCloud.OSS.V2 {
             Models.DeleteMultipleObjectsRequest request,
             OperationOptions? options = null,
             CancellationToken cancellationToken = default
-        ) {
+        )
+        {
             Ensure.NotNull(request.Bucket, "request.Bucket");
             Ensure.NotNull(request.Objects, "request.Objects");
 
-            var input = new OperationInput {
+            var input = new OperationInput
+            {
                 OperationName = "DeleteMultipleObjects",
                 Method = "POST",
                 Headers = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase) {
@@ -465,24 +492,31 @@ namespace AlibabaCloud.OSS.V2 {
             return (Models.DeleteMultipleObjectsResult)result;
         }
 
-        private void AddContentType(ref Models.RequestModel request, ref OperationInput input) {
-            if (!_clientImpl.Options.FeatureFlags.HasFlag(FeatureFlagsType.AutoDetectMimeType)) {
+        private void AddContentType(ref Models.RequestModel request, ref OperationInput input)
+        {
+            if (!_clientImpl.Options.FeatureFlags.HasFlag(FeatureFlagsType.AutoDetectMimeType))
+            {
                 return;
             }
             Serde.AddContentType(ref request, ref input);
         }
 
-        private void AddCrcChecker(ref Models.RequestModel request, ref OperationInput input) {
-            if (!_clientImpl.Options.FeatureFlags.HasFlag(FeatureFlagsType.EnableCrc64CheckUpload)) {
+        private void AddCrcChecker(ref Models.RequestModel request, ref OperationInput input)
+        {
+            if (!_clientImpl.Options.FeatureFlags.HasFlag(FeatureFlagsType.EnableCrc64CheckUpload))
+            {
                 return;
             }
 
             var tracker = new WriteOnlyHashStream(new HashCrc64(BitConverter.GetBytes((ulong)0)));
-            Action<ResponseMessage> handler = x => {
-                if (x.Headers.TryGetValue("x-oss-hash-crc64ecma", out var scrc)) {
+            Action<ResponseMessage> handler = x =>
+            {
+                if (x.Headers.TryGetValue("x-oss-hash-crc64ecma", out var scrc))
+                {
                     var val = tracker.Hash.Final();
                     var ccrc = Convert.ToString(BitConverter.ToUInt64(val, 0), CultureInfo.InvariantCulture);
-                    if (!string.Equals(ccrc, scrc)) {
+                    if (!string.Equals(ccrc, scrc))
+                    {
                         x.Headers.TryGetValue("x-oss-request-id", out var requestId);
                         throw new InconsistentException(ccrc, scrc, requestId ?? "");
                     }
@@ -493,26 +527,33 @@ namespace AlibabaCloud.OSS.V2 {
             input.AddResponseHandler(handler);
         }
 
-        private void AddCrcCheckerNoRetry(ref Models.RequestModel request, ref OperationInput input) {
-            if (!_clientImpl.Options.FeatureFlags.HasFlag(FeatureFlagsType.EnableCrc64CheckUpload)) {
+        private void AddCrcCheckerNoRetry(ref Models.RequestModel request, ref OperationInput input)
+        {
+            if (!_clientImpl.Options.FeatureFlags.HasFlag(FeatureFlagsType.EnableCrc64CheckUpload))
+            {
                 return;
             }
 
             ulong crcInit = 0;
-            if (request is Models.AppendObjectRequest req) {
+            if (request is Models.AppendObjectRequest req)
+            {
                 // ignore crc check
-                if (req.InitHashCrc64 == null) {
+                if (req.InitHashCrc64 == null)
+                {
                     return;
                 }
                 crcInit = Convert.ToUInt64(req.InitHashCrc64);
             }
 
             var tracker = new WriteOnlyHashStream(new HashCrc64(BitConverter.GetBytes(crcInit)));
-            Action<ResponseMessage> handler = x => {
-                if (x.Headers.TryGetValue("x-oss-hash-crc64ecma", out var scrc)) {
+            Action<ResponseMessage> handler = x =>
+            {
+                if (x.Headers.TryGetValue("x-oss-hash-crc64ecma", out var scrc))
+                {
                     var val = tracker.Hash.Final();
                     var ccrc = Convert.ToString(BitConverter.ToUInt64(val, 0), CultureInfo.InvariantCulture);
-                    if (!string.Equals(ccrc, scrc)) {
+                    if (!string.Equals(ccrc, scrc))
+                    {
                         x.Headers.TryGetValue("x-oss-request-id", out var requestId);
                         throw new NoRetryableInconsistentException(ccrc, scrc, requestId ?? "");
                     }
@@ -523,23 +564,28 @@ namespace AlibabaCloud.OSS.V2 {
             input.AddResponseHandler(handler);
         }
 
-        private void AddProgress(ref Models.RequestModel request, ref OperationInput input) {
+        private void AddProgress(ref Models.RequestModel request, ref OperationInput input)
+        {
             ProgressFunc? func;
-            switch (request) {
+            switch (request)
+            {
                 case Models.PutObjectRequest req1:
-                    if (req1.ProgressFn == null) {
+                    if (req1.ProgressFn == null)
+                    {
                         return;
                     }
                     func = req1.ProgressFn;
                     break;
                 case Models.AppendObjectRequest req2:
-                    if (req2.ProgressFn == null) {
+                    if (req2.ProgressFn == null)
+                    {
                         return;
                     }
                     func = req2.ProgressFn;
                     break;
                 case Models.UploadPartRequest req3:
-                    if (req3.ProgressFn == null) {
+                    if (req3.ProgressFn == null)
+                    {
                         return;
                     }
                     func = req3.ProgressFn;
@@ -548,38 +594,47 @@ namespace AlibabaCloud.OSS.V2 {
                     return;
             }
             long total = 0;
-            if (input.Body != null) {
+            if (input.Body != null)
+            {
                 total = input.Body.Length;
             }
             var tracker = new ProgressStream(func, total);
             input.AddStreamTracker(tracker);
         }
 
-        private void AddDownloadCrcChecker(ref Models.RequestModel request, ref OperationInput input) {
-            if (!_clientImpl.Options.FeatureFlags.HasFlag(FeatureFlagsType.EnableCrc64CheckDownload)) {
+        private void AddDownloadCrcChecker(ref Models.RequestModel request, ref OperationInput input)
+        {
+            if (!_clientImpl.Options.FeatureFlags.HasFlag(FeatureFlagsType.EnableCrc64CheckDownload))
+            {
                 return;
             }
 
-            Action<ResponseMessage> handler = x => {
-                if (x.Content == null || !x.Content.CanSeek) {
+            Action<ResponseMessage> handler = x =>
+            {
+                if (x.Content == null || !x.Content.CanSeek)
+                {
                     return;
                 }
 
                 //skip Partial Content
-                if (x.StatusCode == 206) {
+                if (x.StatusCode == 206)
+                {
                     return;
                 }
 
-                if (x.Headers.TryGetValue("x-oss-hash-crc64ecma", out var scrc)) {
+                if (x.Headers.TryGetValue("x-oss-hash-crc64ecma", out var scrc))
+                {
                     var ccrc = "0";
-                    if (x.Content.Length > 0) {
+                    if (x.Content.Length > 0)
+                    {
                         var tracker = new WriteOnlyHashStream(new HashCrc64(0));
                         x.Content.CopyTo(tracker);
                         x.Content.Seek(0, SeekOrigin.Begin);
                         var val = tracker.Hash.Final();
                         ccrc = Convert.ToString(BitConverter.ToUInt64(val, 0), CultureInfo.InvariantCulture);
                     }
-                    if (!string.Equals(ccrc, scrc)) {
+                    if (!string.Equals(ccrc, scrc))
+                    {
                         x.Headers.TryGetValue("x-oss-request-id", out var requestId);
                         throw new InconsistentException(ccrc, scrc, requestId ?? "");
                     }

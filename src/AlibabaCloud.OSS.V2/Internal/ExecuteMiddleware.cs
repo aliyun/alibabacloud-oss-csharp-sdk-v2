@@ -9,8 +9,10 @@ using System.Threading.Tasks;
 using AlibabaCloud.OSS.V2.Credentials;
 using AlibabaCloud.OSS.V2.Transport;
 
-namespace AlibabaCloud.OSS.V2.Internal {
-    internal class TransportExecuteMiddleware : IExecuteMiddleware {
+namespace AlibabaCloud.OSS.V2.Internal
+{
+    internal class TransportExecuteMiddleware : IExecuteMiddleware
+    {
         private static readonly string[] ContentHeaders = {
             "Expires", "Content-Disposition", "Content-Encoding", "Content-Language",
             "Content-Length", "Content-Type", "Content-MD5"
@@ -22,11 +24,13 @@ namespace AlibabaCloud.OSS.V2.Internal {
         );
         private readonly HttpTransport handler;
 
-        public TransportExecuteMiddleware(Transport.HttpTransport handler) {
+        public TransportExecuteMiddleware(Transport.HttpTransport handler)
+        {
             this.handler = handler;
         }
 
-        public async Task<ResponseMessage> ExecuteAsync(RequestMessage request, ExecuteContext context) {
+        public async Task<ResponseMessage> ExecuteAsync(RequestMessage request, ExecuteContext context)
+        {
             using var cts = new CancellationTokenSource(context.RequestOnceTimeout);
             var linkedCts = CancellationTokenSource.CreateLinkedTokenSource(cts.Token, context.ApiCallCancellationToken);
 
@@ -44,15 +48,18 @@ namespace AlibabaCloud.OSS.V2.Internal {
                     : new ByteArrayContent(Array.Empty<byte>());
 
             // Write headers
-            foreach (var item in request.Headers) {
-                if (!ContentHeadersHash.Contains(item.Key)) {
+            foreach (var item in request.Headers)
+            {
+                if (!ContentHeadersHash.Contains(item.Key))
+                {
                     httpRequest.Headers.TryAddWithoutValidation(item.Key, item.Value);
                     continue;
                 }
 
                 if (httpRequest.Content == null) continue;
 
-                switch (item.Key.ToLower()) {
+                switch (item.Key.ToLower())
+                {
                     case "content-disposition":
                         httpRequest.Content.Headers.ContentDisposition = ContentDispositionHeaderValue.Parse(item.Value);
                         break;
@@ -83,19 +90,24 @@ namespace AlibabaCloud.OSS.V2.Internal {
                 }
             }
 
-            try {
+            try
+            {
                 httpResponse = await handler.SendAsync(httpRequest, completionOption, linkedCts.Token).ConfigureAwait(false);
 
                 Stream? contentStream = null;
-                if (httpResponse.Content != null) {
+                if (httpResponse.Content != null)
+                {
 
                     contentStream = await httpResponse.Content.ReadAsStreamAsync().ConfigureAwait(false);
 
                     // allways save reponse body into memroy when status code is not 2xx(not include 203)
                     var statusCode = (int)httpResponse.StatusCode;
-                    if ((statusCode == 203 || statusCode / 100 != 2) && !contentStream.CanSeek) {
-                        try {
-                            if (contentStream.CanTimeout) {
+                    if ((statusCode == 203 || statusCode / 100 != 2) && !contentStream.CanSeek)
+                    {
+                        try
+                        {
+                            if (contentStream.CanTimeout)
+                            {
                                 contentStream.ReadTimeout = (int)context.RequestOnceTimeout.TotalMilliseconds;
                             }
                             var stream = new MemoryStream();
@@ -107,13 +119,15 @@ namespace AlibabaCloud.OSS.V2.Internal {
                             contentStream = stream;
                             contentStream.Seek(0, SeekOrigin.Begin);
                         }
-                        finally {
+                        finally
+                        {
                             httpResponse.Content.Dispose();
                         }
                     }
                 }
 
-                var response = new ResponseMessage((int)httpResponse.StatusCode, httpResponse.ReasonPhrase!) {
+                var response = new ResponseMessage((int)httpResponse.StatusCode, httpResponse.ReasonPhrase!)
+                {
                     Request = request,
                     Content = contentStream
                 };
@@ -121,22 +135,27 @@ namespace AlibabaCloud.OSS.V2.Internal {
                 // headers
                 foreach (KeyValuePair<string, IEnumerable<string>> header in httpResponse.Headers) response.Headers[header.Key] = string.Join(",", header.Value);
 
-                if (httpResponse.Content != null) {
+                if (httpResponse.Content != null)
+                {
                     foreach (KeyValuePair<string, IEnumerable<string>> header in httpResponse.Content.Headers) response.Headers[header.Key] = string.Join(",", header.Value);
                 }
 
                 return response;
             }
-            catch (OperationCanceledException e) when (cts.Token.IsCancellationRequested) {
+            catch (OperationCanceledException e) when (cts.Token.IsCancellationRequested)
+            {
                 throw CancellationHelper.CreateRequestTimeoutException(e, context.RequestOnceTimeout);
             }
-            catch (HttpRequestException e) {
+            catch (HttpRequestException e)
+            {
                 throw new RequestFailedException(e.Message, e);
             }
         }
 
-        private static HttpMethod ConvertMethod(string method) {
-            return method.ToLower() switch {
+        private static HttpMethod ConvertMethod(string method)
+        {
+            return method.ToLower() switch
+            {
                 "delete" => HttpMethod.Delete,
                 "get" => HttpMethod.Get,
                 "head" => HttpMethod.Head,
@@ -148,28 +167,34 @@ namespace AlibabaCloud.OSS.V2.Internal {
         }
     }
 
-    internal class ResponseCheckerExecuteMiddleware : IExecuteMiddleware {
+    internal class ResponseCheckerExecuteMiddleware : IExecuteMiddleware
+    {
         private readonly IExecuteMiddleware nextHandler;
 
-        public ResponseCheckerExecuteMiddleware(IExecuteMiddleware nextHandler) {
+        public ResponseCheckerExecuteMiddleware(IExecuteMiddleware nextHandler)
+        {
             this.nextHandler = nextHandler;
         }
 
-        public async Task<ResponseMessage> ExecuteAsync(RequestMessage request, ExecuteContext context) {
+        public async Task<ResponseMessage> ExecuteAsync(RequestMessage request, ExecuteContext context)
+        {
             var response = await nextHandler.ExecuteAsync(request, context).ConfigureAwait(false);
             OnResponseMessage(response, context);
             return response;
         }
 
-        private static void OnResponseMessage(ResponseMessage message, ExecuteContext context) {
-            if (context.OnResponseMessage == null) {
+        private static void OnResponseMessage(ResponseMessage message, ExecuteContext context)
+        {
+            if (context.OnResponseMessage == null)
+            {
                 return;
             }
             foreach (var fn in context.OnResponseMessage) fn(message);
         }
     }
 
-    internal class SignerExecuteMiddleware : IExecuteMiddleware {
+    internal class SignerExecuteMiddleware : IExecuteMiddleware
+    {
         private readonly Signer.ISigner _signer;
         private readonly IExecuteMiddleware nextHandler;
         private readonly ICredentialsProvider? provider;
@@ -178,16 +203,19 @@ namespace AlibabaCloud.OSS.V2.Internal {
             IExecuteMiddleware nextHandler,
             Signer.ISigner? signer,
             Credentials.ICredentialsProvider? provider
-        ) {
+        )
+        {
             this.nextHandler = nextHandler;
             this.provider = provider;
             _signer = signer ?? new Signer.NopSigner();
         }
 
-        public Task<ResponseMessage> ExecuteAsync(RequestMessage request, ExecuteContext context) {
+        public Task<ResponseMessage> ExecuteAsync(RequestMessage request, ExecuteContext context)
+        {
             if (provider != null &&
                 provider is not AnonymousCredentialsProvider &&
-                context.SigningContext != null) {
+                context.SigningContext != null)
+            {
                 var cred = provider.GetCredentials();
                 if (!cred.HasKeys) throw new("Credentials is null or empty");
                 context.SigningContext.Credentials = cred;
@@ -200,28 +228,34 @@ namespace AlibabaCloud.OSS.V2.Internal {
         }
     }
 
-    internal class RetryerExecuteMiddleware : IExecuteMiddleware {
+    internal class RetryerExecuteMiddleware : IExecuteMiddleware
+    {
         private readonly IExecuteMiddleware _nextHandler;
         private readonly Retry.IRetryer _retryer;
         private readonly int? _attempts;
 
-        public RetryerExecuteMiddleware(IExecuteMiddleware nextHandler, Retry.IRetryer? retryer) {
+        public RetryerExecuteMiddleware(IExecuteMiddleware nextHandler, Retry.IRetryer? retryer)
+        {
             _nextHandler = nextHandler;
             _retryer = retryer ?? new Retry.NopRetryer();
             if (_retryer is Retry.NopRetryer) _attempts = 1;
         }
 
-        public async Task<ResponseMessage> ExecuteAsync(RequestMessage request, ExecuteContext context) {
+        public async Task<ResponseMessage> ExecuteAsync(RequestMessage request, ExecuteContext context)
+        {
             Exception? lastError;
             var body = request.Content ?? new MemoryStream();
             var attempts = _attempts ?? context.RetryMaxAttempts;
             var bodyPos = body.CanSeek ? body.Position : 0;
 
-            for (var i = 0; ; i++) {
-                try {
+            for (var i = 0; ; i++)
+            {
+                try
+                {
                     return await _nextHandler.ExecuteAsync(request, context).ConfigureAwait(false);
                 }
-                catch (Exception ex) {
+                catch (Exception ex)
+                {
                     lastError = ex;
                 }
 

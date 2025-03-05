@@ -4,9 +4,11 @@ using AlibabaCloud.OSS.V2.Transform;
 
 namespace AlibabaCloud.OSS.V2.UnitTests.Models;
 
-public class ModelBucketVersioningTest {
+public class ModelBucketVersioningTest
+{
     [Fact]
-    public void TestPutBucketVersioningRequest() {
+    public void TestPutBucketVersioningRequest()
+    {
         var request = new PutBucketVersioningRequest();
         Assert.Empty(request.Headers);
         Assert.Empty(request.Parameters);
@@ -21,9 +23,11 @@ public class ModelBucketVersioningTest {
         Assert.Null(input.Parameters);
         Assert.Null(input.Body);
 
-        request = new PutBucketVersioningRequest {
+        request = new PutBucketVersioningRequest
+        {
             Bucket = "bucket",
-            VersioningConfiguration = new VersioningConfiguration() {
+            VersioningConfiguration = new VersioningConfiguration()
+            {
                 Status = BucketVersioningStatusType.Enabled.GetString()
             }
         };
@@ -47,14 +51,16 @@ public class ModelBucketVersioningTest {
     }
 
     [Fact]
-    public void TestPutBucketVersioningResult() {
+    public void TestPutBucketVersioningResult()
+    {
         var result = new PutBucketVersioningResult();
         Assert.Equal(0, result.StatusCode);
         Assert.Equal("", result.Status);
         Assert.Equal("", result.RequestId);
         Assert.Empty(result.Headers);
 
-        var output = new OperationOutput {
+        var output = new OperationOutput
+        {
             StatusCode = 200,
             Status = "OK",
             Headers = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase) {
@@ -73,7 +79,8 @@ public class ModelBucketVersioningTest {
     }
 
     [Fact]
-    public void TestGetBucketVersioningRequest() {
+    public void TestGetBucketVersioningRequest()
+    {
         var request = new GetBucketVersioningRequest();
         Assert.Empty(request.Headers);
         Assert.Empty(request.Parameters);
@@ -88,7 +95,8 @@ public class ModelBucketVersioningTest {
         Assert.Null(input.Parameters);
         Assert.Null(input.Body);
 
-        request = new GetBucketVersioningRequest {
+        request = new GetBucketVersioningRequest
+        {
             Bucket = "bucket",
         };
         Assert.Empty(request.Headers);
@@ -101,7 +109,8 @@ public class ModelBucketVersioningTest {
     }
 
     [Fact]
-    public void TestGetBucketVersioningResult() {
+    public void TestGetBucketVersioningResult()
+    {
         var result = new GetBucketVersioningResult();
         Assert.Equal(0, result.StatusCode);
         Assert.Equal("", result.Status);
@@ -114,7 +123,8 @@ public class ModelBucketVersioningTest {
                   </VersioningConfiguration>
                   """;
 
-        var output = new OperationOutput {
+        var output = new OperationOutput
+        {
             StatusCode = 200,
             Status = "OK",
             Headers = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase) {
@@ -141,7 +151,8 @@ public class ModelBucketVersioningTest {
                 </VersioningConfiguration>
                 """;
 
-        output = new OperationOutput {
+        output = new OperationOutput
+        {
             StatusCode = 200,
             Status = "OK",
             Headers = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase) {
@@ -162,7 +173,8 @@ public class ModelBucketVersioningTest {
         Assert.Equal("Enabled", result.VersioningConfiguration.Status);
 
         xml = "<VersioningConfiguration xmlns=\"http://doc.oss-cn-hangzhou.aliyuncs.com\"/>";
-        output = new OperationOutput {
+        output = new OperationOutput
+        {
             StatusCode = 200,
             Status = "OK",
             Headers = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase) {
@@ -183,7 +195,8 @@ public class ModelBucketVersioningTest {
     }
 
     [Fact]
-    public void TestListObjectVersionsRequest() {
+    public void TestListObjectVersionsRequest()
+    {
         var request = new ListObjectVersionsRequest();
         Assert.Empty(request.Headers);
         Assert.Empty(request.Parameters);
@@ -204,7 +217,8 @@ public class ModelBucketVersioningTest {
         Assert.Null(input.Parameters);
         Assert.Null(input.Body);
 
-        request = new ListObjectVersionsRequest {
+        request = new ListObjectVersionsRequest
+        {
             Bucket = "bucket",
             Delimiter = "/",
             EncodingType = "url",
@@ -238,7 +252,8 @@ public class ModelBucketVersioningTest {
     }
 
     [Fact]
-    public void TestListObjectVersionsResult() {
+    public void TestListObjectVersionsResult()
+    {
         var result = new ListObjectVersionsResult();
         Assert.Equal(0, result.StatusCode);
         Assert.Equal("", result.Status);
@@ -267,7 +282,8 @@ public class ModelBucketVersioningTest {
                   </ListVersionsResult>
                   """;
 
-        var output = new OperationOutput {
+        var output = new OperationOutput
+        {
             StatusCode = 200,
             Status = "OK",
             Headers = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase) {
@@ -373,7 +389,8 @@ public class ModelBucketVersioningTest {
     </CommonPrefixes>
 </ListVersionsResult>
 """;
-        output = new OperationOutput {
+        output = new OperationOutput
+        {
             StatusCode = 200,
             Status = "OK",
             Headers = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase) {
@@ -507,7 +524,8 @@ public class ModelBucketVersioningTest {
                 </CommonPrefixes>
             </ListVersionsResult>
 """;
-        output = new OperationOutput {
+        output = new OperationOutput
+        {
             StatusCode = 200,
             Status = "OK",
             Headers = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase) {

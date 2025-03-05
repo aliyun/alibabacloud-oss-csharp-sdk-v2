@@ -4,8 +4,10 @@ using System.Threading;
 using System.Threading.Tasks;
 using AlibabaCloud.OSS.V2.Transform;
 
-namespace AlibabaCloud.OSS.V2 {
-    public partial class Client {
+namespace AlibabaCloud.OSS.V2
+{
+    public partial class Client
+    {
         /// <summary>
         /// You can call this operation to add tags to or modify the tags of an object.
         /// </summary>
@@ -17,12 +19,14 @@ namespace AlibabaCloud.OSS.V2 {
             Models.PutObjectTaggingRequest request,
             OperationOptions? options = null,
             CancellationToken cancellationToken = default
-        ) {
+        )
+        {
             Ensure.NotNull(request.Bucket, "request.Bucket");
             Ensure.NotNull(request.Key, "request.Key");
             Ensure.NotNull(request.Tagging, "request.Tagging");
 
-            var input = new OperationInput {
+            var input = new OperationInput
+            {
                 OperationName = "PutObjectTagging",
                 Method = "PUT",
                 Headers = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase) {
@@ -57,11 +61,13 @@ namespace AlibabaCloud.OSS.V2 {
             Models.GetObjectTaggingRequest request,
             OperationOptions? options = null,
             CancellationToken cancellationToken = default
-        ) {
+        )
+        {
             Ensure.NotNull(request.Bucket, "request.Bucket");
             Ensure.NotNull(request.Key, "request.Key");
 
-            var input = new OperationInput {
+            var input = new OperationInput
+            {
                 OperationName = "GetObjectTagging",
                 Method = "GET",
                 Parameters = new Dictionary<string, string> {
@@ -93,11 +99,13 @@ namespace AlibabaCloud.OSS.V2 {
             Models.DeleteObjectTaggingRequest request,
             OperationOptions? options = null,
             CancellationToken cancellationToken = default
-        ) {
+        )
+        {
             Ensure.NotNull(request.Bucket, "request.Bucket");
             Ensure.NotNull(request.Key, "request.Key");
 
-            var input = new OperationInput {
+            var input = new OperationInput
+            {
                 OperationName = "DeleteObjectTagging",
                 Method = "DELETE",
                 Headers = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase) {
