@@ -1,3 +1,9 @@
+# ChangeLog - Alibaba Cloud OSS SDK for C# v2
+
+## 版本号：0.1.1 日期：2025-04-25
+### 变更内容
+- Fix：Encode query parameters that contain special characters correctly
+
 ## 版本号：0.1.0 日期：2025-03-05
 ### 变更内容
 - Feature：Add credentials provider
