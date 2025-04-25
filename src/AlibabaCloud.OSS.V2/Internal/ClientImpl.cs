@@ -159,7 +159,7 @@ namespace AlibabaCloud.OSS.V2.Internal
                 result.SignedHeaders = signedHeaders;
             }
 
-            result.Url = request.RequestUri.ToString();
+            result.Url = request.RequestUri.AbsoluteUri;
             result.Method = request.Method;
 
             return result;
@@ -509,10 +509,10 @@ namespace AlibabaCloud.OSS.V2.Internal
 
                 isFirst = false;
 
-                queryString.Append(p.Key);
+                queryString.Append(p.Key.UrlEncode());
 
                 if (!string.IsNullOrEmpty(p.Value))
-                    queryString.Append("=").Append(WebUtility.UrlEncode(p.Value));
+                    queryString.Append("=").Append(p.Value.UrlEncode());
             }
 
             return queryString.ToString();

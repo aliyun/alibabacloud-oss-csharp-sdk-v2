@@ -924,4 +924,85 @@ public class ClientMiscTest : IDisposable
         Assert.Equal(fileInfo.Length, transferred);
         Assert.Equal(fileInfo.Length, increment);
     }
+
+    [Fact]
+    public async Task TestQueryWithSpecialChar()
+    {
+        var client = Utils.GetDefaultClient();
+
+        //default
+        var bucketName = Utils.RandomBucketName(BucketNamePrefix);
+
+        var result = await client.PutBucketAsync(
+            new()
+            {
+                Bucket = bucketName
+            }
+        );
+
+        Assert.NotNull(result);
+        Assert.Equal(200, result.StatusCode);
+        Assert.NotNull(result.RequestId);
+
+        // only body
+        var objectName = "special/char-123+ 456.txt";
+        const string content = "hello world, hi oss!";
+
+        var putRequest = new PutObjectRequest()
+        {
+            Bucket = bucketName,
+            Key = objectName,
+        };
+        putRequest.Parameters.Add("with-plus", "123+456");
+        putRequest.Parameters.Add("with-space", "123 456");
+        putRequest.Parameters.Add("key-plus+", "value-key1");
+        putRequest.Parameters.Add("key space", "value-key2");
+
+        var preResult = client.Presign(putRequest);
+
+        Assert.NotNull(preResult);
+        Assert.Empty(preResult.SignedHeaders);
+        Assert.Equal("PUT", preResult.Method);
+        Assert.NotNull(preResult.Expiration);
+        Assert.Contains("with-plus=123%2B456", preResult.Url);
+        Assert.Contains("with-space=123%20456", preResult.Url);
+        Assert.Contains("special/char-123%2B%20456.txt", preResult.Url);
+        Assert.Contains("key-plus%2B=value-key1", preResult.Url);
+        Assert.Contains("key%20space=value-key2", preResult.Url);
+
+        using var hc = new HttpClient();
+        var httpResult = await hc.PutAsync(preResult.Url, new ByteArrayContent(Encoding.UTF8.GetBytes(content)));
+        Assert.NotNull(httpResult);
+        Assert.True(httpResult.IsSuccessStatusCode);
+
+        var getRequest = new GetObjectRequest()
+        {
+            Bucket = bucketName,
+            Key = objectName,
+        };
+        getRequest.Parameters.Add("with-plus", "123+456");
+        getRequest.Parameters.Add("with-space", "123 456");
+        getRequest.Parameters.Add("key-plus+", "value-key1");
+        getRequest.Parameters.Add("key space", "value-key2");
+
+        preResult = client.Presign(getRequest);
+        Assert.NotNull(preResult);
+        Assert.Empty(preResult.SignedHeaders);
+        Assert.Equal("GET", preResult.Method);
+        Assert.NotNull(preResult.Expiration);
+
+        httpResult = await hc.GetAsync(preResult.Url);
+        Assert.NotNull(httpResult);
+        Assert.True(httpResult.IsSuccessStatusCode);
+        var stream = await httpResult.Content.ReadAsStreamAsync();
+        using var reader = new StreamReader(stream);
+        var got = await reader.ReadToEndAsync();
+        Assert.Equal(content, got);
+
+        var getResult = await client.GetObjectAsync(getRequest);
+        Assert.NotNull(getResult);
+        using var reader1 = new StreamReader(getResult.Body);
+        var got1 = await reader1.ReadToEndAsync();
+        Assert.Equal(content, got1);
+    }
 }
