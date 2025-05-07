@@ -1,11 +1,14 @@
-﻿using OSS = AlibabaCloud.OSS.V2;
+﻿using System.Text;
 using CommandLine;
-using System.Text;
+using OSS = AlibabaCloud.OSS.V2;
 
-namespace Sample.PutObject {
-    public class Program {
+namespace Sample.PutObject
+{
+    public class Program
+    {
 
-        public class Options {
+        public class Options
+        {
             [Option("region", Required = true, HelpText = "The region in which the bucket is located.")]
             public string? Region { get; set; }
 
@@ -19,28 +22,41 @@ namespace Sample.PutObject {
             public string? Key { get; set; }
         }
 
-        public static async Task Main(string[] args) {
+        public static async Task Main(string[] args)
+        {
 
             var parserResult = Parser.Default.ParseArguments<Options>(args);
-            if (parserResult.Errors.Any()) {
+            if (parserResult.Errors.Any())
+            {
                 Environment.Exit(1);
             }
             var option = parserResult.Value;
+
+            // Specify the region and other parameters.
+            var region = option.Region;
+            var bucket = option.Bucket;
+            var endpoint = option.Endpoint;
+            var key = option.Key;
 
             // Using the SDK's default configuration
             // loading credentials values from the environment variables
             var cfg = OSS.Configuration.LoadDefault();
             cfg.CredentialsProvider = new OSS.Credentials.EnvironmentVariableCredentialsProvider();
-            cfg.Region = option.Region;
-            cfg.Endpoint = option.Endpoint;
+            cfg.Region = region;
+
+            if (endpoint != null)
+            {
+                cfg.Endpoint = endpoint;
+            }
 
             using var client = new OSS.Client(cfg);
 
             var content = "hi oss";
 
-            var result = await client.PutObjectAsync(new() {
-                Bucket = option.Bucket,
-                Key = option.Key,
+            var result = await client.PutObjectAsync(new()
+            {
+                Bucket = bucket,
+                Key = key,
                 Body = new MemoryStream(Encoding.UTF8.GetBytes(content))
             });
 

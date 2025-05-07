@@ -1,7 +1,8 @@
-﻿using CommandLine;
+﻿using System.Text;
+using CommandLine;
 using OSS = AlibabaCloud.OSS.V2;
 
-namespace Sample.GetObject
+namespace Sample.AppendObject
 {
     public class Program
     {
@@ -50,28 +51,31 @@ namespace Sample.GetObject
 
             using var client = new OSS.Client(cfg);
 
-            // default is streaming mode
-            var result = await client.GetObjectAsync(new OSS.Models.GetObjectRequest()
+            var content1 = "hi,";
+            var content2 = "oss!";
+
+            var result1 = await client.AppendObjectAsync(new OSS.Models.AppendObjectRequest()
             {
                 Bucket = bucket,
                 Key = key,
+                Position = 0,
+                Body = new MemoryStream(Encoding.UTF8.GetBytes(content1))
             });
 
-            // real all data into memory
-            //var result = await client.GetObjectAsync(new OSS.Models.GetObjectRequest() {
-            //    Bucket = bucket,
-            //    Key = key,
-            //},System.Net.Http.HttpCompletionOption.ResponseContentRead);
+            var result2 = await client.AppendObjectAsync(new OSS.Models.AppendObjectRequest()
+            {
+                Bucket = bucket,
+                Key = key,
+                Position = result1.NextAppendPosition,
+                Body = new MemoryStream(Encoding.UTF8.GetBytes(content2))
+            });
 
-            using var body = result.Body;
-            var reader = new StreamReader(body!);
-            var data = reader.ReadToEnd();
-
-            Console.WriteLine("GetObject done");
-            Console.WriteLine($"StatusCode: {result.StatusCode}");
-            Console.WriteLine($"RequestId: {result.RequestId}");
+            Console.WriteLine("AppendObject done");
+            Console.WriteLine($"StatusCode: {result2.StatusCode}");
+            Console.WriteLine($"RequestId: {result2.RequestId}");
             Console.WriteLine("Response Headers:");
-            result.Headers.ToList().ForEach(x => Console.WriteLine(x.Key + " : " + x.Value));
+            result2.Headers.ToList().ForEach(x => Console.WriteLine(x.Key + " : " + x.Value));
+            Console.WriteLine($"NextAppendPosition: {result2.NextAppendPosition}");
         }
     }
 }

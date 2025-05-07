@@ -1,7 +1,7 @@
 ﻿using CommandLine;
 using OSS = AlibabaCloud.OSS.V2;
 
-namespace Sample.GetObject
+namespace Sample.RestoreObject
 {
     public class Program
     {
@@ -19,6 +19,12 @@ namespace Sample.GetObject
 
             [Option("key", Required = true, HelpText = "The `name` of the object.")]
             public string? Key { get; set; }
+
+            [Option("days", HelpText = "The duration in which the object can remain in the restored state.")]
+            public long? Days { get; set; }
+
+            [Option("tier", HelpText = "The restoration priority.")]
+            public string? Tier { get; set; }
         }
 
         public static async Task Main(string[] args)
@@ -36,6 +42,8 @@ namespace Sample.GetObject
             var bucket = option.Bucket;
             var endpoint = option.Endpoint;
             var key = option.Key;
+            var days = option.Days;
+            var tier = option.Tier;
 
             // Using the SDK's default configuration
             // loading credentials values from the environment variables
@@ -50,24 +58,31 @@ namespace Sample.GetObject
 
             using var client = new OSS.Client(cfg);
 
-            // default is streaming mode
-            var result = await client.GetObjectAsync(new OSS.Models.GetObjectRequest()
+            var request = new OSS.Models.RestoreObjectRequest()
             {
                 Bucket = bucket,
                 Key = key,
-            });
+            };
 
-            // real all data into memory
-            //var result = await client.GetObjectAsync(new OSS.Models.GetObjectRequest() {
-            //    Bucket = bucket,
-            //    Key = key,
-            //},System.Net.Http.HttpCompletionOption.ResponseContentRead);
+            if (days != null || tier != null)
+            {
+                request.RestoreRequest = new OSS.Models.RestoreRequest()
+                {
+                    Days = days,
+                };
 
-            using var body = result.Body;
-            var reader = new StreamReader(body!);
-            var data = reader.ReadToEnd();
+                if (tier != null)
+                {
+                    request.RestoreRequest.JobParameters = new OSS.Models.JobParameters()
+                    {
+                        Tier = tier
+                    };
+                }
+            }
 
-            Console.WriteLine("GetObject done");
+            var result = await client.RestoreObjectAsync(request);
+
+            Console.WriteLine("RestoreObject done");
             Console.WriteLine($"StatusCode: {result.StatusCode}");
             Console.WriteLine($"RequestId: {result.RequestId}");
             Console.WriteLine("Response Headers:");

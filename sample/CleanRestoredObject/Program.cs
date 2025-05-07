@@ -1,7 +1,7 @@
 ﻿using CommandLine;
 using OSS = AlibabaCloud.OSS.V2;
 
-namespace Sample.GetObject
+namespace Sample.CleanRestoredObject
 {
     public class Program
     {
@@ -50,24 +50,13 @@ namespace Sample.GetObject
 
             using var client = new OSS.Client(cfg);
 
-            // default is streaming mode
-            var result = await client.GetObjectAsync(new OSS.Models.GetObjectRequest()
+            var result = await client.CleanRestoredObjectAsync(new OSS.Models.CleanRestoredObjectRequest()
             {
                 Bucket = bucket,
                 Key = key,
             });
 
-            // real all data into memory
-            //var result = await client.GetObjectAsync(new OSS.Models.GetObjectRequest() {
-            //    Bucket = bucket,
-            //    Key = key,
-            //},System.Net.Http.HttpCompletionOption.ResponseContentRead);
-
-            using var body = result.Body;
-            var reader = new StreamReader(body!);
-            var data = reader.ReadToEnd();
-
-            Console.WriteLine("GetObject done");
+            Console.WriteLine("CleanRestoredObject done");
             Console.WriteLine($"StatusCode: {result.StatusCode}");
             Console.WriteLine($"RequestId: {result.RequestId}");
             Console.WriteLine("Response Headers:");

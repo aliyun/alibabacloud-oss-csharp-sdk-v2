@@ -1,7 +1,8 @@
-﻿using CommandLine;
+﻿using System.Text;
+using CommandLine;
 using OSS = AlibabaCloud.OSS.V2;
 
-namespace Sample.GetObject
+namespace Sample.ProcessObject
 {
     public class Program
     {
@@ -50,24 +51,27 @@ namespace Sample.GetObject
 
             using var client = new OSS.Client(cfg);
 
-            // default is streaming mode
-            var result = await client.GetObjectAsync(new OSS.Models.GetObjectRequest()
+            // Specify the name of the bucket to store the processed images
+            // the bucket must be in the same region as the bucket where the original image resides
+            var targetBucket = bucket!;
+            // Specify the name of the processed image.
+            var targetKey = $"process-{key}";
+            // Scale the image to a fixed width and height of 100 px
+            var style = "image/resize,m_fixed,w_100,h_100";
+
+            var targetNameBase64 = Convert.ToBase64String(Encoding.UTF8.GetBytes(targetBucket));
+            var targetKeyBase64 = Convert.ToBase64String(Encoding.UTF8.GetBytes(targetKey));
+
+            var process = $"{style}|sys/saveas,o_{targetKeyBase64},b_{targetNameBase64}";
+
+            var result = await client.ProcessObjectAsync(new OSS.Models.ProcessObjectRequest()
             {
                 Bucket = bucket,
                 Key = key,
+                Process = process
             });
 
-            // real all data into memory
-            //var result = await client.GetObjectAsync(new OSS.Models.GetObjectRequest() {
-            //    Bucket = bucket,
-            //    Key = key,
-            //},System.Net.Http.HttpCompletionOption.ResponseContentRead);
-
-            using var body = result.Body;
-            var reader = new StreamReader(body!);
-            var data = reader.ReadToEnd();
-
-            Console.WriteLine("GetObject done");
+            Console.WriteLine("ProcessObject done");
             Console.WriteLine($"StatusCode: {result.StatusCode}");
             Console.WriteLine($"RequestId: {result.RequestId}");
             Console.WriteLine("Response Headers:");

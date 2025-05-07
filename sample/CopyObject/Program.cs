@@ -1,7 +1,7 @@
 ﻿using CommandLine;
 using OSS = AlibabaCloud.OSS.V2;
 
-namespace Sample.GetObject
+namespace Sample.CopyObject
 {
     public class Program
     {
@@ -14,11 +14,18 @@ namespace Sample.GetObject
             [Option("endpoint", Required = false, HelpText = "The domain names that other services can use to access OSS.")]
             public string? Endpoint { get; set; }
 
-            [Option("bucket", Required = true, HelpText = "The `name` of the bucket.")]
-            public string? Bucket { get; set; }
+            [Option("src-bucket", Required = true, HelpText = "The `name` of the source bucket.")]
+            public string? SrcBucket { get; set; }
 
-            [Option("key", Required = true, HelpText = "The `name` of the object.")]
-            public string? Key { get; set; }
+            [Option("src-key", Required = true, HelpText = "The `name` of the source object.")]
+            public string? SrcKey { get; set; }
+
+            [Option("dst-bucket", Required = true, HelpText = "The `name` of the destination bucket.")]
+            public string? DstBucket { get; set; }
+
+            [Option("dst-key", Required = true, HelpText = "The `name` of the destination object.")]
+            public string? DstKey { get; set; }
+
         }
 
         public static async Task Main(string[] args)
@@ -33,9 +40,11 @@ namespace Sample.GetObject
 
             // Specify the region and other parameters.
             var region = option.Region;
-            var bucket = option.Bucket;
             var endpoint = option.Endpoint;
-            var key = option.Key;
+            var srcBucket = option.SrcBucket;
+            var srcKey = option.SrcKey;
+            var dstBucket = option.DstBucket;
+            var dstKey = option.DstKey;
 
             // Using the SDK's default configuration
             // loading credentials values from the environment variables
@@ -50,24 +59,15 @@ namespace Sample.GetObject
 
             using var client = new OSS.Client(cfg);
 
-            // default is streaming mode
-            var result = await client.GetObjectAsync(new OSS.Models.GetObjectRequest()
+            var result = await client.CopyObjectAsync(new OSS.Models.CopyObjectRequest()
             {
-                Bucket = bucket,
-                Key = key,
+                Bucket = dstBucket,
+                Key = dstKey,
+                SourceBucket = srcBucket,
+                SourceKey = srcKey
             });
 
-            // real all data into memory
-            //var result = await client.GetObjectAsync(new OSS.Models.GetObjectRequest() {
-            //    Bucket = bucket,
-            //    Key = key,
-            //},System.Net.Http.HttpCompletionOption.ResponseContentRead);
-
-            using var body = result.Body;
-            var reader = new StreamReader(body!);
-            var data = reader.ReadToEnd();
-
-            Console.WriteLine("GetObject done");
+            Console.WriteLine("CopyObject done");
             Console.WriteLine($"StatusCode: {result.StatusCode}");
             Console.WriteLine($"RequestId: {result.RequestId}");
             Console.WriteLine("Response Headers:");

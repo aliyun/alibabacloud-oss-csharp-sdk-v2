@@ -1,7 +1,8 @@
-﻿using CommandLine;
+﻿using System.Text;
+using CommandLine;
 using OSS = AlibabaCloud.OSS.V2;
 
-namespace Sample.GetObject
+namespace Sample.GetObjectTagging
 {
     public class Program
     {
@@ -50,28 +51,18 @@ namespace Sample.GetObject
 
             using var client = new OSS.Client(cfg);
 
-            // default is streaming mode
-            var result = await client.GetObjectAsync(new OSS.Models.GetObjectRequest()
+            var result = await client.GetObjectTaggingAsync(new()
             {
                 Bucket = bucket,
-                Key = key,
+                Key = key
             });
 
-            // real all data into memory
-            //var result = await client.GetObjectAsync(new OSS.Models.GetObjectRequest() {
-            //    Bucket = bucket,
-            //    Key = key,
-            //},System.Net.Http.HttpCompletionOption.ResponseContentRead);
-
-            using var body = result.Body;
-            var reader = new StreamReader(body!);
-            var data = reader.ReadToEnd();
-
-            Console.WriteLine("GetObject done");
+            Console.WriteLine("GetObjectTagging done");
             Console.WriteLine($"StatusCode: {result.StatusCode}");
             Console.WriteLine($"RequestId: {result.RequestId}");
             Console.WriteLine("Response Headers:");
             result.Headers.ToList().ForEach(x => Console.WriteLine(x.Key + " : " + x.Value));
+            result.Tagging?.TagSet?.Tags?.ForEach(x => Console.WriteLine(x.Key + " : " + x.Value));
         }
     }
 }

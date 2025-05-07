@@ -1,7 +1,7 @@
 ﻿using CommandLine;
 using OSS = AlibabaCloud.OSS.V2;
 
-namespace Sample.GetObject
+namespace Sample.GetObjectAcl
 {
     public class Program
     {
@@ -50,28 +50,18 @@ namespace Sample.GetObject
 
             using var client = new OSS.Client(cfg);
 
-            // default is streaming mode
-            var result = await client.GetObjectAsync(new OSS.Models.GetObjectRequest()
+            var result = await client.GetObjectAclAsync(new OSS.Models.GetObjectAclRequest()
             {
                 Bucket = bucket,
                 Key = key,
             });
 
-            // real all data into memory
-            //var result = await client.GetObjectAsync(new OSS.Models.GetObjectRequest() {
-            //    Bucket = bucket,
-            //    Key = key,
-            //},System.Net.Http.HttpCompletionOption.ResponseContentRead);
-
-            using var body = result.Body;
-            var reader = new StreamReader(body!);
-            var data = reader.ReadToEnd();
-
-            Console.WriteLine("GetObject done");
+            Console.WriteLine("GetObjectAcl done");
             Console.WriteLine($"StatusCode: {result.StatusCode}");
             Console.WriteLine($"RequestId: {result.RequestId}");
             Console.WriteLine("Response Headers:");
             result.Headers.ToList().ForEach(x => Console.WriteLine(x.Key + " : " + x.Value));
+            Console.WriteLine($"Acl: {result.Acl}");
         }
     }
 }

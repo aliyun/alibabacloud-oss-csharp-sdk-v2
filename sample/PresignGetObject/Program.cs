@@ -1,7 +1,9 @@
-﻿using CommandLine;
+﻿using System.Net.Http;
+using System.Web;
+using CommandLine;
 using OSS = AlibabaCloud.OSS.V2;
 
-namespace Sample.GetObject
+namespace Sample.PresignGetObject
 {
     public class Program
     {
@@ -50,28 +52,20 @@ namespace Sample.GetObject
 
             using var client = new OSS.Client(cfg);
 
-            // default is streaming mode
-            var result = await client.GetObjectAsync(new OSS.Models.GetObjectRequest()
+            var result = client.Presign(new OSS.Models.GetObjectRequest()
             {
                 Bucket = bucket,
                 Key = key,
             });
 
-            // real all data into memory
-            //var result = await client.GetObjectAsync(new OSS.Models.GetObjectRequest() {
-            //    Bucket = bucket,
-            //    Key = key,
-            //},System.Net.Http.HttpCompletionOption.ResponseContentRead);
-
-            using var body = result.Body;
-            var reader = new StreamReader(body!);
-            var data = reader.ReadToEnd();
+            using var hc = new HttpClient();
+            var httpResult = await hc.GetAsync(result.Url);
+            var stream = await httpResult.Content.ReadAsStreamAsync();
+            using var reader = new StreamReader(stream);
+            var got = await reader.ReadToEndAsync();
 
             Console.WriteLine("GetObject done");
-            Console.WriteLine($"StatusCode: {result.StatusCode}");
-            Console.WriteLine($"RequestId: {result.RequestId}");
-            Console.WriteLine("Response Headers:");
-            result.Headers.ToList().ForEach(x => Console.WriteLine(x.Key + " : " + x.Value));
+            Console.WriteLine($"StatusCode: {httpResult.StatusCode}");
         }
     }
 }
