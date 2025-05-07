@@ -1,7 +1,7 @@
 ﻿using CommandLine;
 using OSS = AlibabaCloud.OSS.V2;
 
-namespace Sample.GetObject
+namespace Sample.PutBucketAcl
 {
     public class Program
     {
@@ -17,8 +17,8 @@ namespace Sample.GetObject
             [Option("bucket", Required = true, HelpText = "The `name` of the bucket.")]
             public string? Bucket { get; set; }
 
-            [Option("key", Required = true, HelpText = "The `name` of the object.")]
-            public string? Key { get; set; }
+            [Option("acl", Required = true, HelpText = "The ACL that you want to configure or modify for the bucket.")]
+            public string? Acl { get; set; }
         }
 
         public static async Task Main(string[] args)
@@ -35,7 +35,7 @@ namespace Sample.GetObject
             var region = option.Region;
             var bucket = option.Bucket;
             var endpoint = option.Endpoint;
-            var key = option.Key;
+            var acl = option.Acl;
 
             // Using the SDK's default configuration
             // loading credentials values from the environment variables
@@ -50,24 +50,13 @@ namespace Sample.GetObject
 
             using var client = new OSS.Client(cfg);
 
-            // default is streaming mode
-            var result = await client.GetObjectAsync(new OSS.Models.GetObjectRequest()
+            var result = await client.PutBucketAclAsync(new OSS.Models.PutBucketAclRequest()
             {
                 Bucket = bucket,
-                Key = key,
+                Acl = acl
             });
 
-            // real all data into memory
-            //var result = await client.GetObjectAsync(new OSS.Models.GetObjectRequest() {
-            //    Bucket = bucket,
-            //    Key = key,
-            //},System.Net.Http.HttpCompletionOption.ResponseContentRead);
-
-            using var body = result.Body;
-            var reader = new StreamReader(body!);
-            var data = reader.ReadToEnd();
-
-            Console.WriteLine("GetObject done");
+            Console.WriteLine("PutBucketAcl done");
             Console.WriteLine($"StatusCode: {result.StatusCode}");
             Console.WriteLine($"RequestId: {result.RequestId}");
             Console.WriteLine("Response Headers:");

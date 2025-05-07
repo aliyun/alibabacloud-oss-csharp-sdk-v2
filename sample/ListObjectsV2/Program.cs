@@ -1,10 +1,13 @@
-﻿using OSS = AlibabaCloud.OSS.V2;
-using CommandLine;
+﻿using CommandLine;
+using OSS = AlibabaCloud.OSS.V2;
 
-namespace Sample.ListObjectsV2 {
-    public class Program {
+namespace Sample.ListObjectsV2
+{
+    public class Program
+    {
 
-        public class Options {
+        public class Options
+        {
             [Option("region", Required = true, HelpText = "The region in which the bucket is located.")]
             public string? Region { get; set; }
 
@@ -15,32 +18,46 @@ namespace Sample.ListObjectsV2 {
             public string? Bucket { get; set; }
         }
 
-        public static async Task Main(string[] args) {
+        public static async Task Main(string[] args)
+        {
 
             var parserResult = Parser.Default.ParseArguments<Options>(args);
-            if (parserResult.Errors.Any()) {
+            if (parserResult.Errors.Any())
+            {
                 Environment.Exit(1);
             }
             var option = parserResult.Value;
+
+            // Specify the region and other parameters.
+            var region = option.Region;
+            var bucket = option.Bucket;
+            var endpoint = option.Endpoint;
 
             // Using the SDK's default configuration
             // loading credentials values from the environment variables
             var cfg = OSS.Configuration.LoadDefault();
             cfg.CredentialsProvider = new OSS.Credentials.EnvironmentVariableCredentialsProvider();
-            cfg.Region = option.Region;
-            cfg.Endpoint = option.Endpoint;
+            cfg.Region = region;
+
+            if (endpoint != null)
+            {
+                cfg.Endpoint = endpoint;
+            }
 
             using var client = new OSS.Client(cfg);
 
             // Create the Paginator for the ListObjects operation.
-            var paginator = client.ListObjectsV2Paginator(new OSS.Models.ListObjectsV2Request() {
-                Bucket = option.Bucket
+            var paginator = client.ListObjectsV2Paginator(new OSS.Models.ListObjectsV2Request()
+            {
+                Bucket = bucket
             });
 
             // Lists all objects in a bucket
             Console.WriteLine("Objects:");
-            await foreach (var page in paginator.IterPageAsync()) {
-                foreach (var content in page.Contents ?? []) {
+            await foreach (var page in paginator.IterPageAsync())
+            {
+                foreach (var content in page.Contents ?? [])
+                {
                     Console.WriteLine($"Object:{content.Key}, {content.Size}, {content.LastModified}");
                 }
             }

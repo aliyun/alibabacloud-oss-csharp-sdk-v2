@@ -1,7 +1,8 @@
-﻿using CommandLine;
+﻿using System.Text;
+using CommandLine;
 using OSS = AlibabaCloud.OSS.V2;
 
-namespace Sample.GetObject
+namespace Sample.AsyncProcessObject
 {
     public class Program
     {
@@ -50,28 +51,32 @@ namespace Sample.GetObject
 
             using var client = new OSS.Client(cfg);
 
-            // default is streaming mode
-            var result = await client.GetObjectAsync(new OSS.Models.GetObjectRequest()
+            // Specify the name of the bucket to store the converted file
+            var targetBucket = bucket!;
+            // Specify the name of the converted file
+            var targetKey = $"process-{key}";
+            // Build document processing style strings and document transformation processing parameters
+            // Define the processing rules for converting the source Docx document to a PNG image
+            var style = "doc/convert,target_png,source_docx";
+
+            var targetNameBase64 = Convert.ToBase64String(Encoding.UTF8.GetBytes(targetBucket));
+            var targetKeyBase64 = Convert.ToBase64String(Encoding.UTF8.GetBytes(targetKey));
+
+            var process = $"{style}|sys/saveas,b_{targetNameBase64},o_{targetKeyBase64}/notify";
+
+            var result = await client.AsyncProcessObjectAsync(new OSS.Models.AsyncProcessObjectRequest()
             {
                 Bucket = bucket,
                 Key = key,
+                Process = process
             });
 
-            // real all data into memory
-            //var result = await client.GetObjectAsync(new OSS.Models.GetObjectRequest() {
-            //    Bucket = bucket,
-            //    Key = key,
-            //},System.Net.Http.HttpCompletionOption.ResponseContentRead);
-
-            using var body = result.Body;
-            var reader = new StreamReader(body!);
-            var data = reader.ReadToEnd();
-
-            Console.WriteLine("GetObject done");
+            Console.WriteLine("AsyncProcessObject done");
             Console.WriteLine($"StatusCode: {result.StatusCode}");
             Console.WriteLine($"RequestId: {result.RequestId}");
             Console.WriteLine("Response Headers:");
             result.Headers.ToList().ForEach(x => Console.WriteLine(x.Key + " : " + x.Value));
+            Console.WriteLine($"ProcessResult: {result.ProcessResult}");
         }
     }
 }
