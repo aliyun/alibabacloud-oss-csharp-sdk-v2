@@ -1,5 +1,6 @@
 ﻿using System.Text;
 using AlibabaCloud.OSS.V2.Models;
+using AlibabaCloud.OSS.V2.IO;
 
 namespace AlibabaCloud.OSS.V2.IntegrationTests;
 
@@ -1004,5 +1005,107 @@ public class ClientMiscTest : IDisposable
         using var reader1 = new StreamReader(getResult.Body);
         var got1 = await reader1.ReadToEndAsync();
         Assert.Equal(content, got1);
+    }
+
+    [Fact]
+    public async Task TestUploadPartFromFile()
+    {
+        var client = Utils.GetDefaultClient();
+
+        //default
+        var bucketName = Utils.RandomBucketName(BucketNamePrefix);
+
+        var result = await client.PutBucketAsync(new()
+        {
+            Bucket = bucketName
+        });
+
+        Assert.NotNull(result);
+        Assert.Equal(200, result.StatusCode);
+        Assert.NotNull(result.RequestId);
+
+        var partSize = 120 * 1024;
+        var filepath = Utils.RandomFilePath(RootPath);
+        var saveFilepath = Utils.RandomFilePath(RootPath);
+        Utils.PrepareSampleFile(filepath, 512);
+        Assert.True(File.Exists(filepath));
+
+        // init
+        var objectName = Utils.RandomObjectName();
+        var initResult = await client.InitiateMultipartUploadAsync(new()
+        {
+            Bucket = bucketName,
+            Key = objectName
+        }
+        );
+        Assert.NotNull(initResult);
+        Assert.Equal(200, initResult.StatusCode);
+        Assert.NotNull(initResult.RequestId);
+        Assert.Equal("url", initResult.EncodingType);
+
+        // upload
+        using var file = File.OpenRead(filepath);
+        var fileSize = file.Length;
+        long partNumber = 1;
+        for (int offset = 0; offset < fileSize; offset += partSize)
+        {
+            var size = (long)Math.Min(partSize, fileSize - offset);
+            var upResult = await client.UploadPartAsync(new()
+            {
+                Bucket = bucketName,
+                Key = objectName,
+                PartNumber = partNumber,
+                UploadId = initResult.UploadId,
+                Body = new BoundedStream(file, (long)offset, size)
+            });
+
+            partNumber++;
+
+            Assert.NotNull(upResult);
+            Assert.Equal(200, upResult.StatusCode);
+            Assert.NotNull(upResult.RequestId);
+        }
+
+        // complete
+        var cmResult = await client.CompleteMultipartUploadAsync(new()
+        {
+            Bucket = bucketName,
+            Key = objectName,
+            UploadId = initResult.UploadId,
+            CompleteAll = "yes"
+        });
+        Assert.NotNull(cmResult);
+        Assert.Equal(200, cmResult.StatusCode);
+        Assert.NotNull(cmResult.RequestId);
+        Assert.Equal("url", cmResult.EncodingType);
+
+        // get object
+        var getObjectResult = await client.GetObjectAsync(
+            new()
+            {
+                Bucket = bucketName,
+                Key = objectName
+            }
+        );
+        Assert.NotNull(getObjectResult);
+        Assert.Equal(200, getObjectResult.StatusCode);
+        Assert.Equal((long)fileSize, getObjectResult.ContentLength);
+        Assert.Equal("Multipart", getObjectResult.ObjectType);
+        Assert.Null(getObjectResult.TaggingCount);
+        Assert.Null(getObjectResult.ContentMd5);
+        Assert.NotNull(getObjectResult.StorageClass);
+        Assert.NotNull(getObjectResult.Metadata);
+        Assert.Empty(getObjectResult.Metadata);
+        Assert.NotNull(getObjectResult.Body);
+        Assert.False(getObjectResult.Body.CanSeek);
+
+        using var saveStream = File.OpenWrite(saveFilepath);
+        await getObjectResult.Body.CopyToAsync(saveStream);
+        saveStream.Close();
+
+        var srcMd5 = Utils.ComputeContentMd5(filepath);
+        var dstMd5 = Utils.ComputeContentMd5(saveFilepath);
+        Assert.NotEmpty(srcMd5);
+        Assert.Equal(srcMd5, dstMd5);
     }
 }
