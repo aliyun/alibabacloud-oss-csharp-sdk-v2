@@ -79,6 +79,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DeleteMultipleObjects", "De
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DeleteBucket", "DeleteBucket\DeleteBucket.csproj", "{1CFCF2DD-C9F6-4903-A530-C7B813A6ED27}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AliyunCredentialsUsage", "AliyunCredentialsUsage\AliyunCredentialsUsage.csproj", "{02A88682-C702-461A-BE45-03FE071774F1}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -237,6 +239,10 @@ Global
 		{1CFCF2DD-C9F6-4903-A530-C7B813A6ED27}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1CFCF2DD-C9F6-4903-A530-C7B813A6ED27}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1CFCF2DD-C9F6-4903-A530-C7B813A6ED27}.Release|Any CPU.Build.0 = Release|Any CPU
+		{02A88682-C702-461A-BE45-03FE071774F1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{02A88682-C702-461A-BE45-03FE071774F1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{02A88682-C702-461A-BE45-03FE071774F1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{02A88682-C702-461A-BE45-03FE071774F1}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
