@@ -20,5 +20,6 @@
     </ItemGroup>
     <ItemGroup Label="Sample dependencies">
       <PackageVersion Include="CommandLineParser" Version="2.9.1"/>
+      <PackageVersion Include="System.Text.Json" Version="9.0.0"/>
     </ItemGroup>
 </Project>
