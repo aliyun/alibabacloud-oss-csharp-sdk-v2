@@ -54,7 +54,7 @@ public class Utils
         if (_client != null) return _client;
 
         var cfg = Configuration.LoadDefault();
-        cfg.CredentialsProvider = new Credentials.StaticCredentialsProvide(AccessKeyId, AccessKeySecret);
+        cfg.CredentialsProvider = new Credentials.StaticCredentialsProvider(AccessKeyId, AccessKeySecret);
         cfg.Region = Region;
         cfg.Endpoint = Endpoint;
 
@@ -66,7 +66,7 @@ public class Utils
     public static Client GetClient(string region, string endpoint)
     {
         var cfg = Configuration.LoadDefault();
-        cfg.CredentialsProvider = new Credentials.StaticCredentialsProvide(AccessKeyId, AccessKeySecret);
+        cfg.CredentialsProvider = new Credentials.StaticCredentialsProvider(AccessKeyId, AccessKeySecret);
         cfg.Region = region;
         cfg.Endpoint = endpoint;
 
@@ -78,7 +78,7 @@ public class Utils
         if (_invalidClient != null) return _invalidClient;
 
         var cfg = Configuration.LoadDefault();
-        cfg.CredentialsProvider = new Credentials.StaticCredentialsProvide("invalid-ak", "invalid-sk");
+        cfg.CredentialsProvider = new Credentials.StaticCredentialsProvider("invalid-ak", "invalid-sk");
         cfg.Region = Region;
         cfg.Endpoint = Endpoint;
 

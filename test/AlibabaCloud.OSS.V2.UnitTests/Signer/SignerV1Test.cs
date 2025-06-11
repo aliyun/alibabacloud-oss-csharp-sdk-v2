@@ -7,7 +7,7 @@ public class SignerV1Test
     [Fact]
     public void TestAuthHeader()
     {
-        var provider = new V2.Credentials.StaticCredentialsProvide("ak", "sk");
+        var provider = new V2.Credentials.StaticCredentialsProvider("ak", "sk");
         var cred = provider.GetCredentials();
 
         //case 1
@@ -113,7 +113,7 @@ public class SignerV1Test
     [Fact]
     public void TestAuthHeaderToken()
     {
-        var provider = new V2.Credentials.StaticCredentialsProvide("ak", "sk", "token");
+        var provider = new V2.Credentials.StaticCredentialsProvider("ak", "sk", "token");
         var cred = provider.GetCredentials();
 
         //case 1
@@ -148,7 +148,7 @@ public class SignerV1Test
     [Fact]
     public void TestAuthQuery()
     {
-        var provider = new V2.Credentials.StaticCredentialsProvide("ak", "sk");
+        var provider = new V2.Credentials.StaticCredentialsProvider("ak", "sk");
         var cred = provider.GetCredentials();
 
         //case 1
@@ -183,7 +183,7 @@ public class SignerV1Test
     [Fact]
     public void TestAuthQueryToken()
     {
-        var provider = new V2.Credentials.StaticCredentialsProvide("ak", "sk", "token");
+        var provider = new V2.Credentials.StaticCredentialsProvider("ak", "sk", "token");
         var cred = provider.GetCredentials();
 
         //case 1

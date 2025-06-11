@@ -1,32 +1,29 @@
 ﻿
-using System;
-
 namespace AlibabaCloud.OSS.V2.Credentials
 {
     /// <summary>
     /// Explicitly specify the AccessKey pair that you want to use to access OSS.
     /// </summary>
-    [Obsolete("Please use StaticCredentialsProvider instead")]
-    public class StaticCredentialsProvide : ICredentialsProvider
+    public class StaticCredentialsProvider : ICredentialsProvider
     {
         private readonly Credentials _credentials;
         /// <summary>
-        /// Creates an instance of <see cref="StaticCredentialsProvide"/>
+        /// Creates an instance of <see cref="StaticCredentialsProvider"/>
         /// </summary>
         /// <param name="accessKeyId"></param>
         /// <param name="accessKeySecret"></param>
-        public StaticCredentialsProvide(string accessKeyId, string accessKeySecret)
+        public StaticCredentialsProvider(string accessKeyId, string accessKeySecret)
         {
             _credentials = new(accessKeyId, accessKeySecret);
         }
 
         /// <summary>
-        /// Creates an instance of <see cref="StaticCredentialsProvide"/>
+        /// Creates an instance of <see cref="StaticCredentialsProvider"/>
         /// </summary>
         /// <param name="accessKeyId"></param>
         /// <param name="accessKeySecret"></param>
         /// <param name="securityToken"></param>
-        public StaticCredentialsProvide(string accessKeyId, string accessKeySecret, string securityToken)
+        public StaticCredentialsProvider(string accessKeyId, string accessKeySecret, string securityToken)
         {
             _credentials = new(accessKeyId, accessKeySecret, securityToken);
         }

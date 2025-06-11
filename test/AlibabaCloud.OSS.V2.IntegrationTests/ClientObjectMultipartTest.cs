@@ -781,7 +781,7 @@ public class ClientObjectMultipartTest : IDisposable
     public async Task TestUploadPartWithCrcCheckDisable()
     {
         var cfg = Configuration.LoadDefault();
-        cfg.CredentialsProvider = new Credentials.StaticCredentialsProvide(Utils.AccessKeyId, Utils.AccessKeySecret);
+        cfg.CredentialsProvider = new Credentials.StaticCredentialsProvider(Utils.AccessKeyId, Utils.AccessKeySecret);
         cfg.Region = Utils.Region;
         cfg.Endpoint = Utils.Endpoint;
         cfg.DisableUploadCrc64Check = true;
