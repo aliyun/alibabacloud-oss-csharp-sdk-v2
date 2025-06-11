@@ -854,7 +854,7 @@ public class ClientImplTest
         var config = new Configuration()
         {
             Region = "cn-hangzhou",
-            CredentialsProvider = new StaticCredentialsProvide("ak", "sk"),
+            CredentialsProvider = new StaticCredentialsProvider("ak", "sk"),
             HttpTransport = new HttpTransport(mockHandler),
         };
         var client = new ClientImpl(config);
@@ -892,7 +892,7 @@ public class ClientImplTest
         var config = new Configuration()
         {
             Region = "cn-hangzhou",
-            CredentialsProvider = new StaticCredentialsProvide("ak", "sk"),
+            CredentialsProvider = new StaticCredentialsProvider("ak", "sk"),
             HttpTransport = new HttpTransport(mockHandler),
             SignatureVersion = "v1"
         };
@@ -1725,7 +1725,7 @@ public class ClientImplTest
         var config = new Configuration()
         {
             Region = "cn-hangzhou",
-            CredentialsProvider = new StaticCredentialsProvide("ak", "sk"),
+            CredentialsProvider = new StaticCredentialsProvider("ak", "sk"),
             HttpTransport = new HttpTransport(mockHandler),
         };
         var client = new ClientImpl(config);
@@ -1795,7 +1795,7 @@ public class ClientImplTest
         config = new Configuration()
         {
             Region = "cn-hangzhou",
-            CredentialsProvider = new StaticCredentialsProvide("ak", "sk"),
+            CredentialsProvider = new StaticCredentialsProvider("ak", "sk"),
             HttpTransport = new HttpTransport(mockHandler),
             AdditionalHeaders = ["Abc"]
         };
@@ -1842,7 +1842,7 @@ public class ClientImplTest
         config = new Configuration()
         {
             Region = "cn-hangzhou",
-            CredentialsProvider = new StaticCredentialsProvide("ak", "sk", "token"),
+            CredentialsProvider = new StaticCredentialsProvider("ak", "sk", "token"),
             HttpTransport = new HttpTransport(mockHandler),
         };
         client = new ClientImpl(config);
@@ -1882,7 +1882,7 @@ public class ClientImplTest
         var config = new Configuration()
         {
             Region = "cn-hangzhou",
-            CredentialsProvider = new StaticCredentialsProvide("ak", "sk"),
+            CredentialsProvider = new StaticCredentialsProvider("ak", "sk"),
             HttpTransport = new HttpTransport(mockHandler),
         };
         var client = new ClientImpl(config);
@@ -1919,7 +1919,7 @@ public class ClientImplTest
         var config = new Configuration()
         {
             Region = "cn-hangzhou",
-            CredentialsProvider = new StaticCredentialsProvide("ak", "sk"),
+            CredentialsProvider = new StaticCredentialsProvider("ak", "sk"),
             HttpTransport = new HttpTransport(mockHandler),
             SignatureVersion = "v1"
         };
@@ -1985,7 +1985,7 @@ public class ClientImplTest
         config = new Configuration()
         {
             Region = "cn-hangzhou",
-            CredentialsProvider = new StaticCredentialsProvide("ak", "sk"),
+            CredentialsProvider = new StaticCredentialsProvider("ak", "sk"),
             HttpTransport = new HttpTransport(mockHandler),
             SignatureVersion = "v1",
             AdditionalHeaders = ["Abc"]
@@ -2029,7 +2029,7 @@ public class ClientImplTest
         config = new Configuration()
         {
             Region = "cn-hangzhou",
-            CredentialsProvider = new StaticCredentialsProvide("ak", "sk", "token"),
+            CredentialsProvider = new StaticCredentialsProvider("ak", "sk", "token"),
             HttpTransport = new HttpTransport(mockHandler),
             SignatureVersion = "v1"
         };
@@ -2068,7 +2068,7 @@ public class ClientImplTest
         var config = new Configuration()
         {
             Region = "cn-hangzhou",
-            CredentialsProvider = new StaticCredentialsProvide("ak", "sk"),
+            CredentialsProvider = new StaticCredentialsProvider("ak", "sk"),
             HttpTransport = new HttpTransport(mockHandler),
             SignatureVersion = "v1"
         };
@@ -2106,7 +2106,7 @@ public class ClientImplTest
         var config = new Configuration()
         {
             Region = "cn-hangzhou",
-            CredentialsProvider = new StaticCredentialsProvide("ak", "sk"),
+            CredentialsProvider = new StaticCredentialsProvider("ak", "sk"),
             HttpTransport = new HttpTransport(mockHandler),
         };
         var client = new ClientImpl(config);
@@ -2164,7 +2164,7 @@ public class ClientImplTest
         config = new Configuration()
         {
             Region = "cn-hangzhou",
-            CredentialsProvider = new StaticCredentialsProvide("", ""),
+            CredentialsProvider = new StaticCredentialsProvider("", ""),
             HttpTransport = new HttpTransport(mockHandler),
         };
         client = new ClientImpl(config);
@@ -2191,7 +2191,7 @@ public class ClientImplTest
         config = new Configuration()
         {
             Region = "cn-hangzhou",
-            CredentialsProvider = new StaticCredentialsProvide("ak", "sk"),
+            CredentialsProvider = new StaticCredentialsProvider("ak", "sk"),
             HttpTransport = new HttpTransport(mockHandler),
         };
         client = new ClientImpl(config);
@@ -2226,7 +2226,7 @@ public class ClientImplTest
         var config = new Configuration()
         {
             Region = "cn-hangzhou",
-            CredentialsProvider = new StaticCredentialsProvide("ak", "sk"),
+            CredentialsProvider = new StaticCredentialsProvider("ak", "sk"),
             HttpTransport = new HttpTransport(mockHandler),
         };
         using var client = new ClientImpl(config);

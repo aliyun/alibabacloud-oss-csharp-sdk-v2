@@ -1,6 +1,6 @@
 ﻿using System.Text;
-using AlibabaCloud.OSS.V2.Models;
 using AlibabaCloud.OSS.V2.IO;
+using AlibabaCloud.OSS.V2.Models;
 
 namespace AlibabaCloud.OSS.V2.IntegrationTests;
 
@@ -517,7 +517,7 @@ public class ClientMiscTest : IDisposable
     public async Task TestInsecureSkipVerifyTrue()
     {
         var cfg = Configuration.LoadDefault();
-        cfg.CredentialsProvider = new Credentials.StaticCredentialsProvide(Utils.AccessKeyId, Utils.AccessKeySecret);
+        cfg.CredentialsProvider = new Credentials.StaticCredentialsProvider(Utils.AccessKeyId, Utils.AccessKeySecret);
         cfg.Region = Utils.Region;
         cfg.InsecureSkipVerify = true;
 
@@ -901,7 +901,7 @@ public class ClientMiscTest : IDisposable
 
         // disable crc
         var cfg = Configuration.LoadDefault();
-        cfg.CredentialsProvider = new Credentials.StaticCredentialsProvide(Utils.AccessKeyId, Utils.AccessKeySecret);
+        cfg.CredentialsProvider = new Credentials.StaticCredentialsProvider(Utils.AccessKeyId, Utils.AccessKeySecret);
         cfg.Region = Utils.Region;
         cfg.Endpoint = Utils.Endpoint;
         cfg.DisableDownloadCrc64Check = true;

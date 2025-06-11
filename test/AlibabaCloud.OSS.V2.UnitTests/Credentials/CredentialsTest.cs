@@ -58,7 +58,7 @@ public class CredentialsTest
     [Fact]
     public void TestStaticCredentialsProvide()
     {
-        var provider = new V2.Credentials.StaticCredentialsProvide("ak", "sk");
+        var provider = new V2.Credentials.StaticCredentialsProvider("ak", "sk");
         var cred = provider.GetCredentials();
         Assert.Equal("ak", cred.AccessKeyId);
         Assert.Equal("sk", cred.AccessKeySecret);
@@ -67,7 +67,7 @@ public class CredentialsTest
         Assert.Null(cred.Expiration);
         Assert.False(cred.IsExpired);
 
-        provider = new V2.Credentials.StaticCredentialsProvide("ak", "sk", "token");
+        provider = new V2.Credentials.StaticCredentialsProvider("ak", "sk", "token");
         cred = provider.GetCredentials();
         Assert.Equal("ak", cred.AccessKeyId);
         Assert.Equal("sk", cred.AccessKeySecret);
@@ -94,7 +94,7 @@ public class CredentialsTest
     public void TestCredentialsProvideFunc()
     {
 
-        var provider = new V2.Credentials.CredentialsProvideFunc(() => new V2.Credentials.Credentials("ak", "sk"));
+        var provider = new V2.Credentials.CredentialsProviderFunc(() => new V2.Credentials.Credentials("ak", "sk"));
         var cred = provider.GetCredentials();
         Assert.Equal("ak", cred.AccessKeyId);
         Assert.Equal("sk", cred.AccessKeySecret);
@@ -103,7 +103,7 @@ public class CredentialsTest
         Assert.Null(cred.Expiration);
         Assert.False(cred.IsExpired);
 
-        provider = new V2.Credentials.CredentialsProvideFunc(() => new V2.Credentials.Credentials("ak", "sk", "token"));
+        provider = new V2.Credentials.CredentialsProviderFunc(() => new V2.Credentials.Credentials("ak", "sk", "token"));
         cred = provider.GetCredentials();
         Assert.Equal("ak", cred.AccessKeyId);
         Assert.Equal("sk", cred.AccessKeySecret);
