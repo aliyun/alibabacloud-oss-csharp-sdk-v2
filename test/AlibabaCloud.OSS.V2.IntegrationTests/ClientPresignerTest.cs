@@ -196,7 +196,7 @@ public class ClientPresignerTest : IDisposable
     public async Task TestPresignGetAndPutObjectV1()
     {
         var cfg = Configuration.LoadDefault();
-        cfg.CredentialsProvider = new Credentials.StaticCredentialsProvide(Utils.AccessKeyId, Utils.AccessKeySecret);
+        cfg.CredentialsProvider = new Credentials.StaticCredentialsProvider(Utils.AccessKeyId, Utils.AccessKeySecret);
         cfg.Region = "cn-shenzhen";
         cfg.SignatureVersion = "v1";
 
@@ -423,7 +423,7 @@ public class ClientPresignerTest : IDisposable
     public void TestPresignFail()
     {
         var cfg = Configuration.LoadDefault();
-        cfg.CredentialsProvider = new Credentials.StaticCredentialsProvide("", "");
+        cfg.CredentialsProvider = new Credentials.StaticCredentialsProvider("", "");
         cfg.Region = Utils.Region;
         cfg.Endpoint = Utils.Endpoint;
 
@@ -546,7 +546,7 @@ public class ClientPresignerTest : IDisposable
     public void TestPresignWithExpirationTimeV4()
     {
         var cfg = Configuration.LoadDefault();
-        cfg.CredentialsProvider = new Credentials.StaticCredentialsProvide("ak", "sk");
+        cfg.CredentialsProvider = new Credentials.StaticCredentialsProvider("ak", "sk");
         cfg.Region = "cn-shenzhen";
 
         using var client = new Client(cfg);
@@ -671,7 +671,7 @@ public class ClientPresignerTest : IDisposable
     public void TestPresignWithExpirationTimeV1()
     {
         var cfg = Configuration.LoadDefault();
-        cfg.CredentialsProvider = new Credentials.StaticCredentialsProvide("ak", "sk");
+        cfg.CredentialsProvider = new Credentials.StaticCredentialsProvider("ak", "sk");
         cfg.Region = "cn-shenzhen";
         cfg.SignatureVersion = "v1";
 
@@ -800,7 +800,7 @@ public class ClientPresignerTest : IDisposable
 
         // v1 supports > 7 days Expiration
         var cfg = Configuration.LoadDefault();
-        cfg.CredentialsProvider = new Credentials.StaticCredentialsProvide("ak", "sk");
+        cfg.CredentialsProvider = new Credentials.StaticCredentialsProvider("ak", "sk");
         cfg.Region = "cn-shenzhen";
         cfg.SignatureVersion = "v1";
 
@@ -831,7 +831,7 @@ public class ClientPresignerTest : IDisposable
 
         // v4 does not support > 7 days Expiration
         cfg = Configuration.LoadDefault();
-        cfg.CredentialsProvider = new Credentials.StaticCredentialsProvide("ak", "sk");
+        cfg.CredentialsProvider = new Credentials.StaticCredentialsProvider("ak", "sk");
         cfg.Region = "cn-shenzhen";
         cfg.SignatureVersion = "v4";
 
