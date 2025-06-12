@@ -1,5 +1,11 @@
 # ChangeLog - Alibaba Cloud OSS SDK for C# v2
 
+## 版本号：0.1.2 日期：2025-06-12
+### 变更内容
+- Feature：Add BoundedStream
+- Break Change：Change CredentialsProvideFunc to CredentialsProviderFunc
+- Break Change：Change StaticCredentialsProvide to StaticCredentialsProvider
+
 ## 版本号：0.1.1 日期：2025-04-25
 ### 变更内容
 - Fix：Encode query parameters that contain special characters correctly
