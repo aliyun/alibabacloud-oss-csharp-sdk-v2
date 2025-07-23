@@ -498,7 +498,7 @@ public class ModelObjectMultipartTest
         Assert.Equal("123-id", result.RequestId);
         Assert.Equal("txt", result.Headers["content-type"]);
         Assert.Equal("CAEQMxiBgMC0vs6D", result.SourceVersionId);
-        Assert.Equal("2019/4/9 7:01:56", result.LastModified.ToString());
+        Assert.Equal(new DateTime(2019, 4, 9, 7, 1, 56), result.LastModified);
         Assert.Equal("\"25A9F4ABFCC05743DF6E2C886C56****\"", result.ETag);
     }
 
@@ -1001,15 +1001,15 @@ public class ModelObjectMultipartTest
         Assert.NotNull(result.Uploads);
         Assert.Equal(3, result.Uploads.Count);
         Assert.Equal("multipart.data", result.Uploads[0].Key);
-        Assert.Equal("2012/2/23 4:18:23", result.Uploads[0].Initiated.ToString());
+        Assert.Equal(new DateTime(2012, 2, 23, 4, 18, 23), result.Uploads[0].Initiated);
         Assert.Equal("0004B999EF518A1FE585B0C9360DC4C8", result.Uploads[0].UploadId);
 
         Assert.Equal("multipart.data", result.Uploads[1].Key);
-        Assert.Equal("2012/2/23 4:18:24", result.Uploads[1].Initiated.ToString());
+        Assert.Equal(new DateTime(2012, 2, 23, 4, 18, 24), result.Uploads[1].Initiated);
         Assert.Equal("0004B999EF5A239BB9138C6227D6****", result.Uploads[1].UploadId);
 
         Assert.Equal("oss.avi", result.Uploads[2].Key);
-        Assert.Equal("2012/2/23 6:14:27", result.Uploads[2].Initiated.ToString());
+        Assert.Equal(new DateTime(2012, 2, 23, 6, 14, 27), result.Uploads[2].Initiated);
         Assert.Equal("0004B99B8E707874FC2D692FA5D7****", result.Uploads[2].UploadId);
 
 
@@ -1074,15 +1074,15 @@ public class ModelObjectMultipartTest
         Assert.NotNull(result.Uploads);
         Assert.Equal(3, result.Uploads.Count);
         Assert.Equal("123/multipart.data", result.Uploads[0].Key);
-        Assert.Equal("2012/2/23 4:18:23", result.Uploads[0].Initiated.ToString());
+        Assert.Equal(new DateTime(2012, 2, 23, 4, 18, 23), result.Uploads[0].Initiated);
         Assert.Equal("0004B999EF518A1FE585B0C9360DC4C8", result.Uploads[0].UploadId);
 
         Assert.Equal("123/multipart.data", result.Uploads[1].Key);
-        Assert.Equal("2012/2/23 4:18:24", result.Uploads[1].Initiated.ToString());
+        Assert.Equal(new DateTime(2012, 2, 23, 4, 18, 24), result.Uploads[1].Initiated);
         Assert.Equal("0004B999EF5A239BB9138C6227D6****", result.Uploads[1].UploadId);
 
         Assert.Equal("123/oss.avi", result.Uploads[2].Key);
-        Assert.Equal("2012/2/23 6:14:27", result.Uploads[2].Initiated.ToString());
+        Assert.Equal(new DateTime(2012, 2, 23, 6, 14, 27), result.Uploads[2].Initiated);
         Assert.Equal("0004B99B8E707874FC2D692FA5D7****", result.Uploads[2].UploadId);
     }
 
@@ -1257,17 +1257,17 @@ public class ModelObjectMultipartTest
         Assert.NotNull(result.Parts);
         Assert.Equal(3, result.Parts.Count);
         Assert.Equal(1, result.Parts[0].PartNumber);
-        Assert.Equal("2012/2/23 7:01:34", result.Parts[0].LastModified.ToString());
+        Assert.Equal(new DateTime(2012, 2, 23, 7, 1, 34), result.Parts[0].LastModified);
         Assert.Equal("\"3349DC700140D7F86A0784842780****\"", result.Parts[0].ETag);
         Assert.Equal(6291456, result.Parts[0].Size);
 
         Assert.Equal(2, result.Parts[1].PartNumber);
-        Assert.Equal("2012/2/23 7:01:12", result.Parts[1].LastModified.ToString());
+        Assert.Equal(new DateTime(2012, 2, 23, 7, 1, 12), result.Parts[1].LastModified);
         Assert.Equal("\"3349DC700140D7F86A0784842780****\"", result.Parts[1].ETag);
         Assert.Equal(6291456, result.Parts[1].Size);
 
         Assert.Equal(5, result.Parts[2].PartNumber);
-        Assert.Equal("2012/2/23 7:02:03", result.Parts[2].LastModified.ToString());
+        Assert.Equal(new DateTime(2012, 2, 23, 7, 2, 3), result.Parts[2].LastModified);
         Assert.Equal("\"7265F4D211B56873A381D321F586****\"", result.Parts[2].ETag);
         Assert.Equal(1024, result.Parts[2].Size);
 
@@ -1336,19 +1336,19 @@ public class ModelObjectMultipartTest
         Assert.NotNull(result.Parts);
         Assert.Equal(3, result.Parts.Count);
         Assert.Equal(1, result.Parts[0].PartNumber);
-        Assert.Equal("2012/2/23 7:01:34", result.Parts[0].LastModified.ToString());
+        Assert.Equal(new DateTime(2012, 2, 23, 7, 1, 34), result.Parts[0].LastModified);
         Assert.Equal("\"3349DC700140D7F86A0784842780****\"", result.Parts[0].ETag);
         Assert.Equal(6291456, result.Parts[0].Size);
         Assert.Equal("123", result.Parts[0].HashCrc64);
 
         Assert.Equal(2, result.Parts[1].PartNumber);
-        Assert.Equal("2012/2/23 7:01:12", result.Parts[1].LastModified.ToString());
+        Assert.Equal(new DateTime(2012, 2, 23, 7, 1, 12), result.Parts[1].LastModified);
         Assert.Equal("\"3349DC700140D7F86A0784842780****\"", result.Parts[1].ETag);
         Assert.Equal(6291456, result.Parts[1].Size);
         Assert.Equal("456", result.Parts[1].HashCrc64);
 
         Assert.Equal(5, result.Parts[2].PartNumber);
-        Assert.Equal("2012/2/23 7:02:03", result.Parts[2].LastModified.ToString());
+        Assert.Equal(new DateTime(2012, 2, 23, 7, 2, 3), result.Parts[2].LastModified);
         Assert.Equal("\"7265F4D211B56873A381D321F586****\"", result.Parts[2].ETag);
         Assert.Equal(1024, result.Parts[2].Size);
         Assert.Equal("789", result.Parts[2].HashCrc64);

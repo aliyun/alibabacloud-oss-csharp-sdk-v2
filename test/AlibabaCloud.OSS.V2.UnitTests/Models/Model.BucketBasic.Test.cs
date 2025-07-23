@@ -750,7 +750,7 @@ public class ModelBucketBasicTest
         Assert.NotNull(result.Contents);
         Assert.Equal(2, result.Contents.Count);
         Assert.Equal("example-object11.txt", result.Contents[0].Key);
-        Assert.Equal("2020/6/22 11:42:32", result.Contents[0].LastModified.ToString());
+        Assert.Equal(new DateTime(2020, 6, 22, 11, 42, 32), result.Contents[0].LastModified);
         Assert.Equal("\"5B3C1A2E053D763E1B002CC607C5A0FE1****\"", result.Contents[0].ETag);
         Assert.Equal("Normal", result.Contents[0].Type);
         Assert.Equal(344606, result.Contents[0].Size);
@@ -761,8 +761,8 @@ public class ModelBucketBasicTest
         Assert.Equal("ongoing-request=\"true\"", result.Contents[0].RestoreInfo);
 
         Assert.Equal("example-object2.txt", result.Contents[1].Key);
-        Assert.Equal("2023/12/8 8:12:20", result.Contents[1].LastModified.ToString());
-        Assert.Equal("2023/12/8 8:12:21", result.Contents[1].TransitionTime.ToString());
+        Assert.Equal(new DateTime(2023, 12, 8, 8, 12, 20), result.Contents[1].LastModified);
+        Assert.Equal(new DateTime(2023, 12, 8, 8, 12, 21), result.Contents[1].TransitionTime);
 
         Assert.Equal("aaa", result.Prefix);
         Assert.Equal(false, result.IsTruncated);
@@ -825,7 +825,7 @@ public class ModelBucketBasicTest
         Assert.NotNull(result.Contents);
         Assert.Single(result.Contents);
         Assert.Equal("key/123/1.txt", result.Contents[0].Key);
-        Assert.Equal("2020/6/22 11:42:32", result.Contents[0].LastModified.ToString());
+        Assert.Equal(new DateTime(2020, 6, 22, 11, 42, 32), result.Contents[0].LastModified);
         Assert.Equal("\"5B3C1A2E053D763E1B002CC607C5A0FE1****\"", result.Contents[0].ETag);
         Assert.Equal("Normal", result.Contents[0].Type);
         Assert.Equal(344606, result.Contents[0].Size);
@@ -1036,7 +1036,7 @@ public class ModelBucketBasicTest
         Assert.NotNull(result.Contents);
         Assert.Equal(2, result.Contents.Count);
         Assert.Equal("example-object11.txt", result.Contents[0].Key);
-        Assert.Equal("2020/6/22 11:42:32", result.Contents[0].LastModified.ToString());
+        Assert.Equal(new DateTime(2020, 6, 22, 11, 42, 32), result.Contents[0].LastModified);
         Assert.Equal("\"5B3C1A2E053D763E1B002CC607C5A0FE1****\"", result.Contents[0].ETag);
         Assert.Equal("Normal", result.Contents[0].Type);
         Assert.Equal(344606, result.Contents[0].Size);
@@ -1110,7 +1110,7 @@ public class ModelBucketBasicTest
         Assert.NotNull(result.Contents);
         Assert.Single(result.Contents);
         Assert.Equal("key/123/1.txt", result.Contents[0].Key);
-        Assert.Equal("2020/6/22 11:42:32", result.Contents[0].LastModified.ToString());
+        Assert.Equal(new DateTime(2020, 6, 22, 11, 42, 32), result.Contents[0].LastModified);
         Assert.Equal("\"5B3C1A2E053D763E1B002CC607C5A0FE1****\"", result.Contents[0].ETag);
         Assert.Equal("Normal", result.Contents[0].Type);
         Assert.Equal(344606, result.Contents[0].Size);
