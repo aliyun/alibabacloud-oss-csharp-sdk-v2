@@ -468,7 +468,7 @@ public class ModelObjectBasicTest
         Assert.Equal("sse-123", result.ServerSideEncryption);
         Assert.Equal("sse-data-123", result.ServerSideDataEncryption);
         Assert.Equal("sse-kms-id", result.ServerSideEncryptionKeyId);
-        Assert.Equal("2019/4/9 7:01:56", result.LastModified.ToString());
+        Assert.Equal(new DateTime(2019, 4, 9, 7, 1, 56), result.LastModified);
         Assert.Equal("\"25A9F4ABFCC05743DF6E2C886C56****\"", result.ETag);
     }
 

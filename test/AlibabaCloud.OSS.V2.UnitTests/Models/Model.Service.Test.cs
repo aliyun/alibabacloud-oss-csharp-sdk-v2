@@ -169,7 +169,7 @@ public class ModelServiceTest
         Assert.NotNull(result.Buckets);
         Assert.Equal(2, result.Buckets.Count);
         Assert.Equal("app-base-oss", result.Buckets[0].Name);
-        Assert.Equal("2014/2/17 18:12:43", result.Buckets[0].CreationDate.ToString());
+        Assert.Equal(new DateTime(2014, 2, 17, 18, 12, 43), result.Buckets[0].CreationDate);
         Assert.Equal("Standard", result.Buckets[0].StorageClass);
         Assert.Equal("oss-cn-shanghai.aliyuncs.com", result.Buckets[0].ExtranetEndpoint);
         Assert.Equal("oss-cn-shanghai-internal.aliyuncs.com", result.Buckets[0].IntranetEndpoint);
@@ -178,7 +178,7 @@ public class ModelServiceTest
         Assert.Equal("oss-cn-shanghai", result.Buckets[0].Location);
 
         Assert.Equal("mybucket", result.Buckets[1].Name);
-        Assert.Equal("2014/2/25 11:21:04", result.Buckets[1].CreationDate.ToString());
+        Assert.Equal(new DateTime(2014, 2, 25, 11, 21, 4), result.Buckets[1].CreationDate);
         Assert.Equal("IA", result.Buckets[1].StorageClass);
         Assert.Equal("oss-cn-hangzhou.aliyuncs.com", result.Buckets[1].ExtranetEndpoint);
         Assert.Equal("oss-cn-hangzhou-internal.aliyuncs.com", result.Buckets[1].IntranetEndpoint);

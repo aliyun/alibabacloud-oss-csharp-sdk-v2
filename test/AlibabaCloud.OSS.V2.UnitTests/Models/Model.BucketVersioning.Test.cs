@@ -422,7 +422,7 @@ public class ModelBucketVersioningTest
         Assert.Equal("demo/README-CN.md", result.Versions[0].Key);
         Assert.Equal("CAEQEhiBgICDzK6NnBgiIGRlZWJhYmNlMGUxZDQ4YTZhNTU2MzM4Mzk5NDBl****", result.Versions[0].VersionId);
         Assert.Equal(false, result.Versions[0].IsLatest);
-        Assert.Equal("2022/9/28 9:04:39", result.Versions[0].LastModified.ToString());
+        Assert.Equal(new DateTime(2022, 9, 28, 9, 4, 39), result.Versions[0].LastModified);
         Assert.Equal("\"E317049B40462DE37C422CE4FC1B****\"", result.Versions[0].ETag);
         Assert.Equal("Normal", result.Versions[0].Type);
         Assert.Equal(2943, result.Versions[0].Size);
@@ -434,14 +434,14 @@ public class ModelBucketVersioningTest
 
         Assert.Equal("example-object-2.jpg", result.Versions[1].Key);
         Assert.Equal("", result.Versions[1].VersionId);
-        Assert.Equal("2022/9/28 9:04:40", result.Versions[1].TransitionTime.ToString());
+        Assert.Equal(new DateTime(2022, 9, 28, 9, 4, 40), result.Versions[1].TransitionTime);
 
         Assert.NotNull(result.DeleteMarkers);
         Assert.Equal(2, result.DeleteMarkers.Count);
         Assert.Equal("demo/README-CN.md", result.DeleteMarkers[0].Key);
         Assert.Equal("CAEQFBiCgID3.86GohgiIDc4ZTE0NTNhZTc5MDQxYzBhYTU5MjY1ZDFjNGJm****", result.DeleteMarkers[0].VersionId);
         Assert.Equal(true, result.DeleteMarkers[0].IsLatest);
-        Assert.Equal("2022/11/4 8:00:06", result.DeleteMarkers[0].LastModified.ToString());
+        Assert.Equal(new DateTime(2022, 11, 4, 8, 0, 6), result.DeleteMarkers[0].LastModified);
         Assert.NotNull(result.DeleteMarkers[0].Owner);
         Assert.Equal("150692521021****", result.DeleteMarkers[0].Owner.Id);
         Assert.Equal("350692521021****", result.DeleteMarkers[0].Owner.DisplayName);
@@ -557,7 +557,7 @@ public class ModelBucketVersioningTest
         Assert.Equal("demo/README-CN.md", result.Versions[0].Key);
         Assert.Equal("CAEQEhiBgICDzK6NnBgiIGRlZWJhYmNlMGUxZDQ4YTZhNTU2MzM4Mzk5NDBl****", result.Versions[0].VersionId);
         Assert.Equal(false, result.Versions[0].IsLatest);
-        Assert.Equal("2022/9/28 9:04:39", result.Versions[0].LastModified.ToString());
+        Assert.Equal(new DateTime(2022, 9, 28, 9, 4, 39), result.Versions[0].LastModified);
         Assert.Equal("\"E317049B40462DE37C422CE4FC1B****\"", result.Versions[0].ETag);
         Assert.Equal("Normal", result.Versions[0].Type);
         Assert.Equal(2943, result.Versions[0].Size);
@@ -575,7 +575,7 @@ public class ModelBucketVersioningTest
         Assert.Equal("demo/README-CN.md", result.DeleteMarkers[0].Key);
         Assert.Equal("CAEQFBiCgID3.86GohgiIDc4ZTE0NTNhZTc5MDQxYzBhYTU5MjY1ZDFjNGJm****", result.DeleteMarkers[0].VersionId);
         Assert.Equal(true, result.DeleteMarkers[0].IsLatest);
-        Assert.Equal("2022/11/4 8:00:06", result.DeleteMarkers[0].LastModified.ToString());
+        Assert.Equal(new DateTime(2022, 11, 4, 8, 0, 6), result.DeleteMarkers[0].LastModified);
         Assert.NotNull(result.DeleteMarkers[0].Owner);
         Assert.Equal("150692521021****", result.DeleteMarkers[0].Owner.Id);
         Assert.Equal("350692521021****", result.DeleteMarkers[0].Owner.DisplayName);
