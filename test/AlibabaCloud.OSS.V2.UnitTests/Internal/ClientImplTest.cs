@@ -1440,15 +1440,8 @@ public class ClientImplTest
             Key = ""
         };
 
-        try
-        {
-            await client.ExecuteAsync(input);
-            Assert.Fail("should not here");
-        }
-        catch (Exception e)
-        {
-            Assert.Contains("input.Key is invalid", e.ToString());
-        }
+        await Assert.ThrowsAnyAsync<ArgumentException>(() => client.ExecuteAsync(input));
+
         Assert.Null(mockHandler.LastRequest);
     }
 
