@@ -56,7 +56,14 @@ namespace AlibabaCloud.OSS.V2.Extensions
 
         public static bool IsNotEmpty([NotNullWhen(true)] this string? value) => !string.IsNullOrWhiteSpace(value);
 
-        public static string JoinToString(this IEnumerable<string> strings, string separator) => string.Join(separator, strings);
+        // public static string JoinToString(this IEnumerable<string> strings, string separator) => string.Join(separator, strings);
+
+        public static string JoinToString(this IEnumerable<string> strings, char separator)
+#if NET5_0_OR_GREATER
+            => string.Join(separator, strings);
+#else
+            => string.Join(separator.ToString(), strings);
+#endif
 
         public static string SafeString(this string? value) => value ?? string.Empty;
 
