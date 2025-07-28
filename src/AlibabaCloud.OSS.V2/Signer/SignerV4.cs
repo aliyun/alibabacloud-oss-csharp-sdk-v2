@@ -374,9 +374,17 @@ namespace AlibabaCloud.OSS.V2.Signer
 
         internal static string ToHexString(byte[] data, bool lowercase)
         {
-            var sb = new StringBuilder();
-            for (var i = 0; i < data.Length; i++) sb.Append(data[i].ToString(lowercase ? "x2" : "X2"));
+#if NET9_0_OR_GREATER
+            return lowercase ? Convert.ToHexStringLower(data) : Convert.ToHexString(data);
+#elif NET8_0_OR_GREATER
+            return lowercase ? Convert.ToHexString(data).ToLowerInvariant() : Convert.ToHexString(data);
+#else
+            var sb = new StringBuilder(data.Length * 2);
+            var format = lowercase ? "x2" : "X2";
+            foreach (var @byte in data)
+                sb.Append(@byte.ToString(format));
             return sb.ToString();
+#endif
         }
     }
 }
