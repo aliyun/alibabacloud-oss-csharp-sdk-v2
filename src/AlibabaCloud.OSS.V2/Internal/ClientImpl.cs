@@ -451,10 +451,7 @@ namespace AlibabaCloud.OSS.V2.Internal
                 throw new ArgumentException($"input.Bucket name is invalid, got {input.Bucket}.");
             }
 
-            if (input.Key != null && !input.Key.IsValidObjectName())
-            {
-                throw new ArgumentException($"input.Key is invalid, got {input.Key}.");
-            }
+            input.Key?.EnsureObjectNameValid($"{nameof(input)}.{nameof(input.Key)}");
         }
 
         private string BuildHostPath(ref OperationInput input, string baseUrl)

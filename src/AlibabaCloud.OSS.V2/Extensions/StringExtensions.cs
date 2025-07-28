@@ -9,40 +9,45 @@ namespace AlibabaCloud.OSS.V2.Extensions
 {
     internal static class StringExtensions
     {
-
-        public static string UrlDecode(this string input) => WebUtility.UrlDecode(input);
+        public static string UrlDecode(this string input) => WebUtility.UrlDecode(input); //  Uri.UnescapeDataString(input)?
 
         public static string UrlEncode(this string input)
         {
             var encoded = WebUtility.UrlEncode(input);
-            return encoded!.Replace("+", "%20");
+            return encoded!.Replace("+", "%20"); // Should use Uri.EscapeDataString(input)?
         }
 
         private static bool IsUrlSafeChar(char ch)
         {
-            if ((ch >= 'a' && ch <= 'z') || (ch >= 'A' && ch <= 'Z') || (ch >= '0' && ch <= '9'))
+            if (IsAsciiLetterOrDigit(ch))
             {
                 return true;
             }
 
-            return ch switch
-            {
-                '-' or '_' or '.' or '~' or '/' => true,
-                _ => false
-            };
+            return ch is '-' or '_' or '.' or '~' or '/';
+
+#if NET7_0_OR_GREATER
+            static bool IsAsciiLetterOrDigit(char c) => char.IsAsciiLetterOrDigit(c);
+#else
+            static bool IsAsciiLetterOrDigit(char c) => IsAsciiLetter(c) | IsBetween(c, '0', '9');
+            static bool IsAsciiLetter(char c) => (uint)((c | 0x20) - 'a') <= 'z' - 'a';
+            static bool IsBetween(char c, char minInclusive, char maxInclusive) => (uint)(c - minInclusive) <= (uint)(maxInclusive - minInclusive);
+#endif
         }
 
         public static string UrlEncodePath(this string input)
         {
             if (string.IsNullOrEmpty(input))
                 return string.Empty;
-            var encoded = new StringBuilder(input.Length * 2);
-            foreach (char symbol in Encoding.UTF8.GetBytes(input))
+            var inputBytes = Encoding.UTF8.GetBytes(input);
+            var encoded = new StringBuilder(inputBytes.Length);
+            foreach (var ib in inputBytes)
             {
+                var symbol = (char)ib;
                 if (IsUrlSafeChar(symbol))
                     encoded.Append(symbol);
                 else
-                    encoded.Append("%").Append($"{(int)symbol:X2}");
+                    encoded.Append('%').Append(ib.ToString("X2"));
             }
             return encoded.ToString();
         }
@@ -53,7 +58,7 @@ namespace AlibabaCloud.OSS.V2.Extensions
 
         public static string JoinToString(this IEnumerable<string> strings, string separator) => string.Join(separator, strings);
 
-        public static string SafeString(this string? value) => value ?? "";
+        public static string SafeString(this string? value) => value ?? string.Empty;
 
         public static string AddScheme(this string input, bool disableSsl)
         {
@@ -90,19 +95,23 @@ namespace AlibabaCloud.OSS.V2.Extensions
 
         public static Uri? ToUri(this string input)
         {
+            if (string.IsNullOrEmpty(input))
+            {
+                return default;
+            }
+
             try
             {
-                return input == "" ? null : new Uri(input);
+                return new Uri(input);
             }
             catch (Exception)
             {
                 // ignored
             }
-
-            return null;
+            return default;
         }
 
-        private static Regex _bucketNameRegex = new Regex(@"^[a-z0-9-]+$");
+        private static readonly Regex s_bucketNameRegex = new(@"^[a-z0-9-]+$");
         public static bool IsValidBucketName(this string value)
         {
             if (value.Length < 3 || value.Length > 64) return false;
@@ -111,12 +120,30 @@ namespace AlibabaCloud.OSS.V2.Extensions
 
             if (value.EndsWith("-")) return false;
 
-            return _bucketNameRegex.IsMatch(value);
+            return s_bucketNameRegex.IsMatch(value);
         }
 
-        public static bool IsValidObjectName(this string value)
+        public static void EnsureObjectNameValid(this string value, string? paramName = default)
         {
-            return value.Length is >= 1 and <= 1024;
+            paramName ??= nameof(value);
+#if NET6_0_OR_GREATER
+            ArgumentNullException.ThrowIfNull(value, paramName);
+#else
+            if (value is null)
+            {
+                throw new ArgumentNullException(paramName);
+            }
+#endif
+
+#if NET8_0_OR_GREATER
+            ArgumentOutOfRangeException.ThrowIfLessThan(value.Length, 1, paramName);
+            ArgumentOutOfRangeException.ThrowIfGreaterThan(value.Length, 1024, paramName);
+#else
+            if (value.Length is < 1 or > 1024)
+            {
+                throw new ArgumentOutOfRangeException(paramName, $"The length of the object name must be between 1 and 1024 characters, but was {value.Length}.");
+            }
+#endif
         }
     }
 }
