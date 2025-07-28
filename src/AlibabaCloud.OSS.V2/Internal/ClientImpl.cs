@@ -446,11 +446,7 @@ namespace AlibabaCloud.OSS.V2.Internal
 
         private static void VerifyOperation(ref OperationInput input)
         {
-            if (input.Bucket != null && !input.Bucket.IsValidBucketName())
-            {
-                throw new ArgumentException($"input.Bucket name is invalid, got {input.Bucket}.");
-            }
-
+            input.Bucket?.EnsureBucketNameValid($"{nameof(input)}.{nameof(input.Bucket)}");
             input.Key?.EnsureObjectNameValid($"{nameof(input)}.{nameof(input.Key)}");
         }
 

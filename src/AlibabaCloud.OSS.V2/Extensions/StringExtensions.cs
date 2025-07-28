@@ -7,7 +7,7 @@ using System.Text.RegularExpressions;
 
 namespace AlibabaCloud.OSS.V2.Extensions
 {
-    internal static class StringExtensions
+    internal static partial class StringExtensions
     {
         public static string UrlDecode(this string input) => WebUtility.UrlDecode(input); //  Uri.UnescapeDataString(input)?
 
@@ -69,22 +69,15 @@ namespace AlibabaCloud.OSS.V2.Extensions
 
         public static string AddScheme(this string input, bool disableSsl)
         {
-            if (input != "" && !Regex.IsMatch(input, @"^([^:]+)://"))
+            if (input != string.Empty && !RegexUtils.IsValidScheme(input))
             {
-                var scheme = Defaults.HttpScheme;
-                if (disableSsl)
-                {
-                    scheme = "http";
-                }
+                var scheme = disableSsl ? "http" : Defaults.HttpScheme;
                 return scheme + "://" + input;
             }
             return input;
         }
 
-        public static bool IsValidRegion(this string input)
-        {
-            return input != "" && Regex.IsMatch(input, @"^[a-z0-9-]+$");
-        }
+        public static bool IsValidRegion(this string input) => input != string.Empty && RegexUtils.IsValidName(input);
 
         public static string ToEndpoint(this string input, bool disableSsl, string type)
         {
@@ -118,38 +111,84 @@ namespace AlibabaCloud.OSS.V2.Extensions
             return default;
         }
 
-        private static readonly Regex s_bucketNameRegex = new(@"^[a-z0-9-]+$");
-        public static bool IsValidBucketName(this string value)
+        public static void EnsureBucketNameValid(this string value, string? paramName = default)
         {
-            if (value.Length < 3 || value.Length > 64) return false;
+            paramName ??= nameof(value);
 
-            if (value.StartsWith("-")) return false;
+            ExceptionUtils.ThrowIfNull(value, paramName);
+            ExceptionUtils.ThrowIfOutOfRange(value.Length, 3, 64, paramName);
 
-            if (value.EndsWith("-")) return false;
-
-            return s_bucketNameRegex.IsMatch(value);
+#if NET5_0_OR_GREATER
+            if (value.StartsWith('-') || value.EndsWith('-') || !RegexUtils.IsValidName(value))
+#else
+            if (value.StartsWith("-", StringComparison.Ordinal) || value.EndsWith("-", StringComparison.Ordinal) || !RegexUtils.IsValidName(value))
+#endif
+            {
+                throw new ArgumentException($"The bucket name [{value}] is invalid.", paramName);
+            }
         }
 
         public static void EnsureObjectNameValid(this string value, string? paramName = default)
         {
             paramName ??= nameof(value);
-#if NET6_0_OR_GREATER
-            ArgumentNullException.ThrowIfNull(value, paramName);
-#else
-            if (value is null)
+
+            ExceptionUtils.ThrowIfNull(value, paramName);
+            ExceptionUtils.ThrowIfOutOfRange(value.Length, 1, 1024, paramName);
+        }
+
+        private static class ExceptionUtils
+        {
+            public static void ThrowIfNull(string value, string paramName)
             {
-                throw new ArgumentNullException(paramName);
+#if NET6_0_OR_GREATER
+                ArgumentNullException.ThrowIfNull(value, paramName);
+#else
+                if (value is null)
+                {
+                    throw new ArgumentNullException(paramName);
+                }
+#endif
             }
+
+            public static void ThrowIfOutOfRange(int length, int min, int max, string paramName)
+            {
+#if NET8_0_OR_GREATER
+                ArgumentOutOfRangeException.ThrowIfLessThan(length, min, paramName);
+                ArgumentOutOfRangeException.ThrowIfGreaterThan(length, max, paramName);
+#else
+                if (length < min || length > max)
+                {
+                    throw new ArgumentOutOfRangeException(paramName, $"The length of the object name must be between 1 and 1024 characters, but was {length}.");
+                }
+#endif
+            }
+        }
+
+        private static partial class RegexUtils
+        {
+#if NET7_0_OR_GREATER
+            [GeneratedRegex(@"^[a-z0-9-]+$")]
+            private static partial Regex NameCheck();
+
+            [GeneratedRegex(@"^([^:]+)://")]
+            private static partial Regex SchemeCheck();
+#else
+            private static readonly Regex s_nameCheck = new(@"^[a-z0-9-]+$");
+
+            private static readonly Regex s_schemeCheck = new(@"^([^:]+)://");
+#endif
+            public static bool IsValidName(string value)
+#if NET7_0_OR_GREATER
+                => NameCheck().IsMatch(value);
+#else
+                => s_nameCheck.IsMatch(value);
 #endif
 
-#if NET8_0_OR_GREATER
-            ArgumentOutOfRangeException.ThrowIfLessThan(value.Length, 1, paramName);
-            ArgumentOutOfRangeException.ThrowIfGreaterThan(value.Length, 1024, paramName);
+            public static bool IsValidScheme(string value)
+#if NET7_0_OR_GREATER
+                => SchemeCheck().IsMatch(value);
 #else
-            if (value.Length is < 1 or > 1024)
-            {
-                throw new ArgumentOutOfRangeException(paramName, $"The length of the object name must be between 1 and 1024 characters, but was {value.Length}.");
-            }
+                => s_schemeCheck.IsMatch(value);
 #endif
         }
     }

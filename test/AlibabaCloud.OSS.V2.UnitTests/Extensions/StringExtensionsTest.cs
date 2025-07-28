@@ -68,14 +68,15 @@ public class StringExtensionsTest
         Assert.Equal("https://bucket/key", input.AddScheme(false));
     }
 
-    [Fact]
-    public void TestIsValidRegion()
+    [Theory]
+    [InlineData("cn-hangzhou", true)]
+    [InlineData("us-east-1", true)]
+    [InlineData("CN-hangzhou", false)]
+    [InlineData("#ad,ad", false)]
+    [InlineData("", false)]
+    public void TestIsValidRegion(string region, bool expectValid)
     {
-        string[] regions = ["cn-hangzhou", "us-east-1"];
-        foreach (var region in regions) Assert.True(region.IsValidRegion());
-
-        regions = ["CN-hangzhou", "#ad,ad", ""];
-        foreach (var region in regions) Assert.False(region.IsValidRegion());
+        Assert.Equal(expectValid, region.IsValidRegion());
     }
 
     [Fact]
@@ -98,48 +99,50 @@ public class StringExtensionsTest
         Assert.Equal("http://oss-cn-hangzhou.aliyuncs.com", region.ToEndpoint(true, ""));
     }
 
-    [Fact]
-    public void TestToUri()
+    [Theory]
+    [InlineData(default(string), true)]
+    [InlineData("", true)]
+    [InlineData("#?-invalid", true)]
+    [InlineData("http://bucket", false)]
+    public void TestToUri(string url, bool exceptNull)
     {
-        string url = null;
-        Assert.Null(url.ToUri());
-
-        url = "";
-        Assert.Null(url.ToUri());
-
-        url = "#?-invalid";
-        Assert.Null(url.ToUri());
-
-        url = "http://bucket";
         var uri = url.ToUri();
-        Assert.NotNull(uri);
-        Assert.IsAssignableFrom<Uri>(uri);
-        Assert.Equal("http", uri.Scheme);
+        if (exceptNull)
+        {
+            Assert.Null(uri);
+        }
+        else
+        {
+            Assert.NotNull(uri);
+            Assert.IsAssignableFrom<Uri>(uri);
+            Assert.Equal("http", uri.Scheme);
+        }
     }
 
-    [Fact]
-    public void TestIsValidBucketName()
+    [Theory]
+    [InlineData("123", false)]
+    [InlineData("test", false)]
+    [InlineData("test-123", false)]
+    [InlineData("123-test", false)]
+    [InlineData("123test", false)]
+    [InlineData("12", true)]
+    [InlineData("abcdefghij-abcdefghij-abcdefghij-abcdefghij-abcdefghij-abcdefghij", true)]
+    [InlineData("-test", true)]
+    [InlineData("test-", true)]
+    [InlineData("test_123", true)]
+    [InlineData("TEst", true)]
+    [InlineData("#?123", true)]
+    [InlineData("", true)]
+    public void TestIsValidBucketName(string bucket, bool shouldThrow)
     {
-        string[] buckets = [
-            "123",
-            "test",
-            "test-123",
-            "123-test",
-            "123test"
-        ];
-        foreach (var bucket in buckets) Assert.True(bucket.IsValidBucketName());
-
-        buckets = [
-            "12",
-            "abcdefghij-abcdefghij-abcdefghij-abcdefghij-abcdefghij-abcdefghij",
-            "-test",
-            "test-",
-            "test_123",
-            "TEst",
-            "#?123",
-            ""
-        ];
-        foreach (var bucket in buckets) Assert.False(bucket.IsValidBucketName());
+        if (shouldThrow)
+        {
+            Assert.ThrowsAny<ArgumentException>(() => bucket.EnsureBucketNameValid(paramName: nameof(bucket)));
+        }
+        else
+        {
+            bucket.EnsureBucketNameValid();
+        }
     }
 
     [Theory]
