@@ -287,6 +287,11 @@ namespace AlibabaCloud.OSS.V2.Models
         /// It is valid only when the callback is set.
         /// </summary>
         public string? CallbackResult => InnerBody as string;
+
+        public PutObjectResult()
+        {
+            BodyFormat = "string";
+        }
     }
 
     /// <summary>
