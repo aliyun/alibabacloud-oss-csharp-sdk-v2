@@ -1,0 +1,61 @@
+name: CI (Windows)
+
+on:
+  push:
+    branches:
+      - master
+      - 'dev-*'
+  pull_request:
+    branches:
+      - master
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build-and-test:
+    runs-on: windows-latest
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup .NET SDKs
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: |
+            5.0.x
+            8.0.x
+            9.0.x
+
+      - name: Restore dependencies
+        run: dotnet restore
+
+      - name: Build (netstandard2.0)
+        run: dotnet build src/AlibabaCloud.OSS.V2 --configuration Release --no-restore --framework netstandard2.0
+
+      - name: Build (net471)
+        run: dotnet build src/AlibabaCloud.OSS.V2 --configuration Release --no-restore --framework net471
+
+      - name: Build (net48)
+        run: dotnet build src/AlibabaCloud.OSS.V2 --configuration Release --no-restore --framework net48
+
+      - name: Build (net5.0)
+        run: dotnet build src/AlibabaCloud.OSS.V2 --configuration Release --no-restore --framework net5.0
+
+      - name: Build (net8.0)
+        run: dotnet build src/AlibabaCloud.OSS.V2 --configuration Release --no-restore --framework net8.0
+
+      - name: Build (net9.0)
+        run: dotnet build src/AlibabaCloud.OSS.V2 --configuration Release --no-restore --framework net9.0
+
+      - name: Run unit tests (net48)
+        run: dotnet test test/AlibabaCloud.OSS.V2.UnitTests --configuration Release --no-restore --verbosity normal --framework net48
+
+      - name: Run unit tests (net8.0)
+        run: dotnet test test/AlibabaCloud.OSS.V2.UnitTests --configuration Release --no-restore --verbosity normal --framework net8.0
+
+      - name: Run unit tests (net9.0)
+        run: dotnet test test/AlibabaCloud.OSS.V2.UnitTests --configuration Release --no-restore --verbosity normal --framework net9.0
