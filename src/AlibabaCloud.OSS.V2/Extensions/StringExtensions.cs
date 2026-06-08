@@ -158,7 +158,7 @@ namespace AlibabaCloud.OSS.V2.Extensions
 #else
                 if (length < min || length > max)
                 {
-                    throw new ArgumentOutOfRangeException(paramName, $"The length of the object name must be between 1 and 1024 characters, but was {length}.");
+                    throw new ArgumentOutOfRangeException(paramName, $"The length must be between {min} and {max} characters, but was {length}.");
                 }
 #endif
             }
