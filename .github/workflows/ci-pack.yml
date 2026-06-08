@@ -1,0 +1,36 @@
+name: NuGet Pack Verification
+
+on:
+  push:
+    branches:
+      - master
+  pull_request:
+    branches:
+      - master
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  pack:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup .NET 9.0
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '9.0.x'
+
+      - name: Restore dependencies
+        run: dotnet restore
+
+      - name: Build
+        run: dotnet build src/AlibabaCloud.OSS.V2 --configuration Release --no-restore -p:TargetFrameworks='"net8.0;net9.0"'
+
+      - name: Pack
+        run: dotnet pack src/AlibabaCloud.OSS.V2 --configuration Release --no-build -p:TargetFrameworks='"net8.0;net9.0"'
