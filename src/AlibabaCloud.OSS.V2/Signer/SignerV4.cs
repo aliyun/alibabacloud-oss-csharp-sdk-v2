@@ -65,14 +65,14 @@ namespace AlibabaCloud.OSS.V2.Signer
             parameters.Add("x-oss-credential", $"{credentials.AccessKeyId}/{scope}");
 
             if (additionalHeaders.Count > 0)
-                parameters.Add("x-oss-additional-headers", additionalHeaders.JoinToString(";"));
+                parameters.Add("x-oss-additional-headers", additionalHeaders.JoinToString(';'));
 
             // update query 
             var queryStr = parameters
                 .Select(
                     x => x.Value.IsEmpty() ? x.Key.UrlEncode() : x.Key.UrlEncode() + "=" + x.Value.UrlEncode()
                 )
-                .JoinToString("&");
+                .JoinToString('&');
             request.RequestUri = request.RequestUri.AppendToQuery(queryStr);
 
             // CanonicalRequest
@@ -150,7 +150,7 @@ namespace AlibabaCloud.OSS.V2.Signer
             // Credential
             var sb = new StringBuilder();
             sb.AppendFormat("OSS4-HMAC-SHA256 Credential={0}/{1}", credentials.AccessKeyId, scope);
-            if (additionalHeaders.Count > 0) sb.AppendFormat(",AdditionalHeaders={0}", additionalHeaders.JoinToString(";"));
+            if (additionalHeaders.Count > 0) sb.AppendFormat(",AdditionalHeaders={0}", additionalHeaders.JoinToString(';'));
             sb.AppendFormat(",Signature={0}", signature);
 
             request.Headers["Authorization"] = sb.ToString();
@@ -238,7 +238,7 @@ namespace AlibabaCloud.OSS.V2.Signer
             var canonicalHeaderString = CanonicalizeHeaders(headers, additionalHeaders);
 
             // Additional Headers
-            var additionalHeadersString = additionalHeaders.JoinToString(";");
+            var additionalHeadersString = additionalHeaders.JoinToString(';');
 
             var hashBody = CanonicalizeBodyHash(headers);
 
@@ -374,9 +374,17 @@ namespace AlibabaCloud.OSS.V2.Signer
 
         internal static string ToHexString(byte[] data, bool lowercase)
         {
-            var sb = new StringBuilder();
-            for (var i = 0; i < data.Length; i++) sb.Append(data[i].ToString(lowercase ? "x2" : "X2"));
+#if NET9_0_OR_GREATER
+            return lowercase ? Convert.ToHexStringLower(data) : Convert.ToHexString(data);
+#elif NET8_0_OR_GREATER
+            return lowercase ? Convert.ToHexString(data).ToLowerInvariant() : Convert.ToHexString(data);
+#else
+            var sb = new StringBuilder(data.Length * 2);
+            var format = lowercase ? "x2" : "X2";
+            foreach (var @byte in data)
+                sb.Append(@byte.ToString(format));
             return sb.ToString();
+#endif
         }
     }
 }
