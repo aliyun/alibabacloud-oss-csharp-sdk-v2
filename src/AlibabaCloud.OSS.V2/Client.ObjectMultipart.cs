@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using AlibabaCloud.OSS.V2.Transform;
-using static AlibabaCloud.OSS.V2.Transform.Serde;
 
 namespace AlibabaCloud.OSS.V2
 {
@@ -122,7 +121,7 @@ namespace AlibabaCloud.OSS.V2
 
             Models.ResultModel result = new Models.CompleteMultipartUploadResult();
 
-            CustomDeserializer outputDeserializer =
+            Serde.CustomDeserializer outputDeserializer =
                 string.IsNullOrEmpty(request.Callback)
                 ? Serde.DeserializeCompleteMultipartUpload
                 : Serde.DeserializeCompleteMultipartUploadCallback;
