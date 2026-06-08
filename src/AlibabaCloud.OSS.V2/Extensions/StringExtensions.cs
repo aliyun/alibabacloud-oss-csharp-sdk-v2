@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
-using System.Net;
 using System.Text;
 using System.Text.RegularExpressions;
 
@@ -9,13 +8,9 @@ namespace AlibabaCloud.OSS.V2.Extensions
 {
     internal static partial class StringExtensions
     {
-        public static string UrlDecode(this string input) => WebUtility.UrlDecode(input); //  Uri.UnescapeDataString(input)?
+        public static string UrlDecode(this string input) => Uri.UnescapeDataString(input);
 
-        public static string UrlEncode(this string input)
-        {
-            var encoded = WebUtility.UrlEncode(input);
-            return encoded!.Replace("+", "%20"); // Should use Uri.EscapeDataString(input)?
-        }
+        public static string UrlEncode(this string input) => Uri.EscapeDataString(input);
 
         private static bool IsUrlSafeChar(char ch)
         {
