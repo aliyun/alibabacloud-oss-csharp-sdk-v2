@@ -1399,7 +1399,7 @@ public class ClientImplTest
         };
         var client = new ClientImpl(config);
 
-        // bucket is invalid
+        // bucket is empty
         mockHandler.Clear();
         mockHandler.Responses = [
             new() {
@@ -1417,18 +1417,27 @@ public class ClientImplTest
             Bucket = "",
         };
 
-        try
-        {
-            await client.ExecuteAsync(input);
-            Assert.Fail("should not here");
-        }
-        catch (Exception e)
-        {
-            Assert.Contains("input.Bucket name is invalid", e.ToString());
-        }
+        var ex = await Assert.ThrowsAnyAsync<ArgumentException>(() => client.ExecuteAsync(input));
+        Assert.Contains("Bucket", ex.ToString());
         Assert.Null(mockHandler.LastRequest);
 
-        // key is invalid
+        // bucket is non-empty but invalid
+        input = new OperationInput
+        {
+            OperationName = "InvokeOperation",
+            Method = "PUT",
+            Parameters = new Dictionary<string, string> {
+                { "key", "value" },
+            },
+            Bucket = "-invalid-bucket",
+        };
+
+        ex = await Assert.ThrowsAnyAsync<ArgumentException>(() => client.ExecuteAsync(input));
+        Assert.Contains("Bucket", ex.ToString());
+        Assert.Contains("The bucket name [-invalid-bucket] is invalid.", ex.Message);
+        Assert.Null(mockHandler.LastRequest);
+
+        // key is empty
         input = new OperationInput
         {
             OperationName = "InvokeOperation",
@@ -1440,8 +1449,8 @@ public class ClientImplTest
             Key = ""
         };
 
-        await Assert.ThrowsAnyAsync<ArgumentException>(() => client.ExecuteAsync(input));
-
+        ex = await Assert.ThrowsAnyAsync<ArgumentException>(() => client.ExecuteAsync(input));
+        Assert.Contains("Key", ex.ToString());
         Assert.Null(mockHandler.LastRequest);
     }
 
