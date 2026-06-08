@@ -4,50 +4,35 @@ namespace AlibabaCloud.OSS.V2.UnitTests.Extensions;
 
 public class StringExtensionsTest
 {
-    [Fact]
-    public void TestUrlDecode()
+    [Theory]
+    [InlineData("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789.-_!()*", "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789.-_!()*")]
+    [InlineData("%60%21%40%23%24%25%5E%26%2A%28%29%2B%3D%7B%7D%5B%5D%3A%3B%27%5C%7C%3C%3E%2C%3F%2F%20%22", "`!@#$%^&*()+={}[]:;'\\|<>,?/ \"")]
+    [InlineData("hello%20world%21", "hello world!")]
+    public void TestUrlDecode(string input, string expected)
     {
-        var val = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789.-_~";
-        Assert.Equal("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789.-_~", val.UrlDecode());
-
-        val = "%60%21%40%23%24%25%5E%26%2A%28%29%2B%3D%7B%7D%5B%5D%3A%3B%27%5C%7C%3C%3E%2C%3F%2F%20%22";
-        Assert.Equal("`!@#$%^&*()+={}[]:;'\\|<>,?/ \"", val.UrlDecode());
-
-        val = "hello%20world%21";
-        Assert.Equal("hello world!", val.UrlDecode());
+        var actual = input.UrlDecode();
+        Assert.Equal(expected, actual);
     }
 
-    [Fact]
-    public void TestUrlEncode()
+    [Theory]
+    [InlineData("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789.-_!()*", "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789.-_!()*")]
+    [InlineData("`@#$%^&+={}[]:;'\\|<>,?/ \"~", "%60%40%23%24%25%5E%26%2B%3D%7B%7D%5B%5D%3A%3B%27%5C%7C%3C%3E%2C%3F%2F%20%22%7E")]
+    [InlineData("hello world!", "hello%20world!")]
+    public void TestUrlEncode(string input, string expected)
     {
-        var val = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789.-_!()*";
-        Assert.Equal("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789.-_!()*", val.UrlEncode());
-
-        val = "`@#$%^&+={}[]:;'\\|<>,?/ \"~";
-        Assert.Equal("%60%40%23%24%25%5E%26%2B%3D%7B%7D%5B%5D%3A%3B%27%5C%7C%3C%3E%2C%3F%2F%20%22%7E", val.UrlEncode());
-
-        val = "hello world!";
-        Assert.Equal("hello%20world!", val.UrlEncode());
+        var actual = input.UrlEncode();
+        Assert.Equal(expected, actual);
     }
 
-    [Fact]
-    public void TestUrlEncodePath()
+    [Theory]
+    [InlineData("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789.-_/", "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789.-_/")]
+    [InlineData("`@#$%^&+={}[]:;'\\|<>,? \"!()*", "%60%40%23%24%25%5E%26%2B%3D%7B%7D%5B%5D%3A%3B%27%5C%7C%3C%3E%2C%3F%20%22%21%28%29%2A")]
+    [InlineData("hello world!", "hello%20world%21")]
+    [InlineData("", "")]
+    public void TestUrlEncodePath(string input, string expected)
     {
-        var val = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789.-_/";
-        Assert.Equal("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789.-_/", val.UrlEncodePath());
-
-        val = "`@#$%^&+={}[]:;'\\|<>,? \"!()*";
-
-        Assert.Equal(
-            "%60%40%23%24%25%5E%26%2B%3D%7B%7D%5B%5D%3A%3B%27%5C%7C%3C%3E%2C%3F%20%22%21%28%29%2A",
-            val.UrlEncodePath()
-        );
-
-        val = "hello world!";
-        Assert.Equal("hello%20world%21", val.UrlEncodePath());
-
-        val = "";
-        Assert.Equal("", val.UrlEncodePath());
+        var actual = input.UrlEncodePath();
+        Assert.Equal(expected, actual);
     }
 
     [Fact]
@@ -83,14 +68,15 @@ public class StringExtensionsTest
         Assert.Equal("https://bucket/key", input.AddScheme(false));
     }
 
-    [Fact]
-    public void TestIsValidRegion()
+    [Theory]
+    [InlineData("cn-hangzhou", true)]
+    [InlineData("us-east-1", true)]
+    [InlineData("CN-hangzhou", false)]
+    [InlineData("#ad,ad", false)]
+    [InlineData("", false)]
+    public void TestIsValidRegion(string region, bool expectValid)
     {
-        string[] regions = ["cn-hangzhou", "us-east-1"];
-        foreach (var region in regions) Assert.True(region.IsValidRegion());
-
-        regions = ["CN-hangzhou", "#ad,ad", ""];
-        foreach (var region in regions) Assert.False(region.IsValidRegion());
+        Assert.Equal(expectValid, region.IsValidRegion());
     }
 
     [Fact]
@@ -113,63 +99,66 @@ public class StringExtensionsTest
         Assert.Equal("http://oss-cn-hangzhou.aliyuncs.com", region.ToEndpoint(true, ""));
     }
 
-    [Fact]
-    public void TestToUri()
+    [Theory]
+    [InlineData(default(string), true)]
+    [InlineData("", true)]
+    [InlineData("#?-invalid", true)]
+    [InlineData("http://bucket", false)]
+    public void TestToUri(string url, bool exceptNull)
     {
-        string url = null;
-        Assert.Null(url.ToUri());
-
-        url = "";
-        Assert.Null(url.ToUri());
-
-        url = "#?-invalid";
-        Assert.Null(url.ToUri());
-
-        url = "http://bucket";
         var uri = url.ToUri();
-        Assert.NotNull(uri);
-        Assert.IsAssignableFrom<Uri>(uri);
-        Assert.Equal("http", uri.Scheme);
+        if (exceptNull)
+        {
+            Assert.Null(uri);
+        }
+        else
+        {
+            Assert.NotNull(uri);
+            Assert.IsAssignableFrom<Uri>(uri);
+            Assert.Equal("http", uri.Scheme);
+        }
     }
 
-    [Fact]
-    public void TestIsValidBucketName()
+    [Theory]
+    [InlineData("123", false)]
+    [InlineData("test", false)]
+    [InlineData("test-123", false)]
+    [InlineData("123-test", false)]
+    [InlineData("123test", false)]
+    [InlineData("12", true)]
+    [InlineData("abcdefghij-abcdefghij-abcdefghij-abcdefghij-abcdefghij-abcdefghij", true)]
+    [InlineData("-test", true)]
+    [InlineData("test-", true)]
+    [InlineData("test_123", true)]
+    [InlineData("TEst", true)]
+    [InlineData("#?123", true)]
+    [InlineData("", true)]
+    public void TestIsValidBucketName(string bucket, bool shouldThrow)
     {
-        string[] buckets = [
-            "123",
-            "test",
-            "test-123",
-            "123-test",
-            "123test"
-        ];
-        foreach (var bucket in buckets) Assert.True(bucket.IsValidBucketName());
-
-        buckets = [
-            "12",
-            "abcdefghij-abcdefghij-abcdefghij-abcdefghij-abcdefghij-abcdefghij",
-            "-test",
-            "test-",
-            "test_123",
-            "TEst",
-            "#?123",
-            ""
-        ];
-        foreach (var bucket in buckets) Assert.False(bucket.IsValidBucketName());
+        if (shouldThrow)
+        {
+            Assert.ThrowsAny<ArgumentException>(() => bucket.EnsureBucketNameValid(paramName: nameof(bucket)));
+        }
+        else
+        {
+            bucket.EnsureBucketNameValid();
+        }
     }
 
-    [Fact]
-    public void TestIsValidObjectName()
+    [Theory]
+    [InlineData("123", false)]
+    [InlineData("#ADfa", false)]
+    [InlineData("#ADfa?fasdk#ja", false)]
+    [InlineData("", true)]
+    public void TestIsValidObjectName(string key, bool shouldThrow)
     {
-        string[] keys = [
-            "123",
-            "#ADfa",
-            "#ADfa?fasdk#ja"
-        ];
-        foreach (var key in keys) Assert.True(key.IsValidObjectName());
-
-        keys = [
-            ""
-        ];
-        foreach (var key in keys) Assert.False(key.IsValidObjectName());
+        if (shouldThrow)
+        {
+            Assert.ThrowsAny<ArgumentException>(() => key.EnsureObjectNameValid(paramName: nameof(key)));
+        }
+        else
+        {
+            key.EnsureObjectNameValid();
+        }
     }
 }

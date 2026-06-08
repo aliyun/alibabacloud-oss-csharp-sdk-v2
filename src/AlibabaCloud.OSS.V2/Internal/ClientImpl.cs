@@ -446,15 +446,8 @@ namespace AlibabaCloud.OSS.V2.Internal
 
         private static void VerifyOperation(ref OperationInput input)
         {
-            if (input.Bucket != null && !input.Bucket.IsValidBucketName())
-            {
-                throw new ArgumentException($"input.Bucket name is invalid, got {input.Bucket}.");
-            }
-
-            if (input.Key != null && !input.Key.IsValidObjectName())
-            {
-                throw new ArgumentException($"input.Key is invalid, got {input.Key}.");
-            }
+            input.Bucket?.EnsureBucketNameValid($"{nameof(input)}.{nameof(input.Bucket)}");
+            input.Key?.EnsureObjectNameValid($"{nameof(input)}.{nameof(input.Key)}");
         }
 
         private string BuildHostPath(ref OperationInput input, string baseUrl)
@@ -489,7 +482,7 @@ namespace AlibabaCloud.OSS.V2.Internal
                 paths.Add(input.Key.UrlEncodePath());
             }
 
-            return $"{host}/{paths.JoinToString("/")}";
+            return $"{host}/{paths.JoinToString('/')}";
         }
 
         private static string CombineQueryString(IDictionary<string, string>? parameters)
@@ -505,14 +498,14 @@ namespace AlibabaCloud.OSS.V2.Internal
             foreach (var p in parameters)
             {
                 if (!isFirst)
-                    queryString.Append("&");
+                    queryString.Append('&');
 
                 isFirst = false;
 
                 queryString.Append(p.Key.UrlEncode());
 
                 if (!string.IsNullOrEmpty(p.Value))
-                    queryString.Append("=").Append(p.Value.UrlEncode());
+                    queryString.Append('=').Append(p.Value.UrlEncode());
             }
 
             return queryString.ToString();

@@ -48,7 +48,7 @@ public class SignerV4Test
             {
                 return x.Value.IsEmpty() ? x.Key.UrlEncode() : x.Key.UrlEncode() + "=" + x.Value.UrlEncode();
             })
-        .JoinToString("&");
+        .JoinToString('&');
 
         signCtx.Request.RequestUri = request.RequestUri.AppendToQuery(queryStr);
 
@@ -105,7 +105,7 @@ public class SignerV4Test
             {
                 return x.Value.IsEmpty() ? x.Key.UrlEncode() : x.Key.UrlEncode() + "=" + x.Value.UrlEncode();
             })
-        .JoinToString("&");
+        .JoinToString('&');
 
         signCtx.Request.RequestUri = request.RequestUri.AppendToQuery(queryStr);
 
@@ -163,7 +163,7 @@ public class SignerV4Test
             {
                 return x.Value.IsEmpty() ? x.Key.UrlEncode() : x.Key.UrlEncode() + "=" + x.Value.UrlEncode();
             })
-        .JoinToString("&");
+        .JoinToString('&');
 
         signCtx.Request.RequestUri = request.RequestUri.AppendToQuery(queryStr);
 
@@ -253,7 +253,7 @@ public class SignerV4Test
             {
                 return x.Value.IsEmpty() ? x.Key.UrlEncode() : x.Key.UrlEncode() + "=" + x.Value.UrlEncode();
             })
-        .JoinToString("&");
+        .JoinToString('&');
 
         signCtx.Request.RequestUri = request.RequestUri.AppendToQuery(queryStr);
 
@@ -315,7 +315,7 @@ public class SignerV4Test
             {
                 return x.Value.IsEmpty() ? x.Key.UrlEncode() : x.Key.UrlEncode() + "=" + x.Value.UrlEncode();
             })
-        .JoinToString("&");
+        .JoinToString('&');
 
         signCtx.Request.RequestUri = request.RequestUri.AppendToQuery(queryStr);
 
@@ -380,7 +380,7 @@ public class SignerV4Test
             {
                 return x.Value.IsEmpty() ? x.Key.UrlEncode() : x.Key.UrlEncode() + "=" + x.Value.UrlEncode();
             })
-        .JoinToString("&");
+        .JoinToString('&');
 
         signCtx.Request.RequestUri = request.RequestUri.AppendToQuery(queryStr);
 
