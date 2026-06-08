@@ -28,5 +28,7 @@ namespace AlibabaCloud.OSS.V2.Signer
         public List<string>? AdditionalHeaders { get; set; }
 
         public List<string>? SubResource { get; set; }
+
+        public TimeSpan ClockOffset { get; set; }
     }
 }

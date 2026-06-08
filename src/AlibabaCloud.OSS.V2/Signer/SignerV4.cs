@@ -39,7 +39,7 @@ namespace AlibabaCloud.OSS.V2.Signer
             var product = signingContext.Product ?? "";
 
             // Date
-            var signTime = signingContext.SignTime ?? DateTime.UtcNow;
+            var signTime = signingContext.SignTime ?? DateTime.UtcNow.Add(signingContext.ClockOffset);
             var datetime = FormatDateTime(signTime);
             var date = FormatDate(signTime);
 
@@ -109,7 +109,7 @@ namespace AlibabaCloud.OSS.V2.Signer
             var product = signingContext.Product ?? "";
 
             // Date
-            var signTime = signingContext.SignTime ?? DateTime.UtcNow;
+            var signTime = signingContext.SignTime ?? DateTime.UtcNow.Add(signingContext.ClockOffset);
             var datetime = FormatDateTime(signTime);
             var date = FormatDate(signTime);
             var datetimeGmt = FormatRfc822Date(signTime);

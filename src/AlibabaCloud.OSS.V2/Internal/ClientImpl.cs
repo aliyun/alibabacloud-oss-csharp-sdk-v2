@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Net;
@@ -9,12 +10,14 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Xml;
 using AlibabaCloud.OSS.V2.Extensions;
+using AlibabaCloud.OSS.V2.Signer;
 
 namespace AlibabaCloud.OSS.V2.Internal
 {
     internal class InnerOptions
     {
         public string UserAgent { get; set; } = "";
+        public long ClockOffset { get; set; }
     }
 
     internal class PresignInnerResult
@@ -198,6 +201,11 @@ namespace AlibabaCloud.OSS.V2.Internal
                 opt.FeatureFlags &= ~FeatureFlagsType.EnableCrc64CheckDownload;
             }
 
+            if (config.DisableClockSkewCorrection.GetValueOrDefault(false))
+            {
+                opt.FeatureFlags &= ~FeatureFlagsType.CorrectClockSkew;
+            }
+
 #if NETCOREAPP
             opt.RequestOnceTimeout = opt.ReadWriteTimeout;
 #else
@@ -342,7 +350,7 @@ namespace AlibabaCloud.OSS.V2.Internal
             {
                 RetryMaxAttempts = opOpts.RetryMaxAttempts ?? Options.Retryer!.MaxAttempts(),
                 RequestOnceTimeout = opOpts.ReadWriteTimeout ?? Options.RequestOnceTimeout,
-                OnResponseMessage = new List<Action<ResponseMessage>> { OnServiceError }
+                OnResponseMessage = new List<Action<ResponseMessage>>()
             };
 
             // HttpCompletionOption
@@ -384,8 +392,13 @@ namespace AlibabaCloud.OSS.V2.Internal
                 Bucket = input.Bucket,
                 Key = input.Key,
                 AuthMethodQuery = (opOpts.AuthMethod ?? Options.AuthMethod) == AuthMethodType.Query,
-                AdditionalHeaders = Options.AdditionalHeaders
+                AdditionalHeaders = Options.AdditionalHeaders,
+                ClockOffset = TimeSpan.FromSeconds(InnerOptions.ClockOffset)
             };
+
+            // OnServiceError with signingContext closure for clock skew correction
+            var signingContext = context.SigningContext;
+            context.OnResponseMessage.Insert(0, response => OnServiceError(response, signingContext));
 
             // signing time from user
             if (input.OperationMetadata.TryGetValue("expiration-time", out var expirationTime))
@@ -511,7 +524,7 @@ namespace AlibabaCloud.OSS.V2.Internal
             return queryString.ToString();
         }
 
-        private static void OnServiceError(ResponseMessage response)
+        private void OnServiceError(ResponseMessage response, SigningContext? signingContext)
         {
             var statusCode = response.StatusCode;
 
@@ -564,6 +577,12 @@ namespace AlibabaCloud.OSS.V2.Internal
 
             var requestTime = response.Headers.TryGetValue("Date", out value) ? value : "";
 
+            if (Options.FeatureFlags.HasFlag(FeatureFlagsType.CorrectClockSkew) &&
+                IsClockSkewError(statusCode, code, message))
+            {
+                UpdateClockOffset(response, errorFields, signingContext);
+            }
+
             var details = new Dictionary<string, string>() {
                 { "Code", code },
                 { "Message", message },
@@ -575,6 +594,51 @@ namespace AlibabaCloud.OSS.V2.Internal
             };
 
             throw new ServiceException(statusCode, details, errorFields, response.Headers);
+        }
+
+        private static bool IsClockSkewError(int statusCode, string? code, string? message)
+        {
+            if (statusCode == 403 && code == "RequestTimeTooSkewed") return true;
+            if (statusCode == 400 && code == "InvalidArgument"
+                && message == "Invalid signing date in Authorization header.") return true;
+            return false;
+        }
+
+        private void UpdateClockOffset(ResponseMessage response, IDictionary<string, string> errorFields, SigningContext? signingContext)
+        {
+            DateTimeOffset serverTime;
+
+            if (response.Headers.TryGetValue("Date", out var dateStr) &&
+                DateTimeOffset.TryParseExact(dateStr, "ddd, dd MMM yyyy HH:mm:ss 'GMT'",
+                    CultureInfo.InvariantCulture, DateTimeStyles.AssumeUniversal, out serverTime))
+            {
+                // parsed from Date header
+            }
+            else if (errorFields.TryGetValue("ServerTime", out var serverTimeStr) &&
+                     DateTimeOffset.TryParse(serverTimeStr, CultureInfo.InvariantCulture,
+                         DateTimeStyles.AssumeUniversal, out serverTime))
+            {
+                // parsed from XML body ServerTime field
+            }
+            else
+            {
+                return;
+            }
+
+            var localTime = DateTimeOffset.UtcNow;
+            var newOffset = (long)(serverTime - localTime).TotalSeconds;
+
+            if (response.StatusCode == 400 && Math.Abs(newOffset) < 900) return;
+
+            if (signingContext != null)
+            {
+                signingContext.ClockOffset = TimeSpan.FromSeconds(newOffset);
+            }
+
+            if (Math.Abs(newOffset - InnerOptions.ClockOffset) > 60)
+            {
+                InnerOptions.ClockOffset = newOffset;
+            }
         }
     }
 

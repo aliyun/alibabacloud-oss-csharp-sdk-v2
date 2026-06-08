@@ -29,9 +29,16 @@ namespace AlibabaCloud.OSS.V2.Retry
         public bool IsErrorRetryable(Exception error)
         {
             if (error is ServiceException exception)
+            {
                 foreach (var code in _errorCodes)
                     if (exception.ErrorCode == code)
                         return true;
+
+                if (exception.StatusCode == 400
+                    && exception.ErrorCode == "InvalidArgument"
+                    && exception.ErrorMessage == "Invalid signing date in Authorization header.")
+                    return true;
+            }
 
             return false;
         }
