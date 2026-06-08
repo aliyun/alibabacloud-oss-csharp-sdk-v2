@@ -756,6 +756,44 @@ public class ModelObjectMultipartTest
         Assert.Null(result.Key);
         Assert.Null(result.ETag);
         Assert.Equal("json value", result.CallbackResult);
+
+        // callback with json body (matching C++ CompleteMultipartUpload_WithCallback)
+        var callbackBody = """{"Status":"OK"}""";
+        result = new CompleteMultipartUploadResult();
+        output = new OperationOutput
+        {
+            StatusCode = 200,
+            Status = "OK",
+            Headers = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase) {
+                {"x-oss-request-id", "id-1234"},
+            },
+            Body = new MemoryStream(Encoding.UTF8.GetBytes(callbackBody))
+        };
+        baseResult = result;
+        Serde.DeserializeOutput(ref baseResult, ref output, Serde.DeserializeCompleteMultipartUploadCallback);
+
+        Assert.Equal(200, result.StatusCode);
+        Assert.Equal("id-1234", result.RequestId);
+        Assert.Null(result.Bucket);
+        Assert.Null(result.Key);
+        Assert.Equal(callbackBody, result.CallbackResult);
+
+        // callback with null body
+        result = new CompleteMultipartUploadResult();
+        output = new OperationOutput
+        {
+            StatusCode = 200,
+            Status = "OK",
+            Headers = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase) {
+                {"x-oss-request-id", "id-1234"},
+            },
+            Body = null
+        };
+        baseResult = result;
+        Serde.DeserializeOutput(ref baseResult, ref output, Serde.DeserializeCompleteMultipartUploadCallback);
+
+        Assert.Equal(200, result.StatusCode);
+        Assert.Null(result.CallbackResult);
     }
 
 

@@ -555,6 +555,72 @@ public class ClientObjectMultipartTest : IDisposable
     }
 
     [Fact]
+    public async Task TestCompleteMultipartUploadWithCallback()
+    {
+        var client = Utils.GetDefaultClient();
+
+        var bucketName = Utils.RandomBucketName(BucketNamePrefix);
+
+        var result = await client.PutBucketAsync(new()
+        {
+            Bucket = bucketName
+        });
+
+        Assert.NotNull(result);
+        Assert.Equal(200, result.StatusCode);
+        Assert.NotNull(result.RequestId);
+
+        // init
+        var objectName = Utils.RandomObjectName();
+        var initResult = await client.InitiateMultipartUploadAsync(new()
+        {
+            Bucket = bucketName,
+            Key = objectName
+        });
+        Assert.NotNull(initResult);
+        Assert.Equal(200, initResult.StatusCode);
+        Assert.NotNull(initResult.RequestId);
+
+        // upload part
+        var content = Utils.GetRandomString(100 * 1024);
+        var upResult = await client.UploadPartAsync(new()
+        {
+            Bucket = bucketName,
+            Key = objectName,
+            PartNumber = 1,
+            UploadId = initResult.UploadId,
+            Body = new MemoryStream(Encoding.UTF8.GetBytes(content))
+        });
+        Assert.NotNull(upResult);
+        Assert.Equal(200, upResult.StatusCode);
+
+        // complete with callback
+        var callbackJson = @"{""callbackUrl"":""http://223.5.5.5"",""callbackBody"":""bucket=${bucket}&object=${object}"",""callbackBodyType"":""application/x-www-form-urlencoded""}";
+        var callbackParam = Convert.ToBase64String(Encoding.UTF8.GetBytes(callbackJson));
+
+        var cmResult = await client.CompleteMultipartUploadAsync(new()
+        {
+            Bucket = bucketName,
+            Key = objectName,
+            UploadId = initResult.UploadId,
+            Callback = callbackParam,
+            CompleteMultipartUpload = new CompleteMultipartUpload()
+            {
+                Parts = [
+                    new UploadPart() { ETag = upResult.ETag, PartNumber = 1 }
+                ],
+            }
+        });
+
+        Assert.NotNull(cmResult);
+        Assert.Equal(203, cmResult.StatusCode);
+        Assert.NotNull(cmResult.RequestId);
+        Assert.NotNull(cmResult.CallbackResult);
+        Assert.NotEmpty(cmResult.CallbackResult);
+        Assert.Contains("CallbackFailed", cmResult.CallbackResult);
+    }
+
+    [Fact]
     public async Task TestMultipartUploadFail()
     {
         var client = Utils.GetDefaultClient();

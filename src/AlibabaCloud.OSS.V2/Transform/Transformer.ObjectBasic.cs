@@ -29,6 +29,20 @@ namespace AlibabaCloud.OSS.V2.Transform
 
     internal static partial class Serde
     {
+        public static void DeserializePutObjectCallback(
+            ref Models.ResultModel baseResult,
+            ref OperationOutput output
+        )
+        {
+            if (output.Body == null)
+            {
+                return;
+            }
+            using var body = output.Body;
+            using var reader = new StreamReader(body);
+            baseResult.InnerBody = reader.ReadToEnd();
+        }
+
         public static void DeserializeCopyObject(
             ref Models.ResultModel baseResult,
             ref OperationOutput output
