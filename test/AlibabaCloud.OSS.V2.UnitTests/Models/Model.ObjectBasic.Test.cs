@@ -219,6 +219,62 @@ public class ModelObjectBasicTest
         Assert.Equal("123456", result.HashCrc64);
         Assert.Equal("123", result.VersionId);
         Assert.Equal("hello world", result.CallbackResult);
+
+        // callback with DeserializePutObjectCallback (json body)
+        var callbackBody = """{"Status":"OK"}""";
+        result = new PutObjectResult();
+        output = new OperationOutput
+        {
+            StatusCode = 200,
+            Status = "OK",
+            Headers = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase) {
+                { "x-oss-request-id", "id-1234" },
+            },
+            Body = new MemoryStream(Encoding.UTF8.GetBytes(callbackBody))
+        };
+        baseResult = result;
+        Serde.DeserializeOutput(ref baseResult, ref output, Serde.DeserializePutObjectCallback);
+
+        Assert.Equal(200, result.StatusCode);
+        Assert.Equal("OK", result.Status);
+        Assert.Equal("id-1234", result.RequestId);
+        Assert.Equal(callbackBody, result.CallbackResult);
+
+        // callback with DeserializePutObjectCallback (null body)
+        result = new PutObjectResult();
+        output = new OperationOutput
+        {
+            StatusCode = 200,
+            Status = "OK",
+            Headers = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase) {
+                { "x-oss-request-id", "id-1234" },
+            },
+            Body = null
+        };
+        baseResult = result;
+        Serde.DeserializeOutput(ref baseResult, ref output, Serde.DeserializePutObjectCallback);
+
+        Assert.Equal(200, result.StatusCode);
+        Assert.Null(result.CallbackResult);
+
+        // without callback (no body, no deserializer)
+        result = new PutObjectResult();
+        output = new OperationOutput
+        {
+            StatusCode = 200,
+            Status = "OK",
+            Headers = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase) {
+                { "x-oss-request-id", "id-1234" },
+                { "x-oss-version-id", "version123" },
+            },
+            Body = null
+        };
+        baseResult = result;
+        Serde.DeserializeOutput(ref baseResult, ref output);
+
+        Assert.Equal(200, result.StatusCode);
+        Assert.Equal("version123", result.VersionId);
+        Assert.Null(result.CallbackResult);
     }
 
     [Fact]
