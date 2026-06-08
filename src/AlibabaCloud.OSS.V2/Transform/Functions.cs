@@ -102,9 +102,10 @@ namespace AlibabaCloud.OSS.V2.Transform
                 {
                     if (req.Metadata != null)
                     {
+                        input.Headers ??= new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
                         foreach (var h in req.Metadata)
                         {
-                            input.Headers!["x-oss-meta-" + h.Key] = h.Value;
+                            input.Headers["x-oss-meta-" + h.Key] = h.Value;
                         }
                     }
 
@@ -114,9 +115,10 @@ namespace AlibabaCloud.OSS.V2.Transform
                 {
                     if (req.Metadata != null)
                     {
+                        input.Headers ??= new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
                         foreach (var h in req.Metadata)
                         {
-                            input.Headers!["x-oss-meta-" + h.Key] = h.Value;
+                            input.Headers["x-oss-meta-" + h.Key] = h.Value;
                         }
                     }
 
@@ -126,9 +128,10 @@ namespace AlibabaCloud.OSS.V2.Transform
                 {
                     if (req.Metadata != null)
                     {
+                        input.Headers ??= new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
                         foreach (var h in req.Metadata)
                         {
-                            input.Headers!["x-oss-meta-" + h.Key] = h.Value;
+                            input.Headers["x-oss-meta-" + h.Key] = h.Value;
                         }
                     }
 
@@ -138,9 +141,10 @@ namespace AlibabaCloud.OSS.V2.Transform
                 {
                     if (req.Metadata != null)
                     {
+                        input.Headers ??= new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
                         foreach (var h in req.Metadata)
                         {
-                            input.Headers!["x-oss-meta-" + h.Key] = h.Value;
+                            input.Headers["x-oss-meta-" + h.Key] = h.Value;
                         }
                     }
 
