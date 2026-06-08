@@ -1569,6 +1569,46 @@ public class ClientObjectTest : IDisposable
     }
 
     [Fact]
+    public async Task TestPutObjectWithCallback()
+    {
+        var client = Utils.GetDefaultClient();
+
+        var bucketName = Utils.RandomBucketName(BucketNamePrefix);
+
+        var result = await client.PutBucketAsync(
+            new()
+            {
+                Bucket = bucketName
+            }
+        );
+
+        Assert.NotNull(result);
+        Assert.Equal(200, result.StatusCode);
+        Assert.NotNull(result.RequestId);
+
+        var objectName = Utils.RandomObjectName();
+        var callbackJson = @"{""callbackUrl"":""http://223.5.5.5"",""callbackBody"":""bucket=${bucket}&object=${object}"",""callbackBodyType"":""application/x-www-form-urlencoded""}";
+        var callbackParam = Convert.ToBase64String(Encoding.UTF8.GetBytes(callbackJson));
+
+        var putResult = await client.PutObjectAsync(
+            new()
+            {
+                Bucket = bucketName,
+                Key = objectName,
+                Callback = callbackParam,
+                Body = new MemoryStream(Encoding.UTF8.GetBytes("hello world"))
+            }
+        );
+
+        Assert.NotNull(putResult);
+        Assert.Equal(203, putResult.StatusCode);
+        Assert.NotNull(putResult.RequestId);
+        Assert.NotNull(putResult.CallbackResult);
+        Assert.NotEmpty(putResult.CallbackResult);
+        Assert.Contains("CallbackFailed", putResult.CallbackResult);
+    }
+
+    [Fact]
     public async Task TestPutObjectWithCrcCheckDisable()
     {
         var cfg = Configuration.LoadDefault();

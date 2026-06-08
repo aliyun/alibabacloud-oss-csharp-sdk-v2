@@ -121,7 +121,12 @@ namespace AlibabaCloud.OSS.V2
 
             Models.ResultModel result = new Models.CompleteMultipartUploadResult();
 
-            Serde.DeserializeOutput(ref result, ref output, Serde.DeserializeCompleteMultipartUpload);
+            Serde.CustomDeserializer outputDeserializer =
+                string.IsNullOrEmpty(request.Callback)
+                ? Serde.DeserializeCompleteMultipartUpload
+                : Serde.DeserializeCompleteMultipartUploadCallback;
+
+            Serde.DeserializeOutput(ref result, ref output, outputDeserializer);
 
             return (Models.CompleteMultipartUploadResult)result;
         }

@@ -42,7 +42,12 @@ namespace AlibabaCloud.OSS.V2
 
             Models.ResultModel result = new Models.PutObjectResult();
 
-            Serde.DeserializeOutput(ref result, ref output, Serde.DeserializerAnyBody);
+            Serde.CustomDeserializer outputDeserializer =
+                string.IsNullOrEmpty(request.Callback)
+                ? Serde.DeserializerAnyBody
+                : Serde.DeserializePutObjectCallback;
+
+            Serde.DeserializeOutput(ref result, ref output, outputDeserializer);
 
             return (Models.PutObjectResult)result;
         }
