@@ -183,6 +183,8 @@ failures += await TestApi("PutBucketVersioning", async () =>
         VersioningConfiguration = new VersioningConfiguration { Status = "Enabled" }
     });
     Assert(result.Status == "OK", $"Status={result.Status}");
+    Assert(mockHandler.LastRequestBody != null && mockHandler.LastRequestBody.Contains("<Status>Enabled</Status>"),
+        $"RequestBody missing VersioningConfiguration: {mockHandler.LastRequestBody}");
 });
 
 // GetBucketVersioning (deserialize: XmlVersioningConfiguration)
@@ -242,6 +244,8 @@ failures += await TestApi("PutObjectTagging", async () =>
         }
     });
     Assert(result.Status == "OK", $"Status={result.Status}");
+    Assert(mockHandler.LastRequestBody != null && mockHandler.LastRequestBody.Contains("<Key>env</Key>"),
+        $"RequestBody missing Tagging: {mockHandler.LastRequestBody}");
 });
 
 // GetObjectTagging (deserialize via DeserializerAnyBody: Tagging)
@@ -251,6 +255,25 @@ failures += await TestApi("GetObjectTagging", async () =>
         "<Tagging><TagSet><Tag><Key>env</Key><Value>test</Value></Tag></TagSet></Tagging>");
     var result = await client.GetObjectTaggingAsync(new() { Bucket = bucket, Key = key });
     Assert(result.Tagging?.TagSet?.Tags?.Count == 1, $"Tags.Count={result.Tagging?.TagSet?.Tags?.Count}");
+});
+
+// RestoreObject (serialize: RestoreRequest with nested JobParameters)
+failures += await TestApi("RestoreObject", async () =>
+{
+    mockHandler.SetResponse(HttpStatusCode.OK, "");
+    var result = await client.RestoreObjectAsync(new()
+    {
+        Bucket = bucket,
+        Key = key,
+        RestoreRequest = new RestoreRequest
+        {
+            Days = 3,
+            JobParameters = new JobParameters { Tier = "Standard" }
+        }
+    });
+    Assert(result.Status == "OK", $"Status={result.Status}");
+    Assert(mockHandler.LastRequestBody != null && mockHandler.LastRequestBody.Contains("<Days>3</Days>"),
+        $"RequestBody missing RestoreRequest: {mockHandler.LastRequestBody}");
 });
 
 // --- Service ---
@@ -302,7 +325,10 @@ static async Task<int> TestApi(string name, Func<Task> action)
     }
     catch (Exception ex)
     {
-        Console.WriteLine($"  FAIL [{name}]: {ex.GetType().Name}: {ex.Message}");
+        var msg = ex.Message;
+        for (var inner = ex.InnerException; inner != null; inner = inner.InnerException)
+            msg = inner.Message;
+        Console.WriteLine($"  FAIL [{name}]: {ex.GetType().Name}: {msg}");
         return 1;
     }
 }
@@ -310,6 +336,7 @@ static async Task<int> TestApi(string name, Func<Task> action)
 class MockHttpMessageHandler : HttpMessageHandler
 {
     private HttpResponseMessage? _response;
+    public string? LastRequestBody { get; private set; }
 
     public void SetResponse(HttpStatusCode statusCode, string body)
     {
@@ -319,11 +346,12 @@ class MockHttpMessageHandler : HttpMessageHandler
         };
     }
 
-    protected override Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)
+    protected override async Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)
     {
         if (_response == null) throw new InvalidOperationException("No mock response configured");
+        LastRequestBody = request.Content != null ? await request.Content.ReadAsStringAsync() : null;
         var ret = _response;
         _response = null;
-        return Task.FromResult(ret);
+        return ret;
     }
 }

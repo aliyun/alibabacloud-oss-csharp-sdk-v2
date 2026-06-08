@@ -29,10 +29,10 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Setup .NET 8.0
+      - name: Setup .NET 9.0
         uses: actions/setup-dotnet@v4
         with:
-          dotnet-version: '8.0.x'
+          dotnet-version: '9.0.x'
 
       - name: Pack SDK
         run: dotnet pack src/AlibabaCloud.OSS.V2 --configuration Release --output test/aot/packages
@@ -42,8 +42,8 @@ jobs:
 
       - name: Run AOT test app (Linux)
         if: runner.os == 'Linux'
-        run: ./test/aot/bin/Release/net8.0/${{ matrix.rid }}/publish/AlibabaCloud.OSS.V2.AotTest
+        run: ./test/aot/bin/Release/net9.0/${{ matrix.rid }}/publish/AlibabaCloud.OSS.V2.AotTest
 
       - name: Run AOT test app (Windows)
         if: runner.os == 'Windows'
-        run: ./test/aot/bin/Release/net8.0/${{ matrix.rid }}/publish/AlibabaCloud.OSS.V2.AotTest.exe
+        run: ./test/aot/bin/Release/net9.0/${{ matrix.rid }}/publish/AlibabaCloud.OSS.V2.AotTest.exe

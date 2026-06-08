@@ -1,5 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Xml.Serialization;
+#if NET8_0_OR_GREATER
+using System.Diagnostics.CodeAnalysis;
+#endif
 
 namespace AlibabaCloud.OSS.V2.Transform
 {
@@ -31,14 +34,19 @@ namespace AlibabaCloud.OSS.V2.Transform
 
     internal static partial class Serde
     {
+#if NET8_0_OR_GREATER
+        [DynamicDependency(DynamicallyAccessedMemberTypes.All, typeof(Models.BucketProperties))]
+        [DynamicDependency(DynamicallyAccessedMemberTypes.All, typeof(List<Models.BucketProperties>))]
+        [DynamicDependency(DynamicallyAccessedMemberTypes.All, typeof(Models.Owner))]
+#endif
         public static void DeserializeListBuckets(
             ref Models.ResultModel baseResult,
             ref OperationOutput output
         )
         {
-            var serializer = new XmlSerializer(typeof(XmlListAllMyBucketsResult));
+            var serializer = CreateSerializer(typeof(XmlListAllMyBucketsResult));
             using var body = output.Body!;
-            var obj = serializer.Deserialize(body) as XmlListAllMyBucketsResult;
+            var obj = DeserializeXml(serializer, body) as XmlListAllMyBucketsResult;
             var result = baseResult as Models.ListBucketsResult;
 
             result!.Prefix = obj!.Prefix;

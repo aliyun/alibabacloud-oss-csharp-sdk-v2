@@ -5,12 +5,37 @@ using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
 using System.Xml.Serialization;
+#if NET8_0_OR_GREATER
+using System.Diagnostics.CodeAnalysis;
+#endif
 using AlibabaCloud.OSS.V2.Extensions;
 
 namespace AlibabaCloud.OSS.V2.Transform
 {
     internal static partial class Serde
     {
+#if NET8_0_OR_GREATER
+        [UnconditionalSuppressMessage("Trimming", "IL2026",
+            Justification = "XML types are preserved via DynamicallyAccessedMembers and DynamicDependency")]
+#endif
+        private static XmlSerializer CreateSerializer(
+#if NET8_0_OR_GREATER
+            [DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.All)]
+#endif
+            Type type)
+        {
+            return new XmlSerializer(type);
+        }
+
+#if NET8_0_OR_GREATER
+        [UnconditionalSuppressMessage("Trimming", "IL2026",
+            Justification = "XML types are preserved via DynamicallyAccessedMembers and DynamicDependency")]
+#endif
+        private static object? DeserializeXml(XmlSerializer serializer, Stream stream)
+        {
+            return serializer.Deserialize(stream);
+        }
+
         public delegate void CustomSerializer(ref Models.RequestModel request, ref OperationInput input);
 
         public delegate void CustomDeserializer(ref Models.ResultModel result, ref OperationOutput output);
@@ -45,13 +70,30 @@ namespace AlibabaCloud.OSS.V2.Transform
             foreach (var serializer in customSerializer) serializer(ref request, ref input);
         }
 
+#if NET8_0_OR_GREATER
+        [UnconditionalSuppressMessage("Trimming", "IL2026",
+            Justification = "XML types are preserved via DynamicallyAccessedMembers and DynamicDependency")]
+        [UnconditionalSuppressMessage("Trimming", "IL2072",
+            Justification = "Serialization-only types are rooted via DynamicDependency")]
+        [DynamicDependency(DynamicallyAccessedMemberTypes.All, typeof(Models.CreateBucketConfiguration))]
+        [DynamicDependency(DynamicallyAccessedMemberTypes.All, typeof(Models.CompleteMultipartUpload))]
+        [DynamicDependency(DynamicallyAccessedMemberTypes.All, typeof(Models.UploadPart))]
+        [DynamicDependency(DynamicallyAccessedMemberTypes.All, typeof(List<Models.UploadPart>))]
+        [DynamicDependency(DynamicallyAccessedMemberTypes.All, typeof(Models.VersioningConfiguration))]
+        [DynamicDependency(DynamicallyAccessedMemberTypes.All, typeof(Models.Tagging))]
+        [DynamicDependency(DynamicallyAccessedMemberTypes.All, typeof(Models.TagSet))]
+        [DynamicDependency(DynamicallyAccessedMemberTypes.All, typeof(Models.Tag))]
+        [DynamicDependency(DynamicallyAccessedMemberTypes.All, typeof(List<Models.Tag>))]
+        [DynamicDependency(DynamicallyAccessedMemberTypes.All, typeof(Models.RestoreRequest))]
+        [DynamicDependency(DynamicallyAccessedMemberTypes.All, typeof(Models.JobParameters))]
+#endif
         static string SerializeXml(object? obj)
         {
             if (obj == null) return "";
 
             var ns = new XmlSerializerNamespaces();
             ns.Add(string.Empty, string.Empty);
-            var serializer = new XmlSerializer(obj.GetType());
+            var serializer = CreateSerializer(obj.GetType());
             var writer = new Serializers.EncodingStringWriter(Encoding.UTF8);
             serializer.Serialize(writer, obj, ns);
             writer.Flush();
@@ -243,6 +285,15 @@ namespace AlibabaCloud.OSS.V2.Transform
             foreach (var deserializer in customDeserializer) deserializer(ref result, ref output);
         }
 
+#if NET8_0_OR_GREATER
+        [DynamicDependency(DynamicallyAccessedMemberTypes.All, typeof(Models.Owner))]
+        [DynamicDependency(DynamicallyAccessedMemberTypes.All, typeof(Models.AccessControlList))]
+        [DynamicDependency(DynamicallyAccessedMemberTypes.All, typeof(Models.TagSet))]
+        [DynamicDependency(DynamicallyAccessedMemberTypes.All, typeof(Models.Tag))]
+        [DynamicDependency(DynamicallyAccessedMemberTypes.All, typeof(List<Models.Tag>))]
+        [DynamicDependency(DynamicallyAccessedMemberTypes.All, typeof(Models.RegionInfo))]
+        [DynamicDependency(DynamicallyAccessedMemberTypes.All, typeof(List<Models.RegionInfo>))]
+#endif
         public static void DeserializerAnyBody(ref Models.ResultModel result, ref OperationOutput output)
         {
             if (output.Body == null) return;
@@ -258,8 +309,8 @@ namespace AlibabaCloud.OSS.V2.Transform
                         throw new Exception("body type is null");
                     }
 
-                    var serializer = new XmlSerializer(result.BodyType);
-                    result.InnerBody = serializer.Deserialize(body);
+                    var serializer = CreateSerializer(result.BodyType!);
+                    result.InnerBody = DeserializeXml(serializer, body);
                 }
                 break;
                 case "string":
@@ -277,6 +328,13 @@ namespace AlibabaCloud.OSS.V2.Transform
             }
         }
 
+#if NET8_0_OR_GREATER
+        [DynamicDependency(DynamicallyAccessedMemberTypes.All, typeof(Models.BucketInfo))]
+        [DynamicDependency(DynamicallyAccessedMemberTypes.All, typeof(Models.Owner))]
+        [DynamicDependency(DynamicallyAccessedMemberTypes.All, typeof(Models.AccessControlList))]
+        [DynamicDependency(DynamicallyAccessedMemberTypes.All, typeof(Models.ServerSideEncryptionRule))]
+        [DynamicDependency(DynamicallyAccessedMemberTypes.All, typeof(Models.BucketPolicy))]
+#endif
         public static void DeserializerXmlBody(ref Models.ResultModel result, ref OperationOutput output)
         {
             if (output.Body == null) return;
@@ -291,8 +349,8 @@ namespace AlibabaCloud.OSS.V2.Transform
                     }
 
                     using var body = output.Body;
-                    var serializer = new XmlSerializer(result.BodyType);
-                    result.InnerBody = serializer.Deserialize(body);
+                    var serializer = CreateSerializer(result.BodyType!);
+                    result.InnerBody = DeserializeXml(serializer, body);
                 }
                 break;
             }

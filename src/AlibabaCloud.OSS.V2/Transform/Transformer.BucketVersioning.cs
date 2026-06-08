@@ -5,6 +5,9 @@ using System.Xml;
 using System.Xml.Serialization;
 using AlibabaCloud.OSS.V2.Extensions;
 using AlibabaCloud.OSS.V2.Models;
+#if NET8_0_OR_GREATER
+using System.Diagnostics.CodeAnalysis;
+#endif
 
 namespace AlibabaCloud.OSS.V2.Transform
 {
@@ -107,14 +110,23 @@ namespace AlibabaCloud.OSS.V2.Transform
 
     internal static partial class Serde
     {
+#if NET8_0_OR_GREATER
+        [DynamicDependency(DynamicallyAccessedMemberTypes.All, typeof(ObjectVersion))]
+        [DynamicDependency(DynamicallyAccessedMemberTypes.All, typeof(List<ObjectVersion>))]
+        [DynamicDependency(DynamicallyAccessedMemberTypes.All, typeof(DeleteMarkerEntry))]
+        [DynamicDependency(DynamicallyAccessedMemberTypes.All, typeof(List<DeleteMarkerEntry>))]
+        [DynamicDependency(DynamicallyAccessedMemberTypes.All, typeof(CommonPrefix))]
+        [DynamicDependency(DynamicallyAccessedMemberTypes.All, typeof(List<CommonPrefix>))]
+        [DynamicDependency(DynamicallyAccessedMemberTypes.All, typeof(Owner))]
+#endif
         public static void DeserializeListObjectVersions(
             ref Models.ResultModel baseResult,
             ref OperationOutput output
         )
         {
-            var serializer = new XmlSerializer(typeof(XmlListVersionsResult));
+            var serializer = CreateSerializer(typeof(XmlListVersionsResult));
             using var body = output.Body!;
-            var obj = serializer.Deserialize(body) as XmlListVersionsResult;
+            var obj = DeserializeXml(serializer, body) as XmlListVersionsResult;
             var result = baseResult as Models.ListObjectVersionsResult;
 
             if (obj == null || result == null)
@@ -213,8 +225,8 @@ namespace AlibabaCloud.OSS.V2.Transform
             }
             try
             {
-                var serializer = new XmlSerializer(typeof(XmlVersioningConfiguration));
-                var obj = serializer.Deserialize(body) as XmlVersioningConfiguration;
+                var serializer = CreateSerializer(typeof(XmlVersioningConfiguration));
+                var obj = DeserializeXml(serializer, body) as XmlVersioningConfiguration;
 
                 if (obj == null)
                 {
