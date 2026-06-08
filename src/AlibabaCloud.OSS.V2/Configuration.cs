@@ -126,6 +126,15 @@ namespace AlibabaCloud.OSS.V2
         public bool? DisableDownloadCrc64Check { get; set; }
 
         /// <summary>
+        /// Automatically corrects clock skew between client and server by default.
+        /// When the client's local clock differs from the server time by more than 15 minutes,
+        /// the SDK detects the skew error, calculates an offset from the server's Date header,
+        /// and retries the request with the corrected signing time.
+        /// Set this to `true` to disable this feature.
+        /// </summary>
+        public bool? DisableClockSkewCorrection { get; set; }
+
+        /// <summary>
         ///  Additional signable headers.
         /// </summary>
         public List<string>? AdditionalHeaders { get; set; }

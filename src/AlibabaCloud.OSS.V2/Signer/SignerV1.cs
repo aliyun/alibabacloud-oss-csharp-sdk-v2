@@ -108,7 +108,7 @@ namespace AlibabaCloud.OSS.V2.Signer
             var subResource = signingContext.SubResource;
 
             // Date
-            var signTime = signingContext.SignTime ?? DateTime.UtcNow;
+            var signTime = signingContext.SignTime ?? DateTime.UtcNow.Add(signingContext.ClockOffset);
             var date = FormatRfc822Date(signTime);
 
             // Credentials information

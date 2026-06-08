@@ -2262,4 +2262,425 @@ public class ClientImplTest
         return ((time.ToUniversalTime().Ticks - ticksOf1970) / 10000000L).ToString(CultureInfo.InvariantCulture);
     }
 
+    private static string FormatRfc1123(DateTimeOffset time)
+    {
+        return time.ToString("ddd, dd MMM yyyy HH:mm:ss 'GMT'", CultureInfo.InvariantCulture);
+    }
+
+    const string ClockSkewErrorXml = """
+        <?xml version="1.0" encoding="UTF-8"?>
+        <Error>
+            <Code>RequestTimeTooSkewed</Code>
+            <Message>The difference between the request time and the current time is too large.</Message>
+            <RequestId>id-skew</RequestId>
+            <ServerTime>2018-03-07T08:35:19.000Z</ServerTime>
+            <MaxAllowedSkewMilliseconds>900000</MaxAllowedSkewMilliseconds>
+        </Error>
+        """;
+
+    const string AccessDeniedErrorXml = """
+        <?xml version="1.0" encoding="UTF-8"?>
+        <Error>
+            <Code>AccessDenied</Code>
+            <Message>Access Denied.</Message>
+            <RequestId>id-denied</RequestId>
+        </Error>
+        """;
+
+    const string InvalidSigningDateErrorXml = """
+        <?xml version="1.0" encoding="UTF-8"?>
+        <Error>
+            <Code>InvalidArgument</Code>
+            <Message>Invalid signing date in Authorization header.</Message>
+            <RequestId>id-invalid-date</RequestId>
+        </Error>
+        """;
+
+    private static HttpResponseMessage MakeErrorResponse(HttpStatusCode statusCode, string xml, DateTimeOffset? dateHeader = null)
+    {
+        var response = new HttpResponseMessage(statusCode)
+        {
+            Content = new StringContent(xml, Encoding.UTF8, "application/xml")
+        };
+        if (dateHeader.HasValue)
+        {
+            response.Headers.Date = dateHeader.Value;
+        }
+        return response;
+    }
+
+    private static HttpResponseMessage MakeOkResponse()
+    {
+        return new HttpResponseMessage(HttpStatusCode.OK)
+        {
+            Content = new StringContent("")
+        };
+    }
+
+    [Fact]
+    public async Task TestClockSkew_RetryWithCorrectedTime()
+    {
+        var mockHandler = new MockHttpMessageHandler();
+        var config = new Configuration()
+        {
+            Region = "cn-hangzhou",
+            CredentialsProvider = new AnonymousCredentialsProvider(),
+            HttpTransport = new Transport.HttpTransport(mockHandler),
+        };
+        var client = new ClientImpl(config);
+
+        var serverTime = DateTimeOffset.UtcNow;
+        mockHandler.Responses = new List<HttpResponseMessage>
+        {
+            MakeErrorResponse(HttpStatusCode.Forbidden, ClockSkewErrorXml, serverTime),
+            MakeOkResponse()
+        };
+
+        var input = new OperationInput
+        {
+            OperationName = "InvokeOperation",
+            Method = "GET",
+            Bucket = "bucket",
+        };
+
+        var result = await client.ExecuteAsync(input);
+        Assert.Equal(200, result.StatusCode);
+        Assert.Equal(2, mockHandler.Requests.Count);
+    }
+
+    [Fact]
+    public async Task TestClockSkew_OffsetPersistsAcrossRequests()
+    {
+        var mockHandler = new MockHttpMessageHandler();
+        var config = new Configuration()
+        {
+            Region = "cn-hangzhou",
+            CredentialsProvider = new AnonymousCredentialsProvider(),
+            HttpTransport = new Transport.HttpTransport(mockHandler),
+        };
+        var client = new ClientImpl(config);
+
+        var serverTime = DateTimeOffset.UtcNow.AddSeconds(600);
+        mockHandler.Responses = new List<HttpResponseMessage>
+        {
+            MakeErrorResponse(HttpStatusCode.Forbidden, ClockSkewErrorXml, serverTime),
+            MakeOkResponse()
+        };
+
+        var input = new OperationInput
+        {
+            OperationName = "InvokeOperation",
+            Method = "GET",
+            Bucket = "bucket",
+        };
+        var result = await client.ExecuteAsync(input);
+        Assert.Equal(200, result.StatusCode);
+        Assert.Equal(2, mockHandler.Requests.Count);
+        Assert.True(Math.Abs(client.InnerOptions.ClockOffset) > 500);
+
+        mockHandler.Clear();
+        mockHandler.Responses = new List<HttpResponseMessage>
+        {
+            MakeOkResponse()
+        };
+
+        input = new OperationInput
+        {
+            OperationName = "InvokeOperation",
+            Method = "GET",
+            Bucket = "bucket",
+        };
+        result = await client.ExecuteAsync(input);
+        Assert.Equal(200, result.StatusCode);
+        Assert.Equal(1, mockHandler.Requests.Count);
+    }
+
+    [Fact]
+    public async Task TestClockSkew_DisabledFlag()
+    {
+        var mockHandler = new MockHttpMessageHandler();
+        var config = new Configuration()
+        {
+            Region = "cn-hangzhou",
+            CredentialsProvider = new AnonymousCredentialsProvider(),
+            HttpTransport = new Transport.HttpTransport(mockHandler),
+            RetryMaxAttempts = 1,
+            DisableClockSkewCorrection = true,
+        };
+        var client = new ClientImpl(config);
+
+        var serverTime = DateTimeOffset.UtcNow;
+        mockHandler.Responses = new List<HttpResponseMessage>
+        {
+            MakeErrorResponse(HttpStatusCode.Forbidden, ClockSkewErrorXml, serverTime),
+        };
+
+        var input = new OperationInput
+        {
+            OperationName = "InvokeOperation",
+            Method = "GET",
+            Bucket = "bucket",
+        };
+
+        var e = await Assert.ThrowsAsync<OperationException>(async () => await client.ExecuteAsync(input));
+        var se = Assert.IsType<ServiceException>(e.InnerException);
+        Assert.Equal("RequestTimeTooSkewed", se.ErrorCode);
+        Assert.Equal(1, mockHandler.Requests.Count);
+    }
+
+    [Fact]
+    public async Task TestClockSkew_NonSkewError403()
+    {
+        var mockHandler = new MockHttpMessageHandler();
+        var config = new Configuration()
+        {
+            Region = "cn-hangzhou",
+            CredentialsProvider = new AnonymousCredentialsProvider(),
+            HttpTransport = new Transport.HttpTransport(mockHandler),
+            RetryMaxAttempts = 1,
+        };
+        var client = new ClientImpl(config);
+
+        var serverTime = DateTimeOffset.UtcNow;
+        mockHandler.Responses = new List<HttpResponseMessage>
+        {
+            MakeErrorResponse(HttpStatusCode.Forbidden, AccessDeniedErrorXml, serverTime),
+        };
+
+        var input = new OperationInput
+        {
+            OperationName = "InvokeOperation",
+            Method = "GET",
+            Bucket = "bucket",
+        };
+
+        var e = await Assert.ThrowsAsync<OperationException>(async () => await client.ExecuteAsync(input));
+        var se = Assert.IsType<ServiceException>(e.InnerException);
+        Assert.Equal("AccessDenied", se.ErrorCode);
+        Assert.Equal(1, mockHandler.Requests.Count);
+        Assert.Equal(0, client.InnerOptions.ClockOffset);
+    }
+
+    [Fact]
+    public async Task TestClockSkew_ServerTimeFallback()
+    {
+        var mockHandler = new MockHttpMessageHandler();
+        var config = new Configuration()
+        {
+            Region = "cn-hangzhou",
+            CredentialsProvider = new AnonymousCredentialsProvider(),
+            HttpTransport = new Transport.HttpTransport(mockHandler),
+        };
+        var client = new ClientImpl(config);
+
+        var errorResponse = new HttpResponseMessage(HttpStatusCode.Forbidden)
+        {
+            Content = new StringContent(ClockSkewErrorXml, Encoding.UTF8, "application/xml")
+        };
+
+        mockHandler.Responses = new List<HttpResponseMessage>
+        {
+            errorResponse,
+            MakeOkResponse()
+        };
+
+        var input = new OperationInput
+        {
+            OperationName = "InvokeOperation",
+            Method = "GET",
+            Bucket = "bucket",
+        };
+
+        var result = await client.ExecuteAsync(input);
+        Assert.Equal(200, result.StatusCode);
+        Assert.Equal(2, mockHandler.Requests.Count);
+    }
+
+    [Fact]
+    public async Task TestClockSkew_ParseFailure()
+    {
+        var mockHandler = new MockHttpMessageHandler();
+        var config = new Configuration()
+        {
+            Region = "cn-hangzhou",
+            CredentialsProvider = new AnonymousCredentialsProvider(),
+            HttpTransport = new Transport.HttpTransport(mockHandler),
+            RetryMaxAttempts = 1,
+        };
+        var client = new ClientImpl(config);
+
+        var noServerTimeXml = """
+            <?xml version="1.0" encoding="UTF-8"?>
+            <Error>
+                <Code>RequestTimeTooSkewed</Code>
+                <Message>The difference between the request time and the current time is too large.</Message>
+                <RequestId>id-skew</RequestId>
+            </Error>
+            """;
+
+        var errorResponse = new HttpResponseMessage(HttpStatusCode.Forbidden)
+        {
+            Content = new StringContent(noServerTimeXml, Encoding.UTF8, "application/xml")
+        };
+
+        mockHandler.Responses = new List<HttpResponseMessage>
+        {
+            errorResponse,
+        };
+
+        var input = new OperationInput
+        {
+            OperationName = "InvokeOperation",
+            Method = "GET",
+            Bucket = "bucket",
+        };
+
+        var e = await Assert.ThrowsAsync<OperationException>(async () => await client.ExecuteAsync(input));
+        var se = Assert.IsType<ServiceException>(e.InnerException);
+        Assert.Equal("RequestTimeTooSkewed", se.ErrorCode);
+        Assert.Equal(1, mockHandler.Requests.Count);
+    }
+
+    [Fact]
+    public async Task TestClockSkew_OneShotBodyNotRetried()
+    {
+        var mockHandler = new MockHttpMessageHandler();
+        var config = new Configuration()
+        {
+            Region = "cn-hangzhou",
+            CredentialsProvider = new AnonymousCredentialsProvider(),
+            HttpTransport = new Transport.HttpTransport(mockHandler),
+        };
+        var client = new ClientImpl(config);
+
+        var serverTime = DateTimeOffset.UtcNow;
+        mockHandler.Responses = new List<HttpResponseMessage>
+        {
+            MakeErrorResponse(HttpStatusCode.Forbidden, ClockSkewErrorXml, serverTime),
+        };
+
+        var bodyStream = new NonSeekableStream(new MemoryStream(Encoding.UTF8.GetBytes("test body")));
+        var input = new OperationInput
+        {
+            OperationName = "InvokeOperation",
+            Method = "PUT",
+            Bucket = "bucket",
+            Body = bodyStream,
+        };
+
+        var e = await Assert.ThrowsAsync<OperationException>(async () => await client.ExecuteAsync(input));
+        Assert.IsType<ServiceException>(e.InnerException);
+        Assert.Equal(1, mockHandler.Requests.Count);
+    }
+
+    [Fact]
+    public async Task TestClockSkew_InvalidSigningDate_LargeSkew()
+    {
+        var mockHandler = new MockHttpMessageHandler();
+        var config = new Configuration()
+        {
+            Region = "cn-hangzhou",
+            CredentialsProvider = new AnonymousCredentialsProvider(),
+            HttpTransport = new Transport.HttpTransport(mockHandler),
+        };
+        var client = new ClientImpl(config);
+
+        var serverTime = DateTimeOffset.UtcNow.AddSeconds(1200);
+        mockHandler.Responses = new List<HttpResponseMessage>
+        {
+            MakeErrorResponse(HttpStatusCode.BadRequest, InvalidSigningDateErrorXml, serverTime),
+            MakeOkResponse()
+        };
+
+        var input = new OperationInput
+        {
+            OperationName = "InvokeOperation",
+            Method = "GET",
+            Bucket = "bucket",
+        };
+
+        var result = await client.ExecuteAsync(input);
+        Assert.Equal(200, result.StatusCode);
+        Assert.Equal(2, mockHandler.Requests.Count);
+    }
+
+    [Fact]
+    public async Task TestClockSkew_InvalidSigningDate_SmallSkew()
+    {
+        var mockHandler = new MockHttpMessageHandler();
+        var config = new Configuration()
+        {
+            Region = "cn-hangzhou",
+            CredentialsProvider = new AnonymousCredentialsProvider(),
+            HttpTransport = new Transport.HttpTransport(mockHandler),
+            RetryMaxAttempts = 1,
+        };
+        var client = new ClientImpl(config);
+
+        var serverTime = DateTimeOffset.UtcNow.AddSeconds(60);
+        mockHandler.Responses = new List<HttpResponseMessage>
+        {
+            MakeErrorResponse(HttpStatusCode.BadRequest, InvalidSigningDateErrorXml, serverTime),
+        };
+
+        var input = new OperationInput
+        {
+            OperationName = "InvokeOperation",
+            Method = "GET",
+            Bucket = "bucket",
+        };
+
+        var e = await Assert.ThrowsAsync<OperationException>(async () => await client.ExecuteAsync(input));
+        var se = Assert.IsType<ServiceException>(e.InnerException);
+        Assert.Equal("InvalidArgument", se.ErrorCode);
+        Assert.Equal(1, mockHandler.Requests.Count);
+    }
+
+    [Fact]
+    public void TestFeatureFlags_DisableClockSkewCorrection()
+    {
+        var config = new Configuration()
+        {
+            Region = "cn-hangzhou",
+            CredentialsProvider = new AnonymousCredentialsProvider(),
+            DisableClockSkewCorrection = true,
+        };
+        var client = new ClientImpl(config);
+        Assert.False(client.Options.FeatureFlags.HasFlag(FeatureFlagsType.CorrectClockSkew));
+        Assert.True(client.Options.FeatureFlags.HasFlag(FeatureFlagsType.AutoDetectMimeType));
+        Assert.True(client.Options.FeatureFlags.HasFlag(FeatureFlagsType.EnableCrc64CheckUpload));
+        Assert.True(client.Options.FeatureFlags.HasFlag(FeatureFlagsType.EnableCrc64CheckDownload));
+    }
+
+    [Fact]
+    public void TestFeatureFlags_DisableMultiple()
+    {
+        var config = new Configuration()
+        {
+            Region = "cn-hangzhou",
+            CredentialsProvider = new AnonymousCredentialsProvider(),
+            DisableClockSkewCorrection = true,
+            DisableUploadCrc64Check = true,
+            DisableDownloadCrc64Check = true,
+        };
+        var client = new ClientImpl(config);
+        Assert.False(client.Options.FeatureFlags.HasFlag(FeatureFlagsType.CorrectClockSkew));
+        Assert.False(client.Options.FeatureFlags.HasFlag(FeatureFlagsType.EnableCrc64CheckUpload));
+        Assert.False(client.Options.FeatureFlags.HasFlag(FeatureFlagsType.EnableCrc64CheckDownload));
+        Assert.True(client.Options.FeatureFlags.HasFlag(FeatureFlagsType.AutoDetectMimeType));
+    }
+
+    [Fact]
+    public void TestFeatureFlags_ExplicitFalseKeepsEnabled()
+    {
+        var config = new Configuration()
+        {
+            Region = "cn-hangzhou",
+            CredentialsProvider = new AnonymousCredentialsProvider(),
+            DisableClockSkewCorrection = false,
+        };
+        var client = new ClientImpl(config);
+        Assert.Equal(Defaults.FeatureFlags, client.Options.FeatureFlags);
+    }
+
 }
