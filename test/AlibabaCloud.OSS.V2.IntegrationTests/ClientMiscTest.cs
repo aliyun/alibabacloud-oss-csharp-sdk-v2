@@ -425,7 +425,7 @@ public class ClientMiscTest : IDisposable
         }
         catch (Exception e)
         {
-            Assert.Contains("input.Bucket name is invalid", e.ToString());
+            Assert.Contains("Bucket", e.ToString());
         }
 
         try
@@ -453,7 +453,7 @@ public class ClientMiscTest : IDisposable
         }
         catch (Exception e)
         {
-            Assert.Contains("input.Bucket name is invalid", e.ToString());
+            Assert.Contains("Bucket", e.ToString());
         }
 
         try

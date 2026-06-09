@@ -10,6 +10,7 @@
         <PackageVersion Include="Microsoft.NETFramework.ReferenceAssemblies.net472" Version="1.0.3"/>
         <PackageVersion Include="Microsoft.SourceLink.GitHub" Version="8.0.0"/>
         <PackageVersion Include="Microsoft.Bcl.AsyncInterfaces" Version="9.0.2"/>
+        <PackageVersion Include="System.Threading.Tasks.Extensions" Version="4.6.3"/>
     </ItemGroup>
     <ItemGroup Label="Testing dependencies">
         <PackageVersion Include="coverlet.msbuild" Version="6.0.4"/>

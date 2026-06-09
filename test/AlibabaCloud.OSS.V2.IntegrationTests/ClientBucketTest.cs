@@ -313,9 +313,27 @@ public class ClientBucketTest : IDisposable
             Bucket = bucketName,
         });
 
+
         Assert.NotNull(result);
         Assert.Equal(200, result.StatusCode);
         Assert.NotNull(result.RequestId);
+
+        var blockBody = Encoding.UTF8.GetBytes(
+            "<?xml version=\"1.0\" encoding=\"UTF-8\"?>" +
+            "<PublicAccessBlockConfiguration>" +
+            "<BlockPublicAccess>false</BlockPublicAccess>" +
+            "</PublicAccessBlockConfiguration>");
+        var blockResult = await client.InvokeOperationAsync(
+            new OperationInput
+            {
+                OperationName = "PutBucketPublicAccessBlock",
+                Method = "PUT",
+                Parameters = new Dictionary<string, string> { { "publicAccessBlock", "" } },
+                Bucket = bucketName,
+                Body = new MemoryStream(blockBody)
+            }
+        );
+        Assert.Equal(200, blockResult.StatusCode);
 
         var result1 = await client.GetBucketAclAsync(
             new()
