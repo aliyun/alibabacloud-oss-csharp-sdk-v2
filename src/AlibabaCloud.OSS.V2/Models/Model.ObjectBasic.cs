@@ -1333,6 +1333,47 @@ namespace AlibabaCloud.OSS.V2.Models
     }
 
     /// <summary>
+    /// The request for the SealAppendObject operation.
+    /// </summary>
+    public sealed class SealAppendObjectRequest : RequestModel
+    {
+        /// <summary>
+        /// The name of the bucket.
+        /// </summary>
+        public string? Bucket { get; set; }
+
+        /// <summary>
+        /// The name of the appendable object.
+        /// </summary>
+        public string? Key { get; set; }
+
+        /// <summary>
+        /// Used to specify the expected length of the file when the user wants to seal it.
+        /// </summary>
+        public long? Position
+        {
+            get => Parameters.TryGetValue("position", out var value)
+                ? Convert.ToInt64(value, CultureInfo.InvariantCulture)
+                : null;
+            set
+            {
+                if (value != null) Parameters["position"] = Convert.ToString((long)value, CultureInfo.InvariantCulture);
+            }
+        }
+    }
+
+    /// <summary>
+    /// The result for the SealAppendObject operation.
+    /// </summary>
+    public sealed class SealAppendObjectResult : ResultModel
+    {
+        /// <summary>
+        /// The time when the object was sealed.
+        /// </summary>
+        public string? SealedTime => Headers.TryGetValue("x-oss-sealed-time", out var value) ? value : null;
+    }
+
+    /// <summary>
     /// The request for the HeadObject operation.
     /// </summary>
     public sealed class HeadObjectRequest : RequestModel

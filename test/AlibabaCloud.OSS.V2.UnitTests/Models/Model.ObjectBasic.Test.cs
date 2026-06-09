@@ -1050,6 +1050,79 @@ public class ModelObjectBasicTest
     }
 
     [Fact]
+    public void TestSealAppendObjectRequest()
+    {
+        var request = new SealAppendObjectRequest();
+        Assert.Empty(request.Headers);
+        Assert.Empty(request.Parameters);
+        Assert.Null(request.InnerBody);
+        Assert.Equal("", request.BodyFormat);
+        Assert.Null(request.Bucket);
+        Assert.Null(request.Key);
+        Assert.Null(request.Position);
+
+        var input = new OperationInput();
+        Serde.SerializeInput(request, ref input);
+
+        Assert.Null(input.Headers);
+        Assert.Null(input.Parameters);
+        Assert.Null(input.Body);
+
+        request = new SealAppendObjectRequest
+        {
+            Bucket = "bucket",
+            Key = "key",
+            Position = 11
+        };
+
+        Assert.Equal("bucket", request.Bucket);
+        Assert.Equal("key", request.Key);
+        Assert.Equal(11, request.Position);
+        Assert.Empty(request.Headers);
+
+        Assert.Single(request.Parameters);
+        Assert.Equal("11", request.Parameters["position"]);
+
+        Serde.SerializeInput(request, ref input);
+
+        Assert.Null(input.Headers);
+        Assert.Null(input.Body);
+        Assert.NotNull(input.Parameters);
+        Assert.Equal("11", input.Parameters["position"]);
+    }
+
+    [Fact]
+    public void TestSealAppendObjectResult()
+    {
+        var result = new SealAppendObjectResult();
+        Assert.Equal(0, result.StatusCode);
+        Assert.Equal("", result.Status);
+        Assert.Equal("", result.RequestId);
+        Assert.Empty(result.Headers);
+        Assert.Null(result.SealedTime);
+
+        var output = new OperationOutput
+        {
+            StatusCode = 200,
+            Status = "OK",
+            Headers = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase) {
+                { "x-oss-request-id", "123-id" },
+                { "Content-Type", "txt" },
+                { "x-oss-sealed-time", "12345" },
+            }
+        };
+        ResultModel baseResult = result;
+        Serde.DeserializeOutput(ref baseResult, ref output);
+
+        Assert.Equal(200, result.StatusCode);
+        Assert.Equal("OK", result.Status);
+        Assert.Equal("123-id", result.RequestId);
+        Assert.Equal(3, result.Headers.Count);
+        Assert.Equal("txt", result.Headers["content-type"]);
+        Assert.Equal("12345", result.SealedTime);
+    }
+
+    [Fact]
     public void TestHeadObjectRequest()
     {
         var request = new HeadObjectRequest();
