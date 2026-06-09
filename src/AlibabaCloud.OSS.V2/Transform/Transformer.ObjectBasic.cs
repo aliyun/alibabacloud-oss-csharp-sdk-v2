@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using System.IO;
 using System.Text;
 using System.Xml.Serialization;
+#if NET8_0_OR_GREATER
+using System.Diagnostics.CodeAnalysis;
+#endif
 using AlibabaCloud.OSS.V2.Extensions;
 
 namespace AlibabaCloud.OSS.V2.Transform
@@ -48,9 +51,9 @@ namespace AlibabaCloud.OSS.V2.Transform
             ref OperationOutput output
         )
         {
-            var serializer = new XmlSerializer(typeof(XmlCopyObjectResult));
+            var serializer = CreateSerializer(typeof(XmlCopyObjectResult));
             using var body = output.Body!;
-            var obj = serializer.Deserialize(body) as XmlCopyObjectResult;
+            var obj = DeserializeXml(serializer, body) as XmlCopyObjectResult;
             var result = baseResult as Models.CopyObjectResult;
 
             if (obj == null || result == null) return;
@@ -103,6 +106,10 @@ namespace AlibabaCloud.OSS.V2.Transform
             input.Body = new MemoryStream(Encoding.UTF8.GetBytes(sb.ToString()));
         }
 
+#if NET8_0_OR_GREATER
+        [DynamicDependency(DynamicallyAccessedMemberTypes.All, typeof(Models.DeletedInfo))]
+        [DynamicDependency(DynamicallyAccessedMemberTypes.All, typeof(List<Models.DeletedInfo>))]
+#endif
         public static void DeserializeDeleteMultipleObjects(
             ref Models.ResultModel baseResult,
             ref OperationOutput output
@@ -116,8 +123,8 @@ namespace AlibabaCloud.OSS.V2.Transform
             }
 
             // non-empty body
-            var serializer = new XmlSerializer(typeof(XmlDeleteResult));
-            var obj = serializer.Deserialize(body) as XmlDeleteResult;
+            var serializer = CreateSerializer(typeof(XmlDeleteResult));
+            var obj = DeserializeXml(serializer, body) as XmlDeleteResult;
             var result = baseResult as Models.DeleteMultipleObjectsResult;
 
             if (obj == null || result == null) return;
