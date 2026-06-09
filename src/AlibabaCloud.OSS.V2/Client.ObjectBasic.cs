@@ -224,6 +224,45 @@ namespace AlibabaCloud.OSS.V2
         }
 
         /// <summary>
+        /// You can call this operation to seal an appendable object so that the object cannot be appended.
+        /// </summary>
+        /// <param name="request"><see cref="Models.SealAppendObjectRequest"/>The request parameter to send.</param>
+        /// <param name="options"><see cref="OperationOptions"/>Optional, operation options</param>
+        /// <param name="cancellationToken"><see cref="CancellationToken"/>Optional,The cancellation token to cancel operation.</param>
+        /// <returns><see cref="Models.SealAppendObjectResult" />The result instance.</returns>
+        public async Task<Models.SealAppendObjectResult> SealAppendObjectAsync(
+            Models.SealAppendObjectRequest request,
+            OperationOptions? options = null,
+            CancellationToken cancellationToken = default
+        )
+        {
+            Ensure.NotNull(request.Bucket, "request.Bucket");
+            Ensure.NotNull(request.Key, "request.Key");
+            Ensure.NotNull(request.Position, "request.Position");
+
+            var input = new OperationInput
+            {
+                OperationName = "SealAppendObject",
+                Method = "POST",
+                Parameters = new Dictionary<string, string> {
+                    { "seal", "" }
+                },
+                Bucket = request.Bucket,
+                Key = request.Key
+            };
+
+            Serde.SerializeInput(request, ref input, Serde.AddContentMd5);
+
+            var output = await _clientImpl.ExecuteAsync(input, options, cancellationToken).ConfigureAwait(false);
+
+            Models.ResultModel result = new Models.SealAppendObjectResult();
+
+            Serde.DeserializeOutput(ref result, ref output);
+
+            return (Models.SealAppendObjectResult)result;
+        }
+
+        /// <summary>
         /// You can call this operation to query the metadata of an object.
         /// </summary>
         /// <param name="request"><see cref="Models.HeadObjectRequest"/>The request parameter to send.</param>

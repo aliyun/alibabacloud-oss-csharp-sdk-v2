@@ -1927,4 +1927,109 @@ public class ClientObjectTest : IDisposable
         Assert.NotNull(getResult.RequestId);
         Assert.Equal("1796661072844795914", getResult.HashCrc64);
     }
+
+    [Fact]
+    public async Task TestSealAppendObject()
+    {
+        var client = Utils.GetDefaultClient();
+
+        var bucketName = Utils.RandomBucketName(BucketNamePrefix);
+
+        var result = await client.PutBucketAsync(
+            new()
+            {
+                Bucket = bucketName
+            }
+        );
+
+        Assert.NotNull(result);
+        Assert.Equal(200, result.StatusCode);
+        Assert.NotNull(result.RequestId);
+
+        var objectName = Utils.RandomObjectName();
+        var content = "Content to seal";
+
+        var appendResult = await client.AppendObjectAsync(
+            new()
+            {
+                Bucket = bucketName,
+                Key = objectName,
+                Position = 0,
+                Body = new MemoryStream(Encoding.UTF8.GetBytes(content))
+            }
+        );
+
+        Assert.NotNull(appendResult);
+        Assert.Equal(200, appendResult.StatusCode);
+        Assert.NotNull(appendResult.RequestId);
+
+        try
+        {
+            var sealResult = await client.SealAppendObjectAsync(
+                new()
+                {
+                    Bucket = bucketName,
+                    Key = objectName,
+                    Position = content.Length
+                }
+            );
+
+            Assert.NotNull(sealResult);
+            Assert.Equal(200, sealResult.StatusCode);
+            Assert.NotNull(sealResult.RequestId);
+        }
+        catch (Exception e)
+        {
+            Assert.IsAssignableFrom<OperationException>(e);
+            Assert.IsAssignableFrom<ServiceException>(e.InnerException);
+            var se = e.InnerException as ServiceException;
+            Assert.NotNull(se);
+            Assert.Equal("OperationNotSupported", se.ErrorCode);
+        }
+    }
+
+    [Fact]
+    public async Task TestSealAppendObjectFail()
+    {
+        var client = Utils.GetDefaultClient();
+
+        var bucketName = Utils.RandomBucketName(BucketNamePrefix);
+
+        var result = await client.PutBucketAsync(
+            new()
+            {
+                Bucket = bucketName
+            }
+        );
+
+        Assert.NotNull(result);
+        Assert.Equal(200, result.StatusCode);
+        Assert.NotNull(result.RequestId);
+
+        var invClient = Utils.GetInvalidAkClient();
+
+        try
+        {
+            await invClient.SealAppendObjectAsync(
+                new()
+                {
+                    Bucket = bucketName,
+                    Key = "test-key",
+                    Position = 0
+                }
+            );
+        }
+        catch (Exception e)
+        {
+            Assert.IsAssignableFrom<OperationException>(e);
+            Assert.StartsWith("operation error SealAppendObject", e.Message);
+            Assert.IsAssignableFrom<ServiceException>(e.InnerException);
+            var se = e.InnerException as ServiceException;
+            Assert.NotNull(se);
+            Assert.Equal(403, se.StatusCode);
+            Assert.Equal("InvalidAccessKeyId", se.ErrorCode);
+            Assert.Contains("POST", se.RequestTarget);
+            Assert.Contains("?seal", se.RequestTarget);
+        }
+    }
 }

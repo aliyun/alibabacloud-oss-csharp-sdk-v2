@@ -2699,4 +2699,144 @@ public class ClientImplTest
         Assert.True(client.Options.FeatureFlags.HasFlag(FeatureFlagsType.EnableCrc64CheckDownload));
     }
 
+    [Fact]
+    public async Task TestSealAppendObject_Success()
+    {
+        var mockHandler = new MockHttpMessageHandler();
+
+        var config = new Configuration()
+        {
+            Region = "cn-hangzhou",
+            CredentialsProvider = new AnonymousCredentialsProvider(),
+            HttpTransport = new HttpTransport(mockHandler),
+        };
+        var client = new Client(config);
+
+        mockHandler.Clear();
+        mockHandler.Responses = [
+            new() {
+                StatusCode = HttpStatusCode.OK,
+                Headers = { { "x-oss-request-id", "id-1234" }, { "x-oss-sealed-time", "12345" } },
+                Content = new StringContent("")
+            }
+        ];
+
+        var request = new AlibabaCloud.OSS.V2.Models.SealAppendObjectRequest
+        {
+            Bucket = "dest-bucket",
+            Key = "dest-key",
+            Position = 11
+        };
+
+        var result = await client.SealAppendObjectAsync(request);
+        Assert.Equal(200, result.StatusCode);
+        Assert.Equal("id-1234", result.RequestId);
+        Assert.Equal("12345", result.SealedTime);
+
+        Assert.NotNull(mockHandler.LastRequest);
+        Assert.Equal(HttpMethod.Post, mockHandler.LastRequest.Method);
+        Assert.Contains("seal", mockHandler.LastRequest.RequestUri.Query);
+        Assert.Contains("position=11", mockHandler.LastRequest.RequestUri.Query);
+    }
+
+    [Fact]
+    public async Task TestSealAppendObject_ErrorResponse()
+    {
+        var mockHandler = new MockHttpMessageHandler();
+
+        var config = new Configuration()
+        {
+            Region = "cn-hangzhou",
+            CredentialsProvider = new AnonymousCredentialsProvider(),
+            HttpTransport = new HttpTransport(mockHandler),
+        };
+        var client = new Client(config);
+
+        var body = "<Error>" +
+            "<Code>NoSuchKey</Code>" +
+            "<Message>The specified key does not exist</Message>" +
+            "<RequestId>id-1234</RequestId>" +
+            "<HostId>oss-cn-hangzhou.aliyuncs.com</HostId>" +
+            "</Error>";
+
+        mockHandler.Clear();
+        mockHandler.Responses = [
+            new() {
+                StatusCode = HttpStatusCode.NotFound,
+                Headers = { { "x-oss-request-id", "id-12345" } },
+                Content = new StringContent(body)
+            }
+        ];
+
+        var request = new AlibabaCloud.OSS.V2.Models.SealAppendObjectRequest
+        {
+            Bucket = "dest-bucket",
+            Key = "dest-key",
+            Position = 11
+        };
+
+        try
+        {
+            await client.SealAppendObjectAsync(request);
+            Assert.Fail("should not here");
+        }
+        catch (Exception e)
+        {
+            Assert.IsAssignableFrom<OperationException>(e);
+            Assert.StartsWith("operation error SealAppendObject", e.Message);
+            Assert.IsAssignableFrom<ServiceException>(e.InnerException);
+            var se = e.InnerException as ServiceException;
+            Assert.NotNull(se);
+            Assert.Equal(404, se.StatusCode);
+            Assert.Equal("NoSuchKey", se.ErrorCode);
+            Assert.Equal("The specified key does not exist", se.ErrorMessage);
+        }
+    }
+
+    [Fact]
+    public async Task TestSealAppendObject_RequiredField()
+    {
+        var mockHandler = new MockHttpMessageHandler();
+
+        var config = new Configuration()
+        {
+            Region = "cn-hangzhou",
+            CredentialsProvider = new AnonymousCredentialsProvider(),
+            HttpTransport = new HttpTransport(mockHandler),
+        };
+        var client = new Client(config);
+
+        mockHandler.Clear();
+        mockHandler.Responses = [
+            new() {
+                StatusCode = HttpStatusCode.OK,
+                Content = new StringContent("")
+            }
+        ];
+
+        // Missing Bucket
+        var request = new AlibabaCloud.OSS.V2.Models.SealAppendObjectRequest();
+        await Assert.ThrowsAsync<ArgumentNullException>(() => client.SealAppendObjectAsync(request));
+
+        // Missing Key
+        request = new AlibabaCloud.OSS.V2.Models.SealAppendObjectRequest { Bucket = "dest-bucket" };
+        await Assert.ThrowsAsync<ArgumentNullException>(() => client.SealAppendObjectAsync(request));
+
+        // Missing Position
+        request = new AlibabaCloud.OSS.V2.Models.SealAppendObjectRequest { Bucket = "dest-bucket", Key = "dest-key" };
+        await Assert.ThrowsAsync<ArgumentNullException>(() => client.SealAppendObjectAsync(request));
+
+        // All set - should succeed
+        mockHandler.Clear();
+        mockHandler.Responses = [
+            new() {
+                StatusCode = HttpStatusCode.OK,
+                Content = new StringContent("")
+            }
+        ];
+        request = new AlibabaCloud.OSS.V2.Models.SealAppendObjectRequest { Bucket = "dest-bucket", Key = "dest-key", Position = 0 };
+        var result = await client.SealAppendObjectAsync(request);
+        Assert.Equal(200, result.StatusCode);
+    }
+
 }
