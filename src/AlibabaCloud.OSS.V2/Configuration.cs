@@ -135,6 +135,12 @@ namespace AlibabaCloud.OSS.V2
         public bool? DisableClockSkewCorrection { get; set; }
 
         /// <summary>
+        /// Automatically detect the MIME type of the object to upload by default.
+        /// Set this to `true` to disable this feature.
+        /// </summary>
+        public bool? DisableAutoDetectMimeType { get; set; }
+
+        /// <summary>
         ///  Additional signable headers.
         /// </summary>
         public List<string>? AdditionalHeaders { get; set; }
