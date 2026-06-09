@@ -5,5 +5,6 @@
   <ItemGroup Condition="'$(TargetFramework)' == 'net471' Or '$(TargetFramework)' == 'net48'">
     <Reference Include="System.Net.Http" />
     <Reference Include="System.Web" />
+    <PackageReference Include="System.Threading.Tasks.Extensions" />
   </ItemGroup>  
 </Project>
