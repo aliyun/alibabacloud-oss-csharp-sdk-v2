@@ -2683,4 +2683,20 @@ public class ClientImplTest
         Assert.Equal(Defaults.FeatureFlags, client.Options.FeatureFlags);
     }
 
+    [Fact]
+    public void TestFeatureFlags_DisableAutoDetectMimeType()
+    {
+        var config = new Configuration()
+        {
+            Region = "cn-hangzhou",
+            CredentialsProvider = new AnonymousCredentialsProvider(),
+            DisableAutoDetectMimeType = true,
+        };
+        var client = new ClientImpl(config);
+        Assert.False(client.Options.FeatureFlags.HasFlag(FeatureFlagsType.AutoDetectMimeType));
+        Assert.True(client.Options.FeatureFlags.HasFlag(FeatureFlagsType.CorrectClockSkew));
+        Assert.True(client.Options.FeatureFlags.HasFlag(FeatureFlagsType.EnableCrc64CheckUpload));
+        Assert.True(client.Options.FeatureFlags.HasFlag(FeatureFlagsType.EnableCrc64CheckDownload));
+    }
+
 }

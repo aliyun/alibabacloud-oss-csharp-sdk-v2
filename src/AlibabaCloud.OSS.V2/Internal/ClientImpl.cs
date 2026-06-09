@@ -206,6 +206,11 @@ namespace AlibabaCloud.OSS.V2.Internal
                 opt.FeatureFlags &= ~FeatureFlagsType.CorrectClockSkew;
             }
 
+            if (config.DisableAutoDetectMimeType.GetValueOrDefault(false))
+            {
+                opt.FeatureFlags &= ~FeatureFlagsType.AutoDetectMimeType;
+            }
+
 #if NETCOREAPP
             opt.RequestOnceTimeout = opt.ReadWriteTimeout;
 #else
