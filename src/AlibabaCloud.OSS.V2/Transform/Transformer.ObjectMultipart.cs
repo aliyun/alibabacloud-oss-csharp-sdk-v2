@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Xml.Serialization;
+#if NET8_0_OR_GREATER
+using System.Diagnostics.CodeAnalysis;
+#endif
 using AlibabaCloud.OSS.V2.Extensions;
 
 namespace AlibabaCloud.OSS.V2.Transform
@@ -127,9 +130,9 @@ namespace AlibabaCloud.OSS.V2.Transform
             ref OperationOutput output
         )
         {
-            var serializer = new XmlSerializer(typeof(XmlInitiateMultipartUploadResult));
+            var serializer = CreateSerializer(typeof(XmlInitiateMultipartUploadResult));
             using var body = output.Body!;
-            var obj = serializer.Deserialize(body) as XmlInitiateMultipartUploadResult;
+            var obj = DeserializeXml(serializer, body) as XmlInitiateMultipartUploadResult;
             var result = baseResult as Models.InitiateMultipartUploadResult;
 
             if (obj == null || result == null) return;
@@ -154,9 +157,9 @@ namespace AlibabaCloud.OSS.V2.Transform
             ref OperationOutput output
         )
         {
-            var serializer = new XmlSerializer(typeof(XmlCopyPartResult));
+            var serializer = CreateSerializer(typeof(XmlCopyPartResult));
             using var body = output.Body!;
-            var obj = serializer.Deserialize(body) as XmlCopyPartResult;
+            var obj = DeserializeXml(serializer, body) as XmlCopyPartResult;
             var result = baseResult as Models.UploadPartCopyResult;
 
             if (obj == null || result == null) return;
@@ -170,9 +173,9 @@ namespace AlibabaCloud.OSS.V2.Transform
             ref OperationOutput output
         )
         {
-            var serializer = new XmlSerializer(typeof(XmlCompleteMultipartUploadResult));
+            var serializer = CreateSerializer(typeof(XmlCompleteMultipartUploadResult));
             using var body = output.Body!;
-            var obj = serializer.Deserialize(body) as XmlCompleteMultipartUploadResult;
+            var obj = DeserializeXml(serializer, body) as XmlCompleteMultipartUploadResult;
             var result = baseResult as Models.CompleteMultipartUploadResult;
 
             if (obj == null || result == null) return;
@@ -203,14 +206,18 @@ namespace AlibabaCloud.OSS.V2.Transform
             result!.CallbackResult = reader.ReadToEnd();
         }
 
+#if NET8_0_OR_GREATER
+        [DynamicDependency(DynamicallyAccessedMemberTypes.All, typeof(Models.Upload))]
+        [DynamicDependency(DynamicallyAccessedMemberTypes.All, typeof(List<Models.Upload>))]
+#endif
         public static void DeserializeListMultipartUploads(
             ref Models.ResultModel baseResult,
             ref OperationOutput output
         )
         {
-            var serializer = new XmlSerializer(typeof(XmlListMultipartUploadsResult));
+            var serializer = CreateSerializer(typeof(XmlListMultipartUploadsResult));
             using var body = output.Body!;
-            var obj = serializer.Deserialize(body) as XmlListMultipartUploadsResult;
+            var obj = DeserializeXml(serializer, body) as XmlListMultipartUploadsResult;
             var result = baseResult as Models.ListMultipartUploadsResult;
 
             if (obj == null || result == null)
@@ -272,14 +279,18 @@ namespace AlibabaCloud.OSS.V2.Transform
             }
         }
 
+#if NET8_0_OR_GREATER
+        [DynamicDependency(DynamicallyAccessedMemberTypes.All, typeof(Models.Part))]
+        [DynamicDependency(DynamicallyAccessedMemberTypes.All, typeof(List<Models.Part>))]
+#endif
         public static void DeserializeListParts(
             ref Models.ResultModel baseResult,
             ref OperationOutput output
         )
         {
-            var serializer = new XmlSerializer(typeof(XmlListPartsResult));
+            var serializer = CreateSerializer(typeof(XmlListPartsResult));
             using var body = output.Body!;
-            var obj = serializer.Deserialize(body) as XmlListPartsResult;
+            var obj = DeserializeXml(serializer, body) as XmlListPartsResult;
             var result = baseResult as Models.ListPartsResult;
 
             if (obj == null || result == null)

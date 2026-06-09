@@ -1,0 +1,49 @@
+name: CI (AOT)
+
+on:
+  push:
+    branches:
+      - master
+      - 'dev-*'
+  pull_request:
+    branches:
+      - master
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  aot-publish:
+    strategy:
+      matrix:
+        include:
+          - os: ubuntu-latest
+            rid: linux-x64
+          - os: windows-latest
+            rid: win-x64
+    runs-on: ${{ matrix.os }}
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup .NET 9.0
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '9.0.x'
+
+      - name: Pack SDK
+        run: dotnet pack src/AlibabaCloud.OSS.V2 --configuration Release --output test/aot/packages
+
+      - name: Publish AOT test app
+        run: dotnet publish test/aot/AlibabaCloud.OSS.V2.AotTest.csproj --configuration Release --runtime ${{ matrix.rid }}
+
+      - name: Run AOT test app (Linux)
+        if: runner.os == 'Linux'
+        run: ./test/aot/bin/Release/net9.0/${{ matrix.rid }}/publish/AlibabaCloud.OSS.V2.AotTest
+
+      - name: Run AOT test app (Windows)
+        if: runner.os == 'Windows'
+        run: ./test/aot/bin/Release/net9.0/${{ matrix.rid }}/publish/AlibabaCloud.OSS.V2.AotTest.exe

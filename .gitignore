@@ -1,5 +1,6 @@
 packages/
 nuget.config
+!test/aot/nuget.config
 
 #ignore IDE
 .idea/

@@ -1,5 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Xml.Serialization;
+#if NET8_0_OR_GREATER
+using System.Diagnostics.CodeAnalysis;
+#endif
 using AlibabaCloud.OSS.V2.Extensions;
 
 namespace AlibabaCloud.OSS.V2.Transform
@@ -52,14 +55,20 @@ namespace AlibabaCloud.OSS.V2.Transform
 
     internal static partial class Serde
     {
+#if NET8_0_OR_GREATER
+        [DynamicDependency(DynamicallyAccessedMemberTypes.All, typeof(Models.ObjectSummary))]
+        [DynamicDependency(DynamicallyAccessedMemberTypes.All, typeof(List<Models.ObjectSummary>))]
+        [DynamicDependency(DynamicallyAccessedMemberTypes.All, typeof(Models.CommonPrefix))]
+        [DynamicDependency(DynamicallyAccessedMemberTypes.All, typeof(List<Models.CommonPrefix>))]
+#endif
         public static void DeserializeListObjects(
             ref Models.ResultModel baseResult,
             ref OperationOutput output
         )
         {
-            var serializer = new XmlSerializer(typeof(XmlListBucketResult));
+            var serializer = CreateSerializer(typeof(XmlListBucketResult));
             using var body = output.Body!;
-            var obj = serializer.Deserialize(body) as XmlListBucketResult;
+            var obj = DeserializeXml(serializer, body) as XmlListBucketResult;
             var result = baseResult as Models.ListObjectsResult;
 
             if (obj == null || result == null)
@@ -86,9 +95,9 @@ namespace AlibabaCloud.OSS.V2.Transform
             ref OperationOutput output
         )
         {
-            var serializer = new XmlSerializer(typeof(XmlListBucketResult));
+            var serializer = CreateSerializer(typeof(XmlListBucketResult));
             using var body = output.Body!;
-            var obj = serializer.Deserialize(body) as XmlListBucketResult;
+            var obj = DeserializeXml(serializer, body) as XmlListBucketResult;
             var result = baseResult as Models.ListObjectsV2Result;
 
             if (obj == null || result == null)

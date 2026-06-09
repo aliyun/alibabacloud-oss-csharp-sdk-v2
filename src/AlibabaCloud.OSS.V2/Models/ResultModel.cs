@@ -6,6 +6,11 @@ namespace AlibabaCloud.OSS.V2.Models
     public abstract class ResultModel
     {
         internal object? InnerBody;
+
+#if NET8_0_OR_GREATER
+        [System.Diagnostics.CodeAnalysis.DynamicallyAccessedMembers(
+            System.Diagnostics.CodeAnalysis.DynamicallyAccessedMemberTypes.All)]
+#endif
         internal Type? BodyType;
         internal string BodyFormat = "";
 
