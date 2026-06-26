@@ -1,24 +1,34 @@
 # ChangeLog - Alibaba Cloud OSS SDK for C# v2
 
-## °æ±¾ºÅ£º0.1.2 ÈÕÆÚ£º2025-06-12
-### ±ä¸üÄÚÈİ
-- Feature£ºAdd BoundedStream
-- Break Change£ºChange CredentialsProvideFunc to CredentialsProviderFunc
-- Break Change£ºChange StaticCredentialsProvide to StaticCredentialsProvider
+## ç‰ˆæœ¬å·ï¼š0.2.0 æ—¥æœŸï¼š2025-06-26
+### å˜æ›´å†…å®¹
+- Featureï¼šAdd SealAppendObject API support
+- Featureï¼šAdd DisableAutoDetectMimeType configuration option
+- Featureï¼šAdd clock skew correction support
+- Featureï¼šAdd NativeAOT/Trimming support
+- Fixï¼šFix metadata serialization NullReferenceException
+- Fixï¼šFix callback support for PutObject and CompleteMultipartUpload
+- Upadteï¼šSwitch UrlEncode/UrlDecode to Uri.EscapeDataString/UnescapeDataString
 
-## °æ±¾ºÅ£º0.1.1 ÈÕÆÚ£º2025-04-25
-### ±ä¸üÄÚÈİ
-- Fix£ºEncode query parameters that contain special characters correctly
+## ç‰ˆæœ¬å·ï¼š0.1.2 æ—¥æœŸï¼š2025-06-12
+### å˜æ›´å†…å®¹
+- Featureï¼šAdd BoundedStream
+- Break Changeï¼šChange CredentialsProvideFunc to CredentialsProviderFunc
+- Break Changeï¼šChange StaticCredentialsProvide to StaticCredentialsProvider
 
-## °æ±¾ºÅ£º0.1.0 ÈÕÆÚ£º2025-03-05
-### ±ä¸üÄÚÈİ
-- Feature£ºAdd credentials provider
-- Feature£ºAdd retryer
-- Feature£ºAdd signer v4/v1
-- Feature£ºAdd annotation for 8.x
-- Feature£ºAdd bucket's basic api
-- Feature£ºAdd object's api
-- Feature£ºAdd presigner
-- Feature£ºAdd paginator
-- Feature£ºAdd IsObjectExistAsync/IsBucketExistAsync api
-- Feature£ºAdd PutObjectFromFileAsync/GetObjectToFileAsync api
+## ç‰ˆæœ¬å·ï¼š0.1.1 æ—¥æœŸï¼š2025-04-25
+### å˜æ›´å†…å®¹
+- Fixï¼šEncode query parameters that contain special characters correctly
+
+## ç‰ˆæœ¬å·ï¼š0.1.0 æ—¥æœŸï¼š2025-03-05
+### å˜æ›´å†…å®¹
+- Featureï¼šAdd credentials provider
+- Featureï¼šAdd retryer
+- Featureï¼šAdd signer v4/v1
+- Featureï¼šAdd annotation for 8.x
+- Featureï¼šAdd bucket's basic api
+- Featureï¼šAdd object's api
+- Featureï¼šAdd presigner
+- Featureï¼šAdd paginator
+- Featureï¼šAdd IsObjectExistAsync/IsBucketExistAsync api
+- Featureï¼šAdd PutObjectFromFileAsync/GetObjectToFileAsync api
