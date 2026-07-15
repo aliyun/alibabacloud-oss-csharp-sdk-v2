@@ -329,6 +329,18 @@ namespace AlibabaCloud.OSS.V2.Models
         /// </summary>
         [XmlElement("ExtranetEndpoint")]
         public string? ExtranetEndpoint { get; set; }
+
+        /// <summary>
+        /// The resource type of the bucket.
+        /// </summary>
+        [XmlElement("BucketResourceType")]
+        public string? BucketResourceType { get; set; }
+
+        /// <summary>
+        /// The agentic bucket name associated with this bucket.
+        /// </summary>
+        [XmlElement("AgenticBucketName")]
+        public string? AgenticBucketName { get; set; }
     }
 
     /// <summary>
@@ -494,6 +506,18 @@ namespace AlibabaCloud.OSS.V2.Models
             set
             {
                 if (value != null) Headers["x-oss-bucket-tagging"] = value;
+            }
+        }
+
+        /// <summary>
+        /// The agentic bucket name.
+        /// </summary>
+        public string? AgenticBucket
+        {
+            get => Headers.TryGetValue("x-oss-agentic-bucket", out var value) ? value : null;
+            set
+            {
+                if (value != null) Headers["x-oss-agentic-bucket"] = value;
             }
         }
 

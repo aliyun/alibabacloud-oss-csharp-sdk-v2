@@ -1,4 +1,4 @@
-﻿using System.Text;
+using System.Text;
 using AlibabaCloud.OSS.V2.Models;
 using AlibabaCloud.OSS.V2.Transform;
 
@@ -19,6 +19,7 @@ public class ModelBucketBasicTest
         Assert.Null(request.ResourceGroupId);
         Assert.Null(request.BucketTagging);
         Assert.Null(request.CreateBucketConfiguration);
+        Assert.Null(request.AgenticBucket);
 
         var input = new OperationInput();
         Serde.SerializeInput(request, ref input);
@@ -69,6 +70,21 @@ public class ModelBucketBasicTest
 </CreateBucketConfiguration>
 """;
         Assert.Equal(xml, reader.ReadToEnd());
+
+        // with AgenticBucket
+        request = new PutBucketRequest
+        {
+            Bucket = "bucket",
+            Acl = "private",
+            AgenticBucket = "my-agentic-bucket",
+        };
+        Assert.Equal("my-agentic-bucket", request.AgenticBucket);
+        Assert.Equal("my-agentic-bucket", request.Headers["x-oss-agentic-bucket"]);
+
+        input = new OperationInput();
+        Serde.SerializeInput(request, ref input);
+        Assert.NotNull(input.Headers);
+        Assert.Equal("my-agentic-bucket", input.Headers["x-oss-agentic-bucket"]);
     }
 
     [Fact]
@@ -425,6 +441,8 @@ public class ModelBucketBasicTest
                   <Comment>test</Comment>
                   <Versioning>Enabled</Versioning>
                   <BlockPublicAccess>true</BlockPublicAccess>
+                  <BucketResourceType>AgenticBucketSpace</BucketResourceType>
+                  <AgenticBucketName>my-agentic-1234567890-cn-hangzhou-ab-apsr</AgenticBucketName>
                 </Bucket>
               </BucketInfo>
               """;
@@ -469,6 +487,8 @@ public class ModelBucketBasicTest
         Assert.Equal("examplebucket", result.BucketInfo.BucketPolicy!.LogBucket);
         Assert.Equal("log/", result.BucketInfo.BucketPolicy!.LogPrefix);
         Assert.Equal(true, result.BucketInfo.BlockPublicAccess);
+        Assert.Equal("AgenticBucketSpace", result.BucketInfo.BucketResourceType);
+        Assert.Equal("my-agentic-1234567890-cn-hangzhou-ab-apsr", result.BucketInfo.AgenticBucketName);
     }
 
     [Fact]
@@ -1127,3 +1147,4 @@ public class ModelBucketBasicTest
         Assert.Equal(3, result.KeyCount);
     }
 }
+

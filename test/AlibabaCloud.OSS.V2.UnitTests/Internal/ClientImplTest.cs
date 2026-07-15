@@ -202,6 +202,67 @@ public class ClientImplTest
     }
 
     [Fact]
+    public void TestConfigInitError()
+    {
+        // valid account id -> no deferred error
+        var config = new Configuration
+        {
+            Region = "cn-hangzhou",
+            AccountId = "123456",
+            CredentialsProvider = new AnonymousCredentialsProvider()
+        };
+        var client = new ClientImpl(config);
+        Assert.Null(client.InnerOptions.InitError);
+
+        // empty account id -> allowed
+        config = new Configuration
+        {
+            Region = "cn-hangzhou",
+            CredentialsProvider = new AnonymousCredentialsProvider()
+        };
+        client = new ClientImpl(config);
+        Assert.Null(client.InnerOptions.InitError);
+
+        // non-digit account id -> error deferred, not thrown at construction
+        config = new Configuration
+        {
+            Region = "cn-hangzhou",
+            AccountId = "abc123",
+            CredentialsProvider = new AnonymousCredentialsProvider()
+        };
+        client = new ClientImpl(config);
+        Assert.IsType<ArgumentException>(client.InnerOptions.InitError);
+        Assert.Contains("account id", client.InnerOptions.InitError!.Message);
+    }
+
+    [Fact]
+    public async Task TestConfigInitErrorDeferredThrow()
+    {
+        // non-digit account id: construction succeeds, error is surfaced at operation invoke
+        var config = new Configuration
+        {
+            Region = "cn-hangzhou",
+            Endpoint = "oss-cn-hangzhou.aliyuncs.com",
+            AccountId = "abc123",
+            CredentialsProvider = new AnonymousCredentialsProvider()
+        };
+        var client = new ClientImpl(config);
+
+        var input = new OperationInput
+        {
+            OperationName = "GetBucketStat",
+            Method = "GET",
+            Bucket = "bucket"
+        };
+
+        var ex = await Assert.ThrowsAsync<ArgumentException>(() => client.ExecuteAsync(input));
+        Assert.Contains("account id", ex.Message);
+
+        var presignEx = Assert.Throws<ArgumentException>(() => client.PresignInner(input));
+        Assert.Contains("account id", presignEx.Message);
+    }
+
+    [Fact]
     public void TestConfigAuthMethod()
     {
         //default

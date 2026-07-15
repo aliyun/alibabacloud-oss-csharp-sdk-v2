@@ -30,6 +30,23 @@ namespace AlibabaCloud.OSS.V2
         }
     }
 
+    /// <summary>
+    /// Builds the full request URL (scheme, host and path, without the query string) for an operation.
+    /// </summary>
+    public interface IEndpointProvider
+    {
+        string BuildUrl(OperationInput input);
+    }
+
+    /// <summary>
+    /// Resolves the bucket name used for signing an operation. Returns <c>null</c> to keep
+    /// the original bucket name of the operation input.
+    /// </summary>
+    public interface IBucketNameResolver
+    {
+        string? BuildBucketName(OperationInput input);
+    }
+
     public sealed class OperationOutput
     {
         public string Status { get; set; } = string.Empty;
