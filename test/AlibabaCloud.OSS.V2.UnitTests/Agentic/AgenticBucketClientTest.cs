@@ -278,6 +278,7 @@ public class AgenticBucketClientTest
             "<MaxKeys>50</MaxKeys>" +
             "<ContinuationToken></ContinuationToken>" +
             "<NextContinuationToken>next</NextContinuationToken>" +
+            "<StartAfter>space-0</StartAfter>" +
             "<IsTruncated>false</IsTruncated>" +
             "<BucketSpaces>" +
             "<BucketSpace>" +
@@ -295,7 +296,8 @@ public class AgenticBucketClientTest
         var result = await client.ListBucketSpacesAsync(new ListBucketSpacesRequest
         {
             Bucket = "my-agentic",
-            Prefix = "abc"
+            Prefix = "abc",
+            StartAfter = "space-0"
         });
 
         Assert.Equal(HttpMethod.Get, mock.LastRequest.Method);
@@ -303,11 +305,13 @@ public class AgenticBucketClientTest
             "my-agentic-123456-cn-hangzhou-ab-apsr.oss-cn-hangzhou.aliyuncs.com",
             mock.LastRequest.RequestUri!.Host);
         Assert.Contains("bucketSpace", mock.LastRequest.RequestUri.Query);
+        Assert.Contains("start-after=space-0", mock.LastRequest.RequestUri.Query);
 
         Assert.Equal("1234", result.Owner?.Id);
         Assert.Equal("owner-name", result.Owner?.DisplayName);
         Assert.Equal("abc", result.Prefix);
         Assert.Equal(50, result.MaxKeys);
+        Assert.Equal("space-0", result.StartAfter);
         Assert.False(result.IsTruncated);
         Assert.NotNull(result.BucketSpaces);
         Assert.Single(result.BucketSpaces!);

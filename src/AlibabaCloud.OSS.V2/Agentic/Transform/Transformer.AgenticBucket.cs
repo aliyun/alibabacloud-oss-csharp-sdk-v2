@@ -58,6 +58,9 @@ namespace AlibabaCloud.OSS.V2.Transform
         [XmlElement("NextContinuationToken")]
         public string? NextContinuationToken { get; set; }
 
+        [XmlElement("StartAfter")]
+        public string? StartAfter { get; set; }
+
         [XmlElement("IsTruncated")]
         public bool? IsTruncated { get; set; }
     }
@@ -131,6 +134,7 @@ namespace AlibabaCloud.OSS.V2.Transform
             result.MaxKeys = obj.MaxKeys;
             result.ContinuationToken = obj.ContinuationToken;
             result.NextContinuationToken = obj.NextContinuationToken;
+            result.StartAfter = obj.StartAfter;
             result.IsTruncated = obj.IsTruncated;
         }
     }

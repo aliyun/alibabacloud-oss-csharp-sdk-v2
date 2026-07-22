@@ -226,6 +226,18 @@ namespace AlibabaCloud.OSS.V2.Agentic.Models
         }
 
         /// <summary>
+        /// The name of the bucket space after which the list operation begins.
+        /// </summary>
+        public string? StartAfter
+        {
+            get => Parameters.TryGetValue("start-after", out var value) ? value : null;
+            set
+            {
+                if (value != null) Parameters["start-after"] = value;
+            }
+        }
+
+        /// <summary>
         /// The maximum number of bucket spaces that can be returned.
         /// </summary>
         public long? MaxKeys
@@ -274,6 +286,11 @@ namespace AlibabaCloud.OSS.V2.Agentic.Models
         /// The token from which the next list operation starts.
         /// </summary>
         public string? NextContinuationToken { get; set; }
+
+        /// <summary>
+        /// The name of the bucket space after which the list operation began.
+        /// </summary>
+        public string? StartAfter { get; set; }
 
         /// <summary>
         /// Indicates whether the returned results are truncated.
