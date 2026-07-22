@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using AlibabaCloud.OSS.V2.Extensions;
 
 namespace AlibabaCloud.OSS.V2.Agentic
@@ -93,7 +94,7 @@ namespace AlibabaCloud.OSS.V2.Agentic
 
         internal static void ConfigureProvider(ClientOptions options, string accountId, string region, string suffix)
         {
-            var provider = new AgenticProvider(options.Endpoint, accountId, region, suffix);
+            var provider = new AgenticProvider(options.Endpoint, accountId, region, suffix, options.AddressStyle);
             options.EndpointProvider = provider;
             options.BucketNameResolver = provider;
         }
@@ -107,8 +108,8 @@ namespace AlibabaCloud.OSS.V2.Agentic
     /// <summary>
     /// Resolves the full bucket name and builds the request URL for the agentic clients.
     /// The resolved full bucket name ("{bucket}-{accountId}-{region}-{suffix}") is used for
-    /// signing and is always placed in the host (virtual-hosted style), regardless of the
-    /// configured address style.
+    /// signing. In virtual-hosted mode (default) it is placed in the host; in path-style mode
+    /// it is placed in the path.
     /// </summary>
     internal sealed class AgenticProvider : IEndpointProvider, IBucketNameResolver
     {
@@ -116,13 +117,15 @@ namespace AlibabaCloud.OSS.V2.Agentic
         private readonly string _accountId;
         private readonly string _region;
         private readonly string _suffix;
+        private readonly AddressStyleType _addressStyle;
 
-        public AgenticProvider(Uri? endpoint, string accountId, string region, string suffix)
+        public AgenticProvider(Uri? endpoint, string accountId, string region, string suffix, AddressStyleType addressStyle = AddressStyleType.VirtualHosted)
         {
             _endpoint = endpoint;
             _accountId = accountId;
             _region = region;
             _suffix = suffix;
+            _addressStyle = addressStyle;
         }
 
         public string? BuildBucketName(OperationInput input)
@@ -137,11 +140,35 @@ namespace AlibabaCloud.OSS.V2.Agentic
         public string BuildUrl(OperationInput input)
         {
             if (_endpoint == null) return "";
-            var host = input.Bucket == null
-                ? _endpoint.Authority
-                : $"{BuildBucketName(input)}.{_endpoint.Authority}";
-            var path = input.Key != null ? input.Key.UrlEncodePath() : "";
-            return $"{_endpoint.Scheme}://{host}/{path}";
+
+            var paths = new List<string>();
+            var host = _endpoint.Authority;
+
+            if (input.Bucket != null)
+            {
+                switch (_addressStyle)
+                {
+                    case AddressStyleType.Path:
+                        paths.Add(BuildBucketName(input)!);
+
+                        if (input.Key == null)
+                        {
+                            paths.Add("");
+                        }
+
+                        break;
+                    default:
+                        host = $"{BuildBucketName(input)}.{_endpoint.Authority}";
+                        break;
+                }
+            }
+
+            if (input.Key != null)
+            {
+                paths.Add(input.Key.UrlEncodePath());
+            }
+
+            return $"{_endpoint.Scheme}://{host}/{paths.JoinToString('/')}";
         }
     }
 

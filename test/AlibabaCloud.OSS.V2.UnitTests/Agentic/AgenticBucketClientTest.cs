@@ -117,6 +117,28 @@ public class AgenticBucketClientTest
     }
 
     [Fact]
+    public void TestAgenticProviderPathStyle()
+    {
+        var provider = new AgenticProvider(
+            new Uri("https://oss-cn-hangzhou.aliyuncs.com"), "123456", "cn-hangzhou", "ab-apsr", addressStyle: AddressStyleType.Path);
+
+        // BuildBucketName is unchanged by path-style.
+        Assert.Equal("my-agentic-123456-cn-hangzhou-ab-apsr",
+            provider.BuildBucketName(new OperationInput { Bucket = "my-agentic" }));
+
+        Assert.Equal(
+            "https://oss-cn-hangzhou.aliyuncs.com/my-agentic-123456-cn-hangzhou-ab-apsr/",
+            provider.BuildUrl(new OperationInput { Bucket = "my-agentic" }));
+        Assert.Equal(
+            "https://oss-cn-hangzhou.aliyuncs.com/my-agentic-123456-cn-hangzhou-ab-apsr/obj.txt",
+            provider.BuildUrl(new OperationInput { Bucket = "my-agentic", Key = "obj.txt" }));
+        // No bucket routes to the bare endpoint in path-style too.
+        Assert.Equal(
+            "https://oss-cn-hangzhou.aliyuncs.com/",
+            provider.BuildUrl(new OperationInput()));
+    }
+
+    [Fact]
     public void TestBucketSpaceHelper()
     {
         var helper = new BucketSpaceHelper(new Configuration { AccountId = "123456", Region = "cn-hangzhou" });
@@ -438,10 +460,10 @@ public class AgenticBucketClientTest
             client.PutAgenticBucketStatusAsync(new PutAgenticBucketStatusRequest { Bucket = "my-agentic" }));
     }
 
-    // --- agentic name resolution must force virtual-hosted URLs regardless of AddressStyle ---
+    // --- agentic name resolution honors path-style but keeps CName virtual-hosted ---
 
     [Fact]
-    public async Task TestResolvedHostForcesVirtualHostedUnderPathStyle()
+    public async Task TestResolvedHostUsesPathUnderPathStyle()
     {
         var mock = new MockHttpMessageHandler();
         var config = NewConfig(mock);
@@ -453,11 +475,9 @@ public class AgenticBucketClientTest
 
         await client.DeleteAgenticBucketAsync(new DeleteAgenticBucketRequest { Bucket = "my-agentic" });
 
-        // The full bucket name stays in the host, not the path.
-        Assert.Equal(
-            "my-agentic-123456-cn-hangzhou-ab-apsr.oss-cn-hangzhou.aliyuncs.com",
-            mock.LastRequest.RequestUri!.Host);
-        Assert.DoesNotContain("my-agentic-123456-cn-hangzhou-ab-apsr", mock.LastRequest.RequestUri.AbsolutePath);
+        // Under path-style the full bucket name goes in the path, host stays bare.
+        Assert.Equal("oss-cn-hangzhou.aliyuncs.com", mock.LastRequest.RequestUri!.Host);
+        Assert.Contains("/my-agentic-123456-cn-hangzhou-ab-apsr/", mock.LastRequest.RequestUri.AbsolutePath);
     }
 
     [Fact]
