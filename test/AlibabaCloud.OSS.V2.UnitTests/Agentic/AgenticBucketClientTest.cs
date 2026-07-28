@@ -139,6 +139,56 @@ public class AgenticBucketClientTest
     }
 
     [Fact]
+    public void TestAgenticProviderMissingRequiredFields()
+    {
+        var input = new OperationInput { Bucket = "my-bucket" };
+
+        // Missing accountId
+        var p1 = new AgenticProvider(
+            new Uri("https://oss-cn-hangzhou.aliyuncs.com"), "", "cn-hangzhou", "ab-apsr");
+        Assert.Contains("AccountId", Assert.Throws<ArgumentException>(() => p1.BuildUrl(input)).Message);
+        Assert.Contains("AccountId", Assert.Throws<ArgumentException>(() => p1.BuildBucketName(input)).Message);
+
+        // Missing region
+        var p2 = new AgenticProvider(
+            new Uri("https://oss-cn-hangzhou.aliyuncs.com"), "123456", "", "ab-apsr");
+        Assert.Contains("Region", Assert.Throws<ArgumentException>(() => p2.BuildUrl(input)).Message);
+        Assert.Contains("Region", Assert.Throws<ArgumentException>(() => p2.BuildBucketName(input)).Message);
+
+        // No bucket: validation is skipped, no error
+        Assert.Null(p2.BuildBucketName(new OperationInput()));
+    }
+
+    [Fact]
+    public void TestAgenticProviderHostLabelTooLong()
+    {
+        // full name = "{bucket}-123456-cn-hangzhou-ab-apsr" -> len(bucket) + 27
+        const string suffixPart = "-123456-cn-hangzhou-ab-apsr";
+        var vh = new AgenticProvider(
+            new Uri("https://oss-cn-hangzhou.aliyuncs.com"), "123456", "cn-hangzhou", "ab-apsr");
+
+        // Boundary: full name == 63 (bucket 36) is allowed in virtual-hosted style
+        var okName = new string('a', 36);
+        Assert.Equal(63, (okName + suffixPart).Length);
+        Assert.Equal(
+            $"https://{okName}{suffixPart}.oss-cn-hangzhou.aliyuncs.com/",
+            vh.BuildUrl(new OperationInput { Bucket = okName }));
+
+        // Over limit: full name == 64 (bucket 37) is rejected in virtual-hosted style
+        var longName = new string('a', 37);
+        Assert.Equal(64, (longName + suffixPart).Length);
+        Assert.Contains("exceeds the maximum length of 63 characters",
+            Assert.Throws<ArgumentException>(() => vh.BuildUrl(new OperationInput { Bucket = longName })).Message);
+
+        // Path style has no DNS label limit, so the same long name is fine
+        var path = new AgenticProvider(
+            new Uri("https://oss-cn-hangzhou.aliyuncs.com"), "123456", "cn-hangzhou", "ab-apsr", addressStyle: AddressStyleType.Path);
+        Assert.Equal(
+            $"https://oss-cn-hangzhou.aliyuncs.com/{longName}{suffixPart}/",
+            path.BuildUrl(new OperationInput { Bucket = longName }));
+    }
+
+    [Fact]
     public void TestBucketSpaceHelper()
     {
         var helper = new BucketSpaceHelper(new Configuration { AccountId = "123456", Region = "cn-hangzhou" });

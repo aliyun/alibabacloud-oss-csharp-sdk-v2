@@ -130,9 +130,16 @@ namespace AlibabaCloud.OSS.V2.Agentic
 
         public string? BuildBucketName(OperationInput input)
         {
-            return input.Bucket == null
-                ? null
-                : $"{input.Bucket}-{_accountId}-{_region}-{_suffix}";
+            if (input.Bucket == null) return null;
+            if (string.IsNullOrEmpty(_accountId))
+            {
+                throw new ArgumentException("missing required field, AccountId");
+            }
+            if (string.IsNullOrEmpty(_region))
+            {
+                throw new ArgumentException("missing required field, Region");
+            }
+            return $"{input.Bucket}-{_accountId}-{_region}-{_suffix}";
         }
 
         // Returns an empty string when the endpoint is missing so the caller's URL
@@ -158,7 +165,13 @@ namespace AlibabaCloud.OSS.V2.Agentic
 
                         break;
                     default:
-                        host = $"{BuildBucketName(input)}.{_endpoint.Authority}";
+                        var fullName = BuildBucketName(input)!;
+                        if (fullName.Length > 63)
+                        {
+                            throw new ArgumentException(
+                                $"the host label \"{fullName}\" exceeds the maximum length of 63 characters");
+                        }
+                        host = $"{fullName}.{_endpoint.Authority}";
                         break;
                 }
             }
