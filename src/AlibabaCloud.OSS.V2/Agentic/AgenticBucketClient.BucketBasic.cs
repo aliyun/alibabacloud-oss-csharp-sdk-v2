@@ -92,16 +92,13 @@ namespace AlibabaCloud.OSS.V2.Agentic
             {
                 OperationName = "GetAgenticBucket",
                 Method = "GET",
-                Headers = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase) {
-                    { "Content-Type", ContentTypeXml }
-                },
                 Parameters = new Dictionary<string, string> {
                     { "agenticBucket", "" }
                 },
                 Bucket = request.Bucket
             };
 
-            Serde.SerializeInput(request, ref input, Serde.AddContentMd5);
+            Serde.SerializeInput(request, ref input);
 
             var output = await _client.InvokeOperationAsync(input, options, cancellationToken).ConfigureAwait(false);
 
@@ -123,15 +120,12 @@ namespace AlibabaCloud.OSS.V2.Agentic
             {
                 OperationName = "ListAgenticBuckets",
                 Method = "GET",
-                Headers = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase) {
-                    { "Content-Type", ContentTypeXml }
-                },
                 Parameters = new Dictionary<string, string> {
                     { "agenticBucket", "" }
                 }
             };
 
-            Serde.SerializeInput(request, ref input, Serde.AddContentMd5);
+            Serde.SerializeInput(request, ref input);
 
             var output = await _client.InvokeOperationAsync(input, options, cancellationToken).ConfigureAwait(false);
 
@@ -190,9 +184,6 @@ namespace AlibabaCloud.OSS.V2.Agentic
             {
                 OperationName = "ListBucketSpaces",
                 Method = "GET",
-                Headers = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase) {
-                    { "Content-Type", ContentTypeXml }
-                },
                 Parameters = new Dictionary<string, string> {
                     { "agenticBucket", "" },
                     { "bucketSpace", "" }
@@ -200,7 +191,7 @@ namespace AlibabaCloud.OSS.V2.Agentic
                 Bucket = request.Bucket
             };
 
-            Serde.SerializeInput(request, ref input, Serde.AddContentMd5);
+            Serde.SerializeInput(request, ref input);
 
             var output = await _client.InvokeOperationAsync(input, options, cancellationToken).ConfigureAwait(false);
 
