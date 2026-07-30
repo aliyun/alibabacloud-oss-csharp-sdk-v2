@@ -45,6 +45,19 @@ internal static class AgenticTestSupport
 
     public static Client GetBucketSpaceClient() => AgenticBucketClient.NewBucketSpaceClient(TestConfig());
 
+    // Path-style variants: the resolved full name goes into the request path
+    // instead of the leftmost host label. Used by the misc path-style scenario.
+    private static Configuration PathStyleConfig()
+    {
+        var cfg = TestConfig();
+        cfg.UsePathStyle = true;
+        return cfg;
+    }
+
+    public static AgenticBucketClient GetAgenticClientPathStyle() => new(PathStyleConfig());
+
+    public static Client GetBucketSpaceClientPathStyle() => AgenticBucketClient.NewBucketSpaceClient(PathStyleConfig());
+
     public static string GenBucketName()
     {
         var rnd = new Random();
