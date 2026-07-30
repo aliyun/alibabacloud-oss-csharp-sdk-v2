@@ -35,6 +35,14 @@ internal static class AgenticTestSupport
 
     public static AgenticBucketClient GetInvalidAkClient() => new(BaseConfig("invalid-ak", "invalid-sk"));
 
+    // A non-digit account id passes construction but fails (deferred) at invoke.
+    public static AgenticBucketClient GetBadAccountIdClient()
+    {
+        var cfg = TestConfig();
+        cfg.AccountId = "bad-account";
+        return new AgenticBucketClient(cfg);
+    }
+
     public static Client GetBucketSpaceClient() => AgenticBucketClient.NewBucketSpaceClient(TestConfig());
 
     public static string GenBucketName()

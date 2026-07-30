@@ -85,4 +85,50 @@ public class ClientAgenticBasicTest : IClassFixture<AgenticBucketFixture>
         });
         Assert.Equal(200, putResult.StatusCode);
     }
+
+    [Fact]
+    public async Task TestGetInvalidCredentials()
+    {
+        if (!Configured) return;
+        using var client = GetInvalidAkClient();
+        try
+        {
+            await client.GetAgenticBucketAsync(new GetAgenticBucketRequest { Bucket = _fx.Bucket });
+            Assert.Fail("expected an exception");
+        }
+        catch (Exception e)
+        {
+            var se = e as ServiceException ?? e.InnerException as ServiceException;
+            Assert.NotNull(se);
+            Assert.NotEqual(0, se!.StatusCode);
+        }
+    }
+
+    [Fact]
+    public async Task TestGetNotExist()
+    {
+        if (!Configured) return;
+        try
+        {
+            await _fx.Client.GetAgenticBucketAsync(
+                new GetAgenticBucketRequest { Bucket = "csharp-ab-not-exist-000000" });
+            Assert.Fail("expected an exception");
+        }
+        catch (Exception e)
+        {
+            var se = e as ServiceException ?? e.InnerException as ServiceException;
+            Assert.NotNull(se);
+            Assert.NotEqual(0, se!.StatusCode);
+        }
+    }
+
+    [Fact]
+    public async Task TestGetInvalidAccountId()
+    {
+        if (!Configured) return;
+        using var client = GetBadAccountIdClient();
+        var ex = await Assert.ThrowsAsync<ArgumentException>(() =>
+            client.GetAgenticBucketAsync(new GetAgenticBucketRequest { Bucket = _fx.Bucket }));
+        Assert.Contains("account id", ex.Message);
+    }
 }
