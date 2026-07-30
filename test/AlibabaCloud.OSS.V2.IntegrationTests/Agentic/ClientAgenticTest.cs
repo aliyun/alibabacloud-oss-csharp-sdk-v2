@@ -1,9 +1,9 @@
 using System.Text;
 using AlibabaCloud.OSS.V2.Agentic;
 using AlibabaCloud.OSS.V2.Agentic.Models;
-using static AlibabaCloud.OSS.V2.IntegrationTests.AgenticTestSupport;
+using static AlibabaCloud.OSS.V2.IntegrationTests.Agentic.AgenticTestSupport;
 
-namespace AlibabaCloud.OSS.V2.IntegrationTests;
+namespace AlibabaCloud.OSS.V2.IntegrationTests.Agentic;
 
 // One agentic bucket shared by the Basic scenario. Teardown disables it and reaps
 // backlog left disabled by earlier runs.

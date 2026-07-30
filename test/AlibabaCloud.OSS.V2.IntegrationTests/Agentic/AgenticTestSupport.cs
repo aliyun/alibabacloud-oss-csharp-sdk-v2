@@ -3,7 +3,7 @@ using AlibabaCloud.OSS.V2.Agentic;
 using AlibabaCloud.OSS.V2.Agentic.Models;
 using AlibabaCloud.OSS.V2.Credentials;
 
-namespace AlibabaCloud.OSS.V2.IntegrationTests;
+namespace AlibabaCloud.OSS.V2.IntegrationTests.Agentic;
 
 // Shared helpers for the agentic integration tests: client factories, name
 // builders, and the prefix-based reaper that bounds the backlog left by the
@@ -92,7 +92,7 @@ internal static class AgenticTestSupport
                     if (string.IsNullOrEmpty(name) || !name.StartsWith(BucketNamePrefix)) continue;
 
                     var bucket = ToShortName(name, "ab-apsr");
-                    string? status = null;
+                    string status = null;
                     try
                     {
                         var info = await client.GetAgenticBucketAsync(new GetAgenticBucketRequest { Bucket = bucket });
