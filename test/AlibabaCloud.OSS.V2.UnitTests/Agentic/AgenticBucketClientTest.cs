@@ -139,6 +139,81 @@ public class AgenticBucketClientTest
     }
 
     [Fact]
+    public void TestAgenticProviderAliasStyle()
+    {
+        var provider = new AgenticProvider(
+            new Uri("https://oss-cn-hangzhou.aliyuncs.com"), "123456", "cn-hangzhou", "ab-apsr",
+            addressStyle: AddressStyleType.VirtualHostedAlias);
+
+        Assert.Equal(
+            "https://my-agentic-alias-ab-apsr.oss-cn-hangzhou.aliyuncs.com/",
+            provider.BuildUrl(new OperationInput { Bucket = "my-agentic" }));
+        Assert.Equal(
+            "https://my-agentic-alias-ab-apsr.oss-cn-hangzhou.aliyuncs.com/obj.txt",
+            provider.BuildUrl(new OperationInput { Bucket = "my-agentic", Key = "obj.txt" }));
+        // No bucket routes to the bare endpoint in alias style too.
+        Assert.Equal(
+            "https://oss-cn-hangzhou.aliyuncs.com/",
+            provider.BuildUrl(new OperationInput()));
+
+        // Bucket space suffix
+        var bs = new AgenticProvider(
+            new Uri("https://oss-cn-hangzhou.aliyuncs.com"), "123456", "cn-hangzhou", "bs-apsr",
+            addressStyle: AddressStyleType.VirtualHostedAlias);
+        Assert.Equal(
+            "https://my-space-alias-bs-apsr.oss-cn-hangzhou.aliyuncs.com/test.txt",
+            bs.BuildUrl(new OperationInput { Bucket = "my-space", Key = "test.txt" }));
+    }
+
+    [Fact]
+    public void TestAgenticProviderAliasStyleSignsWithFullName()
+    {
+        var input = new OperationInput { Bucket = "my-agentic" };
+        var provider = new AgenticProvider(
+            new Uri("https://oss-cn-hangzhou.aliyuncs.com"), "123456", "cn-hangzhou", "ab-apsr",
+            addressStyle: AddressStyleType.VirtualHostedAlias);
+
+        // The short label only shows up in the host; signing keeps the full name.
+        Assert.Equal("my-agentic-123456-cn-hangzhou-ab-apsr", provider.BuildBucketName(input));
+
+        // So accountId / region stay required.
+        var noAccount = new AgenticProvider(
+            new Uri("https://oss-cn-hangzhou.aliyuncs.com"), "", "cn-hangzhou", "ab-apsr",
+            addressStyle: AddressStyleType.VirtualHostedAlias);
+        Assert.Contains("AccountId",
+            Assert.Throws<ArgumentException>(() => noAccount.BuildBucketName(input)).Message);
+
+        var noRegion = new AgenticProvider(
+            new Uri("https://oss-cn-hangzhou.aliyuncs.com"), "123456", "", "ab-apsr",
+            addressStyle: AddressStyleType.VirtualHostedAlias);
+        Assert.Contains("Region",
+            Assert.Throws<ArgumentException>(() => noRegion.BuildBucketName(input)).Message);
+    }
+
+    [Fact]
+    public void TestAgenticProviderAliasHostLabelTooLong()
+    {
+        // alias label = "{bucket}-alias-ab-apsr" -> len(bucket) + 14
+        const string suffixPart = "-alias-ab-apsr";
+        var provider = new AgenticProvider(
+            new Uri("https://oss-cn-hangzhou.aliyuncs.com"), "123456", "cn-hangzhou", "ab-apsr",
+            addressStyle: AddressStyleType.VirtualHostedAlias);
+
+        // Boundary: label == 63 (bucket 49) is allowed, far more room than the full name has
+        var okName = new string('a', 49);
+        Assert.Equal(63, (okName + suffixPart).Length);
+        Assert.Equal(
+            $"https://{okName}{suffixPart}.oss-cn-hangzhou.aliyuncs.com/",
+            provider.BuildUrl(new OperationInput { Bucket = okName }));
+
+        // Over limit: label == 64 (bucket 50) is rejected
+        var longName = new string('a', 50);
+        Assert.Equal(64, (longName + suffixPart).Length);
+        Assert.Contains("exceeds the maximum length of 63 characters",
+            Assert.Throws<ArgumentException>(() => provider.BuildUrl(new OperationInput { Bucket = longName })).Message);
+    }
+
+    [Fact]
     public void TestAgenticProviderMissingRequiredFields()
     {
         var input = new OperationInput { Bucket = "my-bucket" };
@@ -547,5 +622,60 @@ public class AgenticBucketClientTest
         Assert.Equal(
             "my-agentic-123456-cn-hangzhou-ab-apsr.oss-cn-hangzhou.aliyuncs.com",
             mock.LastRequest.RequestUri!.Host);
+    }
+
+    [Fact]
+    public async Task TestResolvedHostUsesAliasLabelUnderAliasStyle()
+    {
+        var mock = new MockHttpMessageHandler();
+        using var client = new AgenticBucketClient(
+            NewConfig(mock), options => options.AddressStyle = AddressStyleType.VirtualHostedAlias);
+
+        mock.Clear();
+        mock.Responses = [OkXml("")];
+
+        await client.DeleteAgenticBucketAsync(new DeleteAgenticBucketRequest { Bucket = "my-agentic" });
+
+        Assert.Equal("my-agentic-alias-ab-apsr.oss-cn-hangzhou.aliyuncs.com", mock.LastRequest.RequestUri!.Host);
+    }
+
+    [Fact]
+    public async Task TestBucketSpaceClientUsesAliasLabelUnderAliasStyle()
+    {
+        var mock = new MockHttpMessageHandler();
+        using var client = AgenticBucketClient.NewBucketSpaceClient(
+            NewConfig(mock), options => options.AddressStyle = AddressStyleType.VirtualHostedAlias);
+
+        mock.Clear();
+        mock.Responses = [OkXml("")];
+
+        await client.InvokeOperationAsync(new OperationInput
+        {
+            OperationName = "Test",
+            Method = "GET",
+            Bucket = "my-space",
+            Key = "test.txt"
+        });
+
+        Assert.Equal("my-space-alias-bs-apsr.oss-cn-hangzhou.aliyuncs.com", mock.LastRequest.RequestUri!.Host);
+        Assert.Equal("/test.txt", mock.LastRequest.RequestUri.AbsolutePath);
+    }
+
+    [Fact]
+    public async Task TestAliasStyleStillRequiresAccountId()
+    {
+        // The short label drops accountId from the host, but signing keeps the full name,
+        // so a missing accountId must still fail before the request is sent.
+        var mock = new MockHttpMessageHandler();
+        using var client = new AgenticBucketClient(
+            NewConfig(mock, accountId: ""), options => options.AddressStyle = AddressStyleType.VirtualHostedAlias);
+
+        mock.Clear();
+        mock.Responses = [OkXml("")];
+
+        var ex = await Assert.ThrowsAsync<ArgumentException>(() =>
+            client.DeleteAgenticBucketAsync(new DeleteAgenticBucketRequest { Bucket = "my-agentic" }));
+        Assert.Contains("AccountId", ex.Message);
+        Assert.Null(mock.LastRequest);
     }
 }

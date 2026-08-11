@@ -109,10 +109,16 @@ namespace AlibabaCloud.OSS.V2.Agentic
     /// Resolves the full bucket name and builds the request URL for the agentic clients.
     /// The resolved full bucket name ("{bucket}-{accountId}-{region}-{suffix}") is used for
     /// signing. In virtual-hosted mode (default) it is placed in the host; in path-style mode
-    /// it is placed in the path.
+    /// it is placed in the path; in virtual-hosted-alias mode the host carries the short
+    /// alias label "{bucket}-alias-{suffix}" instead.
     /// </summary>
     internal sealed class AgenticProvider : IEndpointProvider, IBucketNameResolver
     {
+        /// <summary>
+        /// The literal segment that replaces "{accountId}-{region}" in the short host label.
+        /// </summary>
+        private const string AliasToken = "alias";
+
         private readonly Uri? _endpoint;
         private readonly string _accountId;
         private readonly string _region;
@@ -163,6 +169,15 @@ namespace AlibabaCloud.OSS.V2.Agentic
                             paths.Add("");
                         }
 
+                        break;
+                    case AddressStyleType.VirtualHostedAlias:
+                        var label = $"{input.Bucket}-{AliasToken}-{_suffix}";
+                        if (label.Length > 63)
+                        {
+                            throw new ArgumentException(
+                                $"the host label \"{label}\" exceeds the maximum length of 63 characters");
+                        }
+                        host = $"{label}.{_endpoint.Authority}";
                         break;
                     default:
                         var fullName = BuildBucketName(input)!;

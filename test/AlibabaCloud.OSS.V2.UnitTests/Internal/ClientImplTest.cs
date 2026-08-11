@@ -1106,6 +1106,40 @@ public class ClientImplTest
     }
 
     [Fact]
+    public async Task TestAddressingModeVirtualHostedAliasFallsBack()
+    {
+        // virtual-hosted-alias is agentic-only, the plain client falls back to virtual-hosted
+        var mockHandler = new MockHttpMessageHandler();
+        var config = new Configuration()
+        {
+            Region = "cn-hangzhou",
+            CredentialsProvider = new AnonymousCredentialsProvider(),
+            HttpTransport = new HttpTransport(mockHandler),
+        };
+        var client = new ClientImpl(config, options => options.AddressStyle = AddressStyleType.VirtualHostedAlias);
+
+        mockHandler.Clear();
+        mockHandler.Responses = [
+            new() {
+                StatusCode = HttpStatusCode.OK,
+                Content    = new StringContent("")
+            }];
+
+        var input = new OperationInput
+        {
+            OperationName = "InvokeOperation",
+            Method = "PUT",
+            Parameters = new Dictionary<string, string> {
+                { "key", "value" },
+            },
+            Bucket = "my-bucket",
+        };
+
+        await client.ExecuteAsync(input);
+        Assert.Equal("https://my-bucket.oss-cn-hangzhou.aliyuncs.com/?key=value", mockHandler.LastRequest.RequestUri.ToString());
+    }
+
+    [Fact]
     public async Task TestAddressingModePath()
     {
         var mockHandler = new MockHttpMessageHandler();
