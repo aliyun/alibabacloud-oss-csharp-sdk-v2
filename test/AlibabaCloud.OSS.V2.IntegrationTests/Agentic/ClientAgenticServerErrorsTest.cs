@@ -3,8 +3,10 @@ using static AlibabaCloud.OSS.V2.IntegrationTests.Agentic.AgenticTestSupport;
 
 namespace AlibabaCloud.OSS.V2.IntegrationTests.Agentic;
 
-// Error propagation with invalid credentials. Create returns 403; Get/List are
-// relaxed because the real service returns 404 for Get under invalid AK.
+// Error propagation with invalid credentials. Create and List return 403 InvalidAccessKeyId,
+// while Get returns 404 NoSuchAgenticBucket: the real service resolves bucket existence before
+// it validates the credentials. Ec is only checked for presence, it is a server-internal
+// diagnostic and not part of the contract.
 public class ClientAgenticServerErrorsTest
 {
     [Fact]
@@ -25,6 +27,8 @@ public class ClientAgenticServerErrorsTest
             var se = e as ServiceException ?? e.InnerException as ServiceException;
             Assert.NotNull(se);
             Assert.Equal(403, se!.StatusCode);
+            Assert.Equal("InvalidAccessKeyId", se.ErrorCode);
+            Assert.NotEmpty(se.Ec);
             Assert.NotEmpty(se.RequestId);
         }
 
@@ -38,7 +42,10 @@ public class ClientAgenticServerErrorsTest
         {
             var se = e as ServiceException ?? e.InnerException as ServiceException;
             Assert.NotNull(se);
-            Assert.NotEqual(0, se!.StatusCode);
+            Assert.Equal(404, se!.StatusCode);
+            Assert.Equal("NoSuchAgenticBucket", se.ErrorCode);
+            Assert.NotEmpty(se.Ec);
+            Assert.NotEmpty(se.RequestId);
         }
 
         // list with invalid AK
@@ -51,7 +58,10 @@ public class ClientAgenticServerErrorsTest
         {
             var se = e as ServiceException ?? e.InnerException as ServiceException;
             Assert.NotNull(se);
-            Assert.NotEqual(0, se!.StatusCode);
+            Assert.Equal(403, se!.StatusCode);
+            Assert.Equal("InvalidAccessKeyId", se.ErrorCode);
+            Assert.NotEmpty(se.Ec);
+            Assert.NotEmpty(se.RequestId);
         }
     }
 }

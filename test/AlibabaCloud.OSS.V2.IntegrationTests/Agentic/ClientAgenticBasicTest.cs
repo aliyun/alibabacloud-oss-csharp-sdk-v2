@@ -118,7 +118,9 @@ public class ClientAgenticBasicTest : IClassFixture<AgenticBucketFixture>
         {
             var se = e as ServiceException ?? e.InnerException as ServiceException;
             Assert.NotNull(se);
-            Assert.NotEqual(0, se!.StatusCode);
+            Assert.Equal(404, se!.StatusCode);
+            Assert.Equal("NoSuchAgenticBucket", se.ErrorCode);
+            Assert.NotEmpty(se.Ec);
         }
     }
 
