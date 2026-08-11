@@ -189,6 +189,29 @@ public class ClientImplTest
         Assert.NotNull(client.Options.Endpoint);
         Assert.Equal(AddressStyleType.Path, client.Options.AddressStyle);
 
+        // virtual-hosted-alias
+        config = new()
+        {
+            Region = "cn-hangzhou",
+            CredentialsProvider = new AnonymousCredentialsProvider(),
+            UseVirtualHostedAlias = true
+        };
+        client = new(config);
+        Assert.NotNull(client.Options.Endpoint);
+        Assert.Equal(AddressStyleType.VirtualHostedAlias, client.Options.AddressStyle);
+
+        // path-style takes precedence over virtual-hosted-alias
+        config = new()
+        {
+            Region = "cn-hangzhou",
+            CredentialsProvider = new AnonymousCredentialsProvider(),
+            UsePathStyle = true,
+            UseVirtualHostedAlias = true
+        };
+        client = new(config);
+        Assert.NotNull(client.Options.Endpoint);
+        Assert.Equal(AddressStyleType.Path, client.Options.AddressStyle);
+
         // ip endpoint
         config = new()
         {

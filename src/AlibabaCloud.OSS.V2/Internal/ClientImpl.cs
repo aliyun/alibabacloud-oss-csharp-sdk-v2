@@ -338,6 +338,10 @@ namespace AlibabaCloud.OSS.V2.Internal
             {
                 style = AddressStyleType.Path;
             }
+            else if (config.UseVirtualHostedAlias.GetValueOrDefault(false))
+            {
+                style = AddressStyleType.VirtualHostedAlias;
+            }
 
             //if the endpoint is ip, set to path-style
             if (endpoint != null)

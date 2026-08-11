@@ -662,6 +662,45 @@ public class AgenticBucketClientTest
     }
 
     [Fact]
+    public async Task TestResolvedHostUsesAliasLabelWithUseVirtualHostedAliasConfig()
+    {
+        var mock = new MockHttpMessageHandler();
+        var config = NewConfig(mock);
+        config.UseVirtualHostedAlias = true;
+        using var client = new AgenticBucketClient(config);
+
+        mock.Clear();
+        mock.Responses = [OkXml("")];
+
+        await client.DeleteAgenticBucketAsync(new DeleteAgenticBucketRequest { Bucket = "my-agentic" });
+
+        Assert.Equal("my-agentic-alias-ab-apsr.oss-cn-hangzhou.aliyuncs.com", mock.LastRequest.RequestUri!.Host);
+    }
+
+    [Fact]
+    public async Task TestBucketSpaceClientUsesAliasLabelWithUseVirtualHostedAliasConfig()
+    {
+        var mock = new MockHttpMessageHandler();
+        var config = NewConfig(mock);
+        config.UseVirtualHostedAlias = true;
+        using var client = AgenticBucketClient.NewBucketSpaceClient(config);
+
+        mock.Clear();
+        mock.Responses = [OkXml("")];
+
+        await client.InvokeOperationAsync(new OperationInput
+        {
+            OperationName = "Test",
+            Method = "GET",
+            Bucket = "my-space",
+            Key = "test.txt"
+        });
+
+        Assert.Equal("my-space-alias-bs-apsr.oss-cn-hangzhou.aliyuncs.com", mock.LastRequest.RequestUri!.Host);
+        Assert.Equal("/test.txt", mock.LastRequest.RequestUri.AbsolutePath);
+    }
+
+    [Fact]
     public async Task TestAliasStyleStillRequiresAccountId()
     {
         // The short label drops accountId from the host, but signing keeps the full name,

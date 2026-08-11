@@ -55,6 +55,11 @@ namespace AlibabaCloud.OSS.V2
         public bool? UseCName { get; set; }
 
         /// <summary>
+        /// If the endpoint is a short-alias host, set this flag to true
+        /// </summary>
+        public bool? UseVirtualHostedAlias { get; set; }
+
+        /// <summary>
         /// Connect timeout
         /// </summary>
         public TimeSpan? ConnectTimeout { get; set; }

@@ -154,10 +154,6 @@ namespace AlibabaCloud.OSS.V2
 
         CName = 2,
 
-        /// <summary>
-        /// Agentic-only, the physical bucket name is replaced by the short alias
-        /// host label. The plain client falls back to <see cref="VirtualHosted"/>.
-        /// </summary>
         VirtualHostedAlias = 3,
     }
 
