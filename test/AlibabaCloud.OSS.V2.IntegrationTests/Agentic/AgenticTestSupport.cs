@@ -1,4 +1,3 @@
-using System.Text;
 using AlibabaCloud.OSS.V2.Agentic;
 using AlibabaCloud.OSS.V2.Agentic.Models;
 using AlibabaCloud.OSS.V2.Credentials;
@@ -10,9 +9,11 @@ namespace AlibabaCloud.OSS.V2.IntegrationTests.Agentic;
 // two-phase (Disable -> wait ~24h -> Delete) bucket lifecycle.
 internal static class AgenticTestSupport
 {
-    // The "ab" marker in the prefix is what the reaper filters on.
-    public const string BucketNamePrefix = "csharp-sdk-test-ab-";
-    private const string Letters = "abcdefghijklmnopqrstuvwxyz";
+    // The "ab" marker in the prefix is what the reaper filters on. Prefix plus the random part
+    // must stay within 23 characters: the resolved name "{bucket}-{accountId}-{region}-ab-apsr"
+    // becomes a DNS host label capped at 63, and the account id (16) plus the longest region (14)
+    // plus the separators and the tail take the other 40.
+    public const string BucketNamePrefix = "csharp-sdk-test-ab";
 
     public static string AccountId => Environment.GetEnvironmentVariable("OSS_TEST_ACCOUNT_ID");
 
@@ -58,12 +59,12 @@ internal static class AgenticTestSupport
 
     public static Client GetBucketSpaceClientPathStyle() => AgenticBucketClient.NewBucketSpaceClient(PathStyleConfig());
 
+    // Fixed length so that the reaper's prefix match cannot cross-match a longer
+    // name, and Guid-based because net48 seeds new Random() from the tick count,
+    // which collides across fixtures starting in the same tick.
     public static string GenBucketName()
     {
-        var rnd = new Random();
-        var sb = new StringBuilder(6);
-        for (var i = 0; i < 6; i++) sb.Append(Letters[rnd.Next(Letters.Length)]);
-        return BucketNamePrefix + sb;
+        return BucketNamePrefix + Guid.NewGuid().ToString("N").Substring(0, 5);
     }
 
     // BuildFullName resolves a short name to the server-side full name
