@@ -35,6 +35,7 @@ public class ConfigurationTest
             EnabledRedirect = true,
             UseCName = false,
             UsePathStyle = true,
+            UseVirtualHostedAlias = false,
             ProxyHost = "http://127.0.0.1:8080",
             DisableUploadCrc64Check = false,
             DisableDownloadCrc64Check = true,
@@ -59,6 +60,7 @@ public class ConfigurationTest
         Assert.Equal(true, config.EnabledRedirect);
         Assert.Equal(false, config.UseCName);
         Assert.Equal(true, config.UsePathStyle);
+        Assert.Equal(false, config.UseVirtualHostedAlias);
         Assert.Equal("http://127.0.0.1:8080", config.ProxyHost);
         Assert.Equal(false, config.DisableUploadCrc64Check);
         Assert.Equal(true, config.DisableDownloadCrc64Check);
@@ -88,6 +90,7 @@ public class ConfigurationTest
         Assert.Null(config.EnabledRedirect);
         Assert.Null(config.UseCName);
         Assert.Null(config.UsePathStyle);
+        Assert.Null(config.UseVirtualHostedAlias);
         Assert.Null(config.ProxyHost);
         Assert.Null(config.DisableUploadCrc64Check);
         Assert.Null(config.DisableDownloadCrc64Check);

@@ -12,6 +12,12 @@ namespace AlibabaCloud.OSS.V2
         public string? Region { get; set; }
 
         /// <summary>
+        /// The ID of the Alibaba Cloud account. It is required by the agentic clients,
+        /// which use it to resolve the full bucket name.
+        /// </summary>
+        public string? AccountId { get; set; }
+
+        /// <summary>
         /// The domain names that other services can use to access OSS.
         /// </summary>
         public string? Endpoint { get; set; }
@@ -47,6 +53,11 @@ namespace AlibabaCloud.OSS.V2
         /// If the endpoint is s CName, set this flag to true
         /// </summary>
         public bool? UseCName { get; set; }
+
+        /// <summary>
+        /// If the endpoint is a short-alias host, set this flag to true
+        /// </summary>
+        public bool? UseVirtualHostedAlias { get; set; }
 
         /// <summary>
         /// Connect timeout
@@ -154,6 +165,14 @@ namespace AlibabaCloud.OSS.V2
         public static Configuration LoadDefault()
         {
             return new Configuration();
+        }
+
+        /// <summary>
+        /// Creates a shallow copy of the configuration.
+        /// </summary>
+        internal Configuration Copy()
+        {
+            return (Configuration)MemberwiseClone();
         }
     }
 }
