@@ -189,6 +189,29 @@ public class ClientImplTest
         Assert.NotNull(client.Options.Endpoint);
         Assert.Equal(AddressStyleType.Path, client.Options.AddressStyle);
 
+        // virtual-hosted-alias
+        config = new()
+        {
+            Region = "cn-hangzhou",
+            CredentialsProvider = new AnonymousCredentialsProvider(),
+            UseVirtualHostedAlias = true
+        };
+        client = new(config);
+        Assert.NotNull(client.Options.Endpoint);
+        Assert.Equal(AddressStyleType.VirtualHostedAlias, client.Options.AddressStyle);
+
+        // path-style takes precedence over virtual-hosted-alias
+        config = new()
+        {
+            Region = "cn-hangzhou",
+            CredentialsProvider = new AnonymousCredentialsProvider(),
+            UsePathStyle = true,
+            UseVirtualHostedAlias = true
+        };
+        client = new(config);
+        Assert.NotNull(client.Options.Endpoint);
+        Assert.Equal(AddressStyleType.Path, client.Options.AddressStyle);
+
         // ip endpoint
         config = new()
         {
@@ -199,6 +222,67 @@ public class ClientImplTest
         client = new(config);
         Assert.NotNull(client.Options.Endpoint);
         Assert.Equal(AddressStyleType.Path, client.Options.AddressStyle);
+    }
+
+    [Fact]
+    public void TestConfigInitError()
+    {
+        // valid account id -> no deferred error
+        var config = new Configuration
+        {
+            Region = "cn-hangzhou",
+            AccountId = "123456",
+            CredentialsProvider = new AnonymousCredentialsProvider()
+        };
+        var client = new ClientImpl(config);
+        Assert.Null(client.InnerOptions.InitError);
+
+        // empty account id -> allowed
+        config = new Configuration
+        {
+            Region = "cn-hangzhou",
+            CredentialsProvider = new AnonymousCredentialsProvider()
+        };
+        client = new ClientImpl(config);
+        Assert.Null(client.InnerOptions.InitError);
+
+        // non-digit account id -> error deferred, not thrown at construction
+        config = new Configuration
+        {
+            Region = "cn-hangzhou",
+            AccountId = "abc123",
+            CredentialsProvider = new AnonymousCredentialsProvider()
+        };
+        client = new ClientImpl(config);
+        Assert.IsType<ArgumentException>(client.InnerOptions.InitError);
+        Assert.Contains("account id", client.InnerOptions.InitError!.Message);
+    }
+
+    [Fact]
+    public async Task TestConfigInitErrorDeferredThrow()
+    {
+        // non-digit account id: construction succeeds, error is surfaced at operation invoke
+        var config = new Configuration
+        {
+            Region = "cn-hangzhou",
+            Endpoint = "oss-cn-hangzhou.aliyuncs.com",
+            AccountId = "abc123",
+            CredentialsProvider = new AnonymousCredentialsProvider()
+        };
+        var client = new ClientImpl(config);
+
+        var input = new OperationInput
+        {
+            OperationName = "GetBucketStat",
+            Method = "GET",
+            Bucket = "bucket"
+        };
+
+        var ex = await Assert.ThrowsAsync<ArgumentException>(() => client.ExecuteAsync(input));
+        Assert.Contains("account id", ex.Message);
+
+        var presignEx = Assert.Throws<ArgumentException>(() => client.PresignInner(input));
+        Assert.Contains("account id", presignEx.Message);
     }
 
     [Fact]
@@ -1042,6 +1126,40 @@ public class ClientImplTest
         Assert.NotNull(mockHandler.LastRequest);
         Assert.Single(mockHandler.Requests);
         Assert.Equal("https://my-bucket.oss-cn-hangzhou.aliyuncs.com/my-key?key=value", mockHandler.LastRequest.RequestUri.ToString());
+    }
+
+    [Fact]
+    public async Task TestAddressingModeVirtualHostedAliasFallsBack()
+    {
+        // virtual-hosted-alias is agentic-only, the plain client falls back to virtual-hosted
+        var mockHandler = new MockHttpMessageHandler();
+        var config = new Configuration()
+        {
+            Region = "cn-hangzhou",
+            CredentialsProvider = new AnonymousCredentialsProvider(),
+            HttpTransport = new HttpTransport(mockHandler),
+        };
+        var client = new ClientImpl(config, options => options.AddressStyle = AddressStyleType.VirtualHostedAlias);
+
+        mockHandler.Clear();
+        mockHandler.Responses = [
+            new() {
+                StatusCode = HttpStatusCode.OK,
+                Content    = new StringContent("")
+            }];
+
+        var input = new OperationInput
+        {
+            OperationName = "InvokeOperation",
+            Method = "PUT",
+            Parameters = new Dictionary<string, string> {
+                { "key", "value" },
+            },
+            Bucket = "my-bucket",
+        };
+
+        await client.ExecuteAsync(input);
+        Assert.Equal("https://my-bucket.oss-cn-hangzhou.aliyuncs.com/?key=value", mockHandler.LastRequest.RequestUri.ToString());
     }
 
     [Fact]

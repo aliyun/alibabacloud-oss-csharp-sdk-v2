@@ -74,6 +74,24 @@ namespace AlibabaCloud.OSS.V2.Extensions
 
         public static bool IsValidRegion(this string input) => input != string.Empty && RegexUtils.IsValidName(input);
 
+        public static bool IsValidAccountId(this string input)
+        {
+            if (string.IsNullOrEmpty(input))
+            {
+                return false;
+            }
+
+            foreach (var ch in input)
+            {
+                if (ch < '0' || ch > '9')
+                {
+                    return false;
+                }
+            }
+
+            return true;
+        }
+
         public static string ToEndpoint(this string input, bool disableSsl, string type)
         {
             var scheme = disableSsl ? "http" : "https";

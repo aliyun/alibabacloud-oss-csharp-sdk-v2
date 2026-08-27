@@ -18,6 +18,9 @@ namespace AlibabaCloud.OSS.V2.Internal
     {
         public string UserAgent { get; set; } = "";
         public long ClockOffset { get; set; }
+
+        // Deferred configuration error, surfaced when an operation is invoked.
+        public Exception? InitError { get; set; }
     }
 
     internal class PresignInnerResult
@@ -52,7 +55,8 @@ namespace AlibabaCloud.OSS.V2.Internal
             Options = opts;
             InnerOptions = new InnerOptions()
             {
-                UserAgent = ResolveUserAgent(config)
+                UserAgent = ResolveUserAgent(config),
+                InitError = ResolveInitError(config)
             };
 
             // build execute stack
@@ -81,6 +85,9 @@ namespace AlibabaCloud.OSS.V2.Internal
             CancellationToken cancellationToken = default
         )
         {
+            // deferred configuration error
+            ThrowIfInitError();
+
             // verify input
             VerifyOperation(ref input);
 
@@ -113,6 +120,9 @@ namespace AlibabaCloud.OSS.V2.Internal
             OperationOptions? options = null
         )
         {
+            // deferred configuration error
+            ThrowIfInitError();
+
             // verify input
             VerifyOperation(ref input);
 
@@ -173,12 +183,25 @@ namespace AlibabaCloud.OSS.V2.Internal
             _executeStack.Dispose();
         }
 
+        // Validates configuration that should not fail client construction but instead
+        // be surfaced when an operation is invoked.
+        private static Exception? ResolveInitError(Configuration config)
+        {
+            var accountId = config.AccountId.SafeString();
+            if (accountId != "" && !accountId.IsValidAccountId())
+            {
+                return new ArgumentException($"invalid account id: {accountId}, must be pure digits");
+            }
+            return null;
+        }
+
         private static ClientOptions ResolveConfig(Configuration config)
         {
             var opt = new ClientOptions()
             {
                 Product = Defaults.Product,
                 Region = config.Region.SafeString(),
+                AccountId = config.AccountId,
                 Endpoint = ResolveEndpoint(config),
                 Retryer = ResolveRetryer(config),
                 Signer = ResolveSigner(config),
@@ -315,6 +338,10 @@ namespace AlibabaCloud.OSS.V2.Internal
             {
                 style = AddressStyleType.Path;
             }
+            else if (config.UseVirtualHostedAlias.GetValueOrDefault(false))
+            {
+                style = AddressStyleType.VirtualHostedAlias;
+            }
 
             //if the endpoint is ip, set to path-style
             if (endpoint != null)
@@ -389,12 +416,20 @@ namespace AlibabaCloud.OSS.V2.Internal
                 }
             }
 
+            // Resolve the bucket name used for signing. When a resolver is set it may replace
+            // the bucket name for signing; input.Bucket keeps its original value.
+            var resolvedBucket = input.Bucket;
+            if (Options.BucketNameResolver != null)
+            {
+                resolvedBucket = Options.BucketNameResolver.BuildBucketName(input) ?? input.Bucket;
+            }
+
             // signing context
             context.SigningContext = new()
             {
                 Product = Options.Product,
                 Region = Options.Region,
-                Bucket = input.Bucket,
+                Bucket = resolvedBucket,
                 Key = input.Key,
                 AuthMethodQuery = (opOpts.AuthMethod ?? Options.AuthMethod) == AuthMethodType.Query,
                 AdditionalHeaders = Options.AdditionalHeaders,
@@ -417,8 +452,15 @@ namespace AlibabaCloud.OSS.V2.Internal
             // request
             // request::host & path & query
             var endpoint = Options.Endpoint ?? throw new ArgumentException("Endpoint invalid.");
-            var baseUrl = BuildHostPath(ref input, endpoint.Authority);
-            var url = $"{endpoint.Scheme}://{baseUrl}";
+            string url;
+            if (Options.EndpointProvider != null)
+            {
+                url = Options.EndpointProvider.BuildUrl(input);
+            }
+            else
+            {
+                url = $"{endpoint.Scheme}://{BuildHostPath(ref input, endpoint.Authority)}";
+            }
             var query = CombineQueryString(input.Parameters);
 
             if (query != "")
@@ -460,6 +502,11 @@ namespace AlibabaCloud.OSS.V2.Internal
             var RetryMaxAttempts = opOpts.RetryMaxAttempts ?? Options.Retryer!.MaxAttempts();
             var RequestOnceTimeout = opOpts.ReadWriteTimeout ?? Options.RequestOnceTimeout;
             return (RetryMaxAttempts, RequestOnceTimeout);
+        }
+
+        private void ThrowIfInitError()
+        {
+            if (InnerOptions.InitError != null) throw InnerOptions.InitError;
         }
 
         private static void VerifyOperation(ref OperationInput input)
