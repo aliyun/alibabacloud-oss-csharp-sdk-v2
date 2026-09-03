@@ -1,5 +1,9 @@
 # ChangeLog - Alibaba Cloud OSS SDK for C# v2
 
+## 版本号：0.3.0 日期：2026-09-03
+### 变更内容
+- Feature：Add agentic bucket
+
 ## 版本号：0.2.0 日期：2025-06-26
 ### 变更内容
 - Feature：Add SealAppendObject API support
