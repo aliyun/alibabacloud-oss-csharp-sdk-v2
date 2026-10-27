@@ -39,5 +39,18 @@ namespace AlibabaCloud.OSS.V2
             FeatureFlagsType.EnableCrc64CheckDownload;
 
         public const int DefaultCopyBufferSize = 81920;
+
+        // defaults for file-like prefetch (ReadOnlyFile)
+        public const int AsyncReadBufferSize = 1 * 1024 * 1024;
+
+        public const int SoftStartInitial = 512 * 1024;
+
+        public const long DefaultPrefetchThreshold = 20L * 1024 * 1024;
+
+        public const int DefaultPrefetchNum = 3;
+
+        public const long DefaultPrefetchChunkSize = 6L * 1024 * 1024;
+
+        public const long DefaultOutOfOrderReadThreshold = 3;
     }
 }

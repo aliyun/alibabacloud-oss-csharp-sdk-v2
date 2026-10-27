@@ -91,6 +91,40 @@ namespace AlibabaCloud.OSS.V2
         }
 
         /// <summary>
+        /// Opens an object as a read-only, seekable <see cref="ReadOnlyFile"/>. Convenience wrapper for
+        /// <see cref="ReadOnlyFile.OpenAsync"/>.
+        /// </summary>
+        /// <param name="bucket">The bucket name.</param>
+        /// <param name="key">The object key.</param>
+        /// <param name="optFn">Optional, configures the open options.</param>
+        /// <param name="cancellationToken"><see cref="CancellationToken"/>Optional,The cancellation token to cancel operation.</param>
+        /// <returns>The opened <see cref="ReadOnlyFile"/>.</returns>
+        public Task<ReadOnlyFile> OpenFileAsync(
+            string bucket,
+            string key,
+            Action<OpenFileOptions>? optFn = null,
+            CancellationToken cancellationToken = default
+        )
+            => ReadOnlyFile.OpenAsync(this, bucket, key, optFn, cancellationToken);
+
+        /// <summary>
+        /// Opens or creates an appendable object as an <see cref="AppendOnlyFile"/>. Convenience wrapper for
+        /// <see cref="AppendOnlyFile.OpenAsync"/>.
+        /// </summary>
+        /// <param name="bucket">The bucket name.</param>
+        /// <param name="key">The object key.</param>
+        /// <param name="optFn">Optional, configures the append options.</param>
+        /// <param name="cancellationToken"><see cref="CancellationToken"/>Optional,The cancellation token to cancel operation.</param>
+        /// <returns>The opened <see cref="AppendOnlyFile"/>.</returns>
+        public Task<AppendOnlyFile> AppendFileAsync(
+            string bucket,
+            string key,
+            Action<AppendFileOptions>? optFn = null,
+            CancellationToken cancellationToken = default
+        )
+            => AppendOnlyFile.OpenAsync(this, bucket, key, optFn, cancellationToken);
+
+        /// <summary>
         /// Put object from local file.
         /// </summary>
         /// <param name="request"><see cref="Models.PutObjectRequest"/>The request parameter to send.</param>
