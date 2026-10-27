@@ -125,6 +125,40 @@ namespace AlibabaCloud.OSS.V2
             => AppendOnlyFile.OpenAsync(this, bucket, key, optFn, cancellationToken);
 
         /// <summary>
+        /// Creates a buffered write handle for a new object. Convenience wrapper for
+        /// <see cref="WriteOnlyFile.Create"/>; no network call is made.
+        /// </summary>
+        /// <param name="bucket">The bucket name.</param>
+        /// <param name="key">The object key.</param>
+        /// <param name="optFn">Optional, configures the write options.</param>
+        /// <returns>The <see cref="WriteOnlyFile"/> handle.</returns>
+        public WriteOnlyFile NewWriteOnlyFile(
+            string bucket,
+            string key,
+            Action<WriteOnlyOptions>? optFn = null
+        )
+            => WriteOnlyFile.Create(this, bucket, key, optFn);
+
+        /// <summary>
+        /// Resumes a write session from a <see cref="WriteCheckpoint"/>. Convenience wrapper for
+        /// <see cref="WriteOnlyFile.OpenAsync"/>.
+        /// </summary>
+        /// <param name="bucket">The bucket name.</param>
+        /// <param name="key">The object key.</param>
+        /// <param name="checkpoint">The checkpoint snapshot to resume from.</param>
+        /// <param name="optFn">Optional, configures the write options.</param>
+        /// <param name="cancellationToken"><see cref="CancellationToken"/>Optional,The cancellation token to cancel operation.</param>
+        /// <returns>The resumed <see cref="WriteOnlyFile"/> handle.</returns>
+        public Task<WriteOnlyFile> OpenWriteOnlyFileAsync(
+            string bucket,
+            string key,
+            WriteCheckpoint checkpoint,
+            Action<WriteOnlyOptions>? optFn = null,
+            CancellationToken cancellationToken = default
+        )
+            => WriteOnlyFile.OpenAsync(this, bucket, key, checkpoint, optFn, cancellationToken);
+
+        /// <summary>
         /// Put object from local file.
         /// </summary>
         /// <param name="request"><see cref="Models.PutObjectRequest"/>The request parameter to send.</param>

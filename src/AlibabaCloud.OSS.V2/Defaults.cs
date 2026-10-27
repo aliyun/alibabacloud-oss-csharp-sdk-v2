@@ -52,5 +52,10 @@ namespace AlibabaCloud.OSS.V2
         public const long DefaultPrefetchChunkSize = 6L * 1024 * 1024;
 
         public const long DefaultOutOfOrderReadThreshold = 3;
+
+        // defaults for WriteOnlyFile
+        public const long DefaultUploadPartSize = 6L * 1024 * 1024;
+
+        public const int DefaultUploadParallel = 3;
     }
 }
