@@ -10,6 +10,16 @@
         private const int GF2_DIM = 64; /* dimension of GF(2) vectors (length of CRC) */
         private static ulong _poly;
 
+#pragma warning disable CS8618
+        static Crc64()
+        {
+            // Eagerly initialize the ECMA-182 table/polynomial so that any static
+            // member (notably Combine, which reads _poly) is safe to call before a
+            // HashCrc64 instance has been constructed, e.g. on the checkpoint resume path.
+            InitECMA();
+        }
+#pragma warning restore CS8618
+
         private static void GenStdCrcTable(ulong poly)
         {
             _poly = poly;

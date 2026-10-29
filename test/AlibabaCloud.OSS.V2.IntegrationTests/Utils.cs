@@ -87,6 +87,16 @@ public class Utils
         return _invalidClient;
     }
 
+    public static Client GetPayerClient()
+    {
+        var cfg = Configuration.LoadDefault();
+        cfg.CredentialsProvider = new Credentials.StaticCredentialsProvider(PayerAccessKeyId, PayerAccessKeySecret);
+        cfg.Region = Region;
+        cfg.Endpoint = Endpoint;
+
+        return new(cfg);
+    }
+
     public static string GetTempFileName()
     {
         return $"file-{Guid.NewGuid().ToString()}.tmp";

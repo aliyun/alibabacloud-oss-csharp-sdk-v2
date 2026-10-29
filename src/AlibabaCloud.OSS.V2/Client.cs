@@ -17,6 +17,12 @@ namespace AlibabaCloud.OSS.V2
         }
 
         /// <summary>
+        /// Gets the resolved client options. Used by high-level transfer managers
+        /// (Uploader/Downloader/Copier) to read feature flags such as CRC64 checks.
+        /// </summary>
+        internal ClientOptions GetClientOptions() => _clientImpl.Options;
+
+        /// <summary>
         /// The generic operations call.
         /// </summary>
         /// <param name="input"><see cref="OperationInput"/>The request parameter to send.</param>
