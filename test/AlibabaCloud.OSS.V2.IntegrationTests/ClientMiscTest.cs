@@ -463,7 +463,11 @@ public class ClientMiscTest : IDisposable
         }
         catch (Exception e)
         {
-            Assert.Contains("The bucket you access does not belong to you.", e.ToString());
+            var message = e.ToString();
+            Assert.True(
+                message.Contains("The bucket you access does not belong to you.") ||
+                message.Contains("The bucket you are attempting to access must be addressed using the specified endpoint."),
+                message);
         }
     }
 

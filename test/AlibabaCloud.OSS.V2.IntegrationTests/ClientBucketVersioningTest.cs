@@ -58,6 +58,8 @@ public class ClientBucketVersioningTest : IDisposable
         Assert.Equal(200, putResult.StatusCode);
         Assert.NotNull(putResult.RequestId);
 
+        Utils.WaitFor(2);
+
         // get bucket versioning status
         getResult = await client.GetBucketVersioningAsync(new()
         {
