@@ -24,8 +24,8 @@ namespace AlibabaCloud.OSS.V2.Retry
         {
             _maxAttempts = maxAttempts ?? Defaults.MaxAttpempts;
             _backoffDelayer = backoffDelayer ?? new FullJitterBackoff(
-                maxBackoff ?? Defaults.MaxBackOff,
-                baseDelay ?? Defaults.BaseDelay);
+                baseDelay ?? Defaults.BaseDelay,
+                maxBackoff ?? Defaults.MaxBackOff);
             _errorRetryables = errorRetryables ?? defaultErrorRetryables;
         }
 

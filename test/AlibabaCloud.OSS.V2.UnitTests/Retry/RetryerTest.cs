@@ -69,4 +69,28 @@ public class RetryerTest
         Assert.True(retryer.RetryDelay(0, new()) > TimeSpan.FromSeconds(0));
         for (var i = 0; i < 128; i++) Assert.True(retryer.RetryDelay(1, new()) < Defaults.MaxBackOff);
     }
+
+    [Fact]
+    public void TestStandardRetryerBackoffParametersNotSwapped()
+    {
+        var retryer = new StandardRetryer();
+
+        // With default settings the max backoff should be Defaults.MaxBackOff (20 s),
+        // not Defaults.BaseDelay (200 ms). Sample enough delays at a high attempt
+        // count to make it virtually certain that at least one exceeds BaseDelay.
+        var maxObserved = TimeSpan.Zero;
+        for (var i = 0; i < 200; i++)
+        {
+            var delay = retryer.RetryDelay(10, new Exception());
+            Assert.True(delay >= TimeSpan.Zero);
+            Assert.True(delay <= Defaults.MaxBackOff);
+            if (delay > maxObserved)
+            {
+                maxObserved = delay;
+            }
+        }
+
+        Assert.True(maxObserved > Defaults.BaseDelay,
+            $"expected some delay > {Defaults.BaseDelay} but max was {maxObserved}");
+    }
 }
