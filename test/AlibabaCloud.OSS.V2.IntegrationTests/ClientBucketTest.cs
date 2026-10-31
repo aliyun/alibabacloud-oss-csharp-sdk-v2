@@ -335,6 +335,8 @@ public class ClientBucketTest : IDisposable
         );
         Assert.Equal(200, blockResult.StatusCode);
 
+        Utils.WaitFor(5);
+
         var result1 = await client.GetBucketAclAsync(
             new()
             {
